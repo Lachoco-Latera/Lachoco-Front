@@ -11,10 +11,7 @@ const MainCarousel = () => {
         showStatus={false}
       >
         <div>
-          <img
-            alt=""
-            src="https://lachoco-latera.com/wp-content/uploads/2024/02/home1-2048x1152.png"
-          />
+          <img alt="" src="./public\images\home1.webp" />
           {/* <p className="legend bg-white text-red-700">Algo Acá 1</p> */}
         </div>
         <div>

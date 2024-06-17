@@ -10,31 +10,36 @@ const MainCarousel = () => {
         showIndicators={false}
         showStatus={false}
       >
-        <div>
+        <div className="">
           <img
-            alt=""
-            src="https://lachoco-latera.com/wp-content/uploads/2024/02/home1-2048x1152.png"
+            alt="Cacao pod"
+            src="./public\images\img-23.webp"
+            className=" h-screen object-cover"
           />
           {/* <p className="legend bg-white text-red-700">Algo Acá 1</p> */}
         </div>
-        <div>
+        <div className="">
           <img
-            alt=""
-            src="https://lachoco-latera.com/wp-content/uploads/2024/02/home1-2048x1152.png"
+            alt="Natural cacao chocolate sugar free"
+            src="./public\images\img-24.webp"
+            className=" h-screen object-cover"
           />
+
           {/* <p className="legend">Algo Acá 2</p> */}
         </div>
-        <div>
+        <div className="">
           <img
-            alt=""
-            src="https://lachoco-latera.com/wp-content/uploads/2024/02/home1-2048x1152.png"
+            alt="Cacao pod in half"
+            src="./public\images\img-25.webp"
+            className=" h-screen object-cover"
           />
           {/* <p className="legend">Algo Acá 3</p> */}
         </div>
-        <div>
+        <div className="">
           <img
-            alt=""
-            src="https://lachoco-latera.com/wp-content/uploads/2024/02/home1-2048x1152.png"
+            alt="Two natural cacao chocolates"
+            src="./public\images\img-33.webp"
+            className=" h-screen object-cover"
           />
           {/* <p className="legend">Algo Acá 4</p> */}
         </div>

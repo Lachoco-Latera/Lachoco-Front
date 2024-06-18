@@ -1,6 +1,6 @@
 // import React from "react";
 import { products } from "../../mocks/data";
-import ImagesCarousel from "./ImagesCarousel";
+// import ImagesCarousel from "./ImagesCarousel";
 import { FaStar } from "react-icons/fa";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";

@@ -48,6 +48,8 @@ const ProductsGridAlt = () => {
               showIndicators={true}
               showStatus={false}
               infiniteLoop
+              swipeable={true}
+              emulateTouch
             >
               <div className="rounded-xl">
                 <img

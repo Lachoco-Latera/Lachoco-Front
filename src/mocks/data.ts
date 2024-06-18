@@ -3,9 +3,9 @@ export const products = [
     name: "Bombones de Chocolate - Caja x 24",
     img: [
       "./public/images/example1.png",
-      "./public/images/img-13.webp",
-      "./public/images/img-14.webp",
-      "./public/images/img-16.webp",
+      "./public/images/example2.png",
+      "./public/images/example3.png",
+      "./public/images/example4.png",
       "./public/images/img-15.webp",
     ],
     price: "176000,00",
@@ -17,7 +17,7 @@ export const products = [
   {
     name: "Bombones de Chocolate - Caja x 48",
     img: [
-      "./public/images/example2.png",
+      "./public/images/img-12.webp",
       "./public/images/img-13.webp",
       "./public/images/img-14.webp",
       "./public/images/img-16.webp",
@@ -33,9 +33,9 @@ export const products = [
     name: "Bombones de Chocolate - Caja x 12",
     img: [
       "./public/images/example3.png",
-      "./public/images/img-13.webp",
-      "./public/images/img-14.webp",
-      "./public/images/img-16.webp",
+      "./public/images/example4.png",
+      "./public/images/example2.png",
+      "./public/images/example1.png",
       "./public/images/img-15.webp",
     ],
     price: "44500,00",
@@ -47,7 +47,7 @@ export const products = [
   {
     name: "Chocolatina Frutas Deshidratadas",
     img: [
-      "./public/images/example4.png",
+      "./public/images/img-15.webp",
       "./public/images/img-13.webp",
       "./public/images/img-14.webp",
       "./public/images/img-16.webp",

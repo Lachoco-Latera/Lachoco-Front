@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 interface ImagesCarouselProps {
   images: readonly string[];
+  className?: String; 
 }
 
 const ImagesCarousel: React.FC<ImagesCarouselProps> = ({ images }) => {
@@ -20,12 +21,12 @@ const ImagesCarousel: React.FC<ImagesCarouselProps> = ({ images }) => {
   };
 
   return (
-    <div className="relative w-full">
-      <div className="overflow-hidden">
+    <div className="relative w-full mb-4">
+      <div className="overflow-hidden drop-shadow-custom">
         <img
           src={images[currentIndex]}
           alt={`Product image ${currentIndex + 1}`}
-          className="w-full max-h-40 min-h-40 object-cover"
+          className="w-full max-h-60 min-h-60 object-cover rounded-xl "
         />
       </div>
       <button

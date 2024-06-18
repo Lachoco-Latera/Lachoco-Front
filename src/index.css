@@ -12,31 +12,27 @@
 
 .product-card {
   background: #fff;
-  border: 1px solid #ccc;
   border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); */
   max-width: 300px;
   text-align: center;
   /* cursor: pointer; */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .product-card-main {
-  padding: 16px 40px 0px 40px;
+  margin: 16px 40px 0px 40px;
+  transition: all 0.3s ease;
 }
-.product-card:hover {
+.product-card-main:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 .product-image {
   width: 100%;
   height: auto;
   border-radius: 8px 8px 0 0;
 }
-
-/* .product-name {
-  font-size: 1.25em;
-  margin: 10px 0;
-} */
 
 .product-price {
   /* color: rgb(248 113 113); */

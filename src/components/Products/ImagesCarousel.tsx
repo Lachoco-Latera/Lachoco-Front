@@ -21,12 +21,12 @@ const ImagesCarousel: React.FC<ImagesCarouselProps> = ({ images }) => {
   };
 
   return (
-    <div className="relative w-full my-4">
+    <div className="relative w-full mb-4">
       <div className="overflow-hidden drop-shadow-custom">
         <img
           src={images[currentIndex]}
           alt={`Product image ${currentIndex + 1}`}
-          className="w-full max-h-40 min-h-40 object-cover "
+          className="w-full max-h-60 min-h-60 object-cover rounded-xl "
         />
       </div>
       <button

@@ -2,3 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  text-align: center;
+  /* cursor: pointer; */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card-main {
+  padding: 16px 16px 0px 16px;
+}
+.product-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px 8px 0 0;
+}
+
+.product-name {
+  font-size: 1.25em;
+  margin: 10px 0;
+}
+
+.product-price {
+  color: #b12704;
+  font-size: 1.15em;
+  margin: 5px 0;
+}
+
+.product-ratings,
+.product-description {
+  font-size: 1em;
+  color: #555;
+  margin: 5px 0;
+}
+.product-advice {
+  font-size: 0.8em;
+  color: #55555585;
+  margin: 5px 0;
+}

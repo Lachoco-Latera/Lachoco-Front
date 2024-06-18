@@ -2,3 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px 8px 0 0;
+}
+
+.product-name {
+  font-size: 1.25em;
+  margin: 10px 0;
+}
+
+.product-price {
+  color: #b12704;
+  font-size: 1.15em;
+  margin: 5px 0;
+}
+
+.product-ratings,
+.product-description,
+.product-advice {
+  font-size: 0.9em;
+  color: #555;
+  margin: 5px 0;
+}

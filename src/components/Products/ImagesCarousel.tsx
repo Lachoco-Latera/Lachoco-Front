@@ -25,18 +25,18 @@ const ImagesCarousel: React.FC<ImagesCarouselProps> = ({ images }) => {
         <img
           src={images[currentIndex]}
           alt={`Product image ${currentIndex + 1}`}
-          className="w-full"
+          className="w-full max-h-40 min-h-40 object-cover"
         />
       </div>
       <button
         onClick={handlePrevClick}
-        className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white px-2 py-1"
+        className="absolute top-1/2 left-0 transform -translate-y-1/2  bg-opacity-50 text-white px-2 py-1"
       >
         {"<"}
       </button>
       <button
         onClick={handleNextClick}
-        className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white px-2 py-1"
+        className="absolute top-1/2 right-0 transform -translate-y-1/2  bg-opacity-50 text-white px-2 py-1"
       >
         {">"}
       </button>

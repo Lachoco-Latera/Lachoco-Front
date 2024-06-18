@@ -44,9 +44,13 @@
 }
 
 .product-ratings,
-.product-description,
-.product-advice {
-  font-size: 0.9em;
+.product-description {
+  font-size: 1em;
   color: #555;
+  margin: 5px 0;
+}
+.product-advice {
+  font-size: 0.8em;
+  color: #55555585;
   margin: 5px 0;
 }

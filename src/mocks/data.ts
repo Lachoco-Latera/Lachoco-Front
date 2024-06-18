@@ -47,7 +47,7 @@ export const products = [
   {
     name: "Chocolatina Frutas Deshidratadas",
     img: [
-      "./public/images/img-23.webp",
+      "./public/images/img-3.webp",
       "./public/images/img-24.webp",
       "./public/images/img-23.webp",
       "./public/images/img-25.webp",

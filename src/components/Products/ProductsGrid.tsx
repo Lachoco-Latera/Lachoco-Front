@@ -40,7 +40,10 @@ const ProductsGrid = () => {
               <StarRating rating={product?.ratings} />
             </div>
             <p className="product-description">{product?.description}</p>
-            <p className="product-advice">{product?.advice}</p>
+            <p className="product-advice">
+              {product?.advice &&
+                product.advice.split(" ").slice(0, 15).join(" ")}
+            </p>
           </div>
           <div className=" bg-red-400 rounded-b-md p-2 cursor-pointer">
             {/*To do: Escalado para cuando pasas el mouse en la card, así no queda corto el boton de añadir carrito */}

@@ -22,9 +22,11 @@
 .product-card-main {
   margin: 16px 40px 0px 40px;
   transition: all 0.3s ease;
+  outline: none;
+  user-select: none;
 }
 .product-card-main:hover {
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -32,6 +34,7 @@
   width: 100%;
   height: auto;
   border-radius: 8px 8px 0 0;
+  outline: none;
 }
 
 .product-price {

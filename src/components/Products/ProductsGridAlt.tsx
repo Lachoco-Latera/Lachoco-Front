@@ -2,6 +2,8 @@
 import { products } from "../../mocks/data";
 import ImagesCarousel from "./ImagesCarousel";
 import { FaStar } from "react-icons/fa";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 // import { CiHeart } from "react-icons/ci";
 
 // const StarRating = ({ rating }: any) => {
@@ -39,15 +41,53 @@ const ProductsGridAlt = () => {
                 className=" mb-2 cursor-pointer hover:scale-110 ease-in-out duration-300"
               ></CiHeart>
             </i> */}
-            <ImagesCarousel
-              images={product?.img}
-              className={"boxShadow-custom"}
-            />
+            <Carousel
+              axis="horizontal"
+              showArrows={true}
+              showThumbs={false}
+              showIndicators={true}
+              showStatus={false}
+              infiniteLoop
+            >
+              <div className="rounded-xl">
+                <img
+                  alt="Cacao pod"
+                  src={product?.img[0]}
+                  className=" h-48 object-cover rounded-xl outline-none"
+                />
+                {/* <p className="legend bg-white text-red-700">Algo Acá 1</p> */}
+              </div>
+              <div className="">
+                <img
+                  alt="Natural cacao chocolate sugar free"
+                  src={product?.img[1]}
+                  className=" h-48 object-cover  rounded-xl"
+                />
+
+                {/* <p className="legend">Algo Acá 2</p> */}
+              </div>
+              <div className="">
+                <img
+                  alt="Cacao pod in half"
+                  src={product?.img[2]}
+                  className="h-48 object-cover  rounded-xl"
+                />
+                {/* <p className="legend">Algo Acá 3</p> */}
+              </div>
+              <div className="">
+                <img
+                  alt="Two natural cacao chocolates"
+                  src={product?.img[3]}
+                  className="h-48 object-cover  rounded-xl"
+                />
+                {/* <p className="legend">Algo Acá 4</p> */}
+              </div>
+            </Carousel>
             {/* <p className="product-advice">
               {product?.advice &&
                 product.advice.split(" ").slice(0, 15).join(" ")}
             </p> */}{" "}
-            <div className="horizontal-line"></div>
+            {/* <div className="horizontal-line"></div> */}
             <div className="flex pt-4">
               <div className="flex flex-col text-left">
                 <h2 className="product-name pr-2">{product?.name}</h2>

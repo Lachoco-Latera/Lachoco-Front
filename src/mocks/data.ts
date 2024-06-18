@@ -24,7 +24,7 @@ export const products = [
       "./public/images/img-23.webp",
     ],
     price: 91800,
-    ratings: 5.0,
+    ratings: 2.0,
     description: "Chocolate natural",
     advice:
       "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
@@ -39,7 +39,7 @@ export const products = [
       "./public/images/img-23.webp",
     ],
     price: 44500,
-    ratings: 5.0,
+    ratings: 3.0,
     description: "Chocolate natural",
     advice:
       "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
@@ -54,7 +54,7 @@ export const products = [
       "./public/images/img-23.webp",
     ],
     price: 24000,
-    ratings: 5.0,
+    ratings: 4.0,
     description: "Chocolate natural",
     advice:
       "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",

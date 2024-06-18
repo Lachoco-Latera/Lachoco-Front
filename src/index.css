@@ -14,11 +14,13 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 16px;
   max-width: 300px;
   text-align: center;
-  cursor: pointer;
+  /* cursor: pointer; */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card-main {
+  padding: 16px 16px 0px 16px;
 }
 .product-card:hover {
   transform: scale(1.05);

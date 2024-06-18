@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 interface ImagesCarouselProps {
-  images: string[];
+  images: readonly string[];
 }
 
 const ImagesCarousel: React.FC<ImagesCarouselProps> = ({ images }) => {

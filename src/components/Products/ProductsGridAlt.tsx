@@ -1,7 +1,7 @@
 // import React from "react";
 import { products } from "../../mocks/data";
 import ImagesCarousel from "./ImagesCarousel";
-import { IoIosStar } from "react-icons/io";
+import { FaStar } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 
 const StarRating = ({ rating }: any) => {
@@ -10,19 +10,18 @@ const StarRating = ({ rating }: any) => {
   return (
     <div className=" flex flex-row justify-center items-center">
       {stars.map((_, index) => (
-        <IoIosStar
+        <FaStar
           key={index}
           color={index < rating ? "#c1a805" : "white"}
-          size={20}
+          size={24}
         />
       ))}
     </div>
   );
 };
-const ProductsGrid = () => {
+const ProductsGridAlt = () => {
   const cl = console.log;
   cl(products);
-
   return (
     <div className="products-grid">
       {products?.map((product, index) => (
@@ -62,4 +61,4 @@ const ProductsGrid = () => {
   );
 };
 
-export default ProductsGrid;
+export default ProductsGridAlt;

@@ -35,6 +35,15 @@ const ProductsGridAlt = () => {
     setModalProduct(null);
   };
 
+  const handleFavoriteClick = (
+    event: React.MouseEvent,
+    product: ProductProps
+  ) => {
+    event.stopPropagation();
+    // Lógica para manejar el favorito del producto
+    console.log(`Producto favorito: ${product.name}`);
+  };
+
   return (
     <div>
       <div className="products-grid">
@@ -54,23 +63,27 @@ const ProductsGridAlt = () => {
               >
                 {product.img.map((image, i) => (
                   <div key={i} className="relative rounded-xl">
-                    <i className="absolute top-2 right-2 drop-shadow">
+                    <i
+                      className="absolute top-2 right-2 drop-shadow"
+                      onClick={(e) => handleFavoriteClick(e, product)}
+                    >
                       <IconContext.Provider value={{}}>
                         <div className="relative group">
                           <HiHeart
                             id="firstHeart"
                             size={24}
-                            className="cursor-pointer group-hover:scale-[1.55] ease-in-out duration-300 drop-shadow absolute scale-[1.21] opacity-30  transparent"
+                            className="cursor-pointer group-hover:scale-[1.55] ease-in-out duration-300 drop-shadow absolute scale-[1.21] opacity-30 transparent"
                           />
                           <SlHeart
                             id="secondHeart"
                             size={24}
                             color="white"
-                            className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow "
+                            className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow z-30"
                           />
                         </div>
                       </IconContext.Provider>
                     </i>
+
                     <img
                       alt={`Product image ${i + 1}`}
                       src={image}

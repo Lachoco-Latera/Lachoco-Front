@@ -2,8 +2,8 @@ export const products = [
   {
     name: "Bombones de Chocolate - Caja x 24",
     img: [
-      "./static/public/images/example1.png",
-      "./static/public/images/example2.png",
+      "./images/example1.png",
+      "./images/example2.png",
       "./static/public/images/example3.png",
       "./static/public/images/example4.png",
       "./static/public/images/img-15.webp",

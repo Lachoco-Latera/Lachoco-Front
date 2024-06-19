@@ -100,14 +100,12 @@
   justify-content: center;
   border-radius: 50%;
 }
-/* .carousel.carousel-slider .control-arrow::before {
-  color: black;
-  content: none;
-}
 .carousel.carousel-slider .control-arrow:hover {
-  opacity: 1;
-  background-color: white;
-} */
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.carousel.carousel-slider .control-arrow:not(:hover) {
+  opacity: 0.7;
+}
 #Heart {
   color: beige;
 }

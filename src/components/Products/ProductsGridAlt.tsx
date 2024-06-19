@@ -84,9 +84,7 @@ const ProductsGridAlt = ({ product }: Props) => {
                       <IconContext.Provider value={{}}>
                         <div
                           className="relative group"
-                          onClick={() =>
-                            toast.success("Añadido a favoritos ❤ ")
-                          }
+                          onClick={() => toast.success("Añadido a favoritos ")}
                         >
                           <HiHeart
                             id="firstHeart"
@@ -118,8 +116,19 @@ const ProductsGridAlt = ({ product }: Props) => {
                     {product?.description}
                   </h6>
                   <p
-                    className="product-price text-black-800 font-regular"
-                    onClick={() => addToCart(product)}
+                    className="product-price text-black-800 
+                    font-regular hover:scale-110 hover:shadow
+                    hover:bg-gray-800 hover:text-white 
+                    hover:px-2 rounded-xl transition-all ease"
+                    onClick={() => (
+                      addToCart(product),
+                      toast("✔ Añadido al carrito", {
+                        action: {
+                          label: "Carrito",
+                          onClick: () => console.log("Cerrar"),
+                        },
+                      })
+                    )}
                   >
                     $ {product?.price}
                   </p>

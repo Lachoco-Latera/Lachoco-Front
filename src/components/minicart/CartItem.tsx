@@ -2,7 +2,7 @@ import { FaTrashAlt } from "react-icons/fa";
 
 import { Product } from "../../types.d";
 import { useCartStore } from "../../stores/useCartStore";
-
+import { toast } from "sonner";
 interface Props {
   product: Product;
 }
@@ -30,7 +30,10 @@ export default function CartItem({ product }: Props) {
         <button
           title="Remove Item"
           className="text-red-500 hover:text-red-600 ml-4"
-          onClick={() => removeFromCart(product)}
+          onClick={() => (
+            removeFromCart(product),
+            toast.error(`Producto ${product.name} eliminado 🗑 `)
+          )}
         >
           <FaTrashAlt size={18} />
         </button>

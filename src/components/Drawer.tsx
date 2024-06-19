@@ -10,12 +10,12 @@ const Drawer = ({ children, isOpen, onCartIconClick }: Props) => {
 	return (
 		<div className='relative'>
 			<div
-				className={`fixed top-0 right-0 h-full w-80 bg-amber-100 text-white transition duration-700 ease-in-out transform z-50 ${
+				className={`fixed top-0 right-0 h-full w-80 bg-white text-white transition duration-700 ease-in-out transform z-50 ${
 					isOpen ? "translate-x-0" : "translate-x-full"
 				}`}
 				// style={{ boxShadow: `${isOpen ? "rgba(0, 0, 0, 0.4) 0px 30px 30px" : ""}` }}
 			>
-				<aside className='h-full overflow-y-auto drop-shadow-xl'>
+				<aside className='h-full overflow-y-auto shadow'>
 					<header className='bg-amber-200 text-white py-4 flex items-center justify-end px-4 h-14'>
 						<div>
 							<button className="text-gray-800" onClick={onCartIconClick}>Close</button>

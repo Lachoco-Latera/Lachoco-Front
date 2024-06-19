@@ -3,7 +3,6 @@ import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
 
 import useFromStore from "../../hooks/useFromStore";
-
 interface Props {
   onCartIconClick: () => void;
 }
@@ -12,7 +11,7 @@ export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
 
   return (
-    <header className=" bg-amber-100 text-gray-700 py-4 flex items-center justify-between h-14 sticky top-0 z-10">
+    <header className=" bg-white-100 text-gray-700 py-4 flex items-center justify-between h-14 sticky top-0 z-10 shadow">
       <nav className="container mx-auto md:w-10/12 px-4 flex justify-between">
         <span className="text-lg font-semibold">Lachoco Latera</span>
         <div className="relative">

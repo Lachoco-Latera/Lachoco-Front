@@ -3,6 +3,8 @@ import { products as rawProducts } from "../../mocks/data";
 import { FaStar } from "react-icons/fa";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { CiHeart } from "react-icons/ci";
+import { IconContext } from "react-icons";
 
 interface ProductProps {
   name: string;
@@ -50,7 +52,20 @@ const ProductsGridAlt = () => {
                 onClickItem={() => handleImageClick(product)}
               >
                 {product.img.map((image, i) => (
-                  <div key={i} className="rounded-xl">
+                  <div key={i} className="relative rounded-xl">
+                    <i className="absolute top-2 right-2 drop-shadow">
+                      <IconContext.Provider
+                        value={{
+                          color: "blue",
+                          className: "global-class-name",
+                        }}
+                      >
+                        <CiHeart
+                          size={24}
+                          className="cursor-pointer hover:scale-110 ease-in-out duration-300"
+                        ></CiHeart>
+                      </IconContext.Provider>
+                    </i>
                     <img
                       alt={`Product image ${i + 1}`}
                       src={image}
@@ -65,7 +80,7 @@ const ProductsGridAlt = () => {
                   <h6 className="product-description">
                     {product?.description}
                   </h6>
-                  <p className="product-price text-black-800 font-semibold">
+                  <p className="product-price text-black-800 font-regular">
                     $ {product?.price}
                   </p>
                 </div>
@@ -90,10 +105,10 @@ const ProductsGridAlt = () => {
           >
             <Carousel
               axis="horizontal"
-              showArrows={false}
+              showArrows={true}
               showThumbs={false}
               showIndicators={false}
-              showStatus={true}
+              showStatus={false}
               infiniteLoop
               swipeable={true}
               emulateTouch

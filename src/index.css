@@ -5,7 +5,7 @@
 .products-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px;
   padding-top: 24px;
   justify-content: center;
 }
@@ -89,4 +89,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.carousel.carousel-slider .control-arrow {
+  height: 30px;
+  width: 30px;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+/* .carousel.carousel-slider .control-arrow::before {
+  color: black;
+  content: none;
+}
+.carousel.carousel-slider .control-arrow:hover {
+  opacity: 1;
+  background-color: white;
+} */
+#Heart {
+  color: beige;
 }

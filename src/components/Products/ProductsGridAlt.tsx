@@ -6,6 +6,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { HiHeart } from "react-icons/hi";
 import { IconContext } from "react-icons";
 import { SlHeart } from "react-icons/sl";
+import { toast } from "sonner";
 
 interface ProductProps {
   name: string;
@@ -68,7 +69,12 @@ const ProductsGridAlt = () => {
                       onClick={(e) => handleFavoriteClick(e, product)}
                     >
                       <IconContext.Provider value={{}}>
-                        <div className="relative group">
+                        <div
+                          className="relative group"
+                          onClick={() =>
+                            toast.success("Añadido a favoritos ❤ ")
+                          }
+                        >
                           <HiHeart
                             id="firstHeart"
                             size={24}

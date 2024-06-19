@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import Products from "./components/Products/Products.tsx";
 import "./index.css";
+import { Toaster } from "sonner";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 const router = createBrowserRouter([
   {
@@ -16,6 +18,7 @@ const router = createBrowserRouter([
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    <Toaster />
     <RouterProvider router={router} />
   </React.StrictMode>
 );

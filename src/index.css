@@ -84,3 +84,9 @@
     color-stop(0.98, white)
   );
 }
+/*Manipula directamente la libreria del slider o carrusel*/
+.carousel .slider-wrapper.axis-horizontal .slider .slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

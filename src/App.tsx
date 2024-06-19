@@ -10,7 +10,7 @@ import Products from "./components/Products/Products";
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const { products, isLoading, error, fetchData } = useProductsStore();
+  const { fetchData } = useProductsStore();
 
   useEffect(() => {
     fetchData();

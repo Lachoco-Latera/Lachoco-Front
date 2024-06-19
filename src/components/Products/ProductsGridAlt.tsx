@@ -32,7 +32,8 @@ const ProductsGridAlt = ({ product }: Props) => {
   const [modalProduct, setModalProduct] = useState<ProductProps | null>(null);
   const [showModal, setShowModal] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
-
+  const cl = console.log;
+  cl(product);
   const products: ProductProps[] = rawProducts.map((product) => ({
     ...product,
     img: [...product.img],

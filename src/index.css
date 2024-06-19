@@ -5,7 +5,7 @@
 .products-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px;
   padding-top: 24px;
   justify-content: center;
 }
@@ -83,4 +83,29 @@
     color-stop(0.5, rgba(128, 128, 128, 0.181)),
     color-stop(0.98, white)
   );
+}
+/*Manipula directamente la libreria del slider o carrusel*/
+.carousel .slider-wrapper.axis-horizontal .slider .slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel.carousel-slider .control-arrow {
+  height: 30px;
+  width: 30px;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.carousel.carousel-slider .control-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.carousel.carousel-slider .control-arrow:not(:hover) {
+  opacity: 0.7;
+}
+#Heart {
+  color: rgb(255, 255, 255);
 }

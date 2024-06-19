@@ -3,8 +3,9 @@ import { products as rawProducts } from "../../mocks/data";
 import { FaStar } from "react-icons/fa";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { CiHeart } from "react-icons/ci";
+import { HiHeart } from "react-icons/hi";
 import { IconContext } from "react-icons";
+import { SlHeart } from "react-icons/sl";
 
 interface ProductProps {
   name: string;
@@ -54,22 +55,26 @@ const ProductsGridAlt = () => {
                 {product.img.map((image, i) => (
                   <div key={i} className="relative rounded-xl">
                     <i className="absolute top-2 right-2 drop-shadow">
-                      <IconContext.Provider
-                        value={{
-                          color: "blue",
-                          className: "global-class-name",
-                        }}
-                      >
-                        <CiHeart
-                          size={24}
-                          className="cursor-pointer hover:scale-110 ease-in-out duration-300"
-                        ></CiHeart>
+                      <IconContext.Provider value={{}}>
+                        <div className="relative group">
+                          <HiHeart
+                            id="firstHeart"
+                            size={24}
+                            className="cursor-pointer group-hover:scale-[1.55] ease-in-out duration-300 drop-shadow absolute scale-[1.21] opacity-30  transparent"
+                          />
+                          <SlHeart
+                            id="secondHeart"
+                            size={24}
+                            color="white"
+                            className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow "
+                          />
+                        </div>
                       </IconContext.Provider>
                     </i>
                     <img
                       alt={`Product image ${i + 1}`}
                       src={image}
-                      className="h-48 object-cover rounded-xl outline-none"
+                      className=" min-w-48 min-h-48 object-cover rounded-xl outline-none"
                     />
                   </div>
                 ))}
@@ -85,7 +90,7 @@ const ProductsGridAlt = () => {
                   </p>
                 </div>
                 <div className="flex flex-row">
-                  <FaStar size={18} />
+                  <FaStar size={16} className="pt-1" />
                   <p className="pl-1 text-sm"> {product?.ratings}</p>
                 </div>
               </div>

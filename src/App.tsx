@@ -1,14 +1,31 @@
-// import MainCarousel from "./components/Carousel/Carousel";
+import { useEffect, useState } from "react";
+
 // import Products from "./components/Products/Products";
-import ProductsGridAlt from "./components/Products/ProductsGridAlt";
+import Header from "./components/Header/Header";
+import Drawer from "./components/Drawer";
+import Cart from "./components/minicart/Cart";
+import { useProductsStore } from "./stores/useProductsStore";
+import Products from "./components/Products/Products";
 
 function App() {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const { products, isLoading, error, fetchData } = useProductsStore();
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleCartIconClick = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
   return (
     <div>
-      {/* <MainCarousel /> */}
-      {/* <Products /> */}
-      <ProductsGridAlt></ProductsGridAlt>
+      <Header onCartIconClick={handleCartIconClick} />
+      <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
+        <Cart />
+      </Drawer>
+      <Products />
     </div>
   );
 }

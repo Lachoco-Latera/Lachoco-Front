@@ -14,7 +14,7 @@ export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
 
   return (
-    <header className=" bg-white text-gray-700 py-4 flex items-center justify-between h-14 sticky top-0 z-10 shadow">
+    <header className=" z-10 bg-white text-gray-700 py-4 flex items-center justify-between h-14 sticky top-0 shadow">
       <nav className="container mx-auto md:w-10/12 px-4 flex justify-between items-center">
         <span className="text-lg font-semibold">Lachoco Latera</span>
         <div>

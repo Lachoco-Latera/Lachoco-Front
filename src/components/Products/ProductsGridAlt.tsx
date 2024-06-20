@@ -125,7 +125,7 @@ const ProductsGridAlt = ({ product }: Props) => {
                       toast("✔ Añadido al carrito", {
                         action: {
                           label: "Carrito",
-                          onClick: () => console.log("Cerrar"),
+                          onClick: () => console.log("Producto añadido"),
                         },
                       })
                     )}

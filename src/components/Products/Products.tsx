@@ -1,9 +1,12 @@
+//@ts-nocheck
 // import React from 'react'
-import ProductsGrid from "./ProductsGrid";
+import ProductsGridAlt from "./ProductsGridAlt";
+
 const Products = () => {
   return (
-    <div className=" my-8">
-      <ProductsGrid />
+    <div className=" my-8 flex flex-col justify-center items-center">
+
+      <ProductsGridAlt />
     </div>
   );
 };

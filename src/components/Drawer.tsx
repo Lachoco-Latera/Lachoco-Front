@@ -16,7 +16,7 @@ const Drawer = ({ children, isOpen, onCartIconClick }: Props) => {
 				// style={{ boxShadow: `${isOpen ? "rgba(0, 0, 0, 0.4) 0px 30px 30px" : ""}` }}
 			>
 				<aside className='h-full overflow-y-auto shadow'>
-					<header className='bg-amber-200 text-white py-4 flex items-center justify-end px-4 h-14'>
+					<header className=' bg-gray-100 text-white py-4 flex items-center justify-end px-4 h-14'>
 						<div>
 							<button className="text-gray-800" onClick={onCartIconClick}>Close</button>
 						</div>

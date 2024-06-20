@@ -15,7 +15,7 @@ export default function Header({ onCartIconClick }: Props) {
 
   return (
     <header className=" bg-white-100 text-gray-700 py-4 flex items-center justify-between h-14 sticky top-0 z-10 shadow">
-      <nav className="container mx-auto md:w-10/12 px-4 flex justify-between">
+      <nav className="container mx-auto md:w-10/12 px-4 flex justify-between items-center">
         <span className="text-lg font-semibold">Lachoco Latera</span>
         <div>
           <SearchExampleStandard />

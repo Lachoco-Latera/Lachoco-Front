@@ -3,6 +3,9 @@ import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
 
 import useFromStore from "../../hooks/useFromStore";
+//@ts-ignore
+import SearchExampleStandard from "../Searchbar/Searchbar";
+
 interface Props {
   onCartIconClick: () => void;
 }
@@ -14,6 +17,9 @@ export default function Header({ onCartIconClick }: Props) {
     <header className=" bg-white-100 text-gray-700 py-4 flex items-center justify-between h-14 sticky top-0 z-10 shadow">
       <nav className="container mx-auto md:w-10/12 px-4 flex justify-between">
         <span className="text-lg font-semibold">Lachoco Latera</span>
+        <div>
+          <SearchExampleStandard />
+        </div>
         <div className="relative">
           <button
             type="button"

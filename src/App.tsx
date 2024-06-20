@@ -6,6 +6,7 @@ import Drawer from "./components/Drawer";
 import Cart from "./components/minicart/Cart";
 import { useProductsStore } from "./stores/useProductsStore";
 import Products from "./components/Products/Products";
+import "semantic-ui-css/semantic.min.css";
 
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

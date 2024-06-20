@@ -1,4 +1,4 @@
-import { TbBeach, TbMountain, TbMilkshake, TbIceCream } from "react-icons/tb";
+import { TbBeach, TbMountain, TbMilkshake } from "react-icons/tb";
 import {
   GiBoatFishing,
   GiField,

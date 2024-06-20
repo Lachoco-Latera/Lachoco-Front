@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/*Cuidado*/
+* {
+  user-select: none;
+}
+/*Cuidado*/
+
 .products-grid {
   display: flex;
   flex-wrap: wrap;
@@ -109,4 +115,3 @@
 #Heart {
   color: rgb(255, 255, 255);
 }
-

@@ -20,9 +20,6 @@ const StarRating = ({ rating }: any) => {
   );
 };
 const ProductsGrid = () => {
-  const cl = console.log;
-  cl(products);
-
   return (
     <div className="products-grid">
       {products?.map((product, index) => (

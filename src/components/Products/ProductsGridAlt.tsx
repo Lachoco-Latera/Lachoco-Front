@@ -7,20 +7,33 @@ import { HiHeart } from "react-icons/hi";
 import { IconContext } from "react-icons";
 import { SlHeart } from "react-icons/sl";
 import { toast } from "sonner";
+import { useCartStore } from "../../stores/useCartStore";
+import { Product } from "@/types.d";
 
+interface Props {
+  product: Product;
+}
 interface ProductProps {
-  name: string;
+  id?: number;
+  name?: string;
   img: string[];
-  price: string | number;
+  price: number;
   ratings: string | number;
   description: string;
   advice: string;
+  discountPercentage?: number;
+  stock?: number;
+  brand?: string;
+  category?: string;
+  thumbnail?: string;
 }
 
-const ProductsGridAlt = () => {
+const ProductsGridAlt = ({ product }: Props) => {
   const [modalProduct, setModalProduct] = useState<ProductProps | null>(null);
   const [showModal, setShowModal] = useState(false);
-
+  const addToCart = useCartStore((state) => state.addToCart);
+  const cl = console.log;
+  cl(product);
   const products: ProductProps[] = rawProducts.map((product) => ({
     ...product,
     img: [...product.img],
@@ -71,9 +84,7 @@ const ProductsGridAlt = () => {
                       <IconContext.Provider value={{}}>
                         <div
                           className="relative group"
-                          onClick={() =>
-                            toast.success("Añadido a favoritos ❤ ")
-                          }
+                          onClick={() => toast.success("Añadido a favoritos ")}
                         >
                           <HiHeart
                             id="firstHeart"
@@ -104,7 +115,21 @@ const ProductsGridAlt = () => {
                   <h6 className="product-description">
                     {product?.description}
                   </h6>
-                  <p className="product-price text-black-800 font-regular">
+                  <p
+                    className="product-price text-black-800 
+                    font-regular hover:scale-110 hover:shadow
+                    hover:bg-gray-800 hover:text-white 
+                    hover:px-2 rounded-xl transition-all ease"
+                    onClick={() => (
+                      addToCart(product),
+                      toast("✔ Añadido al carrito", {
+                        action: {
+                          label: "Carrito",
+                          onClick: () => console.log("Producto añadido"),
+                        },
+                      })
+                    )}
+                  >
                     $ {product?.price}
                   </p>
                 </div>

@@ -6,6 +6,7 @@ import useFromStore from "../../hooks/useFromStore";
 
 function Cart() {
   const cart = useFromStore(useCartStore, (state) => state.cart);
+  const addToCart = useCartStore((state) => state.addToCart);
 
   let total = 0;
   if (cart) {
@@ -27,6 +28,9 @@ function Cart() {
       <div className="flex justify-between items-center mt-4">
         <span className="text-lg font-bold">Total:</span>
         <span className="text-xl font-bold">${total.toFixed(2)}</span>
+      </div>
+      <div className="flex rounded-xl p-2 mt-2 shadow justify-center hover:bg-amber-100 hover:scale-105 transition-all ease">
+        <button>Proceder al págo?</button>
       </div>
     </section>
   );

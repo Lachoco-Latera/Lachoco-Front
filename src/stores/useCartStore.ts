@@ -12,6 +12,7 @@ interface State {
 interface Actions {
   addToCart: (Item: Product) => void;
   removeFromCart: (Item: Product) => void;
+  substractFromCart: (Item: Product) => void;
 }
 
 const INITIAL_STATE: State = {
@@ -52,11 +53,44 @@ export const useCartStore = create(
         }
       },
       removeFromCart: (product: Product) => {
-        set((state) => ({
-          cart: state.cart.filter((item) => item.id !== product.id),
-          totalItems: state.totalItems - 1,
-          totalPrice: state.totalPrice - product.price,
-        }));
+        const cart = get().cart;
+        const cartItem = cart.find((item) => item.id === product.id);
+
+        if (cartItem) {
+          const updatedCart = cart.filter((item) => item.id !== product.id);
+          set((state) => ({
+            cart: updatedCart,
+            totalItems: state.totalItems - (cartItem.quantity as number),
+            totalPrice:
+              state.totalPrice - cartItem.price * (cartItem.quantity as number),
+          }));
+        }
+      },
+      substractFromCart: (product: Product) => {
+        const cart = get().cart;
+        const cartItem = cart.find((item) => item.id === product.id);
+
+        if (cartItem) {
+          if (cartItem.quantity === 1) {
+            const updatedCart = cart.filter((item) => item.id !== product.id);
+            set((state) => ({
+              cart: updatedCart,
+              totalItems: state.totalItems - 1,
+              totalPrice: state.totalPrice - product.price,
+            }));
+          } else {
+            const updatedCart = cart.map((item) =>
+              item.id === product.id
+                ? { ...item, quantity: (item.quantity as number) - 1 }
+                : item
+            );
+            set((state) => ({
+              cart: updatedCart,
+              totalItems: state.totalItems - 1,
+              totalPrice: state.totalPrice - product.price,
+            }));
+          }
+        }
       },
     }),
     {

@@ -1,6 +1,6 @@
 import { FaTrashAlt } from "react-icons/fa";
 
-import { Product } from "../../types.d";
+import { Product } from "../../types";
 import { useCartStore } from "../../stores/useCartStore";
 import { toast } from "sonner";
 interface Props {

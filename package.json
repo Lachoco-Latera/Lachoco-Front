@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.0.4",
     "faker": "^4.1.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",

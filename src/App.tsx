@@ -29,6 +29,7 @@ function App() {
       </Drawer>
       <Categories />
       <Products />
+      
     </div>
   );
 }

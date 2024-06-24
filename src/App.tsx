@@ -60,14 +60,14 @@ function App() {
     <div>
       <Header onCartIconClick={handleCartIconClick} />
       <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
-        <Cart similar={products}/>
+        <Cart similar={products} />
       </Drawer>
-      <Login/>
-      <Register/>
-      <UserConfig/>
-      <Footer/>
       <Categories categories={categories} />
       <Products products={products} />
+      <Login />
+      <Register />
+      <UserConfig />
+      <Footer />
     </div>
   );
 }

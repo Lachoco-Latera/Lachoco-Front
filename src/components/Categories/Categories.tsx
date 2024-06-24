@@ -16,11 +16,10 @@ import {
 import { FaTreeCity, FaIceCream } from "react-icons/fa6";
 import { Transition } from "@headlessui/react";
 import { useState, useEffect } from "react";
-
 import CategoryBox from "../CategoryBox";
 
-const Categories = () => {
-  const categories = [
+const Categories = ({ categories }: any) => {
+  const categoriesAlt = [
     {
       label: "Vanilla",
       icon: TbBeach,
@@ -168,7 +167,7 @@ const Categories = () => {
           overflow-x-auto
         "
         >
-          {categories.map((item) => (
+          {categoriesAlt.map((item) => (
             <CategoryBox
               key={item.label}
               label={item.label}

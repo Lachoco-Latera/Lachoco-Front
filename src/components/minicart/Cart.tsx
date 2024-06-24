@@ -4,18 +4,19 @@ import { useCartStore } from "../../stores/useCartStore";
 
 import useFromStore from "../../hooks/useFromStore";
 
-function Cart() {
+function Cart({ similar }: any) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
 
   let total = 0;
   if (cart) {
-	//Con esto prohibo que vaya menor a 0, por más forzado que sea
+    //Con esto prohibo que vaya menor a 0, por más forzado que sea
     total = cart.reduce((acc, product) => {
       const quantity = Math.max(product.quantity as number, 0);
       return acc + product.price * quantity;
     }, 0);
   }
-
+  //@ts-ignore
+  const recomendations = similar;
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Shopping Cart</h3>

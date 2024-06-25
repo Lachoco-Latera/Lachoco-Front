@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-// import Products from "./components/Products/Products";
 import Header from "./components/Header/Header";
 import Drawer from "./components/Drawer";
 import Cart from "./components/minicart/Cart";
 import { useProductsStore } from "./stores/useProductsStore";
-import Products from "./components/Products/Products";
+import ProductsGridAlt from "./components/Products/ProductsGridAlt";
 import "semantic-ui-css/semantic.min.css";
 import { Login } from "./components/Login/Login";
 import { Register } from "./components/Register/Register";
@@ -24,19 +22,19 @@ function App() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://lachoco.onrender.com/products"
+          "http://localhost:3000/products"
         );
         setProducts(response.data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
 
-    fetchProducts();
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
@@ -44,13 +42,13 @@ function App() {
         );
         setCategories(response.data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
 
+    fetchProducts();
     fetchCategories();
   }, []);
-  console.log(products, categories);
 
   const handleCartIconClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -63,7 +61,7 @@ function App() {
         <Cart similar={products} />
       </Drawer>
       <Categories categories={categories} />
-      <Products products={products} />
+      <ProductsGridAlt products={products} />
       <Login />
       <Register />
       <UserConfig />

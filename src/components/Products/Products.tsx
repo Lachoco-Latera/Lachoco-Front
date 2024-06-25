@@ -5,7 +5,7 @@ import ProductsGridAlt from "./ProductsGridAlt";
 const Products = (products) => {
   return (
     <div className=" my-8 flex flex-col justify-center items-center">
-      <ProductsGridAlt />
+      {/* <ProductsGridAlt products={products} /> */}
     </div>
   );
 };

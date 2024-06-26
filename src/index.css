@@ -115,3 +115,16 @@
 #Heart {
   color: rgb(255, 255, 255);
 }
+
+.hover-center-text:hover {
+  padding-left: calc(50% - (var(--text-width) / 2));
+  padding-right: calc(50% - (var(--text-width) / 2));
+}
+.ui.icon.input > input:hover {
+  padding-right: 8em !important;
+  transition: all ease 0.2s;
+}
+.ui.icon.input > input {
+  transition: all ease 0.2s;
+}
+

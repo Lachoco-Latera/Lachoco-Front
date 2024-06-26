@@ -1,16 +1,20 @@
 export interface Product {
-  id?: number;
-  name?: string;
-  img: string[];
-  price: number;
-  ratings: string | number;
+  id: string;
+  name: string;
+  presentacion: number;
   description: string;
-  advice: string;
-  discountPercentage?: number;
-  stock?: number;
-  brand?: string;
-  category?: string;
-  thumbnail?: string;
-  images?: string[];
-  quantity?: number;
+  price: string;
+  currency: string;
+  label: string;
+  isActive: boolean;
+  flavors?: {
+    id: string;
+    name: string;
+    stock: number;
+  }[];
+  images: {
+    id: string;
+    img?: string;
+    https?: string;
+  }[];
 }

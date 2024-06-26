@@ -1,12 +1,8 @@
 import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
-
 import useFromStore from "../../hooks/useFromStore";
-// @ts-ignore
-import SearchExampleStandard from "../Searchbar/Searchbar";
-
 import { useState } from "react";
-import { IconoUser } from "../IconoUser/IconoUser.tsx";
+import { IconoUser } from "../IconoUser/IconoUser.tsx"; // Revisar import si es necesario
 import iconoUser from "../../../public/images/iconoUser.svg";
 import close from "../../../public/images/close.svg";
 import config from "../../../public/images/configuracion.svg";
@@ -15,37 +11,19 @@ interface Props {
   onCartIconClick: () => void;
 }
 
-export default function Header({ onCartIconClick }: Props) {
+export default function BottomBar({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const [stateUser, setStateUser] = useState(false);
 
   const handleButtonUser = () => {
     setStateUser((prevState) => !prevState);
-    console.log(stateUser);
   };
 
   return (
-    <header
-      className=" 
-    z-10 bg-white text-gray-700 
-    py-4 flex items-center 
-    justify-between h-18 
-    sticky top-0 shadow"
-    >
-      <nav className="container mx-auto md:w-10/12 px-4 flex md:justify-between justify-left items-center">
-        <span className="text-lg font-semibold hidden md:block">
-          <img
-            src="./images/logo.png"
-            className="w-28 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
-            alt="Lachoco-Latera logo"
-            onClick={() => (window.location.href = "/")}
-          />
-        </span>
-        <div className="hover:drop-shadow transition-all ease ">
-          <SearchExampleStandard />
-        </div>
-        <div className="flex flex-row items-center gap-10">
-          <div className="relative  hidden md:block">
+    <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white text-gray-700 py-4 shadow">
+      <div className="container mx-auto md:w-10/12 px-4">
+        <div className="flex md:flex-row flex-row-reverse items-center justify-evenly gap-10">
+          <div className="relative">
             <button
               type="button"
               title="Mini Cart"
@@ -59,34 +37,34 @@ export default function Header({ onCartIconClick }: Props) {
             </button>
           </div>
 
-          <div className="hidden md:block">
-            {stateUser ? (
-              <button onClick={handleButtonUser}>
+          {/* BOTON DE USUARIO */}
+          <div>
+            <button onClick={handleButtonUser}>
+              {stateUser ? (
                 <img
                   src={close}
                   alt=""
                   className="w-[25px] h-[25px] transition-all ease duration-100"
                 />
-              </button>
-            ) : (
-              <button onClick={handleButtonUser}>
+              ) : (
                 <img src={iconoUser} alt="" className="w-[23px] h-[23px]" />
-              </button>
-            )}
+              )}
+            </button>
           </div>
+
           {/* BOTON DE CONFIGURACION */}
-          <div className="hidden md:block">
+          <div>
             <button>
               <img src={config} alt="" className="w-[30px] h-[30px]" />
             </button>
           </div>
         </div>
-      </nav>
-      {stateUser ? (
+      </div>
+      {stateUser && (
         <div className="w-[300px] h-[100px] absolute mt-[150px] right-0 bg-gray-300 z-20 flex flex-col justify-evenly">
           <IconoUser />
         </div>
-      ) : null}
-    </header>
+      )}
+    </footer>
   );
 }

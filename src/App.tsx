@@ -11,6 +11,7 @@ import { Register } from "./components/Register/Register";
 import { UserConfig } from "./components/UserConfig/UserConfig";
 import { Footer } from "./components/Footer/Footer";
 import Categories from "./components/Categories/Categories";
+import BottomBar from "./components/BottomBar/BottomBar";
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [products, setProducts] = useState([]);
@@ -56,6 +57,9 @@ function App() {
   return (
     <div>
       <Header onCartIconClick={handleCartIconClick} />
+      <div className="block md:hidden">
+        <BottomBar onCartIconClick={handleCartIconClick} />
+      </div>
       <Categories categories={categories} />
       <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
         <Cart similar={products} />

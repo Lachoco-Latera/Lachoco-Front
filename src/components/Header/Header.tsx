@@ -10,6 +10,7 @@ import {IconoUser} from "../IconoUser/IconoUser.tsx"
 import iconoUser from '../../../public/images/iconoUser.svg'
 import close from '../../../public/images/close.svg'
 import config from "../../../public/images/configuracion.svg";
+import logo from "../../../public/images/logo.png";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
 interface Props {

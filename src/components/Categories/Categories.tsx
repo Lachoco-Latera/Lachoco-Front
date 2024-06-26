@@ -162,7 +162,7 @@ const Categories = ({ categories }: any) => {
         sticky 
         top-14
         bg-white
-        z-10
+        z-[5]
         drop-shadow
       "
     >

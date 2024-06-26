@@ -120,3 +120,11 @@
   padding-left: calc(50% - (var(--text-width) / 2));
   padding-right: calc(50% - (var(--text-width) / 2));
 }
+.ui.icon.input > input:hover {
+  padding-right: 10em !important;
+  transition: all ease 0.2s;
+}
+.ui.icon.input > input {
+  transition: all ease 0.2s;
+}
+

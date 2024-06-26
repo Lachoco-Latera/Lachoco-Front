@@ -53,7 +53,11 @@ function App() {
   const handleCartIconClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
-
+  const handleCartIconClickAlt = () => {
+    return isDrawerOpen === false
+      ? setIsDrawerOpen(!isDrawerOpen)
+      : setIsDrawerOpen(isDrawerOpen);
+  };
   return (
     <div>
       <Header onCartIconClick={handleCartIconClick} />
@@ -66,7 +70,7 @@ function App() {
       </Drawer>
       <ProductsGridAlt
         products={products}
-        onCartIconClick={handleCartIconClick}
+        onCartIconClick={handleCartIconClickAlt}
       />
       <Login />
       <Register />

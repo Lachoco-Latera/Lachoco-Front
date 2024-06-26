@@ -8,6 +8,7 @@ import { SlHeart } from "react-icons/sl";
 import { toast } from "sonner";
 import { useCartStore } from "../../stores/useCartStore";
 import { Product } from "@/types.d";
+import { MdAddShoppingCart } from "react-icons/md";
 
 interface Props {
   products: Product[];
@@ -91,34 +92,45 @@ const ProductsGridAlt = ({ products }: Props) => {
                   </div>
                 ))}
               </Carousel>
-              <div className="flex pt-4">
-                <div className="flex flex-col text-left">
-                  <h2 className="product-name pr-2">{product.name}</h2>
-                  <h6 className="product-description">{product.description}</h6>
-                  <p
-                    className="product-price text-black-800 font-regular 
-                    relative transition-all ease
-                    hover:scale-110 hover:shadow hover:bg-pink-800 
-                   hover:text-white hover:px-2
-                    rounded-xl hover:text-center"
-                    onClick={() => (
-                      addToCart(product),
-                      toast("✔ Añadido al carrito", {
-                        action: {
-                          label: "Carrito",
-                          onClick: () => console.log("Producto añadido"),
-                        },
-                      })
-                    )}
-                  >
-                    <span className="relative block  transition-colors ease duration-0 hover:px-10">
+              <div className="flex flex-col pt-4">
+                <div className="flex flex-row">
+                  <div className="flex flex-col text-left">
+                    <h2 className="product-name pr-2">{product.name}</h2>
+                    <h6 className="product-description">
+                      {product.description}
+                    </h6>
+                  </div>
+                  <div className="flex flex-row">
+                    <FaStar size={16} className="pt-1" />
+                    <p className="pl-1 text-sm"> 5.0</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="product-price text-black-800 font-regular relative transition-all ease">
+                    <span
+                      className="duration-0 flex flex-row justify-between items-center py-2 "
+                      onClick={() => (
+                        addToCart(product),
+                        toast("✔ Añadido al carrito", {
+                          action: {
+                            label: "Carrito",
+                            onClick: () => console.log("Producto añadido"),
+                          },
+                        })
+                      )}
+                    >
                       $ {product.price}
+                      <div
+                        className="
+                      rounded-2xl 
+                      hover:shadow p-[0.33em] hover:scale-110
+                      hover:bg-pink-800 hover:text-white 
+                      transition-colors ease duration-100"
+                      >
+                        <MdAddShoppingCart />
+                      </div>
                     </span>
                   </p>
-                </div>
-                <div className="flex flex-row">
-                  <FaStar size={16} className="pt-1" />
-                  <p className="pl-1 text-sm"> 5.0</p>
                 </div>
               </div>
             </div>

@@ -36,7 +36,6 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
     // Lógica para manejar el favorito del producto
     console.log(`Producto favorito: ${product.description}`);
   };
-
   return (
     <div>
       <div className="products-grid">

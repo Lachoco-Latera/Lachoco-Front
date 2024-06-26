@@ -2,7 +2,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
 
 import useFromStore from "../../hooks/useFromStore";
-// @ts-ignore
+
 import SearchExampleStandard from "../Searchbar/Searchbar";
 
 import { useState } from "react";
@@ -10,7 +10,7 @@ import { IconoUser } from "../IconoUser/IconoUser.tsx";
 import iconoUser from "../../../public/images/iconoUser.svg";
 import close from "../../../public/images/close.svg";
 import config from "../../../public/images/configuracion.svg";
-
+import logo from "../../../public/images/logo.png";
 interface Props {
   onCartIconClick: () => void;
 }
@@ -35,7 +35,7 @@ export default function Header({ onCartIconClick }: Props) {
       <nav className="container mx-auto md:w-10/12 px-4 flex md:justify-between justify-left items-center">
         <span className="text-lg font-semibold hidden md:block">
           <img
-            src="./images/logo.png"
+            src={logo}
             className="w-28 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
             alt="Lachoco-Latera logo"
             onClick={() => (window.location.href = "/")}

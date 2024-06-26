@@ -4,7 +4,6 @@ import App from "./App.tsx";
 import Products from "./components/Products/Products.tsx";
 import "./index.css";
 import { Toaster } from "sonner";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { ClerkProvider } from '@clerk/clerk-react'
@@ -22,15 +21,21 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/products",
+    path: "/products/:id",
     element: <Products />,
   },
 ]);
+
+const isSmallScreen = window.innerWidth < 768;
+
+const toasterPosition = isSmallScreen ? "bottom-left" : "top-right";
+const toasterDuration = isSmallScreen ? 900 : 1200;
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <Toaster position="top-right" duration={1200} richColors/>
-      <RouterProvider router={router} />
+     <Toaster position={toasterPosition} duration={toasterDuration} richColors />
+     <RouterProvider router={router} />
      </ClerkProvider>
   </React.StrictMode>
 );

@@ -57,7 +57,7 @@ const Categories = ({ categories }: any) => {
       description: "Chocolate with marshmallows and nuts",
     },
     {
-      label: "Chocolate",
+      label: "Sabajón",
       icon: GiField,
       description: "Nutty pistachio flavor",
     },
@@ -116,38 +116,36 @@ const Categories = ({ categories }: any) => {
 
     fetchCategories();
     console.log(categoriess);
-
-    let lastScrollTop = 0;
-    let scrolledDownEnough = false;
-
-    const handleScroll = () => {
-      const currentScrollTop =
-        window.scrollY || document?.documentElement.scrollTop;
-
-      if (currentScrollTop > lastScrollTop) {
-        // Scrolling down
-        if (currentScrollTop >= 75) {
-          scrolledDownEnough = true;
-          setIsShowing(false);
-        }
-      } else {
-        // Scrolling up
-        if (scrolledDownEnough || currentScrollTop === 0) {
-          setIsShowing(true);
-          scrolledDownEnough = false;
-        }
-      }
-
-      lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
   const category = "default";
+  // useEffect(() => {
+  //   let lastScrollTop = 0;
+  //   let scrolledDownEnough = false;
+
+  //   const handleScroll = () => {
+  //     const currentScrollTop =
+  //       window.scrollY || document?.documentElement.scrollTop;
+
+  //     if (currentScrollTop > lastScrollTop) {
+  //       // Scrolling down
+  //       if (currentScrollTop >= 75) {
+  //         scrolledDownEnough = true;
+  //         setIsShowing(false);
+  //       }
+  //     } else {
+  //       // Scrolling up
+  //       if (scrolledDownEnough || currentScrollTop === 0) {
+  //         setIsShowing(true);
+  //         scrolledDownEnough = false;
+  //       }
+  //     }
+
+  //     lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+  // }, []);
+  
   // const isMainPage = /^\/(es|en)?$/.test(pathname);
   // if (!isMainPage) {
   //   return null;
@@ -160,7 +158,12 @@ const Categories = ({ categories }: any) => {
         xl:px-20 
         md:px-10
         sm:px-2
-        px-4
+        px-4 
+        sticky 
+        top-14
+        bg-white
+        z-10
+        drop-shadow
       "
     >
       <Transition

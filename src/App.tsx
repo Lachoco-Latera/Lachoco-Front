@@ -10,7 +10,7 @@ import { Login } from "./components/Login/Login";
 import { Register } from "./components/Register/Register";
 import { UserConfig } from "./components/UserConfig/UserConfig";
 import { Footer } from "./components/Footer/Footer";
-
+import Categories from "./components/Categories/Categories";
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [products, setProducts] = useState([]);
@@ -56,6 +56,7 @@ function App() {
   return (
     <div>
       <Header onCartIconClick={handleCartIconClick} />
+      <Categories categories={categories} />
       <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
         <Cart similar={products} />
       </Drawer>

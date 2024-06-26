@@ -76,6 +76,7 @@ function App() {
       <Register />
       <UserConfig />
       <Footer />
+
     </div>
   );
 }

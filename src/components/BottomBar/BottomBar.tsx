@@ -1,7 +1,6 @@
 import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
 import useFromStore from "../../hooks/useFromStore";
-import SearchExampleStandard from "../Searchbar/Searchbar"; // Revisar import si es necesario
 import { useState } from "react";
 import { IconoUser } from "../IconoUser/IconoUser.tsx"; // Revisar import si es necesario
 import iconoUser from "../../../public/images/iconoUser.svg";

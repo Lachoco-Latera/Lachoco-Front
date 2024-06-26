@@ -12,11 +12,13 @@ import { MdAddShoppingCart } from "react-icons/md";
 
 interface Props {
   products: Product[];
+  onCartIconClick: () => void;
 }
 
-const ProductsGridAlt = ({ products }: Props) => {
+const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
   const [modalProduct, setModalProduct] = useState<Product | null>(null);
   const [showModal, setShowModal] = useState(false);
+
   const addToCart = useCartStore((state) => state.addToCart);
 
   const handleImageClick = (product: Product) => {
@@ -114,7 +116,7 @@ const ProductsGridAlt = ({ products }: Props) => {
                         toast("✔ Añadido al carrito", {
                           action: {
                             label: "Carrito",
-                            onClick: () => console.log("Producto añadido"),
+                            onClick: () => onCartIconClick(),
                           },
                         })
                       )}

@@ -64,7 +64,10 @@ function App() {
       <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
         <Cart similar={products} />
       </Drawer>
-      <ProductsGridAlt products={products} />
+      <ProductsGridAlt
+        products={products}
+        onCartIconClick={handleCartIconClick}
+      />
       <Login />
       <Register />
       <UserConfig />

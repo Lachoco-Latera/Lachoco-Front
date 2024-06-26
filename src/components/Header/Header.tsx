@@ -27,7 +27,14 @@ export default function Header({ onCartIconClick }: Props) {
   return (
     <header className=" z-10 bg-white text-gray-700 py-4 flex items-center justify-between h-14 sticky top-0 shadow">
       <nav className="container mx-auto md:w-10/12 px-4 flex justify-between items-center">
-        <span className="text-lg font-semibold">Lachoco Latera</span>
+        <span className="text-lg font-semibold">
+          <img
+            src="./images/logo.png"
+            className="w-28 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-150"
+            alt="Lachoco-Latera logo"
+            onClick={() => (window.location.href = "/")}
+          />
+        </span>
         <div className="hover:drop-shadow transition-all ease">
           <SearchExampleStandard />
         </div>

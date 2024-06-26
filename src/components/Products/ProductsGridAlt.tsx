@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useCartStore } from "../../stores/useCartStore";
 import { Product } from "@/types.d";
 import { MdAddShoppingCart } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   products: Product[];
@@ -18,7 +19,10 @@ interface Props {
 const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
   const [modalProduct, setModalProduct] = useState<Product | null>(null);
   const [showModal, setShowModal] = useState(false);
-
+  const navigate = useNavigate();
+  const redirectToProductDetail = (productId: string) => {
+    navigate(`/products/${productId}`);
+  };
   const addToCart = useCartStore((state) => state.addToCart);
 
   const handleImageClick = (product: Product) => {
@@ -94,7 +98,10 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                 ))}
               </Carousel>
               <div className="flex flex-col pt-4">
-                <div className="flex flex-row">
+                <div
+                  className="flex flex-row"
+                  onClick={() => redirectToProductDetail(product.id)}
+                >
                   <div className="flex flex-col text-left">
                     <h2 className="product-name pr-2">{product.name}</h2>
                     <h6 className="product-description">

@@ -3,6 +3,7 @@ import CartItem from "./CartItem";
 import { useCartStore } from "../../stores/useCartStore";
 
 import useFromStore from "../../hooks/useFromStore";
+import { toast } from "sonner";
 
 function Cart({ similar }: any) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
@@ -19,6 +20,14 @@ function Cart({ similar }: any) {
   }
   //@ts-ignore
   const recomendations = similar;
+  const promise = () =>
+    new Promise((resolve) =>
+      setTimeout(
+        () =>
+          resolve((window.location.href = "https://www.mercadopago.com.ar")),
+        1100
+      )
+    );
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Shopping Cart</h3>
@@ -32,7 +41,19 @@ function Cart({ similar }: any) {
         <span className="text-xl font-bold">${total.toFixed(2)}</span>
       </div>
       <div className="flex rounded-xl p-2 mt-2 shadow justify-center hover:bg-amber-100 hover:scale-105 transition-all ease">
-        <button>Proceder al págo?</button>
+        <button
+          onClick={() =>
+            toast.promise(promise, {
+              loading: `Serás redireccionado para pagar...`,
+              success: () => {
+                return `Muchas gracias de antemano! ❤`;
+              },
+              error: "Error",
+            })
+          }
+        >
+          Proceder al págo?
+        </button>
       </div>
     </section>
   );

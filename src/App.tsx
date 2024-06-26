@@ -10,7 +10,6 @@ import { Login } from "./components/Login/Login";
 import { Register } from "./components/Register/Register";
 import { UserConfig } from "./components/UserConfig/UserConfig";
 import { Footer } from "./components/Footer/Footer";
-import Categories from "./components/Categories/Categories";
 
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -27,7 +26,7 @@ function App() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/products"
+          "https://lachoco.onrender.com/products"
         );
         setProducts(response.data);
       } catch (err) {
@@ -60,7 +59,6 @@ function App() {
       <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
         <Cart similar={products} />
       </Drawer>
-      <Categories categories={categories} />
       <ProductsGridAlt products={products} />
       <Login />
       <Register />

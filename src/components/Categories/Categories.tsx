@@ -17,6 +17,7 @@ import { FaTreeCity, FaIceCream } from "react-icons/fa6";
 import { Transition } from "@headlessui/react";
 import { useState, useEffect } from "react";
 import CategoryBox from "../CategoryBox";
+import axios from "axios";
 
 const Categories = ({ categories }: any) => {
   const categoriesAlt = [
@@ -31,32 +32,32 @@ const Categories = ({ categories }: any) => {
       description: "Rich and creamy chocolate",
     },
     {
-      label: "Strawberry",
+      label: "Maracuyá",
       icon: TbMountain,
       description: "Fresh and fruity strawberry",
     },
     {
-      label: "Mint",
+      label: "Cereza",
       icon: GiBoatFishing,
       description: "Cool minty freshness",
     },
     {
-      label: "Cookies and Cream",
+      label: "Coriandro",
       icon: GiForestCamp,
       description: "Creamy with cookie chunks",
     },
     {
-      label: "Butter Pecan",
+      label: "Canela",
       icon: MdSnowmobile,
       description: "Smooth butter pecan",
     },
     {
-      label: "Rocky Road",
+      label: "Sal Marina",
       icon: MdOutlineWbSunny,
       description: "Chocolate with marshmallows and nuts",
     },
     {
-      label: "Pistachio",
+      label: "Chocolate",
       icon: GiField,
       description: "Nutty pistachio flavor",
     },
@@ -66,42 +67,56 @@ const Categories = ({ categories }: any) => {
       description: "Tropical mango delight",
     },
     {
-      label: "Milkshake",
+      label: "Maní",
       icon: TbMilkshake,
       description: "Thick and creamy milkshake",
     },
     {
-      label: "Ice Cream Sundae",
+      label: "Café",
       icon: FaIceCream,
       description: "Topped with syrup and cherries",
     },
     {
-      label: "Donut",
+      label: "Whisky",
       icon: GiDonut,
       description: "Sweet and sugary donut",
     },
     {
-      label: "Cupcake",
+      label: "Baileys",
       icon: GiCupcake,
       description: "Delicious cupcake with frosting",
     },
     {
-      label: "Cookie Dough",
+      label: "Nuez con coñac",
       icon: MdOutlineCookie,
       description: "Chunks of cookie dough",
     },
     {
-      label: "Apple Pie",
+      label: "Sabajón de feijoa",
       icon: GiPieSlice,
       description: "Classic apple pie flavor",
     },
   ];
 
   // const pathname = window.location.href || "";
-
+  const [categoriess, setCategories] = useState([]);
   const [isShowing, setIsShowing] = useState(true);
 
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://lachoco.onrender.com/category"
+        );
+        setCategories(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCategories();
+    console.log(categoriess);
+
     let lastScrollTop = 0;
     let scrolledDownEnough = false;
 
@@ -162,6 +177,7 @@ const Categories = ({ categories }: any) => {
           pt-4
           flex 
           flex-row 
+          text-center 
           items-center 
           justify-between
           overflow-x-auto

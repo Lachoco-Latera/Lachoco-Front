@@ -33,6 +33,7 @@ const ProductsGridAlt = ({ products }: Props) => {
     // Lógica para manejar el favorito del producto
     console.log(`Producto favorito: ${product.description}`);
   };
+
   return (
     <div>
       <div className="products-grid">
@@ -52,6 +53,12 @@ const ProductsGridAlt = ({ products }: Props) => {
               >
                 {product.images.map((image, i) => (
                   <div key={i} className="relative rounded-xl">
+                    <p className="absolute top-2 left-2 p-1 px-2 product-description rounded-2xl border-1 shadow">
+                      {product.label === "SoloOnline"
+                        ? "Solo Online"
+                        : product.label}
+                    </p>
+
                     <i
                       className="absolute top-2 right-2 drop-shadow"
                       onClick={(e) => handleFavoriteClick(e, product)}
@@ -87,13 +94,13 @@ const ProductsGridAlt = ({ products }: Props) => {
               <div className="flex pt-4">
                 <div className="flex flex-col text-left">
                   <h2 className="product-name pr-2">{product.name}</h2>
-                  <h2 className="product-name pr-2">{product.label}</h2>
                   <h6 className="product-description">{product.description}</h6>
                   <p
-                    className="product-price text-black-800 
-                    font-regular hover:scale-110 hover:shadow
-                    hover:bg-gray-800 hover:text-white 
-                    hover:px-2 rounded-xl transition-all ease"
+                    className="product-price text-black-800 font-regular 
+                    relative transition-all ease
+                    hover:scale-110 hover:shadow hover:bg-pink-800 
+                   hover:text-white hover:px-2
+                    rounded-xl hover:text-center"
                     onClick={() => (
                       addToCart(product),
                       toast("✔ Añadido al carrito", {
@@ -104,7 +111,9 @@ const ProductsGridAlt = ({ products }: Props) => {
                       })
                     )}
                   >
-                    $ {product.price}
+                    <span className="relative block  transition-colors ease duration-0 hover:px-10">
+                      $ {product.price}
+                    </span>
                   </p>
                 </div>
                 <div className="flex flex-row">

@@ -115,3 +115,8 @@
 #Heart {
   color: rgb(255, 255, 255);
 }
+
+.hover-center-text:hover {
+  padding-left: calc(50% - (var(--text-width) / 2));
+  padding-right: calc(50% - (var(--text-width) / 2));
+}

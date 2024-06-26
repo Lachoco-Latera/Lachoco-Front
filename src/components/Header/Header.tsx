@@ -11,6 +11,7 @@ import iconoUser from "../../../public/images/iconoUser.svg";
 import close from "../../../public/images/close.svg";
 import config from "../../../public/images/configuracion.svg";
 import logo from "../../../public/images/logo.png";
+import { toast } from "sonner";
 interface Props {
   onCartIconClick: () => void;
 }
@@ -23,7 +24,14 @@ export default function Header({ onCartIconClick }: Props) {
     setStateUser((prevState) => !prevState);
     console.log(stateUser);
   };
-
+  const promise = () =>
+    new Promise((resolve) =>
+      setTimeout(
+        () =>
+          resolve((window.location.href = "https://www.mercadopago.com.ar")),
+        1100
+      )
+    );
   return (
     <header
       className=" 
@@ -45,6 +53,27 @@ export default function Header({ onCartIconClick }: Props) {
           <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-10">
+          <div className="relative  hidden md:block">
+            <button
+              type="button"
+              title="Mini Cart"
+              className="
+              text-gray-800 hover:text-white hover:bg-pink-500 
+              rounded-3xl py-1 px-3 text-xl flex items-center 
+              hover:scale-110 transition-all ease shadow"
+              onClick={() =>
+                toast.promise(promise, {
+                  loading: `Serás redireccionado para suscribirte...`,
+                  success: () => {
+                    return `Muchas gracias de antemano! ❤`;
+                  },
+                  error: "Error",
+                })
+              }
+            >
+              ¡Suscribete!
+            </button>
+          </div>
           <div className="relative  hidden md:block">
             <button
               type="button"

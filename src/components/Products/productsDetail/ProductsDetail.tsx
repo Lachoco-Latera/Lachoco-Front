@@ -110,7 +110,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
             {altLabel.map((label: any, index: number) => (
               <li
                 key={index}
-                className="relativ bg-red-900 font-bold text-white rounded-3xl shadow-xl p-2 hover:scale-105 cursor-pointer transition-all ease"
+                className="relativ bg-rose-500 font-bold text-white rounded-3xl shadow-xl p-2 hover:scale-105 cursor-pointer transition-all ease"
               >
                 {label}
               </li>
@@ -138,12 +138,12 @@ const ProductsDetail = ({ info }: { info: any }) => {
             <p className=""> {productInfo?.description}</p>
           </p>
         </div>
-
         <div className="flex">
           <Checkout
             price={productInfo?.price}
             currency={productInfo?.currency}
             flavors={productInfo?.flavors}
+            productName={productInfo?.name}
           />
         </div>
       </div>

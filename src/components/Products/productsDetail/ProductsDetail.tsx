@@ -54,10 +54,14 @@ const ProductsDetail = ({ info }: { info: any }) => {
       <div className="flex flex-col md:flex-row items-center md:justify-between">
         <h2 className="font-semibold md:text-3xl ">{productInfo?.name}</h2>
         <div className="flex items-center gap-2 ease transition-all">
-          <div className="flex flex-row cursor-pointer items-center hover:scale-110 hover:px-2 gap-2 transition-all ease">
+          <a
+            className="flex flex-row cursor-pointer items-center hover:scale-110 hover:px-2 gap-2 transition-all ease"
+            href="whatsapp://send?text=Mirá la nueva página de lachoco-latera: https://lachoco-front.vercel.app"
+            data-action="share/whatsapp/share"
+          >
             <FaShareSquare size={16} />
-            {"Compartir"}
-          </div>
+            {"Compartir"}{" "}
+          </a>
           <div
             className="relative group flex cursor-pointer items-center gap-2 hover:scale-110 hover:px-2 transition-all ease"
             onClick={handleHeartClick}

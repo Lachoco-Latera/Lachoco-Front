@@ -16,7 +16,10 @@ export default function CartItem({ product }: Props) {
   const handleSubtractFromCart = (product: Product) => {
     const cartItem = cart.find((item) => item.id === product.id);
 
-    if (cartItem?.quantity === 1) {
+    if (
+      //@ts-ignore
+      cartItem?.quantity === 1
+    ) {
       removeFromCart(product);
       toast.error(`Producto ${product.name} fue eliminado 🗑`);
     } else {
@@ -25,10 +28,10 @@ export default function CartItem({ product }: Props) {
     }
   };
   return (
-    <li className="flex justify-between items-center gap-4  mb-2 shadow-md p-4">
+    <li className="flex justify-between items-center gap-4 mb-2 shadow-md p-4">
       <div className="flex items-center">
         <img
-          src={product.thumbnail}
+          src={product.images[1]?.img}
           alt={product.name}
           width={100}
           height={100}
@@ -37,7 +40,14 @@ export default function CartItem({ product }: Props) {
         <div className="flex flex-col">
           <span className="font-bold flex-1">{product.name}</span>
           <span className="text-gray-600 font-bold">${product.price}</span>
-          <span>Quantity: {product.quantity}</span>
+
+          <span>
+            Quantity:
+            {
+              //@ts-ignore
+              product.quantity
+            }
+          </span>
         </div>
       </div>
       <div className="flex flex-col">

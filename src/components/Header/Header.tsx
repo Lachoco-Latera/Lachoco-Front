@@ -10,7 +10,8 @@ import { useState } from "react";
 import {IconoUser} from "../IconoUser/IconoUser.tsx"
 import iconoUser from '../../../public/images/iconoUser.svg'
 import close from '../../../public/images/close.svg'
-import config from '../../../public/images/configuracion.svg'
+
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
 interface Props {
   onCartIconClick: () => void;
@@ -56,8 +57,16 @@ export default function Header({ onCartIconClick }: Props) {
           }  
         </div>
         {/* BOTON DE CONFIGURACION */}
-        <div>
+        {/* <div>
           <button><img src={config} alt="" className="w-[30px] h-[30px]"/></button>
+        </div> */}
+        <div>
+        <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
         </div>
       </nav>
         {

@@ -11,7 +11,9 @@ function Cart({ similar }: any) {
   if (cart) {
     //Con esto prohibo que vaya menor a 0, por más forzado que sea
     total = cart.reduce((acc, product) => {
+      //@ts-ignore
       const quantity = Math.max(product.quantity as number, 0);
+      //@ts-ignore
       return acc + product.price * quantity;
     }, 0);
   }

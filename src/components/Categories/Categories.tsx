@@ -16,11 +16,11 @@ import {
 import { FaTreeCity, FaIceCream } from "react-icons/fa6";
 import { Transition } from "@headlessui/react";
 import { useState, useEffect } from "react";
-
 import CategoryBox from "../CategoryBox";
+import axios from "axios";
 
-const Categories = () => {
-  const categories = [
+const Categories = ({ categories }: any) => {
+  const categoriesAlt = [
     {
       label: "Vanilla",
       icon: TbBeach,
@@ -32,32 +32,32 @@ const Categories = () => {
       description: "Rich and creamy chocolate",
     },
     {
-      label: "Strawberry",
+      label: "Maracuyá",
       icon: TbMountain,
       description: "Fresh and fruity strawberry",
     },
     {
-      label: "Mint",
+      label: "Cereza",
       icon: GiBoatFishing,
       description: "Cool minty freshness",
     },
     {
-      label: "Cookies and Cream",
+      label: "Coriandro",
       icon: GiForestCamp,
       description: "Creamy with cookie chunks",
     },
     {
-      label: "Butter Pecan",
+      label: "Canela",
       icon: MdSnowmobile,
       description: "Smooth butter pecan",
     },
     {
-      label: "Rocky Road",
+      label: "Sal Marina",
       icon: MdOutlineWbSunny,
       description: "Chocolate with marshmallows and nuts",
     },
     {
-      label: "Pistachio",
+      label: "Sabajón",
       icon: GiField,
       description: "Nutty pistachio flavor",
     },
@@ -67,73 +67,85 @@ const Categories = () => {
       description: "Tropical mango delight",
     },
     {
-      label: "Milkshake",
+      label: "Maní",
       icon: TbMilkshake,
       description: "Thick and creamy milkshake",
     },
     {
-      label: "Ice Cream Sundae",
+      label: "Café",
       icon: FaIceCream,
       description: "Topped with syrup and cherries",
     },
     {
-      label: "Donut",
+      label: "Whisky",
       icon: GiDonut,
       description: "Sweet and sugary donut",
     },
     {
-      label: "Cupcake",
+      label: "Baileys",
       icon: GiCupcake,
       description: "Delicious cupcake with frosting",
     },
     {
-      label: "Cookie Dough",
+      label: "Nuez con coñac",
       icon: MdOutlineCookie,
       description: "Chunks of cookie dough",
     },
     {
-      label: "Apple Pie",
+      label: "Sabajón de feijoa",
       icon: GiPieSlice,
       description: "Classic apple pie flavor",
     },
   ];
 
   // const pathname = window.location.href || "";
-
-  const [isShowing, setIsShowing] = useState(true);
+  const [categoriess, setCategories] = useState([]);
+  // const [isShowing, setIsShowing] = useState(true);
 
   useEffect(() => {
-    let lastScrollTop = 0;
-    let scrolledDownEnough = false;
-
-    const handleScroll = () => {
-      const currentScrollTop =
-        window.scrollY || document?.documentElement.scrollTop;
-
-      if (currentScrollTop > lastScrollTop) {
-        // Scrolling down
-        if (currentScrollTop >= 75) {
-          scrolledDownEnough = true;
-          setIsShowing(false);
-        }
-      } else {
-        // Scrolling up
-        if (scrolledDownEnough || currentScrollTop === 0) {
-          setIsShowing(true);
-          scrolledDownEnough = false;
-        }
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://lachoco.onrender.com/category"
+        );
+        setCategories(response.data);
+      } catch (err) {
+        console.error(err);
       }
-
-      lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
     };
 
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    fetchCategories();
+    console.log(categoriess, "Si es que hay: ", categories);
   }, []);
   const category = "default";
+  // useEffect(() => {
+  //   let lastScrollTop = 0;
+  //   let scrolledDownEnough = false;
+
+  //   const handleScroll = () => {
+  //     const currentScrollTop =
+  //       window.scrollY || document?.documentElement.scrollTop;
+
+  //     if (currentScrollTop > lastScrollTop) {
+  //       // Scrolling down
+  //       if (currentScrollTop >= 75) {
+  //         scrolledDownEnough = true;
+  //         setIsShowing(false);
+  //       }
+  //     } else {
+  //       // Scrolling up
+  //       if (scrolledDownEnough || currentScrollTop === 0) {
+  //         setIsShowing(true);
+  //         scrolledDownEnough = false;
+  //       }
+  //     }
+
+  //     lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+  // }, []);
+
   // const isMainPage = /^\/(es|en)?$/.test(pathname);
   // if (!isMainPage) {
   //   return null;
@@ -146,11 +158,16 @@ const Categories = () => {
         xl:px-20 
         md:px-10
         sm:px-2
-        px-4
+        px-4 
+        sticky 
+        top-14
+        bg-white
+        z-[5]
+        drop-shadow
       "
     >
       <Transition
-        show={isShowing}
+        show={true}
         enter="transition-opacity duration-45"
         enterFrom="opacity-0"
         enterTo="opacity-100"
@@ -163,12 +180,13 @@ const Categories = () => {
           pt-4
           flex 
           flex-row 
+          text-center 
           items-center 
           justify-between
           overflow-x-auto
         "
         >
-          {categories.map((item) => (
+          {categoriesAlt.map((item) => (
             <CategoryBox
               key={item.label}
               label={item.label}

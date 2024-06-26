@@ -100,7 +100,7 @@ const Categories = ({ categories }: any) => {
 
   // const pathname = window.location.href || "";
   const [categoriess, setCategories] = useState([]);
-  const [isShowing, setIsShowing] = useState(true);
+  // const [isShowing, setIsShowing] = useState(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -115,7 +115,7 @@ const Categories = ({ categories }: any) => {
     };
 
     fetchCategories();
-    console.log(categoriess);
+    console.log(categoriess, "Si es que hay: ", categories);
   }, []);
   const category = "default";
   // useEffect(() => {
@@ -145,7 +145,7 @@ const Categories = ({ categories }: any) => {
 
   //   window.addEventListener("scroll", handleScroll);
   // }, []);
-  
+
   // const isMainPage = /^\/(es|en)?$/.test(pathname);
   // if (!isMainPage) {
   //   return null;
@@ -167,7 +167,7 @@ const Categories = ({ categories }: any) => {
       "
     >
       <Transition
-        show={isShowing}
+        show={true}
         enter="transition-opacity duration-45"
         enterFrom="opacity-0"
         enterTo="opacity-100"

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { toast } from "sonner";
 
-const Checkout = ({ price, currency }: any) => {
+const Checkout = ({ price, currency, productName }: any) => {
   const [pickedFlavors, setPickedFlavors] = useState<{
     [key: string]: boolean;
   }>({});
@@ -29,14 +30,22 @@ const Checkout = ({ price, currency }: any) => {
       [name]: checked,
     }));
   };
-
+  const promise = () =>
+    new Promise((resolve) =>
+      setTimeout(
+        () =>
+          resolve((window.location.href = "https://www.mercadopago.com.ar")),
+        1100
+      )
+    );
   return (
     <div
       className="
         px-8 py-48 rounded-xl 
-        text-white
+        text-slate-700
+        drop-shadow-md
         hover:drop-shadow-2xl ease 
-        transition-all bg-red-900     
+        transition-all bg-white     
         flex flex-col gap-2 text-center max-w-sm
       "
     >
@@ -58,8 +67,24 @@ const Checkout = ({ price, currency }: any) => {
           </div>
         ))}
       </div>
-      <div>
-        <button className="shadow rounded-3xl p-4 bg-red-800 hover:scale-105 cursor-pointer transition-all ease">
+      <div className="pt-4">
+        <button
+          className="
+        shadow rounded-full p-4 hover:drop-shadow-xl 
+        bg-rose-600 hover:bg-white
+        hover:text-green-300 text-white 
+        hover:scale-105 hover:font-bold text-xl
+         cursor-pointer transition-all ease"
+          onClick={() =>
+            toast.promise(promise, {
+              loading: `Serás redireccionado para pagar ${productName}...`,
+              success: () => {
+                return `Muchas gracias de antemano! ❤`;
+              },
+              error: "Error",
+            })
+          }
+        >
           Comprár ahora
         </button>
       </div>

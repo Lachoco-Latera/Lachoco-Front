@@ -20,7 +20,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
   };
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white text-gray-700 py-4 shadow">
+    <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white text-gray-700 py-4 shadow drop-shadow">
       <div className="container mx-auto md:w-10/12 px-4">
         <div className="flex md:flex-row flex-row-reverse items-center justify-evenly gap-10">
           <div className="relative">

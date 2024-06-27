@@ -6,11 +6,12 @@ import useFromStore from "../../hooks/useFromStore";
 import SearchExampleStandard from "../Searchbar/Searchbar";
 
 import { useState } from "react";
-import { IconoUser } from "../IconoUser/IconoUser.tsx";
-import iconoUser from "../../../public/images/iconoUser.svg";
-import close from "../../../public/images/close.svg";
+import {IconoUser} from "../IconoUser/IconoUser.tsx"
+import iconoUser from '../../../public/images/iconoUser.svg'
+import close from '../../../public/images/close.svg'
 import config from "../../../public/images/configuracion.svg";
 import logo from "../../../public/images/logo.png";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import { toast } from "sonner";
 interface Props {
   onCartIconClick: () => void;
@@ -109,6 +110,14 @@ export default function Header({ onCartIconClick }: Props) {
               <img src={config} alt="" className="w-[30px] h-[30px]" />
             </button>
           </div>
+        </div>
+        <div>
+        <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
         </div>
       </nav>
       {stateUser ? (

@@ -44,7 +44,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
     <div>
       <div className="products-grid">
         {products.map((product, index) => (
-          <div key={index} className="product-card">
+          <div key={index} className="product-card hover:shadow-xl transition-all ease duration-300">
             <div className="product-card-main flex flex-col" key={index}>
               <Carousel
                 axis="horizontal"
@@ -114,7 +114,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                   </div>
                 </div>
                 <div>
-                  <p className="product-price text-black-800 font-regular relative transition-all ease">
+                  <div className="product-price text-black-800 font-regular relative transition-all ease">
                     <span
                       className="duration-0 flex flex-row justify-between items-center py-2 "
                       onClick={() => (
@@ -138,7 +138,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                         <MdAddShoppingCart />
                       </div>
                     </span>
-                  </p>
+                  </div>
                 </div>
               </div>
             </div>

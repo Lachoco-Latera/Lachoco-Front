@@ -60,7 +60,7 @@
   color: #55555585;
   margin: 5px 0;
 }
-
+/* 
 .horizontal-line {
   height: 1px;
   background-color: #e6e6e6;
@@ -89,7 +89,7 @@
     color-stop(0.5, rgba(128, 128, 128, 0.181)),
     color-stop(0.98, white)
   );
-}
+} */
 /*Manipula directamente la libreria del slider o carrusel*/
 .carousel .slider-wrapper.axis-horizontal .slider .slide {
   display: flex;

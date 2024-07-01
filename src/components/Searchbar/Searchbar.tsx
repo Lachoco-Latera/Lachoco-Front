@@ -117,7 +117,11 @@ function SearchExampleStandard() {
               type: "UPDATE_SELECTION",
               selection: data.result.title,
             });
-            navigate(`/products/${data.result.id}`);
+            window.location.href = `/products/${data.result.id}`;
+            /*NO UTILIZAR "useNavigate" 
+            ROMPE POR COMPLETO EL CICLO DE VIDA DE LOS COMPONENTES 
+            CON EL HOOK */
+            console.log(e);
           }}
           onSearchChange={handleSearchChange}
           results={results}

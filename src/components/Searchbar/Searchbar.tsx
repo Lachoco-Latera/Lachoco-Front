@@ -79,8 +79,9 @@ function SearchExampleStandard({ products }: Props) {
   console.log(products);
   return (
     <Grid>
-      <GridColumn width={6}>
+      <GridColumn width={16}>
         <Search
+          fluid
           loading={loading}
           placeholder="Chocolatéa!"
           onResultSelect={(e, data) => (

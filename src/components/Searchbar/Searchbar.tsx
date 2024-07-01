@@ -48,7 +48,7 @@ function SearchExampleStandard({ products }: Props) {
         const isNumber = /^\d+(\.\d+)?$/.test(searchTerm);
         const re = new RegExp(_.escapeRegExp(searchTerm), "i");
 
-        const results = _.filter(products, (result) => {
+        let results = _.filter(products, (result) => {
           if (isNumber) {
             // Buscar por precio si el término es un número
             return re.test(result.price);
@@ -57,6 +57,9 @@ function SearchExampleStandard({ products }: Props) {
             return re.test(result.name) || re.test(result.description);
           }
         });
+
+        // Limitar los resultados a un máximo de 6
+        results = results.slice(0, 6);
 
         dispatch({
           type: "FINISH_SEARCH",

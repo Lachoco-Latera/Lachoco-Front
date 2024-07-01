@@ -128,3 +128,9 @@
   transition: all ease 0.2s;
 }
 
+@media (max-width: 768px) {
+  .ui.icon.input > input {
+    width:50vmax; /* Ocupa todo el ancho disponible */
+    transition: all ease 0.2s;
+  }
+}

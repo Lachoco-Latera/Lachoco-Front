@@ -28,7 +28,7 @@ export const Footer = () => {
             </li>
 
             {monedaState ? (
-              <div className="w-[100px] h-[100px] absolute mb-[150px] right-96 bg-gray-300 z-20 flex flex-col justify-evenly">
+              <div className="w-[100px] h-[120px] absolute bottom-12 pb-10 bg-white z-20 flex flex-col justify-evenly rounded-t-xl">
                 <CambioMoneda />{" "}
               </div>
             ) : null}
@@ -41,7 +41,7 @@ export const Footer = () => {
                 Datos de la empresa
               </a>
             </li>
-          <li className=" hover:scale-105  transition-all ease">
+            <li className=" hover:scale-105  transition-all ease">
               <a
                 href="#"
                 className="hover:underline me-4 md:me-6 hover:text-slate-800 hover:scale-105  transition-all ease"
@@ -49,7 +49,7 @@ export const Footer = () => {
                 Politica de privacidad
               </a>
             </li>
-          <li className=" hover:scale-105  transition-all ease">
+            <li className=" hover:scale-105  transition-all ease">
               <a
                 href="#"
                 className="hover:underline me-4 md:me-6 hover:text-slate-800 hover:scale-105  transition-all ease"
@@ -57,7 +57,7 @@ export const Footer = () => {
                 Tarjetas de regalo
               </a>
             </li>
-          <li className=" hover:scale-105  transition-all ease">
+            <li className=" hover:scale-105  transition-all ease">
               <a
                 href="#"
                 className="hover:underline hover:text-slate-800 hover:scale-105  transition-all ease"

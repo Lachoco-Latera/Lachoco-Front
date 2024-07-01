@@ -116,7 +116,7 @@ export default function Header({ onCartIconClick }: Props) {
               <img src={config} alt="" className="w-[30px] h-[30px]" />
             </button>
           </div> */}{" "}
-          <div>
+          <div className="md:block hidden">
             <SignedOut>
               <SignInButton />
             </SignedOut>

@@ -1,28 +1,43 @@
 import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
 import useFromStore from "../../hooks/useFromStore";
-import { useState } from "react";
-import { IconoUser } from "../IconoUser/IconoUser.tsx"; // Revisar import si es necesario
-import iconoUser from "../../../public/images/iconoUser.svg";
-import close from "../../../public/images/close.svg";
-import config from "../../../public/images/configuracion.svg";
+import { MdFavoriteBorder } from "react-icons/md";
 
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 interface Props {
   onCartIconClick: () => void;
 }
 
 export default function BottomBar({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
-  const [stateUser, setStateUser] = useState(false);
-
-  const handleButtonUser = () => {
-    setStateUser((prevState) => !prevState);
-  };
-
+  const navigate = useNavigate();
+  const promise = () =>
+    new Promise((resolve) =>
+      setTimeout(
+        () =>
+          resolve((window.location.href = "https://www.mercadopago.com.ar")),
+        1100
+      )
+    );
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white text-gray-700 py-4 shadow drop-shadow">
       <div className="container mx-auto md:w-10/12 px-4">
         <div className="flex md:flex-row flex-row-reverse items-center justify-evenly gap-10">
+          <div>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>
           <div className="relative">
             <button
               type="button"
@@ -36,35 +51,34 @@ export default function BottomBar({ onCartIconClick }: Props) {
               </div>
             </button>
           </div>
-
-          {/* BOTON DE USUARIO */}
+          <MdFavoriteBorder
+            size={28}
+            className=" text-slate-800 hover:cursor-pointer"
+            onClick={() => navigate(`/favorites`)}
+          />
           <div>
-            <button onClick={handleButtonUser}>
-              {stateUser ? (
-                <img
-                  src={close}
-                  alt=""
-                  className="w-[25px] h-[25px] transition-all ease duration-100"
-                />
-              ) : (
-                <img src={iconoUser} alt="" className="w-[23px] h-[23px]" />
-              )}
-            </button>
-          </div>
-
-          {/* BOTON DE CONFIGURACION */}
-          <div>
-            <button>
-              <img src={config} alt="" className="w-[30px] h-[30px]" />
+            <button
+              type="button"
+              title="Mini Cart"
+              className="
+              text-gray-800 hover:text-white hover:bg-pink-500 
+              rounded-3xl py-1 px-3 text-xl flex items-center 
+              hover:scale-110 transition-all ease shadow"
+              onClick={() =>
+                toast.promise(promise, {
+                  loading: `Serás redireccionado para suscribirte...`,
+                  success: () => {
+                    return `Muchas gracias de antemano! ❤`;
+                  },
+                  error: "Error",
+                })
+              }
+            >
+              ¡Suscribete!
             </button>
           </div>
         </div>
       </div>
-      {stateUser && (
-        <div className="w-[300px] h-[100px] absolute mt-[150px] right-0 bg-gray-300 z-20 flex flex-col justify-evenly">
-          <IconoUser />
-        </div>
-      )}
     </footer>
   );
 }

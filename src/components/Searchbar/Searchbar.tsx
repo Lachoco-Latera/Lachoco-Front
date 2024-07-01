@@ -44,12 +44,23 @@ function SearchExampleStandard({ products }: Props) {
           return;
         }
 
-        const re = new RegExp(_.escapeRegExp(data.value), "i");
-        const isMatch = (result: Product) => re.test(result.name);
+        const searchTerm = data.value.trim();
+        const isNumber = /^\d+(\.\d+)?$/.test(searchTerm);
+        const re = new RegExp(_.escapeRegExp(searchTerm), "i");
+
+        const results = _.filter(products, (result) => {
+          if (isNumber) {
+            // Buscar por precio si el término es un número
+            return re.test(result.price);
+          } else {
+            // Buscar por nombre o descripción si no es un número
+            return re.test(result.name) || re.test(result.description);
+          }
+        });
 
         dispatch({
           type: "FINISH_SEARCH",
-          results: _.filter(products, isMatch),
+          results: results,
         });
       }, 300);
     },

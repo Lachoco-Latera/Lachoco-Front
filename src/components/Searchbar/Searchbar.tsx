@@ -1,14 +1,28 @@
 import _ from "lodash";
 //@ts-ignore
-import faker from "faker";
+import { faker } from "@faker-js/faker";
 import React from "react";
 import { GridColumn, Search, Grid } from "semantic-ui-react";
 
 const source = _.times(5, () => ({
-  title: faker.company.companyName(),
-  description: faker.company.catchPhrase(),
-  image: faker.internet.avatar(),
-  price: faker.finance.amount(0, 100, 2, "$"),
+  id: faker.string.uuid(),
+  name: faker.commerce.productName(),
+  presentacion: faker.number.int({ min: 1, max: 1000 }),
+  description: faker.commerce.productDescription(),
+  price: faker.commerce.price(0, 100, 2, "$"),
+  currency: "USD",
+  label: faker.commerce.productAdjective(),
+  isActive: faker.datatype.boolean(),
+  flavors: _.times(3, () => ({
+    id: faker.string.uuid(),
+    name: faker.commerce.productMaterial(), // Cambiado aquí
+    stock: faker.number.int({ min: 0, max: 100 }),
+  })),
+  images: _.times(2, () => ({
+    id: faker.string.uuid(),
+    img: faker.image.url(),
+    https: faker.internet.url(),
+  })),
 }));
 
 const initialState = {

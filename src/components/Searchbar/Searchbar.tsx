@@ -1,17 +1,13 @@
 import _ from "lodash";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GridColumn, Search, Grid } from "semantic-ui-react";
-import { Product } from "@/types.d";
+import axios from "axios";
 
 const initialState = {
   loading: false,
   results: [],
   value: "",
 };
-
-interface Props {
-  products: Product[];
-}
 
 function exampleReducer(state: any, action: any) {
   switch (action.type) {
@@ -28,9 +24,10 @@ function exampleReducer(state: any, action: any) {
   }
 }
 
-function SearchExampleStandard({ products }: Props) {
+function SearchExampleStandard() {
   const [state, dispatch] = React.useReducer(exampleReducer, initialState);
   const { loading, results, value } = state;
+  const [products, setProducts] = useState([]);
 
   const timeoutRef: any = React.useRef();
   const handleSearchChange = React.useCallback(
@@ -48,7 +45,7 @@ function SearchExampleStandard({ products }: Props) {
         const isNumber = /^\d+(\.\d+)?$/.test(searchTerm);
         const re = new RegExp(_.escapeRegExp(searchTerm), "i");
 
-        let results = _.filter(products, (result) => {
+        let results = _.filter(products, (result: any) => {
           if (isNumber) {
             // Buscar por precio si el término es un número
             return re.test(result.price);
@@ -75,7 +72,19 @@ function SearchExampleStandard({ products }: Props) {
     },
     [products]
   );
-
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          "https://lachoco.onrender.com/products"
+        );
+        setProducts(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProducts();
+  }, []);
   React.useEffect(() => {
     return () => {
       clearTimeout(timeoutRef.current);

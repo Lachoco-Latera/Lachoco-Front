@@ -25,7 +25,7 @@ export const useProductsStore = create<State & Actions>((set) => ({
   fetchData: async () => {
     try {
       set({ isLoading: true, error: null });
-      const response = await fetch("https://dummyjson.com/products");
+      const response = await fetch("https://lachoco.onrender.com/products");
       const data = await response.json();
       set({ products: data.products, isLoading: false });
     } catch (error) {

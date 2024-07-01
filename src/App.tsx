@@ -26,7 +26,9 @@ function App() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/products");
+        const response = await axios.get(
+          "https://lachoco.onrender.com/products"
+        );
         setProducts(response.data);
       } catch (err) {
         console.error(err);
@@ -35,7 +37,9 @@ function App() {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/category");
+        const response = await axios.get(
+          "https://lachoco.onrender.com/category"
+        );
         setCategories(response.data);
       } catch (err) {
         console.error(err);

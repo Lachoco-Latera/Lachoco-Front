@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { useCartStore } from "../../stores/useCartStore";
 import { Product } from "@/types.d";
 import { MdAddShoppingCart } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom"; // Importa useSearchParams desde react-router-dom
 
 interface Props {
   products: Product[];
@@ -20,10 +20,12 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
   const [modalProduct, setModalProduct] = useState<Product | null>(null);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const addToCart = useCartStore((state) => state.addToCart);
+  const [searchParams] = useSearchParams(); // Obtén los parámetros de la URL
+
   const redirectToProductDetail = (productId: string) => {
     navigate(`/products/${productId}`);
   };
-  const addToCart = useCartStore((state) => state.addToCart);
 
   const handleImageClick = (product: Product) => {
     setModalProduct(product);
@@ -40,11 +42,22 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
     // Lógica para manejar el favorito del producto
     console.log(`Producto favorito: ${product.description}`);
   };
+
+  // Obtén el valor del parámetro 'category' de la URL
+  const selectedCategory = searchParams.get("category");
+
+  // Filtra los productos basados en la categoría seleccionada
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category.name === selectedCategory)
+    : products;
   return (
     <div>
       <div className="products-grid">
-        {products.map((product, index) => (
-          <div key={index} className="product-card hover:shadow-xl transition-all ease duration-300">
+        {filteredProducts.map((product, index) => (
+          <div
+            key={index}
+            className="product-card hover:shadow-xl transition-all ease duration-300"
+          >
             <div className="product-card-main flex flex-col" key={index}>
               <Carousel
                 axis="horizontal"

@@ -1,9 +1,8 @@
+import React from "react";
 import { IconType } from "react-icons";
-import { useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
 
 interface CategoryBoxProps {
-  icon: IconType;
+  icon: IconType | undefined; // Permitimos que icon sea undefined para manejar casos donde no hay icono definido
   label: string;
   selected?: boolean;
   onSelect?: () => void;
@@ -15,15 +14,9 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
   selected,
   onSelect,
 }) => {
-  const [, setSearchParams] = useSearchParams();
-
-  const handleClick = useCallback(() => {
-    setSearchParams({ category: label });
-  }, [label, setSearchParams]);
-
   return (
     <div
-      onClick={onSelect || handleClick}
+      onClick={onSelect}
       className={`
         flex 
         flex-col 
@@ -39,8 +32,7 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
         ${selected ? "text-neutral-800" : "text-neutral-500"}
       `}
     >
-      {Icon && <Icon size={26} />}
-      {/* Asegúrate de que Icon esté definido antes de renderizarlo */}
+      {Icon && <Icon size={26} />} {/* Renderiza el icono solo si Icon está definido */}
       <div className="font-medium text-sm">{label}</div>
     </div>
   );

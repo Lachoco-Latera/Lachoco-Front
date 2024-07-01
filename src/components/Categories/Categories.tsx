@@ -39,10 +39,16 @@ const Categories = ({ categories }: any) => {
     FaIceCream,
   };
 
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedCategory = searchParams.get("category") || "default";
 
   const handleClickCategory = (category: string) => {
-    setSearchParams({ category });
+    const currentCategory = searchParams.get("category");
+    if (currentCategory === category) {
+      setSearchParams({});
+    } else {
+      setSearchParams({ category });
+    }
   };
 
   return (
@@ -53,7 +59,7 @@ const Categories = ({ categories }: any) => {
             key={item.id}
             label={item.name}
             icon={iconMap[item.icon]} // Utiliza iconMap para obtener el icono correcto
-            selected={true} // Ajusta según sea necesario
+            selected={selectedCategory === item.name} // Ajusta según sea necesario
             onSelect={() => handleClickCategory(item.name)}
           />
         ))}

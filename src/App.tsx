@@ -60,7 +60,7 @@ function App() {
   };
   return (
     <div>
-      <Header onCartIconClick={handleCartIconClick} />
+      <Header onCartIconClick={handleCartIconClick} products={products} />
       <div className="block md:hidden">
         <BottomBar onCartIconClick={handleCartIconClick} />
       </div>
@@ -75,6 +75,7 @@ function App() {
       <Login />
       <Register />
       <UserConfig />
+
       <Footer />
     </div>
   );

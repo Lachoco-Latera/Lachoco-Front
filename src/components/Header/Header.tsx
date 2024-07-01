@@ -11,10 +11,12 @@ import iconoUser from '../../../public/images/iconoUser.svg'
 import close from '../../../public/images/close.svg'
 import config from "../../../public/images/configuracion.svg";
 import logo from "../../../public/images/logo.png";
+import { Product } from "@/types.d";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import { toast } from "sonner";
 interface Props {
   onCartIconClick: () => void;
+  products: Product[];
 }
 
 export default function Header({ onCartIconClick }: Props) {
@@ -23,7 +25,7 @@ export default function Header({ onCartIconClick }: Props) {
 
   const handleButtonUser = () => {
     setStateUser((prevState) => !prevState);
-    console.log(stateUser);
+    // console.log(stateUser);
   };
   const promise = () =>
     new Promise((resolve) =>

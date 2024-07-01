@@ -103,14 +103,14 @@ function SearchExampleStandard() {
       dispatch({ type: "CLEAN_QUERY" });
     };
   }, []);
-
+  console.log(products);
   return (
     <Grid>
       <GridColumn width={16}>
         <Search
           fluid
           loading={loading}
-          placeholder="Chocolatéa!"
+          placeholder="¿Qué quieres probar?"
           onResultSelect={(e, data) => {
             dispatch({
               type: "UPDATE_SELECTION",

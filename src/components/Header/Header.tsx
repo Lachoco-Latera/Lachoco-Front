@@ -5,14 +5,19 @@ import useFromStore from "../../hooks/useFromStore";
 
 import SearchExampleStandard from "../Searchbar/Searchbar";
 
-import { useState } from "react";
-import {IconoUser} from "../IconoUser/IconoUser.tsx"
-import iconoUser from '../../../public/images/iconoUser.svg'
-import close from '../../../public/images/close.svg'
-import config from "../../../public/images/configuracion.svg";
+// import { useState } from "react";
+// import { IconoUser } from "../IconoUser/IconoUser.tsx";
+// import iconoUser from "../../../public/images/iconoUser.svg";
+// import close from "../../../public/images/close.svg";
+// import config from "../../../public/images/configuracion.svg";
 import logo from "../../../public/images/logo.png";
 import { Product } from "@/types.d";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/clerk-react";
 import { toast } from "sonner";
 interface Props {
   onCartIconClick: () => void;
@@ -21,12 +26,12 @@ interface Props {
 
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
-  const [stateUser, setStateUser] = useState(false);
+  // const [stateUser, setStateUser] = useState(false);
 
-  const handleButtonUser = () => {
-    setStateUser((prevState) => !prevState);
-    // console.log(stateUser);
-  };
+  // const handleButtonUser = () => {
+  //   setStateUser((prevState) => !prevState);
+  //   // console.log(stateUser);
+  // };
   const promise = () =>
     new Promise((resolve) =>
       setTimeout(
@@ -43,7 +48,7 @@ export default function Header({ onCartIconClick }: Props) {
     justify-between h-18 
     sticky top-0 shadow"
     >
-      <nav className="container mx-auto md:w-10/12 px-4 flex md:justify-between justify-left items-center">
+      <nav className="container mx-auto md:w-10/12 px-4 flex md:justify-between justify-between items-center">
         <span className="text-lg font-semibold hidden md:block">
           <img
             src={logo}
@@ -90,8 +95,7 @@ export default function Header({ onCartIconClick }: Props) {
               </div>
             </button>
           </div>
-
-          <div className="hidden md:block">
+          {/* <div className="hidden md:block">
             {stateUser ? (
               <button onClick={handleButtonUser}>
                 <img
@@ -105,28 +109,28 @@ export default function Header({ onCartIconClick }: Props) {
                 <img src={iconoUser} alt="" className="w-[23px] h-[23px]" />
               </button>
             )}
-          </div>
+          </div> */}
           {/* BOTON DE CONFIGURACION */}
-          <div className="hidden md:block">
+          {/* <div className="hidden md:block">
             <button>
               <img src={config} alt="" className="w-[30px] h-[30px]" />
             </button>
-          </div>
-        </div>
-        <div>
-        <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
+          </div> */}{" "}
+          <div className="md:block hidden">
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>{" "}
+          {/* {stateUser ? (
+            <div className="w-[300px] h-[100px] absolute mt-[150px] right-0 bg-gray-300 z-20 flex flex-col justify-evenly">
+              <IconoUser />
+            </div>
+          ) : null} */}
         </div>
       </nav>
-      {stateUser ? (
-        <div className="w-[300px] h-[100px] absolute mt-[150px] right-0 bg-gray-300 z-20 flex flex-col justify-evenly">
-          <IconoUser />
-        </div>
-      ) : null}
     </header>
   );
 }

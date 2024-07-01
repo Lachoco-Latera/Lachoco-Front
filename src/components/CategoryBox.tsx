@@ -32,7 +32,7 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
         ${selected ? "text-neutral-800" : "text-neutral-500"}
       `}
     >
-      {Icon && <Icon size={26} />} {/* Renderiza el icono solo si Icon está definido */}
+      {Icon && <Icon size={26} className="max-h-8" />}
       <div className="font-medium text-sm">{label}</div>
     </div>
   );

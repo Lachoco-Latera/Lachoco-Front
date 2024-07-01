@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { GridColumn, Search, Grid } from "semantic-ui-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   loading: false,
@@ -28,13 +29,14 @@ function SearchExampleStandard() {
   const [state, dispatch] = React.useReducer(exampleReducer, initialState);
   const { loading, results, value } = state;
   const [products, setProducts] = useState([]);
-
+  const navigate = useNavigate();
   const timeoutRef: any = React.useRef();
+
+  // Función para manejar el cambio en la búsqueda
   const handleSearchChange = React.useCallback(
     (e: any, data: any) => {
       clearTimeout(timeoutRef.current);
       dispatch({ type: "START_SEARCH", query: data.value });
-      console.log(e ? "Searching on searchbar" : "Event didnt pop");
       timeoutRef.current = setTimeout(() => {
         if (data.value.length === 0) {
           dispatch({ type: "CLEAN_QUERY" });
@@ -45,16 +47,16 @@ function SearchExampleStandard() {
         const isNumber = /^\d+(\.\d+)?$/.test(searchTerm);
         const re = new RegExp(_.escapeRegExp(searchTerm), "i");
 
-        let results = _.filter(products, (result: any) => {
+        let filteredResults: any = _.filter(products, (result: any) => {
           if (isNumber) {
-            // Buscar por precio si el término es un número
             return re.test(result.price);
           } else {
-            // Buscar por nombre o descripción si no es un número
             return re.test(result.name) || re.test(result.description);
           }
         });
-        results = results.slice(0, 6).map((result) => ({
+
+        // Limitar los resultados y ajustar la descripción e imagen si es necesario
+        filteredResults = filteredResults.slice(0, 6).map((result: any) => ({
           ...result,
           description: result.description
             .split(" ")
@@ -66,12 +68,14 @@ function SearchExampleStandard() {
 
         dispatch({
           type: "FINISH_SEARCH",
-          results: results,
+          results: filteredResults,
         });
       }, 300);
     },
     [products]
   );
+
+  // Obtener productos al cargar el componente
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -83,15 +87,24 @@ function SearchExampleStandard() {
         console.error(err);
       }
     };
+
     fetchProducts();
   }, []);
-  React.useEffect(() => {
+
+  // Limpiar timeout al desmontar el componente
+  useEffect(() => {
     return () => {
       clearTimeout(timeoutRef.current);
     };
   }, []);
 
-  console.log(products);
+  // Limpiar estado al desmontar el componente
+  useEffect(() => {
+    return () => {
+      dispatch({ type: "CLEAN_QUERY" });
+    };
+  }, []);
+
   return (
     <Grid>
       <GridColumn width={16}>
@@ -99,13 +112,13 @@ function SearchExampleStandard() {
           fluid
           loading={loading}
           placeholder="Chocolatéa!"
-          onResultSelect={(e, data) => (
+          onResultSelect={(e, data) => {
             dispatch({
               type: "UPDATE_SELECTION",
               selection: data.result.title,
-            }),
-            console.log(e ? "Got searched on searchbar" : "Event didnt pop")
-          )}
+            });
+            navigate(`/products/${data.result.id}`);
+          }}
           onSearchChange={handleSearchChange}
           results={results}
           value={value}

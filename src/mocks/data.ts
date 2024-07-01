@@ -5,6 +5,11 @@ export const products: Product[] = [
     id: "123831c5-b4d5-4ac6-9ccf-26e485c97d10",
     name: "",
     presentacion: 24,
+    category: {
+      id: "",
+      name: "",
+      icon: 2,
+    },
     description:
       "Chocolate oscuro premium con 70% de cacao, elaborado con ingredientes de alta calidad y un toque de vainilla.",
     price: "15000.00",

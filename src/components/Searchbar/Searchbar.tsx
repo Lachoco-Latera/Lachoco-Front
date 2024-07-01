@@ -103,7 +103,7 @@ function SearchExampleStandard() {
       dispatch({ type: "CLEAN_QUERY" });
     };
   }, []);
-
+  console.log(products);
   return (
     <Grid>
       <GridColumn width={16}>

@@ -41,7 +41,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
         toast.success("Añadido a favoritos");
         return "red";
       } else {
-        toast.error("Se ha eliminado");
+        toast.error("Se ha eliminado de favoritos");
         return "transparent";
       }
     });

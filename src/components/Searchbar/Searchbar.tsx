@@ -57,9 +57,15 @@ function SearchExampleStandard({ products }: Props) {
             return re.test(result.name) || re.test(result.description);
           }
         });
-
-        // Limitar los resultados a un máximo de 6
-        results = results.slice(0, 6);
+        results = results.slice(0, 6).map((result) => ({
+          ...result,
+          description: result.description
+            .split(" ")
+            .slice(0, 12)
+            .join(" ")
+            .concat(result.description.split(" ").length > 12 ? "..." : ""),
+          image: result.images.length > 0 ? result.images[0].img : undefined,
+        }));
 
         dispatch({
           type: "FINISH_SEARCH",

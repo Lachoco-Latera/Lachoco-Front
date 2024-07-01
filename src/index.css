@@ -118,7 +118,10 @@
 
 .hover-center-text:hover {
   padding-left: calc(50% - (var(--text-width) / 2));
-  padding-right: calc(50% - (var(--text-width) / 2));
+  padding-right: calc(20% - (var(--text-width) / 2));
+}
+.ui.icon.input {
+  min-width: 25vmax;
 }
 .ui.icon.input > input:hover {
   padding-right: 8em !important;
@@ -130,7 +133,7 @@
 
 @media (max-width: 768px) {
   .ui.icon.input > input {
-    width:45vmax; /* Ocupa todo el ancho disponible */
+    width: 45vmax; /* Ocupa todo el ancho disponible */
     transition: all ease 0.2s;
   }
 }

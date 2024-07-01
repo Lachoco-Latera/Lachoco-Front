@@ -53,7 +53,7 @@ export default function Header({ onCartIconClick, products }: Props) {
           />
         </span>
         <div className="hover:drop-shadow transition-all ease ">
-          <SearchExampleStandard products={products} />
+          <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-10">
           <div className="relative  hidden md:block">

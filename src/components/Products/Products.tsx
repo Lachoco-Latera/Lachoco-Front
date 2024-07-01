@@ -39,7 +39,7 @@ const Products = () => {
 
   return (
     <>
-      <Header onCartIconClick={handleCartIconClick} />
+      <Header onCartIconClick={handleCartIconClick} products={info} />
       <div className="block md:hidden">
         <BottomBar onCartIconClick={handleCartIconClickAlt} />
       </div>

@@ -110,7 +110,7 @@ function SearchExampleStandard() {
         <Search
           fluid
           loading={loading}
-          placeholder="Chocolatéa!"
+          placeholder="¿Qué quieres probar?"
           onResultSelect={(e, data) => {
             dispatch({
               type: "UPDATE_SELECTION",

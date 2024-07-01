@@ -2,7 +2,6 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { GridColumn, Search, Grid } from "semantic-ui-react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const initialState = {
   loading: false,
@@ -29,11 +28,11 @@ function SearchExampleStandard() {
   const [state, dispatch] = React.useReducer(exampleReducer, initialState);
   const { loading, results, value } = state;
   const [products, setProducts] = useState([]);
-  const navigate = useNavigate();
   const timeoutRef: any = React.useRef();
 
   // Función para manejar el cambio en la búsqueda
   const handleSearchChange = React.useCallback(
+    //@ts-ignore
     (e: any, data: any) => {
       clearTimeout(timeoutRef.current);
       dispatch({ type: "START_SEARCH", query: data.value });

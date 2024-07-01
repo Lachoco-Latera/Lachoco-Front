@@ -19,7 +19,7 @@ interface Props {
   products: Product[];
 }
 
-export default function Header({ onCartIconClick, products }: Props) {
+export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const [stateUser, setStateUser] = useState(false);
 

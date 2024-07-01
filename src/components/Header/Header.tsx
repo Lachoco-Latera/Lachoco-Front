@@ -11,18 +11,21 @@ import iconoUser from "../../../public/images/iconoUser.svg";
 import close from "../../../public/images/close.svg";
 import config from "../../../public/images/configuracion.svg";
 import logo from "../../../public/images/logo.png";
+import { Product } from "@/types.d";
+
 import { toast } from "sonner";
 interface Props {
   onCartIconClick: () => void;
+  products: Product[];
 }
 
-export default function Header({ onCartIconClick }: Props) {
+export default function Header({ onCartIconClick, products }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const [stateUser, setStateUser] = useState(false);
 
   const handleButtonUser = () => {
     setStateUser((prevState) => !prevState);
-    console.log(stateUser);
+    // console.log(stateUser);
   };
   const promise = () =>
     new Promise((resolve) =>
@@ -50,7 +53,7 @@ export default function Header({ onCartIconClick }: Props) {
           />
         </span>
         <div className="hover:drop-shadow transition-all ease ">
-          <SearchExampleStandard />
+          <SearchExampleStandard products={products} />
         </div>
         <div className="flex flex-row items-center gap-10">
           <div className="relative  hidden md:block">

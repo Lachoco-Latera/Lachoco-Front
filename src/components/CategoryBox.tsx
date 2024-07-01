@@ -1,58 +1,29 @@
-
-// import qs from "query-string";
-
-// import { useCallback } from "react";
 import { IconType } from "react-icons";
+import { useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 
 interface CategoryBoxProps {
   icon: IconType;
   label: string;
   selected?: boolean;
+  onSelect?: () => void;
 }
 
 const CategoryBox: React.FC<CategoryBoxProps> = ({
   icon: Icon,
   label,
   selected,
+  onSelect,
 }) => {
-  // const handleClick = useCallback(() => {
-  //   let currentQuery = {};
+  const [, setSearchParams] = useSearchParams();
 
-  //   if (params) {
-  //     currentQuery = qs.parse(params.toString());
-  //   }
-
-  //   const updatedQuery: any = {
-  //     ...currentQuery,
-  //     category: label,
-  //   };
-
-  //   if (params?.get("category") === label) {
-  //     delete updatedQuery.category;
-  //   }
-
-  //   // Verificar si la ruta actual ya contiene "/es" o "/en"
-  //   const currentPath = window.location.pathname;
-  //   const hasLocale =
-  //     currentPath.startsWith("/es") || currentPath.startsWith("/en");
-
-  //   // Construir la URL con o sin la versión internacionalizada
-  //   const url = qs.stringifyUrl(
-  //     {
-  //       url: hasLocale ? currentPath : "/",
-  //       query: updatedQuery,
-  //     },
-  //     { skipNull: true }
-  //   );
-
-  //   router.push(url);
-  // }, [label, router, params]);
+  const handleClick = useCallback(() => {
+    setSearchParams({ category: label });
+  }, [label, setSearchParams]);
 
   return (
     <div
-      onClick={() => {
-        console.log("handleClick");
-      }}
+      onClick={onSelect || handleClick}
       className={`
         flex 
         flex-col 
@@ -68,7 +39,8 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
         ${selected ? "text-neutral-800" : "text-neutral-500"}
       `}
     >
-      <Icon size={26} />
+      {Icon && <Icon size={26} />}
+      {/* Asegúrate de que Icon esté definido antes de renderizarlo */}
       <div className="font-medium text-sm">{label}</div>
     </div>
   );

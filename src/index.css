@@ -133,7 +133,7 @@
 
 @media (max-width: 768px) {
   .ui.icon.input > input {
-    width: 35vmax; /* Ocupa todo el ancho disponible */
+    width: 42vmax; /* Ocupa todo el ancho disponible */
     transition: all ease 0.2s;
   }
   .ui.icon.input {

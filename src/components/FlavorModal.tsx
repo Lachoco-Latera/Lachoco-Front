@@ -18,6 +18,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const [flavorCounts, setFlavorCounts] = useState<{ [key: string]: number }>(
     {}
   );
+  const [moreOptions, setMoreOptions] = useState(false);
 
   let total = 0;
   if (cart) {
@@ -35,10 +36,9 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         flavorCounts[flavor.id] < product.presentacion)
     ) {
       setLastSelectedProductId(product.id);
-      setLastPickedFlavor(flavor.id); // Set last picked flavor
+      setLastPickedFlavor(flavor.id);
       setSelectedFlavors([...selectedFlavors, flavor.id]);
 
-      // Increment flavor count
       setFlavorCounts((prevCounts) => ({
         ...prevCounts,
         [flavor.id]: (prevCounts[flavor.id] || 0) + 1,
@@ -61,6 +61,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   };
 
   const handleResetFlavors = () => {
+    setMoreOptions(false);
     setSelectedFlavors([]);
     setFlavorCounts({});
   };
@@ -69,7 +70,6 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     if (selectedFlavors.length < product.presentacion) {
       let flavorToAdd = lastSelectedProductId;
 
-      // Si no hay un último sabor seleccionado, elige uno aleatorio
       if (!flavorToAdd && product.flavors.length > 0) {
         flavorToAdd =
           product.flavors[Math.floor(Math.random() * product.flavors.length)]
@@ -77,12 +77,13 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       }
 
       setSelectedFlavors([...selectedFlavors, flavorToAdd]);
+
       setFlavorCounts((prevCounts) => ({
         ...prevCounts,
         [flavorToAdd]: (prevCounts[flavorToAdd] || 0) + 1,
       }));
 
-      setLastSelectedProductId(flavorToAdd); // Guarda el último sabor seleccionado
+      setLastSelectedProductId(flavorToAdd);
 
       toast(
         `Sabor ${
@@ -147,8 +148,12 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
+  useEffect(() => {
+    if (selectedFlavors.length === 0) {
+      setMoreOptions(false);
+    }
+  }, [selectedFlavors]);
 
-  const canSaveSelection = selectedFlavors.length < product.presentacion;
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -217,22 +222,6 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 </div>
               ))}
             </div>
-            {canSaveSelection && (
-              <div className="flex justify-center mt-4">
-                <button
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-2xl shadow-xl mr-2"
-                  onClick={handleFillWithLastFlavor}
-                >
-                  Rellenar con último sabor
-                </button>
-                <button
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-2xl shadow-xl"
-                  onClick={handleAddRandomFlavor}
-                >
-                  Añadir aleatoriamente
-                </button>
-              </div>
-            )}
           </div>
           <div className="w-1/2 pl-6 border-l border-gray-200">
             <h2 className="text-2xl font-bold mb-4">Cantidad de sabores</h2>
@@ -250,27 +239,52 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
               <p className="text-lg">Precio total: ${total.toFixed(2)}</p>
             </div>
             <div className="pt-4">
-              {selectedFlavors.length > 0 ? (
-                <button
-                  className="
-                  bg-rose-600 hover:bg-white
-                  hover:text-green-300 text-white 
-                  cursor-pointer transition-all ease 
-                  hover:scale-105 hover:font-bold text-xl
-                  shadow rounded-full p-4 hover:drop-shadow-xl "
-                  onClick={() =>
-                    toast.promise(promise, {
-                      loading: `Serás redireccionado para pagar ${product.name}...`,
-                      success: () => {
-                        return `Muchas gracias de antemano! ❤`;
-                      },
-                      error: "Error",
-                    })
-                  }
-                >
-                  Guardar selección
-                </button>
-              ) : null}
+              {selectedFlavors.length > 0 && (
+                <>
+                  <button
+                    className="
+          bg-rose-600 hover:bg-white
+          hover:text-green-300 text-white 
+          cursor-pointer transition-all ease 
+          hover:scale-105 hover:font-bold text-xl
+          shadow rounded-full p-4 hover:drop-shadow-xl"
+                    onClick={() => {
+                      if (selectedFlavors.length < product.presentacion) {
+                        toast.info("Aún faltan sabores por seleccionar.");
+                        setMoreOptions(true);
+                      } else {
+                        toast.promise(promise, {
+                          loading: `Serás redireccionado para pagar ${product.name}...`,
+                          success: () => {
+                            return `¡Muchas gracias de antemano! ❤`;
+                          },
+                          error: "Error",
+                        });
+                      }
+                    }}
+                  >
+                    Guardar selección
+                  </button>
+
+                  {selectedFlavors.length < product.presentacion &&
+                    moreOptions && (
+                      <div className="flex justify-center mt-4">
+                        <button
+                          className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-2xl shadow-xl mr-2"
+                          onClick={handleFillWithLastFlavor}
+                        >
+                          Rellenar con último sabor
+                        </button>
+                        <button
+                          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-2xl shadow-xl"
+                          onClick={handleAddRandomFlavor}
+                        >
+                          Añadir aleatoriamente
+                        </button>
+                      </div>
+                    )}
+                </>
+              )}
             </div>
           </div>
         </div>

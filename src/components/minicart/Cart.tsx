@@ -30,7 +30,7 @@ function Cart({ similar }: any) {
     );
   return (
     <section>
-      <h3 className="text-2xl font-bold mb-4">Shopping Cart</h3>
+      <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
       <ul>
         {cart?.map((product) => (
           <CartItem key={product.id} product={product} />
@@ -52,7 +52,7 @@ function Cart({ similar }: any) {
             })
           }
         >
-          Proceder al págo?
+         Ordenar Ahora
         </button>
       </div>
     </section>

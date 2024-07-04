@@ -21,7 +21,6 @@ const ProductsDetail = ({ info }: { info: any }) => {
     setModalProduct(product);
     setShowModal(true);
   };
-
   const closeModal = () => {
     setShowModal(false);
     setModalProduct(null);
@@ -47,8 +46,6 @@ const ProductsDetail = ({ info }: { info: any }) => {
       }
     });
   };
-
-  console.log(info);
   return (
     <div className="flex flex-col md:px-48 px-12 md:py-10 ">
       <div className="flex flex-col md:flex-row items-center md:justify-between">
@@ -116,27 +113,27 @@ const ProductsDetail = ({ info }: { info: any }) => {
               </li>
             ))}
           </ul>
-          <p className="self-start max-w-2xl pt-12 md:font-semibold">
-            <h2 className="flex gap-2 text-3xl">
+          <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
+            <p className="flex gap-2 text-3xl">
               <LuPackageOpen />
               Presentación
-            </h2>
+            </p>
             <p className=""> {productInfo?.description}</p>
-          </p>
-          <p className="self-start max-w-2xl pt-12 md:font-semibold">
-            <h2 className="flex gap-2 text-3xl">
+          </h2>
+          <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
+            <p className="flex gap-2 text-3xl">
               <FaBookOpen />
               Descripción
-            </h2>
+            </p>
             <p className=""> {productInfo?.description}</p>
-          </p>
-          <p className="self-start max-w-2xl pt-12 md:font-semibold">
-            <h2 className="flex gap-2 text-3xl">
+          </h2>
+          <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
+            <p className="flex gap-2 text-3xl">
               <GrDeliver />
               Envios
-            </h2>
+            </p>
             <p className=""> {productInfo?.description}</p>
-          </p>
+          </h2>
         </div>
         <div className="flex">
           <Checkout

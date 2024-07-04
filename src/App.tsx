@@ -6,9 +6,9 @@ import Cart from "./components/minicart/Cart";
 import { useProductsStore } from "./stores/useProductsStore";
 import ProductsGridAlt from "./components/Products/ProductsGridAlt";
 import "semantic-ui-css/semantic.min.css";
-import { Login } from "./components/Login/Login";
-import { Register } from "./components/Register/Register";
-import { UserConfig } from "./components/UserConfig/UserConfig";
+// import { Login } from "./components/Login/Login";
+// import { Register } from "./components/Register/Register";
+// import { UserConfig } from "./components/UserConfig/UserConfig";
 import { Footer } from "./components/Footer/Footer";
 import Categories from "./components/Categories/Categories";
 import BottomBar from "./components/BottomBar/BottomBar";
@@ -60,7 +60,7 @@ function App() {
   };
   return (
     <div>
-      <Header onCartIconClick={handleCartIconClick} />
+      <Header onCartIconClick={handleCartIconClick} products={products} />
       <div className="block md:hidden">
         <BottomBar onCartIconClick={handleCartIconClick} />
       </div>
@@ -72,9 +72,10 @@ function App() {
         products={products}
         onCartIconClick={handleCartIconClickAlt}
       />
-      <Login />
+      {/* <Login />
       <Register />
-      <UserConfig />
+      <UserConfig /> */}
+
       <Footer />
     </div>
   );

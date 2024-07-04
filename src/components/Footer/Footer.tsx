@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 
 import { CambioMoneda } from "../CambioMoneda/CambioMoneda"
 import logo1 from '/images/facebook.png'
@@ -6,11 +6,11 @@ import logo2 from '/images/whatsapp.png'
 import logo3 from '/images/instagram.png'
 
 export const Footer = () => {
-    const [monedaState, setMonedaState] = useState(false)
+  const [monedaState, setMonedaState] = useState(false);
 
-    const handleOnClick = () => {
-        setMonedaState(!monedaState)
-    }
+  const handleOnClick = () => {
+    setMonedaState(!monedaState);
+  };
 
   return (
     <>
@@ -52,9 +52,5 @@ export const Footer = () => {
             </div>
         </footer>
     </>
-  )
-}
-
-
-
-
+  );
+};

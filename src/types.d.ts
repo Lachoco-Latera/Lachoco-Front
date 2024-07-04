@@ -3,6 +3,11 @@ export interface Product {
   name: string;
   presentacion: number;
   description: string;
+  category: {
+    id: string;
+    name: string;
+    icon: number;
+  };
   price: string;
   currency: string;
   label: string;

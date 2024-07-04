@@ -53,7 +53,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       onClick={closeModal}
     >
       <div
-        className="flex flex-col bg-white p-6 rounded-lg shadow-lg w-4/5 text-center z-40"
+        className="flex flex-col bg-white p-6 rounded-2xl shadow-lg w-4/5 text-center z-40"
         onClick={handleModalClick}
       >
         <div className="flex self-end">

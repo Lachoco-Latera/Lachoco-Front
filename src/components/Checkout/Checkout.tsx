@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { toast } from "sonner";
-
 const Checkout = ({ price, currency, productName }: any) => {
   const [pickedFlavors, setPickedFlavors] = useState<{
     [key: string]: boolean;

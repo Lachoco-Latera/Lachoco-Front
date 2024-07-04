@@ -9,6 +9,8 @@ import { SlHeart } from "react-icons/sl";
 import { LuPackageOpen } from "react-icons/lu";
 import { GrDeliver } from "react-icons/gr";
 import { FaBookOpen } from "react-icons/fa";
+import MapComponent from "../../MapComponent";
+import FlavorModal from "../../FlavorModal";
 
 const ProductsDetail = ({ info }: { info: any }) => {
   const [modalProduct, setModalProduct] = useState<Product | null>(null);
@@ -134,6 +136,9 @@ const ProductsDetail = ({ info }: { info: any }) => {
             </p>
             <p className=""> {productInfo?.description}</p>
           </h2>
+          <div className="z-0">
+            <MapComponent />
+          </div>
         </div>
         <div className="flex">
           <Checkout
@@ -179,6 +184,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
           </div>
         </div>
       )}
+      <FlavorModal product={info}></FlavorModal>
     </div>
   );
 };

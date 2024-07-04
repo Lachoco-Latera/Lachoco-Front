@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { toast } from "sonner";
 import { useCartStore } from "../../stores/useCartStore";
 
@@ -57,8 +56,19 @@ const Checkout = ({
         $ {price} {currency}
       </div>
       <div className="pt-4">
-        {productCategory !== "bombones" ||
-        confirmedFlavors === flavorQuantity ? (
+        {productCategory === "bombones" ||
+        confirmedFlavors !== flavorQuantity ? (
+          <button
+            className="
+        shadow rounded-full p-4 hover:drop-shadow-xl 
+        bg-rose-600 hover:bg-white
+        hover:text-green-300 text-white 
+        hover:scale-105 hover:font-bold text-xl
+         cursor-pointer transition-all ease"
+          >
+            Seleccionar sabores
+          </button>
+        ) : (
           <button
             className="
         shadow rounded-full p-4 hover:drop-shadow-xl 
@@ -69,17 +79,6 @@ const Checkout = ({
             onClick={handleButtonClick}
           >
             Comprar ahora
-          </button>
-        ) : (
-          <button
-            className="
-        shadow rounded-full p-4 hover:drop-shadow-xl 
-        bg-rose-600 hover:bg-white
-        hover:text-green-300 text-white 
-        hover:scale-105 hover:font-bold text-xl
-         cursor-pointer transition-all ease"
-          >
-            Seleccionar sabores
           </button>
         )}
       </div>

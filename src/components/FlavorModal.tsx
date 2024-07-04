@@ -13,6 +13,7 @@ interface Props {
 const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const {
     cart,
+    //@ts-ignore
     totalItems,
     confirmedFlavors,
     addConfirmedFlavors,

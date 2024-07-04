@@ -1,9 +1,16 @@
 import { toast } from "sonner";
 import { useCartStore } from "../../stores/useCartStore";
 
-const Checkout = ({ price, currency, productName, openModal }: any) => {
-  const { cart, selectFlavors } = useCartStore();
-
+const Checkout = ({
+  price,
+  currency,
+  productName,
+  openModal,
+  productCategory,
+  flavorQuantity,
+  confirmedFlavors,
+}: any) => {
+  const { cart } = useCartStore();
   const promise = () =>
     new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -11,7 +18,11 @@ const Checkout = ({ price, currency, productName, openModal }: any) => {
           (item) => item.category.name === "bombones"
         );
 
-        if (hasBombones && selectFlavors.length > 0) {
+        if (
+          hasBombones &&
+          confirmedFlavors !== flavorQuantity &&
+          productCategory === "bombones"
+        ) {
           reject("Debes seleccionar sabores para los bombones.");
         } else {
           resolve((window.location.href = "https://www.mercadopago.com.ar"));
@@ -27,11 +38,11 @@ const Checkout = ({ price, currency, productName, openModal }: any) => {
       error: "Debes seleccionar sabores para los bombones.",
     });
   };
-
+  console.log(confirmedFlavors == flavorQuantity);
   return (
     <div
       className="
-        px-8 py-48 rounded-xl 
+        px-8 py-8 rounded-xl 
         text-slate-700
         drop-shadow-md
         hover:drop-shadow-2xl ease 
@@ -45,17 +56,31 @@ const Checkout = ({ price, currency, productName, openModal }: any) => {
         $ {price} {currency}
       </div>
       <div className="pt-4">
-        <button
-          className="
+        {productCategory !== "bombones" ||
+        confirmedFlavors === flavorQuantity ? (
+          <button
+            className="
         shadow rounded-full p-4 hover:drop-shadow-xl 
         bg-rose-600 hover:bg-white
         hover:text-green-300 text-white 
         hover:scale-105 hover:font-bold text-xl
          cursor-pointer transition-all ease"
-          onClick={handleButtonClick}
-        >
-          Comprar ahora
-        </button>
+            onClick={handleButtonClick}
+          >
+            Comprar ahora
+          </button>
+        ) : (
+          <button
+            className="
+        shadow rounded-full p-4 hover:drop-shadow-xl 
+        bg-rose-600 hover:bg-white
+        hover:text-green-300 text-white 
+        hover:scale-105 hover:font-bold text-xl
+         cursor-pointer transition-all ease"
+          >
+            Seleccionar sabores
+          </button>
+        )}
       </div>
     </div>
   );

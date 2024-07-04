@@ -11,8 +11,10 @@ import { GrDeliver } from "react-icons/gr";
 import { FaBookOpen } from "react-icons/fa";
 import MapComponent from "../../MapComponent";
 import FlavorModal from "../../FlavorModal";
+import { useCartStore } from "../../../stores/useCartStore";
 
 const ProductsDetail = ({ info }: { info: any }) => {
+  const { cart, confirmedFlavors } = useCartStore();
   const [modalProduct, setModalProduct] = useState<Product | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [productInfo, setProductInfo] = useState<any>(null);
@@ -57,6 +59,20 @@ const ProductsDetail = ({ info }: { info: any }) => {
       }
     });
   };
+  const maxFlavors =
+    info.presentacion *
+    cart.reduce((acc, item: any) => {
+      if (item.id === info.id) {
+        return acc + item.quantity;
+      }
+      return acc;
+    }, 0);
+
+  const actualSelectionLength = confirmedFlavors[info.id]?.length || 0;
+
+  console.log("Selección actual de flavors:", actualSelectionLength);
+  console.log("Maximo de sabores:", maxFlavors);
+
   return (
     <div className="flex flex-col md:px-48 px-12 md:py-10 ">
       <div className="flex flex-col md:flex-row items-center md:justify-between">
@@ -85,7 +101,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
               id="secondHeart"
               size={24}
               color="white"
-              className="cursor-pointer group-hover:scale-[1.1] ease-in-out duration-300 drop-shadow z-30"
+              className="cursor-pointer group-hover:scale-[1.1] ease-in-out duration-300 drop-shadow z-[8]"
             />
             {"Añadir a favoritos"}
           </div>
@@ -161,6 +177,9 @@ const ProductsDetail = ({ info }: { info: any }) => {
             currency={productInfo?.currency}
             flavors={productInfo?.flavors}
             productName={productInfo?.name}
+            productCategory={productInfo?.category.name}
+            flavorQuantity={maxFlavors}
+            confirmedFlavors={actualSelectionLength}
             openModal={
               info?.category?.name === "bombones" ? openFlavorModal : null
             }

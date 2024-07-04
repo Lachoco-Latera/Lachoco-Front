@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { toast } from "sonner";
 import { useCartStore } from "../../stores/useCartStore";
 

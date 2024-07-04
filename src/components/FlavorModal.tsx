@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useCartStore } from "../stores/useCartStore";
-// import { FaCirclePlus } from "react-icons/fa6";
 import { toast } from "sonner";
 import { Product } from "@/types.d";
 import { IoMdExit } from "react-icons/io";
@@ -29,24 +28,34 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   }
 
   const handleFlavorClick = (flavor: any) => {
-    setLastSelectedProductId(product.id);
-    setSelectedFlavors([...selectedFlavors, flavor.id]);
+    if (
+      selectedFlavors.length < product.presentacion &&
+      (!flavorCounts[flavor.id] ||
+        flavorCounts[flavor.id] < product.presentacion)
+    ) {
+      setLastSelectedProductId(product.id);
+      setSelectedFlavors([...selectedFlavors, flavor.id]);
 
-    // Increment flavor count
-    setFlavorCounts((prevCounts) => ({
-      ...prevCounts,
-      [flavor.id]: (prevCounts[flavor.id] || 0) + 1,
-    }));
+      // Increment flavor count
+      setFlavorCounts((prevCounts) => ({
+        ...prevCounts,
+        [flavor.id]: (prevCounts[flavor.id] || 0) + 1,
+      }));
 
-    toast(`Sabor ${flavor.name} agregado!`, {
-      action: {
-        label: "Okay!",
-        onClick: () => {
-          console.log(`Cerrar modal de ${flavor.name}`);
-          closeModal();
+      toast(`Sabor ${flavor.name} agregado!`, {
+        action: {
+          label: "Okay!",
+          onClick: () => {
+            console.log(`Cerrar modal de ${flavor.name}`);
+            closeModal();
+          },
         },
-      },
-    });
+      });
+    } else {
+      toast.error(
+        `Ya has alcanzado el límite de sabores para ${product.name}.`
+      );
+    }
   };
 
   const handleResetFlavors = () => {
@@ -74,7 +83,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
-  console.log(product.presentacion);
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -134,9 +143,6 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                     <div>
                       <p className="text-lg font-semibold">{flavor.name}</p>
                     </div>
-                    {/* <div className="transform hover:scale-110 transition-transform">
-                      <FaCirclePlus color={"green"} />
-                    </div> */}
                     {flavorCounts[flavor.id] && (
                       <div className="absolute bg-green-400 font-bold text-lg text-white py-1 px-2 shadow rounded-full">
                         <span>{`x${flavorCounts[flavor.id]}`}</span>
@@ -150,27 +156,8 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
           <div className="w-1/2 pl-6 border-l border-gray-200">
             <h2 className="text-2xl font-bold mb-4">Cantidad de sabores</h2>
             <div>
-              {/* {cart.length > 0 ? (
-                cart.flatMap((item) =>
-                  item.category.name === "bombones"
-                    ? Array.from({ length: item.quantity ?? 0 }, (_, index) => (
-                        <div
-                          key={`${item.id}-${index}`}
-                          className="flex flex-row justify-between my-2 p-2 rounded-3xl shadow cursor-pointer hover:scale-105 hover:bg-green-100 transition-all ease duration-200"
-                        >
-                          <span>{item.name}</span>
-                          <span>{index + 1}#</span>
-                        </div>
-                      ))
-                    : null
-                )
-              ) : (
-                <p className="my-4">Tu carrito está vacío</p>
-              )} */}
               <div className="flex flex-row justify-center items-center gap-2">
-                <span className=" text-2xl">
-                  {selectedFlavors.length}
-                </span>
+                <span className=" text-2xl">{selectedFlavors.length}</span>
                 <p className=" text-2xl font-bold ">/</p>
                 <span className=" text-2xl font-bold">
                   {product.presentacion}

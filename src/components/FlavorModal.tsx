@@ -71,7 +71,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         <p className="text-lg mb-2">{product.description}</p>
         <div className="flex justify-between items-start p-6">
           <div className="pr-6">
-            <h2 className="text-2xl font-bold mb-4">Select Your Flavors</h2>
+            <h2 className="text-2xl font-bold mb-4">Elige tus sabores</h2>
             <div className="flex flex-wrap justify-center items-center gap-4">
               {product.flavors.map((flavor) => (
                 <div
@@ -87,9 +87,9 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                     />
                     <div>
                       <p className="text-lg font-semibold">{flavor.name}</p>
-                      <p className="text-sm text-gray-600">
+                      {/* <p className="text-sm text-gray-600">
                         Stock: {flavor.stock}
-                      </p>
+                      </p> */}
                     </div>
                     <div className="transform hover:scale-110 transition-transform">
                       <FaCirclePlus color={"green"} />
@@ -100,23 +100,23 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
             </div>
           </div>
           <div className="w-1/2 pl-6 border-l border-gray-200">
-            <h2 className="text-2xl font-bold mb-4">Cart</h2>
+            <h2 className="text-2xl font-bold mb-4">Tus sabores elegidos</h2>
             <div>
               {cart.length > 0 ? (
                 cart.map((item) => (
                   <div key={item.id} className="flex justify-between my-2">
                     <span>{item.name}</span>
-                    <span>Quantity: {item.quantity}</span>
-                    <span>Price: ${item.price}</span>
+                    <span>Cantidad: {item.quantity}</span>
+                    {/* <span>Precio: ${item.price}</span> */}
                   </div>
                 ))
               ) : (
-                <p className="my-4">Your cart is empty</p>
+                <p className="my-4">Tu carrito está vacio</p>
               )}
             </div>
             <div className="mt-6">
-              <p className="text-lg">Total Items: {totalItems}</p>
-              <p className="text-lg">Total Price: ${total.toFixed(2)}</p>
+              <p className="text-lg">Total de sabores: {totalItems}</p>
+              <p className="text-lg">Precio total: ${total.toFixed(2)}</p>
             </div>
             <div className="pt-4">
               <button

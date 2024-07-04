@@ -111,7 +111,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
         ))}
       </Carousel>
       <div className="flex md:flex-row flex-col items-center md:items-start justify-between">
-        <div className="flex flex-col pr-10">
+        <div className="flex flex-col md:pr-10">
           <ul className="flex gap-2 ">
             {altLabel.map((label: any, index: number) => (
               <li
@@ -136,7 +136,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
             </p>
             <p className=""> {productInfo?.description}</p>
           </h2>
-          <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
+          <h2 className="self-start max-w-2xl pt-12 pb-12 md:font-semibold">
             <p className="flex gap-2 text-3xl">
               <GrDeliver />
               Envios

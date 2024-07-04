@@ -1,34 +1,6 @@
-import React, { useState } from "react";
 import { toast } from "sonner";
-const Checkout = ({ price, currency, productName }: any) => {
-  const [pickedFlavors, setPickedFlavors] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const exaflavors = [
-    "Vanilla",
-    "Chocolate",
-    "Strawberry",
-    "Mint",
-    "Caramel",
-    "Lemon",
-    "Blueberry",
-    "Hazelnut",
-    "Pistachio",
-    "Cookies and Cream",
-    "Raspberry",
-    "Butterscotch",
-    "Peach",
-    "Coconut",
-    "Cherry",
-  ];
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = event.target;
-    setPickedFlavors((prevPickedFlavors) => ({
-      ...prevPickedFlavors,
-      [name]: checked,
-    }));
-  };
+const Checkout = ({ price, currency, productName, openModal }: any) => {
   const promise = () =>
     new Promise((resolve) =>
       setTimeout(
@@ -37,6 +9,18 @@ const Checkout = ({ price, currency, productName }: any) => {
         1100
       )
     );
+
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    toast.promise(promise, {
+      loading: `Serás redireccionado para pagar ${productName}...`,
+      success: () => {
+        return `Muchas gracias de antemano! ❤`;
+      },
+      error: "Error",
+    });
+  };
+
   return (
     <div
       className="
@@ -47,24 +31,11 @@ const Checkout = ({ price, currency, productName }: any) => {
         transition-all bg-white     
         flex flex-col gap-2 text-center max-w-sm
       "
+      onClick={() => openModal()}
     >
-      <div>Checkout Aquí</div>
+      <h2 className="text-xl font-bold">Precio Final</h2>
       <div>
         $ {price} {currency}
-      </div>
-      <div className="flex flex-wrap justify-between gap-2">
-        {exaflavors.map((flavor: string) => (
-          <div key={flavor} className="flex items-center gap-1">
-            <input
-              type="checkbox"
-              className="hover:cursor-pointer"
-              name={flavor}
-              checked={pickedFlavors[flavor] || false}
-              onChange={handleCheckboxChange}
-            />
-            <label className="ml-1">{flavor}</label>
-          </div>
-        ))}
       </div>
       <div className="pt-4">
         <button
@@ -74,17 +45,9 @@ const Checkout = ({ price, currency, productName }: any) => {
         hover:text-green-300 text-white 
         hover:scale-105 hover:font-bold text-xl
          cursor-pointer transition-all ease"
-          onClick={() =>
-            toast.promise(promise, {
-              loading: `Serás redireccionado para pagar ${productName}...`,
-              success: () => {
-                return `Muchas gracias de antemano! ❤`;
-              },
-              error: "Error",
-            })
-          }
+          onClick={handleButtonClick}
         >
-          Comprár ahora
+          Comprar ahora
         </button>
       </div>
     </div>

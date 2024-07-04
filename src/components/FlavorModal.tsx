@@ -63,7 +63,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
             size={28}
           />
         </div>
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row justify-center pb-4">
           <h2 className="text-4xl font-bold mb-4 drop-shadow-xl flex justify-between items-center">
             {product.name}
           </h2>

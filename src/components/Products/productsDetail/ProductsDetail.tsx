@@ -147,12 +147,13 @@ const ProductsDetail = ({ info }: { info: any }) => {
             <MapComponent />
           </div>
         </div>
-        <div className="flex hover:cursor-pointer" onClick={openFlavorModal}>
+        <div className="flex hover:cursor-pointer">
           <Checkout
             price={productInfo?.price}
             currency={productInfo?.currency}
             flavors={productInfo?.flavors}
             productName={productInfo?.name}
+            openModal={openFlavorModal}
           />
         </div>
       </div>

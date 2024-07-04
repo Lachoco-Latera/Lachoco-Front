@@ -14,6 +14,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
   const [lastSelectedProductId, setLastSelectedProductId] =
     useState<string>("");
+  const [lastPickedFlavor, setLastPickedFlavor] = useState<string>("");
   const [flavorCounts, setFlavorCounts] = useState<{ [key: string]: number }>(
     {}
   );
@@ -34,6 +35,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         flavorCounts[flavor.id] < product.presentacion)
     ) {
       setLastSelectedProductId(product.id);
+      setLastPickedFlavor(flavor.id); // Set last picked flavor
       setSelectedFlavors([...selectedFlavors, flavor.id]);
 
       // Increment flavor count
@@ -63,6 +65,68 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     setFlavorCounts({});
   };
 
+  const handleFillWithLastFlavor = () => {
+    if (selectedFlavors.length < product.presentacion) {
+      let flavorToAdd = lastSelectedProductId;
+
+      // Si no hay un último sabor seleccionado, elige uno aleatorio
+      if (!flavorToAdd && product.flavors.length > 0) {
+        flavorToAdd =
+          product.flavors[Math.floor(Math.random() * product.flavors.length)]
+            .id;
+      }
+
+      setSelectedFlavors([...selectedFlavors, flavorToAdd]);
+      setFlavorCounts((prevCounts) => ({
+        ...prevCounts,
+        [flavorToAdd]: (prevCounts[flavorToAdd] || 0) + 1,
+      }));
+
+      setLastSelectedProductId(flavorToAdd); // Guarda el último sabor seleccionado
+
+      toast(
+        `Sabor ${
+          product.flavors.find((flavor) => flavor.id === flavorToAdd)?.name
+        } agregado!`,
+        {
+          action: {
+            label: "Okay!",
+            onClick: () => {
+              console.log(
+                `Cerrar modal de ${
+                  product.flavors.find((flavor) => flavor.id === flavorToAdd)
+                    ?.name
+                }`
+              );
+              closeModal();
+            },
+          },
+        }
+      );
+    }
+  };
+
+  const handleAddRandomFlavor = () => {
+    if (selectedFlavors.length < product.presentacion) {
+      const randomFlavor =
+        product.flavors[Math.floor(Math.random() * product.flavors.length)];
+      setSelectedFlavors([...selectedFlavors, randomFlavor.id]);
+      setFlavorCounts((prevCounts) => ({
+        ...prevCounts,
+        [randomFlavor.id]: (prevCounts[randomFlavor.id] || 0) + 1,
+      }));
+      toast(`Sabor ${randomFlavor.name} agregado!`, {
+        action: {
+          label: "Okay!",
+          onClick: () => {
+            console.log(`Cerrar modal de ${randomFlavor.name}`);
+            closeModal();
+          },
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     console.log("Último producto seleccionado:", lastSelectedProductId);
   }, [lastSelectedProductId]);
@@ -84,6 +148,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     e.stopPropagation();
   };
 
+  const canSaveSelection = selectedFlavors.length < product.presentacion;
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -152,6 +217,22 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 </div>
               ))}
             </div>
+            {canSaveSelection && (
+              <div className="flex justify-center mt-4">
+                <button
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-2xl shadow-xl mr-2"
+                  onClick={handleFillWithLastFlavor}
+                >
+                  Rellenar con último sabor
+                </button>
+                <button
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-2xl shadow-xl"
+                  onClick={handleAddRandomFlavor}
+                >
+                  Añadir aleatoriamente
+                </button>
+              </div>
+            )}
           </div>
           <div className="w-1/2 pl-6 border-l border-gray-200">
             <h2 className="text-2xl font-bold mb-4">Cantidad de sabores</h2>

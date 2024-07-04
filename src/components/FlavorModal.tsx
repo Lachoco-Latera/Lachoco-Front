@@ -68,13 +68,16 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
 
   const handleFillWithLastFlavor = () => {
     if (selectedFlavors.length < product.presentacion) {
-      let flavorToAdd = lastSelectedProductId;
+      let flavorToAdd = lastPickedFlavor;
 
       if (!flavorToAdd && product.flavors.length > 0) {
         flavorToAdd =
           product.flavors[Math.floor(Math.random() * product.flavors.length)]
             .id;
       }
+
+      const flavorName =
+        product.flavors.find((flavor) => flavor.id === flavorToAdd)?.name || "";
 
       setSelectedFlavors([...selectedFlavors, flavorToAdd]);
 
@@ -85,25 +88,15 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
 
       setLastSelectedProductId(flavorToAdd);
 
-      toast(
-        `Sabor ${
-          product.flavors.find((flavor) => flavor.id === flavorToAdd)?.name
-        } agregado!`,
-        {
-          action: {
-            label: "Okay!",
-            onClick: () => {
-              console.log(
-                `Cerrar modal de ${
-                  product.flavors.find((flavor) => flavor.id === flavorToAdd)
-                    ?.name
-                }`
-              );
-              closeModal();
-            },
+      toast(`Sabor ${flavorName} agregado!`, {
+        action: {
+          label: "Okay!",
+          onClick: () => {
+            console.log(`Cerrar modal de ${flavorName}`);
+            closeModal();
           },
-        }
-      );
+        },
+      });
     }
   };
 

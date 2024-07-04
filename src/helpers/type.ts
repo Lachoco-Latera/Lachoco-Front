@@ -58,3 +58,20 @@ export interface IFlavor {
     name?: string,
     stock?: number
 }
+
+export interface IGitfCards {
+    id?: string,
+    discount?: number,
+    img?: string,
+    isUsed?: boolean,
+    cantidad?: number,
+    product?: IProduct,
+}
+
+export interface IRedes {
+    id?: string,
+    url?: string,
+    img?: string,
+}
+
+

@@ -5,7 +5,6 @@ import { useCartStore } from "../../stores/useCartStore";
 import { toast } from "sonner";
 import { IoIosAdd } from "react-icons/io";
 import { LuMinus } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
 interface Props {
   product: Product;
 }
@@ -15,7 +14,6 @@ export default function CartItem({ product }: Props) {
   const addToCart = useCartStore((state) => state.addToCart);
   const delFromCart = useCartStore((state) => state.subtractFromCart);
   const cart = useCartStore((state) => state.cart);
-  const navigate = useNavigate();
   const handleSubtractFromCart = (product: Product) => {
     const cartItem = cart.find((item) => item.id === product.id);
 

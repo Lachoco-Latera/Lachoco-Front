@@ -2,7 +2,7 @@ import { toast } from "sonner";
 import { useCartStore } from "../../stores/useCartStore";
 
 const Checkout = ({ price, currency, productName, openModal }: any) => {
-  const { cart, flavorsSelected } = useCartStore();
+  const { cart, selectFlavors } = useCartStore();
 
   const promise = () =>
     new Promise((resolve, reject) => {
@@ -11,7 +11,7 @@ const Checkout = ({ price, currency, productName, openModal }: any) => {
           (item) => item.category.name === "bombones"
         );
 
-        if (hasBombones && !flavorsSelected) {
+        if (hasBombones && selectFlavors.length > 0) {
           reject("Debes seleccionar sabores para los bombones.");
         } else {
           resolve((window.location.href = "https://www.mercadopago.com.ar"));

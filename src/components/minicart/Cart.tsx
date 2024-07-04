@@ -6,7 +6,7 @@ import { useCartStore } from "../../stores/useCartStore";
 import { toast } from "sonner";
 
 function Cart({ similar }: any) {
-  const { cart, flavorsSelected } = useCartStore();
+  const { cart, selectFlavors } = useCartStore();
 
   let total = 0;
   if (cart) {
@@ -28,7 +28,7 @@ function Cart({ similar }: any) {
           (item) => item.category.name === "bombones"
         );
 
-        if (hasBombones && !flavorsSelected) {
+        if (hasBombones && selectFlavors.length > 0 ) {
           reject("Debes seleccionar sabores para los bombones.");
         } else {
           resolve((window.location.href = "https://www.mercadopago.com.ar"));

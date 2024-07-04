@@ -3,10 +3,11 @@ import { useCartStore } from "../stores/useCartStore";
 import { FaCirclePlus } from "react-icons/fa6";
 import { toast } from "sonner";
 import { Product } from "@/types.d";
+import { IoMdExit } from "react-icons/io";
 
 interface Props {
   product: Product;
-  closeModal: () => void; 
+  closeModal: () => void;
 }
 
 const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
@@ -52,12 +53,21 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       onClick={closeModal}
     >
       <div
-        className="bg-white p-6 rounded-lg shadow-lg w-4/5 text-center z-40"
+        className="flex flex-col bg-white p-6 rounded-lg shadow-lg w-4/5 text-center z-40"
         onClick={handleModalClick}
       >
-        <h2 className="text-4xl font-bold mb-4 drop-shadow-xl">
-          {product.name}
-        </h2>
+        <div className="flex self-end">
+          <IoMdExit
+            className="cursor-pointer hover:scale-110 text-red-500 hover:text-red-600 transition-all ease duration-200 "
+            onClick={closeModal}
+            size={28}
+          />
+        </div>
+        <div className="flex flex-row justify-center">
+          <h2 className="text-4xl font-bold mb-4 drop-shadow-xl flex justify-between items-center">
+            {product.name}
+          </h2>
+        </div>
         <p className="text-lg mb-2">{product.description}</p>
         <div className="flex justify-between items-start p-6">
           <div className="pr-6">
@@ -81,7 +91,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                         Stock: {flavor.stock}
                       </p>
                     </div>
-                    <div>
+                    <div className="transform hover:scale-110 transition-transform">
                       <FaCirclePlus color={"green"} />
                     </div>
                   </div>

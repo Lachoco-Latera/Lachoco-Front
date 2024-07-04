@@ -28,7 +28,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         label: "Okay!",
         onClick: () => {
           console.log(`Cerrar modal de ${flavor.name}`);
-          closeModal(); // Llamamos a la función closeModal para cerrar el modal
+          closeModal();
         },
       },
     });
@@ -46,7 +46,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
-  console.log(product.flavors)
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -87,9 +87,6 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                     />
                     <div>
                       <p className="text-lg font-semibold">{flavor.name}</p>
-                      {/* <p className="text-sm text-gray-600">
-                        Stock: {flavor.stock}
-                      </p> */}
                     </div>
                     <div className="transform hover:scale-110 transition-transform">
                       <FaCirclePlus color={"green"} />
@@ -103,15 +100,21 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
             <h2 className="text-2xl font-bold mb-4">Tus sabores elegidos</h2>
             <div>
               {cart.length > 0 ? (
-                cart.map((item) => (
-                  <div key={item.id} className="flex justify-between my-2">
-                    <span>{item.name}</span>
-                    <span>Cantidad: {item.quantity}</span>
-                    {/* <span>Precio: ${item.price}</span> */}
-                  </div>
-                ))
+                cart.flatMap((item) =>
+                  item.category.name === "bombones"
+                    ? Array.from({ length: item.quantity ?? 0 }, (_, index) => (
+                        <div
+                          key={`${item.id}-${index}`}
+                          className="flex justify-between my-2 p-2 rounded-3xl shadow cursor-pointer hover:scale-105 hover:bg-green-100 transition-all ease duration-200"
+                        >
+                          <span>{item.name}</span>
+                          <span>{index + 1}#</span>
+                        </div>
+                      ))
+                    : null
+                )
               ) : (
-                <p className="my-4">Tu carrito está vacio</p>
+                <p className="my-4">Tu carrito está vacío</p>
               )}
             </div>
             <div className="mt-6">
@@ -121,11 +124,11 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
             <div className="pt-4">
               <button
                 className="
-              bg-rose-600 hover:bg-white
-              hover:text-green-300 text-white 
-                cursor-pointer transition-all ease 
-                hover:scale-105 hover:font-bold text-xl
-                shadow rounded-full p-4 hover:drop-shadow-xl "
+                  bg-rose-600 hover:bg-white
+                  hover:text-green-300 text-white 
+                  cursor-pointer transition-all ease 
+                  hover:scale-105 hover:font-bold text-xl
+                  shadow rounded-full p-4 hover:drop-shadow-xl "
                 onClick={() =>
                   toast.promise(promise, {
                     loading: `Serás redireccionado para pagar ${product.name}...`,

@@ -29,7 +29,9 @@ const ProductsDetail = ({ info }: { info: any }) => {
   };
 
   const openFlavorModal = () => {
-    setShowFlavorModal(true);
+    info?.category?.name === "bombones"
+      ? setShowFlavorModal(true)
+      : setShowFlavorModal(false);
   };
 
   const closeFlavorModal = () => {
@@ -147,13 +149,21 @@ const ProductsDetail = ({ info }: { info: any }) => {
             <MapComponent />
           </div>
         </div>
-        <div className="flex hover:cursor-pointer">
+        <div
+          className={`flex ${
+            productInfo?.category?.name === "bombones"
+              ? "hover:cursor-pointer"
+              : null
+          }`}
+        >
           <Checkout
             price={productInfo?.price}
             currency={productInfo?.currency}
             flavors={productInfo?.flavors}
             productName={productInfo?.name}
-            openModal={openFlavorModal}
+            openModal={
+              info?.category?.name === "bombones" ? openFlavorModal : null
+            }
           />
         </div>
       </div>

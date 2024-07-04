@@ -10,7 +10,7 @@ interface Props {
 }
 
 const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
-  const { cart, totalItems } = useCartStore();
+  const { cart, totalItems, addConfirmedFlavors } = useCartStore(); // Agrega addConfirmedFlavors desde useCartStore
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
   const [lastSelectedProductId, setLastSelectedProductId] =
     useState<string>("");
@@ -147,6 +147,15 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     }
   }, [selectedFlavors]);
 
+  const handleGuardarSeleccion = () => {
+    if (selectedFlavors.length === product.presentacion) {
+      addConfirmedFlavors(product.id, selectedFlavors);
+      toast.success(`Selección de sabores guardada para ${product.name}`);
+    } else {
+      toast.error("Por favor selecciona todos los sabores antes de guardar.");
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -241,20 +250,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
           cursor-pointer transition-all ease 
           hover:scale-105 hover:font-bold text-xl
           shadow rounded-full p-4 hover:drop-shadow-xl"
-                    onClick={() => {
-                      if (selectedFlavors.length < product.presentacion) {
-                        toast.info("Aún faltan sabores por seleccionar.");
-                        setMoreOptions(true);
-                      } else {
-                        toast.promise(promise, {
-                          loading: `Serás redireccionado para pagar ${product.name}...`,
-                          success: () => {
-                            return `¡Muchas gracias de antemano! ❤`;
-                          },
-                          error: "Error",
-                        });
-                      }
-                    }}
+                    onClick={handleGuardarSeleccion} // Llama a handleGuardarSeleccion en lugar del onClick original
                   >
                     Guardar selección
                   </button>

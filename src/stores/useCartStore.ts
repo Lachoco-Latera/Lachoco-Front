@@ -7,6 +7,7 @@ interface State {
   cart: Product[];
   totalItems: number;
   totalPrice: number;
+  confirmedFlavors: { [productId: string]: string[] };
 }
 
 interface Actions {
@@ -14,12 +15,14 @@ interface Actions {
   removeFromCart: (product: Product) => void;
   subtractFromCart: (product: Product) => void;
   selectFlavors: (productId: string, pickedFlavors: string[]) => void;
+  addConfirmedFlavors: (productId: string, confirmedFlavors: string[]) => void;
 }
 
 const INITIAL_STATE: State = {
   cart: [],
   totalItems: 0,
   totalPrice: 0,
+  confirmedFlavors: {},
 };
 
 export const useCartStore = create(
@@ -28,6 +31,7 @@ export const useCartStore = create(
       cart: INITIAL_STATE.cart,
       totalItems: INITIAL_STATE.totalItems,
       totalPrice: INITIAL_STATE.totalPrice,
+      confirmedFlavors: INITIAL_STATE.confirmedFlavors,
       addToCart: (product: Product) => {
         const cart = get().cart;
         const cartItem = cart.find((item) => item.id === product.id);
@@ -105,6 +109,15 @@ export const useCartStore = create(
           cart: state.cart.map((item) =>
             item.id === productId ? { ...item, pickedFlavors } : item
           ),
+        }));
+      },
+      addConfirmedFlavors: (productId: string, confirmedFlavors: string[]) => {
+        set((state) => ({
+          ...state,
+          confirmedFlavors: {
+            ...state.confirmedFlavors,
+            [productId]: confirmedFlavors,
+          },
         }));
       },
     }),

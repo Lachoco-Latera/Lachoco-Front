@@ -51,7 +51,7 @@ const Checkout = ({
       "
       onClick={() => openModal()}
     >
-      <h2 className="text-xl font-bold">Precio Final</h2>
+      <h2 className="text-xl font-bold">Precio Individual</h2>
       <div>
         $ {price} {currency}
       </div>

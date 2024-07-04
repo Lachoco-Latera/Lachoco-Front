@@ -71,7 +71,7 @@ export default function CartItem({ product }: Props) {
           </span>
           <span className="text-gray-600 font-bold">${product.price}</span>
           <span className="flex flex-row gap-2 items-center relative">
-            Cajas:
+            Cajas: {product.quantity}
             {confirmedFlavorsCount !== productMaxFlavor ? (
               <>
                 <FaExclamation

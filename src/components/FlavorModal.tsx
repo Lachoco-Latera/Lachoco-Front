@@ -169,25 +169,27 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
               <p className="text-lg">Precio total: ${total.toFixed(2)}</p>
             </div>
             <div className="pt-4">
-              <button
-                className="
+              {selectedFlavors.length > 0 ? (
+                <button
+                  className="
                   bg-rose-600 hover:bg-white
                   hover:text-green-300 text-white 
                   cursor-pointer transition-all ease 
                   hover:scale-105 hover:font-bold text-xl
                   shadow rounded-full p-4 hover:drop-shadow-xl "
-                onClick={() =>
-                  toast.promise(promise, {
-                    loading: `Serás redireccionado para pagar ${product.name}...`,
-                    success: () => {
-                      return `Muchas gracias de antemano! ❤`;
-                    },
-                    error: "Error",
-                  })
-                }
-              >
-                Comprar ahora
-              </button>
+                  onClick={() =>
+                    toast.promise(promise, {
+                      loading: `Serás redireccionado para pagar ${product.name}...`,
+                      success: () => {
+                        return `Muchas gracias de antemano! ❤`;
+                      },
+                      error: "Error",
+                    })
+                  }
+                >
+                  Guardar selección
+                </button>
+              ) : null}
             </div>
           </div>
         </div>

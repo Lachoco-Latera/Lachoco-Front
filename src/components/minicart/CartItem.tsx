@@ -17,6 +17,7 @@ export default function CartItem({ product }: Props) {
   const cart = useCartStore((state) => state.cart);
   const confirmedFlavors = useCartStore((state) => state.confirmedFlavors); // Obtener confirmedFlavors del store
   const [confirmedFlavorsCount, setConfirmedFlavorsCount] = useState<number>(0);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const [, setActualTotalFlavors] = useState<number>(0);
 
   const selectedProductId = product.id;
@@ -36,20 +37,9 @@ export default function CartItem({ product }: Props) {
     }
     setActualTotalFlavors(totalFlavors);
   }, [confirmedFlavors, selectedProductId]);
-  //@ts-ignore
+
   const productMaxFlavor = product.quantity * product.presentacion;
-  // console.log(
-  //   "Confirmación individual del cliente",
-  //   confirmedFlavorsCount,
-  //   "Sumatoria:",
-  //   actualTotalFlavors
-  // );
-  // console.log(
-  //   "Confirmación individual del cliente",
-  //   confirmedFlavorsCount,
-  //   "Máximo:",
-  //   productMaxFlavor
-  // );
+
   const handleSubtractFromCart = (product: Product) => {
     const cartItem = cart.find((item) => item.id === product.id);
     if (cartItem?.quantity === 1) {
@@ -80,12 +70,24 @@ export default function CartItem({ product }: Props) {
             <span className="font-light"> x {product.presentacion}</span>
           </span>
           <span className="text-gray-600 font-bold">${product.price}</span>
-          <span className="flex flex-row gap-2 items-center">
+          <span className="flex flex-row gap-2 items-center relative">
             Cajas:
             {confirmedFlavorsCount !== productMaxFlavor ? (
-              <FaExclamation className=" text-amber-500" size={16} />
+              <>
+                <FaExclamation
+                  className="text-amber-500 cursor-pointer"
+                  size={16}
+                  onMouseEnter={() => setShowTooltip(true)}
+                  onMouseLeave={() => setShowTooltip(false)}
+                />
+                {showTooltip && (
+                  <span className="tooltip absolute bg-slate-600 opacity-95 text-white text-xs px-2 py-1 rounded-md -left-2 -top-10">
+                    Aún te faltan cargar sabores
+                  </span>
+                )}
+              </>
             ) : (
-              <FaCheck className=" text-green-500" />
+              <FaCheck className="text-green-500" />
             )}
           </span>
         </div>
@@ -117,7 +119,7 @@ export default function CartItem({ product }: Props) {
           <FaTrashAlt size={18} />
         </button>
         <button
-          title="Substract Item"
+          title="Subtract Item"
           className="text-gray-500 pt-1 md:pt-1 hover:text-gray-600 ml-4 hover:md:scale-110"
           onClick={() => handleSubtractFromCart(product)}
         >

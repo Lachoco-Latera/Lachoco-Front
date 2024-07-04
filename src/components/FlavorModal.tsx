@@ -129,14 +129,14 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     console.log("Sabores seleccionados:", selectedFlavors);
   }, [selectedFlavors]);
 
-  const promise = () =>
-    new Promise((resolve) =>
-      setTimeout(
-        () =>
-          resolve((window.location.href = "https://www.mercadopago.com.ar")),
-        1100
-      )
-    );
+  // const promise = () =>
+  //   new Promise((resolve) =>
+  //     setTimeout(
+  //       () =>
+  //         resolve((window.location.href = "https://www.mercadopago.com.ar")),
+  //       1100
+  //     )
+  //   );
 
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();

@@ -115,12 +115,18 @@ export const useCartStore = create(
           ),
         }));
       },
-      addConfirmedFlavors: (productId: string, confirmedFlavors: string[]) => {
+      addConfirmedFlavors: (
+        productId: string,
+        confirmedFlavorsToAdd: string[]
+      ) => {
         set((state) => ({
           ...state,
           confirmedFlavors: {
             ...state.confirmedFlavors,
-            [productId]: confirmedFlavors,
+            [productId]: [
+              ...(state.confirmedFlavors[productId] || []), 
+              ...confirmedFlavorsToAdd, 
+            ],
           },
         }));
       },

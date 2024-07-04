@@ -1,25 +1,28 @@
-//@ts-nocheck
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
 import { Product } from "../types";
 
 interface State {
   cart: Product[];
   totalItems: number;
   totalPrice: number;
+  confirmedFlavors: { [productId: string]: string[] };
 }
 
 interface Actions {
-  addToCart: (Item: Product) => void;
-  removeFromCart: (Item: Product) => void;
-  substractFromCart: (Item: Product) => void;
+  addToCart: (product: Product) => void;
+  removeFromCart: (product: Product) => void;
+  subtractFromCart: (product: Product) => void;
+  selectFlavors: (productId: string, pickedFlavors: string[]) => void;
+  addConfirmedFlavors: (productId: string, confirmedFlavors: string[]) => void;
+  removeConfirmedFlavors: (productId: string) => void; // Nueva función para eliminar sabores confirmados
 }
 
 const INITIAL_STATE: State = {
   cart: [],
   totalItems: 0,
   totalPrice: 0,
+  confirmedFlavors: {},
 };
 
 export const useCartStore = create(
@@ -28,6 +31,7 @@ export const useCartStore = create(
       cart: INITIAL_STATE.cart,
       totalItems: INITIAL_STATE.totalItems,
       totalPrice: INITIAL_STATE.totalPrice,
+      confirmedFlavors: INITIAL_STATE.confirmedFlavors,
       addToCart: (product: Product) => {
         const cart = get().cart;
         const cartItem = cart.find((item) => item.id === product.id);
@@ -39,17 +43,19 @@ export const useCartStore = create(
               : item
           );
           set((state) => ({
+            ...state,
             cart: updatedCart,
             totalItems: state.totalItems + 1,
-            totalPrice: state.totalPrice + product.price,
+            totalPrice: state.totalPrice + parseFloat(product.price),
           }));
         } else {
           const updatedCart = [...cart, { ...product, quantity: 1 }];
 
           set((state) => ({
+            ...state,
             cart: updatedCart,
             totalItems: state.totalItems + 1,
-            totalPrice: state.totalPrice + product.price,
+            totalPrice: state.totalPrice + parseFloat(product.price),
           }));
         }
       },
@@ -59,25 +65,36 @@ export const useCartStore = create(
 
         if (cartItem) {
           const updatedCart = cart.filter((item) => item.id !== product.id);
+          const confirmedFlavors = { ...get().confirmedFlavors };
+          delete confirmedFlavors[product.id]; // Eliminar los sabores confirmados del producto eliminado
+
           set((state) => ({
+            ...state,
             cart: updatedCart,
             totalItems: state.totalItems - (cartItem.quantity as number),
             totalPrice:
-              state.totalPrice - cartItem.price * (cartItem.quantity as number),
+              state.totalPrice -
+              parseFloat(cartItem.price) * (cartItem.quantity as number),
+            confirmedFlavors,
           }));
         }
       },
-      substractFromCart: (product: Product) => {
+      subtractFromCart: (product: Product) => {
         const cart = get().cart;
         const cartItem = cart.find((item) => item.id === product.id);
 
         if (cartItem) {
           if (cartItem.quantity === 1) {
             const updatedCart = cart.filter((item) => item.id !== product.id);
+            const confirmedFlavors = { ...get().confirmedFlavors };
+            delete confirmedFlavors[product.id]; // Eliminar los sabores confirmados del producto eliminado
+
             set((state) => ({
+              ...state,
               cart: updatedCart,
               totalItems: state.totalItems - 1,
-              totalPrice: state.totalPrice - product.price,
+              totalPrice: state.totalPrice - parseFloat(product.price),
+              confirmedFlavors,
             }));
           } else {
             const updatedCart = cart.map((item) =>
@@ -86,12 +103,45 @@ export const useCartStore = create(
                 : item
             );
             set((state) => ({
+              ...state,
               cart: updatedCart,
               totalItems: state.totalItems - 1,
-              totalPrice: state.totalPrice - product.price,
+              totalPrice: state.totalPrice - parseFloat(product.price),
             }));
           }
         }
+      },
+      selectFlavors: (productId: string, pickedFlavors: string[]) => {
+        set((state) => ({
+          ...state,
+          cart: state.cart.map((item) =>
+            item.id === productId ? { ...item, pickedFlavors } : item
+          ),
+        }));
+      },
+      addConfirmedFlavors: (
+        productId: string,
+        confirmedFlavorsToAdd: string[]
+      ) => {
+        set((state) => ({
+          ...state,
+          confirmedFlavors: {
+            ...state.confirmedFlavors,
+            [productId]: [
+              ...(state.confirmedFlavors[productId] || []),
+              ...confirmedFlavorsToAdd,
+            ],
+          },
+        }));
+      },
+      removeConfirmedFlavors: (productId: string) => {
+        const confirmedFlavors = { ...get().confirmedFlavors };
+        delete confirmedFlavors[productId]; // Eliminar los sabores confirmados del producto eliminado
+
+        set((state) => ({
+          ...state,
+          confirmedFlavors,
+        }));
       },
     }),
     {

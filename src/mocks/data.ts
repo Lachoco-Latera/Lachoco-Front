@@ -5,6 +5,7 @@ export const products: Product[] = [
     id: "123831c5-b4d5-4ac6-9ccf-26e485c97d10",
     name: "",
     presentacion: 24,
+    quantity: 1,
     category: {
       id: "",
       name: "",

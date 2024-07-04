@@ -19,6 +19,8 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { toast } from "sonner";
+import { MdFavoriteBorder } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 interface Props {
   onCartIconClick: () => void;
   products: Product[];
@@ -26,6 +28,8 @@ interface Props {
 
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
+  const navigate = useNavigate();
+
   // const [stateUser, setStateUser] = useState(false);
 
   // const handleButtonUser = () => {
@@ -80,6 +84,16 @@ export default function Header({ onCartIconClick }: Props) {
               }
             >
               ¡Suscribete!
+            </button>
+          </div>
+          <div className="relative  hidden md:block">
+            <button
+              type="button"
+              title="Mini Cart"
+              className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
+              onClick={() => navigate("/favorites")}
+            >
+              <MdFavoriteBorder size={28} />
             </button>
           </div>
           <div className="relative  hidden md:block">

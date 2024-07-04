@@ -46,7 +46,7 @@ function SearchExampleStandard() {
         const isNumber = /^\d+(\.\d+)?$/.test(searchTerm);
         const re = new RegExp(_.escapeRegExp(searchTerm), "i");
 
-        let filteredResults: any = _.filter(products, (result: any) => {
+        let filteredResults = _.filter(products, (result: any) => {
           if (isNumber) {
             return re.test(result.price);
           } else {
@@ -54,34 +54,43 @@ function SearchExampleStandard() {
           }
         });
 
-        // Limitar los resultados y ajustar la descripción e imagen si es necesario
-        filteredResults = filteredResults.slice(0, 6).map((result: any) => ({
-          ...result,
-          description: result.description
-            .split(" ")
-            .slice(0, 12)
-            .join(" ")
-            .concat(result.description.split(" ").length > 12 ? "..." : ""),
-          image: result.images.length > 0 ? result.images[0].img : undefined,
+        // Agrupar resultados por categoría
+        const categorizedResults = _.groupBy(filteredResults, "category");
+
+        const finalResults = _.map(categorizedResults, (value, key) => ({
+          name: key,
+          results: value.slice(0, 6).map((result) => ({
+            title: result.name,
+            description: result.description
+              .split(" ")
+              .slice(0, 12)
+              .join(" ")
+              .concat(result.description.split(" ").length > 12 ? "..." : ""),
+            image: result.images.length > 0 ? result.images[0].img : undefined,
+            price: result.price,
+          })),
         }));
 
         dispatch({
           type: "FINISH_SEARCH",
-          results: filteredResults,
+          results: finalResults,
         });
       }, 300);
     },
     [products]
   );
 
-  // Obtener productos al cargar el componente
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
           "https://lachoco.onrender.com/products"
         );
-        setProducts(response.data);
+        const productsWithCategory = response.data.map((product: any) => ({
+          ...product,
+          category: "Tabletas", // Hasta que cambien los products por el trabajo en suscripción
+        }));
+        setProducts(productsWithCategory);
       } catch (err) {
         console.error(err);
       }
@@ -90,27 +99,14 @@ function SearchExampleStandard() {
     fetchProducts();
   }, []);
 
-  // Limpiar timeout al desmontar el componente
-  useEffect(() => {
-    return () => {
-      clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
-  // Limpiar estado al desmontar el componente
-  useEffect(() => {
-    return () => {
-      dispatch({ type: "CLEAN_QUERY" });
-    };
-  }, []);
-  console.log(products);
   return (
     <Grid>
       <GridColumn width={16}>
         <Search
           fluid
+          category
           loading={loading}
-          placeholder="¿Qué quieres probar?"
+          placeholder="¿Qué quieres probar?" //@ts-ignore
           onResultSelect={(e, data) => {
             dispatch({
               type: "UPDATE_SELECTION",
@@ -120,7 +116,6 @@ function SearchExampleStandard() {
             /*NO UTILIZAR "useNavigate" 
             ROMPE POR COMPLETO EL CICLO DE VIDA DE LOS COMPONENTES 
             CON EL HOOK */
-            console.log(e);
           }}
           onSearchChange={handleSearchChange}
           results={results}

@@ -13,7 +13,7 @@ export interface Product {
   currency: string;
   label: string;
   isActive: boolean;
-  flavors?: {
+  flavors: {
     id: string;
     name: string;
     stock: number;

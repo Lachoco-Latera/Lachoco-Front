@@ -191,12 +191,6 @@ const ProductsDetail = ({ info }: { info: any }) => {
           </div>
         </div>
       )}
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={openFlavorModal}
-      >
-        Open Flavor Modal
-      </button>
       {/* Aquí se cierra FlavorModal si showFlavorModal es true */}
       {showFlavorModal && (
         <FlavorModal product={productInfo} closeModal={closeFlavorModal} />

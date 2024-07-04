@@ -1,43 +1,15 @@
-// FlavorModal.tsx
 import React from "react";
 import { useCartStore } from "../stores/useCartStore";
 import { FaCirclePlus } from "react-icons/fa6";
 import { toast } from "sonner";
+import { Product } from "@/types.d";
 
-interface Flavor {
-  id: string;
-  name: string;
-  stock: number;
+interface Props {
+  product: Product;
+  closeModal: () => void; 
 }
 
-interface Image {
-  id: string;
-  img: string;
-}
-
-interface Product {
-  id: string;
-  name: string;
-  presentacion: number;
-  description: string;
-  price: string;
-  currency: string;
-  label: string;
-  isActive: boolean;
-  purchaseDate: string | null;
-  expiryDate: string | null;
-  status: string;
-  flavors: Flavor[];
-  images: Image[];
-  category?: {
-    id?: string;
-    icon: string;
-    name: string;
-  };
-}
-const FlavorModal: React.FC<{ product: Product; closeModal: any }> = ({
-  product,
-}) => {
+const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const { cart, totalItems } = useCartStore();
 
   let total = 0;
@@ -48,6 +20,19 @@ const FlavorModal: React.FC<{ product: Product; closeModal: any }> = ({
       return acc + price * quantity;
     }, 0);
   }
+
+  const handleFlavorClick = (flavor: any) => {
+    toast(`Sabor ${flavor.name} agregado!`, {
+      action: {
+        label: "Okay!",
+        onClick: () => {
+          console.log(`Cerrar modal de ${flavor.name}`);
+          closeModal(); // Llamamos a la función closeModal para cerrar el modal
+        },
+      },
+    });
+  };
+
   const promise = () =>
     new Promise((resolve) =>
       setTimeout(
@@ -56,9 +41,20 @@ const FlavorModal: React.FC<{ product: Product; closeModal: any }> = ({
         1100
       )
     );
+
+  const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-4/5  text-center">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+      onClick={closeModal}
+    >
+      <div
+        className="bg-white p-6 rounded-lg shadow-lg w-4/5 text-center z-40"
+        onClick={handleModalClick}
+      >
         <h2 className="text-4xl font-bold mb-4 drop-shadow-xl">
           {product.name}
         </h2>
@@ -71,15 +67,7 @@ const FlavorModal: React.FC<{ product: Product; closeModal: any }> = ({
                 <div
                   key={flavor.id}
                   className="flex flex-row items-center gap-2 py-2 px-4 rounded-2xl hover:shadow-lg hover:cursor-pointer hover:scale-105 transition-all ease-out"
-                  onClick={() =>
-                    toast(`Sabor ${flavor.name} agregado!`, {
-                      action: {
-                        label: "Okay!",
-                        onClick: () =>
-                          console.log(`Cerrar toaster de ${flavor.name} `),
-                      },
-                    })
-                  }
+                  onClick={() => handleFlavorClick(flavor)}
                 >
                   <div className="flex flex-col justify-center items-center gap-2">
                     <img
@@ -138,7 +126,7 @@ const FlavorModal: React.FC<{ product: Product; closeModal: any }> = ({
                   })
                 }
               >
-                Comprár ahora
+                Comprar ahora
               </button>
             </div>
           </div>

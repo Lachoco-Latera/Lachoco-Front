@@ -1,4 +1,4 @@
-import { FaTrashAlt } from "react-icons/fa";
+import { FaExclamation, FaTrashAlt } from "react-icons/fa";
 
 import { Product } from "../../types";
 import { useCartStore } from "../../stores/useCartStore";
@@ -14,9 +14,13 @@ export default function CartItem({ product }: Props) {
   const addToCart = useCartStore((state) => state.addToCart);
   const delFromCart = useCartStore((state) => state.subtractFromCart);
   const cart = useCartStore((state) => state.cart);
+  // const { confirmedFlavors } = useCartStore();
+  //@ts-ignore
+  const productMaxFlavor = product.quantity * product.presentacion;
+  const selectedProductId = product.id;
+  console.log(productMaxFlavor, selectedProductId);
   const handleSubtractFromCart = (product: Product) => {
     const cartItem = cart.find((item) => item.id === product.id);
-
     if (
       //@ts-ignore
       cartItem?.quantity === 1
@@ -54,6 +58,7 @@ export default function CartItem({ product }: Props) {
               //@ts-ignore
               product.quantity
             }
+            {product.quantity ? <FaExclamation /> : null}
           </span>
         </div>
       </div>

@@ -46,8 +46,8 @@ function Cart({ similar }: any) {
     },
     0
   );
-  console.log("Mis sabores:", actualConfirmedFlavorsTotal);
-  console.warn("Mi objetivo de sabores:", totalPresentationQuantity);
+  // console.log("Mis sabores:", actualConfirmedFlavorsTotal);
+  // console.warn("Mi objetivo de sabores:", totalPresentationQuantity);
   //@ts-ignore
   const recomendations = similar;
   const promise = () =>

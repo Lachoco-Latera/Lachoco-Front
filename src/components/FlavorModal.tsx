@@ -15,6 +15,9 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
   const [lastSelectedProductId, setLastSelectedProductId] =
     useState<string>("");
+  const [flavorCounts, setFlavorCounts] = useState<{ [key: string]: number }>(
+    {}
+  );
 
   let total = 0;
   if (cart) {
@@ -29,6 +32,12 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     setLastSelectedProductId(product.id);
     setSelectedFlavors([...selectedFlavors, flavor.id]);
 
+    // Increment flavor count
+    setFlavorCounts((prevCounts) => ({
+      ...prevCounts,
+      [flavor.id]: (prevCounts[flavor.id] || 0) + 1,
+    }));
+
     toast(`Sabor ${flavor.name} agregado!`, {
       action: {
         label: "Okay!",
@@ -38,6 +47,11 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         },
       },
     });
+  };
+
+  const handleResetFlavors = () => {
+    setSelectedFlavors([]);
+    setFlavorCounts({});
   };
 
   useEffect(() => {
@@ -84,9 +98,27 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         </div>
         <p className="text-lg mb-2">{product.description}</p>
         <div className="flex justify-between items-start p-6">
-          <div className="pr-6">
+          <div className="flex flex-col pr-6 py-4">
+            <div className="self-end">
+              {selectedFlavors.length > 0 ? (
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-2xl shadow-xl"
+                  onClick={handleResetFlavors}
+                >
+                  Reiniciar sabores
+                </button>
+              ) : (
+                <button
+                  className="bg-slate-500 text-white font-bold py-2 px-4 rounded-2xl border border-white opacity-30 shadow-xl"
+                  disabled
+                >
+                  Reiniciar sabores
+                </button>
+              )}
+            </div>
             <h2 className="text-2xl font-bold mb-4">Elige tus sabores</h2>
-            <div className="flex flex-wrap justify-center items-center gap-4">
+
+            <div className="flex flex-wrap justify-center items-center gap-4 py-12">
               {product.flavors.map((flavor) => (
                 <div
                   key={flavor.id}
@@ -102,9 +134,14 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                     <div>
                       <p className="text-lg font-semibold">{flavor.name}</p>
                     </div>
-                    <div className="transform hover:scale-110 transition-transform">
+                    {/* <div className="transform hover:scale-110 transition-transform">
                       <FaCirclePlus color={"green"} />
-                    </div>
+                    </div> */}
+                    {flavorCounts[flavor.id] && (
+                      <div className="absolute bg-green-400 font-bold text-lg text-white py-1 px-2 shadow rounded-full">
+                        <span>{`x${flavorCounts[flavor.id]}`}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

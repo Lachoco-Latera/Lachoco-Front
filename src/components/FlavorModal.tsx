@@ -46,7 +46,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
-
+  console.log(product.flavors)
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"

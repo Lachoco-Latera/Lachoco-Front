@@ -5,7 +5,7 @@ import { useCartStore } from "../../stores/useCartStore";
 import { toast } from "sonner";
 import { IoIosAdd } from "react-icons/io";
 import { LuMinus } from "react-icons/lu";
-
+import { useNavigate } from "react-router-dom";
 interface Props {
   product: Product;
 }
@@ -15,7 +15,7 @@ export default function CartItem({ product }: Props) {
   const addToCart = useCartStore((state) => state.addToCart);
   const delFromCart = useCartStore((state) => state.subtractFromCart);
   const cart = useCartStore((state) => state.cart);
-
+  const navigate = useNavigate();
   const handleSubtractFromCart = (product: Product) => {
     const cartItem = cart.find((item) => item.id === product.id);
 
@@ -32,7 +32,10 @@ export default function CartItem({ product }: Props) {
   };
   return (
     <li className="flex justify-between items-center gap-4 mb-2 shadow-md p-4">
-      <div className="flex items-center md:flex-row flex-col md:text-start text-center">
+      <div
+        className="flex items-center md:flex-row flex-col md:text-start text-center hover:cursor-pointer"
+        onClick={() => (window.location.href = `/products/${product.id}`)}
+      >
         <img
           src={product.images[1]?.img}
           alt={product.name}
@@ -45,7 +48,7 @@ export default function CartItem({ product }: Props) {
           <span className="text-gray-600 font-bold">${product.price}</span>
 
           <span>
-            Quantity:
+            Cajas:
             {
               //@ts-ignore
               product.quantity

@@ -65,6 +65,9 @@ export const useCartStore = create(
 
         if (cartItem) {
           const updatedCart = cart.filter((item) => item.id !== product.id);
+          const confirmedFlavors = { ...get().confirmedFlavors };
+          delete confirmedFlavors[product.id]; // Eliminar los sabores confirmados del producto eliminado
+
           set((state) => ({
             ...state,
             cart: updatedCart,
@@ -72,6 +75,7 @@ export const useCartStore = create(
             totalPrice:
               state.totalPrice -
               parseFloat(cartItem.price) * (cartItem.quantity as number),
+            confirmedFlavors,
           }));
         }
       },

@@ -15,6 +15,7 @@ interface Actions {
   subtractFromCart: (product: Product) => void;
   selectFlavors: (productId: string, pickedFlavors: string[]) => void;
   addConfirmedFlavors: (productId: string, confirmedFlavors: string[]) => void;
+  removeConfirmedFlavors: (productId: string) => void; // Nueva función para eliminar sabores confirmados
 }
 
 const INITIAL_STATE: State = {
@@ -85,11 +86,15 @@ export const useCartStore = create(
         if (cartItem) {
           if (cartItem.quantity === 1) {
             const updatedCart = cart.filter((item) => item.id !== product.id);
+            const confirmedFlavors = { ...get().confirmedFlavors };
+            delete confirmedFlavors[product.id]; // Eliminar los sabores confirmados del producto eliminado
+
             set((state) => ({
               ...state,
               cart: updatedCart,
               totalItems: state.totalItems - 1,
               totalPrice: state.totalPrice - parseFloat(product.price),
+              confirmedFlavors,
             }));
           } else {
             const updatedCart = cart.map((item) =>
@@ -123,10 +128,19 @@ export const useCartStore = create(
           confirmedFlavors: {
             ...state.confirmedFlavors,
             [productId]: [
-              ...(state.confirmedFlavors[productId] || []), 
-              ...confirmedFlavorsToAdd, 
+              ...(state.confirmedFlavors[productId] || []),
+              ...confirmedFlavorsToAdd,
             ],
           },
+        }));
+      },
+      removeConfirmedFlavors: (productId: string) => {
+        const confirmedFlavors = { ...get().confirmedFlavors };
+        delete confirmedFlavors[productId]; // Eliminar los sabores confirmados del producto eliminado
+
+        set((state) => ({
+          ...state,
+          confirmedFlavors,
         }));
       },
     }),

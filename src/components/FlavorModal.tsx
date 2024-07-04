@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useCartStore } from "../stores/useCartStore";
 import { toast } from "sonner";
 import { Product } from "@/types.d";
-import { IoMdExit } from "react-icons/io";
+import { IoIosRefresh, IoMdExit } from "react-icons/io";
+import { TbShoppingCartX } from "react-icons/tb";
 
 interface Props {
   product: Product;
@@ -10,8 +11,14 @@ interface Props {
 }
 
 const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
-  const { cart, totalItems, addConfirmedFlavors, confirmedFlavors } =
-    useCartStore(); // Agrega addConfirmedFlavors desde useCartStore
+  const {
+    cart,
+    totalItems,
+    confirmedFlavors,
+    addConfirmedFlavors,
+    removeConfirmedFlavors,
+  } = useCartStore(); // Usando useCartStore dentro del componente
+
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
   const [lastSelectedProductId, setLastSelectedProductId] =
     useState<string>("");
@@ -121,6 +128,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       });
     }
   };
+
   useEffect(() => {
     console.log("Último producto seleccionado:", lastSelectedProductId);
   }, [lastSelectedProductId]);
@@ -129,23 +137,12 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     console.log("Sabores seleccionados:", selectedFlavors);
   }, [selectedFlavors]);
 
-  // const promise = () =>
-  //   new Promise((resolve) =>
-  //     setTimeout(
-  //       () =>
-  //         resolve((window.location.href = "https://www.mercadopago.com.ar")),
-  //       1100
-  //     )
-  //   );
-
-  const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
   useEffect(() => {
     if (selectedFlavors.length === 0) {
       setMoreOptions(false);
     }
   }, [selectedFlavors]);
+
   const maxFlavors =
     product.presentacion *
     cart.reduce((acc, item: any) => {
@@ -154,7 +151,9 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       }
       return acc;
     }, 0);
+
   const actualSelectionLength = confirmedFlavors[product.id]?.length || 0;
+
   const handleGuardarSeleccion = () => {
     if (
       selectedFlavors.length === product.presentacion &&
@@ -164,11 +163,25 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       toast.success(`Selección de sabores guardada para ${product.name}`);
     } else {
       toast.error(
-        "Por favor selecciona todos los sabores que puedas antes de guardar."
+        "Por favor fijarse sabores restantes, Ó selecciona todos los sabores que puedas antes de guardar."
       );
+      setMoreOptions(true);
     }
   };
 
+  const handleDeleteConfirmedFlavors = () => {
+    const updatedConfirmedFlavors = { ...confirmedFlavors };
+    delete updatedConfirmedFlavors[product.id];
+
+    removeConfirmedFlavors(product.id);
+
+    toast.success(`Sabores eliminados para ${product.name}`);
+
+    closeModal();
+  };
+  const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -196,17 +209,17 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
             <div className="self-end">
               {selectedFlavors.length > 0 ? (
                 <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-2xl shadow-xl"
+                  className="bg-red-500 hover:scale-105 hover:bg-white hover:drop-shadow-xl transition-all ease hover:text-red-500 text-white font-bold py-2 px-2 rounded-2xl shadow-xl"
                   onClick={handleResetFlavors}
                 >
-                  Reiniciar sabores
+                  <IoIosRefresh size={20} />
                 </button>
               ) : (
                 <button
-                  className="bg-slate-500 text-white font-bold py-2 px-4 rounded-2xl border border-white opacity-30 shadow-xl"
+                  className="bg-slate-400 text-white transition-all ease font-bold py-2 px-2 rounded-2xl border border-white opacity-30 shadow-xl"
                   disabled
                 >
-                  Reiniciar sabores
+                  <IoIosRefresh size={20} />
                 </button>
               )}
             </div>
@@ -252,20 +265,30 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 </span>
               </div>
             </div>
-            <div className="mt-6">
-              <p className="text-lg">
+            <div className="flex flex-col justify-center gap-2 mt-6">
+              <p className="flex flex-row text-lg justify-center items-center gap-2">
                 Total de sabores elegidos:
                 <b
                   className={` ${
                     actualSelectionLength === maxFlavors
                       ? "text-red-400"
                       : "text-green-400"
-                  }`}
+                  } text-xl`}
                 >
                   {actualSelectionLength}
                 </b>
+                <i
+                  className={`p-1 rounded-full drop-shadow-xl hover:cursor-pointer hover:shadow-xl hover:scale-110 transition-all ease ${
+                    actualSelectionLength === maxFlavors
+                      ? "text-red-400"
+                      : "text-slate-200"
+                  }`}
+                  onClick={() => handleDeleteConfirmedFlavors()}
+                >
+                  <TbShoppingCartX size={20} />
+                </i>
               </p>
-              <p className="text-lg">Precio total: ${total.toFixed(2)}</p>
+              <p className="text-lg ">Precio total: ${total.toFixed(2)}</p>
             </div>
             <div className="pt-4">
               {selectedFlavors.length > 0 && (
@@ -277,25 +300,27 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                         : "hover:text-green-300"
                     } bg-rose-600 hover:bg-white
                  text-white 
+                 shadow-xl
                   cursor-pointer transition-all ease 
                   hover:scale-105 hover:font-bold text-xl
-                  shadow rounded-full p-4 hover:drop-shadow-xl`}
+                  rounded-full p-4 hover:drop-shadow-xl`}
                     onClick={handleGuardarSeleccion} // Llama a handleGuardarSeleccion en lugar del onClick original
                   >
                     Guardar selección
                   </button>
 
                   {selectedFlavors.length < product.presentacion &&
+                    actualSelectionLength !== maxFlavors &&
                     moreOptions && (
                       <div className="flex justify-center mt-4">
                         <button
-                          className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-2xl shadow-xl mr-2"
+                          className="bg-orange-500 hover:bg-white hover:text-orange-500 text-white font-bold py-2 px-4 rounded-2xl shadow-xl mr-2 transition-all ease hover:scale-105"
                           onClick={handleFillWithLastFlavor}
                         >
                           Rellenar con último sabor
                         </button>
                         <button
-                          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-2xl shadow-xl"
+                          className="bg-yellow-500 hover:bg-white hover:text-yellow-500 text-white font-bold py-2 px-4 rounded-2xl shadow-xl transition-all ease hover:scale-105"
                           onClick={handleAddRandomFlavor}
                         >
                           Añadir aleatoriamente

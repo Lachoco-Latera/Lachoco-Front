@@ -173,6 +173,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
           }`}
         >
           <Checkout
+            id={productInfo?.id}
             price={productInfo?.price}
             currency={productInfo?.currency}
             flavors={productInfo?.flavors}

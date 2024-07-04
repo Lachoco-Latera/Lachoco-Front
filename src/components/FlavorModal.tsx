@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCartStore } from "../stores/useCartStore";
-import { FaCirclePlus } from "react-icons/fa6";
+// import { FaCirclePlus } from "react-icons/fa6";
 import { toast } from "sonner";
 import { Product } from "@/types.d";
 import { IoMdExit } from "react-icons/io";
@@ -74,7 +74,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
-
+  console.log(product.presentacion);
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -148,15 +148,15 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
             </div>
           </div>
           <div className="w-1/2 pl-6 border-l border-gray-200">
-            <h2 className="text-2xl font-bold mb-4">Tus sabores elegidos</h2>
+            <h2 className="text-2xl font-bold mb-4">Cantidad de sabores</h2>
             <div>
-              {cart.length > 0 ? (
+              {/* {cart.length > 0 ? (
                 cart.flatMap((item) =>
                   item.category.name === "bombones"
                     ? Array.from({ length: item.quantity ?? 0 }, (_, index) => (
                         <div
                           key={`${item.id}-${index}`}
-                          className="flex justify-between my-2 p-2 rounded-3xl shadow cursor-pointer hover:scale-105 hover:bg-green-100 transition-all ease duration-200"
+                          className="flex flex-row justify-between my-2 p-2 rounded-3xl shadow cursor-pointer hover:scale-105 hover:bg-green-100 transition-all ease duration-200"
                         >
                           <span>{item.name}</span>
                           <span>{index + 1}#</span>
@@ -166,7 +166,16 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 )
               ) : (
                 <p className="my-4">Tu carrito está vacío</p>
-              )}
+              )} */}
+              <div className="flex flex-row justify-center items-center gap-2">
+                <span className=" text-2xl">
+                  {selectedFlavors.length}
+                </span>
+                <p className=" text-2xl font-bold ">/</p>
+                <span className=" text-2xl font-bold">
+                  {product.presentacion}
+                </span>
+              </div>
             </div>
             <div className="mt-6">
               <p className="text-lg">Total de sabores: {totalItems}</p>

@@ -2,11 +2,11 @@ import CartItem from "./CartItem";
 
 import { useCartStore } from "../../stores/useCartStore";
 
-import useFromStore from "../../hooks/useFromStore";
+// import useFromStore from "../../hooks/useFromStore";
 import { toast } from "sonner";
 
 function Cart({ similar }: any) {
-  const cart = useFromStore(useCartStore, (state) => state.cart);
+  const { cart, flavorsSelected } = useCartStore();
 
   let total = 0;
   if (cart) {
@@ -20,14 +20,22 @@ function Cart({ similar }: any) {
   }
   //@ts-ignore
   const recomendations = similar;
+
   const promise = () =>
-    new Promise((resolve) =>
-      setTimeout(
-        () =>
-          resolve((window.location.href = "https://www.mercadopago.com.ar")),
-        1100
-      )
-    );
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const hasBombones = cart.some(
+          (item) => item.category.name === "bombones"
+        );
+
+        if (hasBombones && !flavorsSelected) {
+          reject("Debes seleccionar sabores para los bombones.");
+        } else {
+          resolve((window.location.href = "https://www.mercadopago.com.ar"));
+        }
+      }, 1100);
+    });
+
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
@@ -45,14 +53,12 @@ function Cart({ similar }: any) {
           onClick={() =>
             toast.promise(promise, {
               loading: `Serás redireccionado para pagar...`,
-              success: () => {
-                return `Muchas gracias de antemano! ❤`;
-              },
-              error: "Error",
+              success: "Muchas gracias de antemano! ❤",
+              error: "Debes seleccionar sabores para los bombones.",
             })
           }
         >
-         Ordenar Ahora
+          Ordenar Ahora
         </button>
       </div>
     </section>

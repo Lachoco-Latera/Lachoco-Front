@@ -13,7 +13,7 @@ interface Props {
 export default function CartItem({ product }: Props) {
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const addToCart = useCartStore((state) => state.addToCart);
-  const delFromCart = useCartStore((state) => state.substractFromCart);
+  const delFromCart = useCartStore((state) => state.subtractFromCart);
   const cart = useCartStore((state) => state.cart);
 
   const handleSubtractFromCart = (product: Product) => {

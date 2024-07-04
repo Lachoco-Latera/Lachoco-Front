@@ -1,23 +1,30 @@
 import { toast } from "sonner";
+import { useCartStore } from "../../stores/useCartStore";
 
 const Checkout = ({ price, currency, productName, openModal }: any) => {
+  const { cart, flavorsSelected } = useCartStore();
+
   const promise = () =>
-    new Promise((resolve) =>
-      setTimeout(
-        () =>
-          resolve((window.location.href = "https://www.mercadopago.com.ar")),
-        1100
-      )
-    );
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const hasBombones = cart.some(
+          (item) => item.category.name === "bombones"
+        );
+
+        if (hasBombones && !flavorsSelected) {
+          reject("Debes seleccionar sabores para los bombones.");
+        } else {
+          resolve((window.location.href = "https://www.mercadopago.com.ar"));
+        }
+      }, 1100);
+    });
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     toast.promise(promise, {
       loading: `Serás redireccionado para pagar ${productName}...`,
-      success: () => {
-        return `Muchas gracias de antemano! ❤`;
-      },
-      error: "Error",
+      success: "Muchas gracias de antemano! ❤",
+      error: "Debes seleccionar sabores para los bombones.",
     });
   };
 

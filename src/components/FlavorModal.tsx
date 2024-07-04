@@ -10,7 +10,8 @@ interface Props {
 }
 
 const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
-  const { cart, totalItems, addConfirmedFlavors } = useCartStore(); // Agrega addConfirmedFlavors desde useCartStore
+  const { cart, totalItems, addConfirmedFlavors, confirmedFlavors } =
+    useCartStore(); // Agrega addConfirmedFlavors desde useCartStore
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
   const [lastSelectedProductId, setLastSelectedProductId] =
     useState<string>("");
@@ -120,7 +121,6 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       });
     }
   };
-
   useEffect(() => {
     console.log("Último producto seleccionado:", lastSelectedProductId);
   }, [lastSelectedProductId]);
@@ -146,13 +146,26 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       setMoreOptions(false);
     }
   }, [selectedFlavors]);
-
+  const maxFlavors =
+    product.presentacion *
+    cart.reduce((acc, item: any) => {
+      if (item.id === product.id) {
+        return acc + item.quantity;
+      }
+      return acc;
+    }, 0);
+  const actualSelectionLength = confirmedFlavors[product.id]?.length || 0;
   const handleGuardarSeleccion = () => {
-    if (selectedFlavors.length === product.presentacion) {
+    if (
+      selectedFlavors.length === product.presentacion &&
+      actualSelectionLength < maxFlavors
+    ) {
       addConfirmedFlavors(product.id, selectedFlavors);
       toast.success(`Selección de sabores guardada para ${product.name}`);
     } else {
-      toast.error("Por favor selecciona todos los sabores antes de guardar.");
+      toast.error(
+        "Por favor selecciona todos los sabores que puedas antes de guardar."
+      );
     }
   };
 
@@ -228,6 +241,9 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
           <div className="w-1/2 pl-6 border-l border-gray-200">
             <h2 className="text-2xl font-bold mb-4">Cantidad de sabores</h2>
             <div>
+              <div className=" text-lg">
+                Maximo <b className=" text-red-600">{maxFlavors}</b>
+              </div>
               <div className="flex flex-row justify-center items-center gap-2">
                 <span className=" text-2xl">{selectedFlavors.length}</span>
                 <p className=" text-2xl font-bold ">/</p>
@@ -237,19 +253,33 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
               </div>
             </div>
             <div className="mt-6">
-              <p className="text-lg">Total de sabores: {totalItems}</p>
+              <p className="text-lg">
+                Total de sabores elegidos:
+                <b
+                  className={` ${
+                    actualSelectionLength === maxFlavors
+                      ? "text-red-400"
+                      : "text-green-400"
+                  }`}
+                >
+                  {actualSelectionLength}
+                </b>
+              </p>
               <p className="text-lg">Precio total: ${total.toFixed(2)}</p>
             </div>
             <div className="pt-4">
               {selectedFlavors.length > 0 && (
                 <>
                   <button
-                    className="
-          bg-rose-600 hover:bg-white
-          hover:text-green-300 text-white 
-          cursor-pointer transition-all ease 
-          hover:scale-105 hover:font-bold text-xl
-          shadow rounded-full p-4 hover:drop-shadow-xl"
+                    className={` ${
+                      actualSelectionLength === maxFlavors
+                        ? "hover:text-red-500"
+                        : "hover:text-green-300"
+                    } bg-rose-600 hover:bg-white
+                 text-white 
+                  cursor-pointer transition-all ease 
+                  hover:scale-105 hover:font-bold text-xl
+                  shadow rounded-full p-4 hover:drop-shadow-xl`}
                     onClick={handleGuardarSeleccion} // Llama a handleGuardarSeleccion en lugar del onClick original
                   >
                     Guardar selección

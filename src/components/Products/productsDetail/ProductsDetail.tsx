@@ -17,7 +17,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
   const [showModal, setShowModal] = useState(false);
   const [productInfo, setProductInfo] = useState<any>(null);
   const [heartColor, setHeartColor] = useState("transparent");
-
+  const [showFlavorModal, setShowFlavorModal] = useState(false);
   const altLabel = ["Solo Online", "Nuevo", "Importado"];
   const handleImageClick = (product: Product) => {
     setModalProduct(product);
@@ -28,6 +28,13 @@ const ProductsDetail = ({ info }: { info: any }) => {
     setModalProduct(null);
   };
 
+  const openFlavorModal = () => {
+    setShowFlavorModal(true);
+  };
+
+  const closeFlavorModal = () => {
+    setShowFlavorModal(false);
+  };
   useEffect(() => {
     if (info) {
       setProductInfo(info);
@@ -140,7 +147,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
             <MapComponent />
           </div>
         </div>
-        <div className="flex">
+        <div className="flex hover:cursor-pointer" onClick={openFlavorModal}>
           <Checkout
             price={productInfo?.price}
             currency={productInfo?.currency}
@@ -184,7 +191,16 @@ const ProductsDetail = ({ info }: { info: any }) => {
           </div>
         </div>
       )}
-      <FlavorModal product={info}></FlavorModal>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={openFlavorModal}
+      >
+        Open Flavor Modal
+      </button>
+      {/* Aquí se cierra FlavorModal si showFlavorModal es true */}
+      {showFlavorModal && (
+        <FlavorModal product={productInfo} closeModal={closeFlavorModal} />
+      )}
     </div>
   );
 };

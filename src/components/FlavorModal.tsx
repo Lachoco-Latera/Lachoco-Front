@@ -35,8 +35,9 @@ interface Product {
     name: string;
   };
 }
-
-const FlavorModal: React.FC<{ product: Product }> = ({ product }) => {
+const FlavorModal: React.FC<{ product: Product; closeModal: any }> = ({
+  product,
+}) => {
   const { cart, totalItems } = useCartStore();
 
   let total = 0;
@@ -58,7 +59,9 @@ const FlavorModal: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-4/5  text-center">
-        <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
+        <h2 className="text-4xl font-bold mb-4 drop-shadow-xl">
+          {product.name}
+        </h2>
         <p className="text-lg mb-2">{product.description}</p>
         <div className="flex justify-between items-start p-6">
           <div className="pr-6">
@@ -120,11 +123,11 @@ const FlavorModal: React.FC<{ product: Product }> = ({ product }) => {
             <div className="pt-4">
               <button
                 className="
-        shadow rounded-full p-4 hover:drop-shadow-xl 
-        bg-rose-600 hover:bg-white
-        hover:text-green-300 text-white 
-        hover:scale-105 hover:font-bold text-xl
-         cursor-pointer transition-all ease"
+              bg-rose-600 hover:bg-white
+              hover:text-green-300 text-white 
+                cursor-pointer transition-all ease 
+                hover:scale-105 hover:font-bold text-xl
+                shadow rounded-full p-4 hover:drop-shadow-xl "
                 onClick={() =>
                   toast.promise(promise, {
                     loading: `Serás redireccionado para pagar ${product.name}...`,

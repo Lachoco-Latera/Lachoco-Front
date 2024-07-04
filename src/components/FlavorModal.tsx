@@ -297,7 +297,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                   <button
                     className={` ${
                       actualSelectionLength === maxFlavors
-                        ? "hover:text-red-500"
+                        ? "hover:text-red-500 hidden"
                         : "hover:text-green-300"
                     } bg-rose-600 hover:bg-white
                  text-white 

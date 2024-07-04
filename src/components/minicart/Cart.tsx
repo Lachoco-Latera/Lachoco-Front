@@ -6,7 +6,7 @@ import { useCartStore } from "../../stores/useCartStore";
 import { toast } from "sonner";
 
 function Cart({ similar }: any) {
-  const { cart, selectFlavors } = useCartStore();
+  const { cart, confirmedFlavors } = useCartStore();
 
   let total = 0;
   if (cart) {
@@ -19,16 +19,31 @@ function Cart({ similar }: any) {
     }, 0);
   }
   //@ts-ignore
-  const recomendations = similar;
+  let bombonesProducts = cart.filter(
+    (product) => product.category.name === "bombones"
+  );
 
+  // Calcular la suma de presentaciones * quantity
+  let totalPresentationQuantity = bombonesProducts.reduce(
+    (total, product: any) => {
+      return total + product.presentacion * product.quantity;
+    },
+    0
+  );
+
+  console.log(
+    "Total de presentaciones * cantidad para productos 'bombones':",
+    totalPresentationQuantity
+  );
+  //@ts-ignore
+  const recomendations = similar;
   const promise = () =>
     new Promise((resolve, reject) => {
       setTimeout(() => {
         const hasBombones = cart.some(
           (item) => item.category.name === "bombones"
         );
-
-        if (hasBombones && selectFlavors.length > 0 ) {
+        if (hasBombones) {
           reject("Debes seleccionar sabores para los bombones.");
         } else {
           resolve((window.location.href = "https://www.mercadopago.com.ar"));

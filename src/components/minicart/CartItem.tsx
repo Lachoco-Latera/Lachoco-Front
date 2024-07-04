@@ -42,7 +42,10 @@ export default function CartItem({ product }: Props) {
           className="h-10 w-10 rounded-full md:mr-4"
         />
         <div className="flex flex-col">
-          <span className="font-bold flex-1">{product.name}</span>
+          <span className="font-bold flex-1">
+            {product.name}
+            <span className="font-light"> x {product.presentacion}</span>
+          </span>
           <span className="text-gray-600 font-bold">${product.price}</span>
 
           <span>

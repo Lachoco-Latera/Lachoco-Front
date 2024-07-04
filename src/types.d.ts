@@ -3,6 +3,7 @@ export interface Product {
   name: string;
   presentacion: number;
   description: string;
+  quantity: number;
   category: {
     id: string;
     name: string;
@@ -12,7 +13,7 @@ export interface Product {
   currency: string;
   label: string;
   isActive: boolean;
-  flavors?: {
+  flavors: {
     id: string;
     name: string;
     stock: number;

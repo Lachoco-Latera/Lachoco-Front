@@ -5,7 +5,7 @@ import Products from "./components/Products/Products.tsx";
 import "./index.css";
 import { Toaster } from "sonner";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Favorites from "./components/Favorites/Favoritos.tsx";
+import Favorites from "./components/Favorites/Favorites.tsx";
 import { ClerkProvider } from "@clerk/clerk-react";
 
 // Import your publishable key

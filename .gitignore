@@ -26,3 +26,5 @@ dist-ssr
 # VSCode Peacock || Other extensions configuration files
 
 *.vscode
+*.env
+.env

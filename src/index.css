@@ -60,7 +60,7 @@
   color: #55555585;
   margin: 5px 0;
 }
-
+/* 
 .horizontal-line {
   height: 1px;
   background-color: #e6e6e6;
@@ -89,7 +89,7 @@
     color-stop(0.5, rgba(128, 128, 128, 0.181)),
     color-stop(0.98, white)
   );
-}
+} */
 /*Manipula directamente la libreria del slider o carrusel*/
 .carousel .slider-wrapper.axis-horizontal .slider .slide {
   display: flex;
@@ -118,7 +118,10 @@
 
 .hover-center-text:hover {
   padding-left: calc(50% - (var(--text-width) / 2));
-  padding-right: calc(50% - (var(--text-width) / 2));
+  padding-right: calc(20% - (var(--text-width) / 2));
+}
+.ui.icon.input {
+  min-width: 25vmax;
 }
 .ui.icon.input > input:hover {
   padding-right: 8em !important;
@@ -128,3 +131,12 @@
   transition: all ease 0.2s;
 }
 
+@media (max-width: 768px) {
+  .ui.icon.input > input {
+    width: 42vmax; /* Ocupa todo el ancho disponible */
+    transition: all ease 0.2s;
+  }
+  .ui.icon.input {
+  min-width: 10vmax;
+}
+}

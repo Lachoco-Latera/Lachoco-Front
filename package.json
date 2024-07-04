@@ -11,13 +11,15 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.2.5",
+    "@faker-js/faker": "^8.4.1",
     "@headlessui/react": "^2.0.4",
     "axios": "^1.7.2",
-    "faker": "^4.1.0",
+    "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.2.1",
+    "react-leaflet": "^4.2.1",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.23.1",
     "semantic-ui-css": "^2.5.0",
@@ -25,6 +27,7 @@
     "sonner": "^1.5.0"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.12",
     "@types/lodash": "^4.17.5",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

@@ -9,24 +9,36 @@ import { SlHeart } from "react-icons/sl";
 import { LuPackageOpen } from "react-icons/lu";
 import { GrDeliver } from "react-icons/gr";
 import { FaBookOpen } from "react-icons/fa";
+import MapComponent from "../../MapComponent";
+import FlavorModal from "../../FlavorModal";
+import { useCartStore } from "../../../stores/useCartStore";
 
 const ProductsDetail = ({ info }: { info: any }) => {
+  const { cart, confirmedFlavors } = useCartStore();
   const [modalProduct, setModalProduct] = useState<Product | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [productInfo, setProductInfo] = useState<any>(null);
   const [heartColor, setHeartColor] = useState("transparent");
-
+  const [showFlavorModal, setShowFlavorModal] = useState(false);
   const altLabel = ["Solo Online", "Nuevo", "Importado"];
   const handleImageClick = (product: Product) => {
     setModalProduct(product);
     setShowModal(true);
   };
-
   const closeModal = () => {
     setShowModal(false);
     setModalProduct(null);
   };
 
+  const openFlavorModal = () => {
+    info?.category?.name === "bombones"
+      ? setShowFlavorModal(true)
+      : setShowFlavorModal(false);
+  };
+
+  const closeFlavorModal = () => {
+    setShowFlavorModal(false);
+  };
   useEffect(() => {
     if (info) {
       setProductInfo(info);
@@ -47,8 +59,20 @@ const ProductsDetail = ({ info }: { info: any }) => {
       }
     });
   };
+  const maxFlavors =
+    info.presentacion *
+    cart.reduce((acc, item: any) => {
+      if (item.id === info.id) {
+        return acc + item.quantity;
+      }
+      return acc;
+    }, 0);
 
-  console.log(info);
+  const actualSelectionLength = confirmedFlavors[info.id]?.length || 0;
+
+  console.log("Selección actual de flavors:", actualSelectionLength);
+  console.log("Maximo de sabores:", maxFlavors);
+
   return (
     <div className="flex flex-col md:px-48 px-12 md:py-10 ">
       <div className="flex flex-col md:flex-row items-center md:justify-between">
@@ -77,7 +101,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
               id="secondHeart"
               size={24}
               color="white"
-              className="cursor-pointer group-hover:scale-[1.1] ease-in-out duration-300 drop-shadow z-30"
+              className="cursor-pointer group-hover:scale-[1.1] ease-in-out duration-300 drop-shadow z-[8]"
             />
             {"Añadir a favoritos"}
           </div>
@@ -105,7 +129,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
         ))}
       </Carousel>
       <div className="flex md:flex-row flex-col items-center md:items-start justify-between">
-        <div className="flex flex-col pr-10">
+        <div className="flex flex-col md:pr-10">
           <ul className="flex gap-2 ">
             {altLabel.map((label: any, index: number) => (
               <li
@@ -116,34 +140,49 @@ const ProductsDetail = ({ info }: { info: any }) => {
               </li>
             ))}
           </ul>
-          <p className="self-start max-w-2xl pt-12 md:font-semibold">
-            <h2 className="flex gap-2 text-3xl">
+          <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
+            <p className="flex gap-2 text-3xl">
               <LuPackageOpen />
               Presentación
-            </h2>
+            </p>
             <p className=""> {productInfo?.description}</p>
-          </p>
-          <p className="self-start max-w-2xl pt-12 md:font-semibold">
-            <h2 className="flex gap-2 text-3xl">
+          </h2>
+          <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
+            <p className="flex gap-2 text-3xl">
               <FaBookOpen />
               Descripción
-            </h2>
+            </p>
             <p className=""> {productInfo?.description}</p>
-          </p>
-          <p className="self-start max-w-2xl pt-12 md:font-semibold">
-            <h2 className="flex gap-2 text-3xl">
+          </h2>
+          <h2 className="self-start max-w-2xl pt-12 pb-12 md:font-semibold">
+            <p className="flex gap-2 text-3xl">
               <GrDeliver />
               Envios
-            </h2>
+            </p>
             <p className=""> {productInfo?.description}</p>
-          </p>
+          </h2>
+          <div className="z-0">
+            <MapComponent />
+          </div>
         </div>
-        <div className="flex">
+        <div
+          className={`flex ${
+            productInfo?.category?.name === "bombones"
+              ? "hover:cursor-pointer"
+              : null
+          }`}
+        >
           <Checkout
             price={productInfo?.price}
             currency={productInfo?.currency}
             flavors={productInfo?.flavors}
             productName={productInfo?.name}
+            productCategory={productInfo?.category.name}
+            flavorQuantity={maxFlavors}
+            confirmedFlavors={actualSelectionLength}
+            openModal={
+              info?.category?.name === "bombones" ? openFlavorModal : null
+            }
           />
         </div>
       </div>
@@ -181,6 +220,10 @@ const ProductsDetail = ({ info }: { info: any }) => {
             </Carousel>
           </div>
         </div>
+      )}
+      {/* Aquí se cierra FlavorModal si showFlavorModal es true */}
+      {showFlavorModal && (
+        <FlavorModal product={productInfo} closeModal={closeFlavorModal} />
       )}
     </div>
   );

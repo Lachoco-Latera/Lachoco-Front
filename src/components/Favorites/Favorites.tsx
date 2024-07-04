@@ -4,27 +4,26 @@ import BottomBar from "../../components/BottomBar/BottomBar";
 import axios from "axios";
 import Drawer from "../Drawer";
 import Cart from "../minicart/Cart";
-import { useParams } from "react-router-dom";
-import ProductsDetail from "./productsDetail/ProductsDetail";
+import { MdFavoriteBorder } from "react-icons/md";
 
 const Products = () => {
-  const { id } = useParams();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [info, setInfo] = useState<any>(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchFavorites = async () => {
       try {
         const response = await axios.get(
-          `https://lachoco.onrender.com/products/${id}`
+          `https://lachoco.onrender.com/products`
         );
         setInfo(response.data);
       } catch (err) {
         console.error(err);
       }
     };
+    //                    `https://lachoco.onrender.com/users/favorite/${userId}`
 
-    fetchProducts();
+    fetchFavorites();
   }, []);
 
   const handleCartIconClick = () => {
@@ -47,7 +46,14 @@ const Products = () => {
         <Cart similar={info} />
       </Drawer>
       <div className="my-8 flex flex-col justify-center items-center">
-        {info ? <ProductsDetail info={info} /> : <div>Loading...</div>}
+        {info ? (
+          <p className="flex flex-row gap-2 justify-center items-center">
+            <MdFavoriteBorder size={28} />
+            Lista de favoritos!
+          </p>
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
     </>
   );

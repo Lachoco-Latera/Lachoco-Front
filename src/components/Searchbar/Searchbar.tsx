@@ -1,15 +1,7 @@
 import _ from "lodash";
-//@ts-ignore
-import faker from "faker";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GridColumn, Search, Grid } from "semantic-ui-react";
-
-const source = _.times(5, () => ({
-  title: faker.company.companyName(),
-  description: faker.company.catchPhrase(),
-  image: faker.internet.avatar(),
-  price: faker.finance.amount(0, 100, 2, "$"),
-}));
+import axios from "axios";
 
 const initialState = {
   loading: false,
@@ -27,7 +19,6 @@ function exampleReducer(state: any, action: any) {
       return { ...state, loading: false, results: action.results };
     case "UPDATE_SELECTION":
       return { ...state, value: action.selection };
-
     default:
       throw new Error();
   }
@@ -36,46 +27,96 @@ function exampleReducer(state: any, action: any) {
 function SearchExampleStandard() {
   const [state, dispatch] = React.useReducer(exampleReducer, initialState);
   const { loading, results, value } = state;
-
+  const [products, setProducts] = useState([]);
   const timeoutRef: any = React.useRef();
-  const handleSearchChange = React.useCallback((e: any, data: any) => {
-    clearTimeout(timeoutRef.current);
-    dispatch({ type: "START_SEARCH", query: data.value });
-    console.log(e ? "Searching on searchbar" : "Event didnt pop");
-    timeoutRef.current = setTimeout(() => {
-      if (data.value.length === 0) {
-        dispatch({ type: "CLEAN_QUERY" });
-        return;
-      }
 
-      const re = new RegExp(_.escapeRegExp(data.value), "i");
-      const isMatch = (result: any) => re.test(result.title);
-
-      dispatch({
-        type: "FINISH_SEARCH",
-        results: _.filter(source, isMatch),
-      });
-    }, 300);
-  }, []);
-  React.useEffect(() => {
-    return () => {
+  // Función para manejar el cambio en la búsqueda
+  const handleSearchChange = React.useCallback(
+    //@ts-ignore
+    (e: any, data: any) => {
       clearTimeout(timeoutRef.current);
+      dispatch({ type: "START_SEARCH", query: data.value });
+      timeoutRef.current = setTimeout(() => {
+        if (data.value.length === 0) {
+          dispatch({ type: "CLEAN_QUERY" });
+          return;
+        }
+
+        const searchTerm = data.value.trim();
+        const isNumber = /^\d+(\.\d+)?$/.test(searchTerm);
+        const re = new RegExp(_.escapeRegExp(searchTerm), "i");
+
+        let filteredResults = _.filter(products, (result: any) => {
+          if (isNumber) {
+            return re.test(result.price);
+          } else {
+            return re.test(result.name) || re.test(result.description);
+          }
+        });
+
+        // Agrupar resultados por categoría
+        const categorizedResults = _.groupBy(filteredResults, "category");
+
+        const finalResults = _.map(categorizedResults, (value, key) => ({
+          name: key,
+          results: value.slice(0, 6).map((result) => ({
+            title: result.name,
+            description: result.description
+              .split(" ")
+              .slice(0, 12)
+              .join(" ")
+              .concat(result.description.split(" ").length > 12 ? "..." : ""),
+            image: result.images.length > 0 ? result.images[0].img : undefined,
+            price: result.price,
+          })),
+        }));
+
+        dispatch({
+          type: "FINISH_SEARCH",
+          results: finalResults,
+        });
+      }, 300);
+    },
+    [products]
+  );
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          "https://lachoco.onrender.com/products"
+        );
+        const productsWithCategory = response.data.map((product: any) => ({
+          ...product,
+          category: "Tabletas", // Hasta que cambien los products por el trabajo en suscripción
+        }));
+        setProducts(productsWithCategory);
+      } catch (err) {
+        console.error(err);
+      }
     };
+
+    fetchProducts();
   }, []);
 
   return (
     <Grid>
-      <GridColumn width={6}>
+      <GridColumn width={16}>
         <Search
+          fluid
+          category
           loading={loading}
-          placeholder="Chocolatéa!"
-          onResultSelect={(e, data) => (
+          placeholder="¿Qué quieres probar?" //@ts-ignore
+          onResultSelect={(e, data) => {
             dispatch({
               type: "UPDATE_SELECTION",
               selection: data.result.title,
-            }),
-            console.log(e ? "Got searched on searchbar" : "Event didnt pop")
-          )}
+            });
+            window.location.href = `/products/${data.result.id}`;
+            /*NO UTILIZAR "useNavigate" 
+            ROMPE POR COMPLETO EL CICLO DE VIDA DE LOS COMPONENTES 
+            CON EL HOOK */
+          }}
           onSearchChange={handleSearchChange}
           results={results}
           value={value}

@@ -53,7 +53,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         [flavor.id]: (prevCounts[flavor.id] || 0) + 1,
       }));
 
-      toast(`Sabor ${flavor.name} agregado!`, {
+      toast(`Sabor ${flavor.name} seleccionado!`, {
         action: {
           label: "Okay!",
           onClick: () => {
@@ -97,7 +97,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
 
       setLastSelectedProductId(flavorToAdd);
 
-      toast(`Sabor ${flavorName} agregado!`, {
+      toast(`Sabor ${flavorName} seleccionado!`, {
         action: {
           label: "Okay!",
           onClick: () => {

@@ -4,10 +4,26 @@ import { useCartStore } from "../../stores/useCartStore";
 
 // import useFromStore from "../../hooks/useFromStore";
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors } = useCartStore();
+  const [actualConfirmedFlavorsTotal, setActualConfirmedFlavorsTotal] =
+    useState<number>(0);
 
+  useEffect(() => {
+    const countFlavorsAndSum = () => {
+      let totalFlavors = 0;
+
+      for (const id in confirmedFlavors) {
+        totalFlavors += confirmedFlavors[id].length;
+      }
+
+      setActualConfirmedFlavorsTotal(totalFlavors);
+    };
+
+    countFlavorsAndSum();
+  }, [confirmedFlavors]);
   let total = 0;
   if (cart) {
     //Con esto prohibo que vaya menor a 0, por más forzado que sea
@@ -30,11 +46,8 @@ function Cart({ similar }: any) {
     },
     0
   );
-
-  console.log(
-    "Total de presentaciones * cantidad para productos 'bombones':",
-    totalPresentationQuantity
-  );
+  console.log("Mis sabores:", actualConfirmedFlavorsTotal);
+  console.warn("Mi objetivo de sabores:", totalPresentationQuantity);
   //@ts-ignore
   const recomendations = similar;
   const promise = () =>
@@ -43,7 +56,10 @@ function Cart({ similar }: any) {
         const hasBombones = cart.some(
           (item) => item.category.name === "bombones"
         );
-        if (hasBombones) {
+        if (
+          hasBombones &&
+          actualConfirmedFlavorsTotal !== totalPresentationQuantity
+        ) {
           reject("Debes seleccionar sabores para los bombones.");
         } else {
           resolve((window.location.href = "https://www.mercadopago.com.ar"));
@@ -62,20 +78,40 @@ function Cart({ similar }: any) {
       <div className="flex justify-between items-center mt-4">
         <span className="text-lg font-bold">Total:</span>
         <span className="text-xl font-bold">${total.toFixed(2)}</span>
+        <span className="text-lg font-bold">{2}</span>
       </div>
-      <div className="flex rounded-xl p-2 mt-2 shadow justify-center hover:bg-amber-100 hover:scale-105 transition-all ease">
-        <button
-          onClick={() =>
-            toast.promise(promise, {
-              loading: `Serás redireccionado para pagar...`,
-              success: "Muchas gracias de antemano! ❤",
-              error: "Debes seleccionar sabores para los bombones.",
-            })
-          }
-        >
-          Ordenar Ahora
-        </button>
-      </div>
+
+      {actualConfirmedFlavorsTotal !== totalPresentationQuantity ? (
+        <div className="flex rounded-xl p-2 mt-2 shadow justify-center text-red-300  hover:text-red-500 hover:scale-105 transition-all ease">
+          <button
+            onClick={() =>
+              toast.promise(promise, {
+                loading: `Serás redireccionado para pagar...`,
+                success: "Muchas gracias de antemano! ❤",
+                error: "Debes seleccionar sabores para los bombones.",
+              })
+            }
+            className=" text-xl font-bold"
+          >
+            Aún tienes sabores pendientes
+          </button>
+        </div>
+      ) : (
+        <div className="flex rounded-xl p-2 mt-2 shadow justify-center hover:bg-green-100 hover:scale-105 transition-all ease">
+          <button
+            onClick={() =>
+              toast.promise(promise, {
+                loading: `Serás redireccionado para pagar...`,
+                success: "Muchas gracias de antemano! ❤",
+                error: "Debes seleccionar sabores para los bombones.",
+              })
+            }
+            className=" text-xl text-green-500 font-bold"
+          >
+            Ordenar Ahora
+          </button>
+        </div>
+      )}
     </section>
   );
 }

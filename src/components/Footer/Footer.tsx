@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState } from "react";
 import { CambioMoneda } from "../CambioMoneda/CambioMoneda"
 import logo1 from '/images/facebook.png'

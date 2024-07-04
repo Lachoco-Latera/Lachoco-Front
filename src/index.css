@@ -67,7 +67,7 @@
   width: 12em;
   margin: 0 auto;
   background-image: linear-gradient(left, white 2%, #e6e6e6 50%, white 98%);
-  background-image: -o-linear-gradient(left, white 2%, #e6e6e6 50%, white 98%);
+  background-image: -o-linear-gradient( left, white 2%, #e6e6e6 50%, white 98%);
   background-image: -moz-linear-gradient(
     left,
     white 2%,

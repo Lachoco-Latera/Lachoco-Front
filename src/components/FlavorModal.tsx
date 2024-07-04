@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useCartStore } from "../stores/useCartStore";
 import { FaCirclePlus } from "react-icons/fa6";
 import { toast } from "sonner";
@@ -12,6 +12,9 @@ interface Props {
 
 const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const { cart, totalItems } = useCartStore();
+  const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
+  const [lastSelectedProductId, setLastSelectedProductId] =
+    useState<string>("");
 
   let total = 0;
   if (cart) {
@@ -23,6 +26,9 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   }
 
   const handleFlavorClick = (flavor: any) => {
+    setLastSelectedProductId(product.id);
+    setSelectedFlavors([...selectedFlavors, flavor.id]);
+
     toast(`Sabor ${flavor.name} agregado!`, {
       action: {
         label: "Okay!",
@@ -33,6 +39,14 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       },
     });
   };
+
+  useEffect(() => {
+    console.log("Último producto seleccionado:", lastSelectedProductId);
+  }, [lastSelectedProductId]);
+
+  useEffect(() => {
+    console.log("Sabores seleccionados:", selectedFlavors);
+  }, [selectedFlavors]);
 
   const promise = () =>
     new Promise((resolve) =>

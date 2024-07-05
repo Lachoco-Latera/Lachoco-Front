@@ -59,7 +59,8 @@ const Checkout = ({
         $ {price} {currency}
       </div>
       <div className="pt-4">
-        {(productCategory === "bombones" && isCartItem) ||
+        {productCategory === "bombones" &&
+        isCartItem &&
         confirmedFlavors !== flavorQuantity ? (
           <button
             className="
@@ -73,7 +74,8 @@ const Checkout = ({
           </button>
         ) : (
           <>
-            {productCategory !== "bombones" && isCartItem ? (
+            {(productCategory !== "bombones" && isCartItem) ||
+            (confirmedFlavors === flavorQuantity && confirmedFlavors != 0) ? (
               <button
                 className="
                   shadow rounded-full p-4 hover:drop-shadow-xl 

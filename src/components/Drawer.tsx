@@ -8,7 +8,7 @@ interface Props {
 
 const Drawer = ({ children, isOpen, onCartIconClick }: Props) => {
   const backdropClass = isOpen
-    ? "fixed top-0 left-0 h-screen w-screen bg-black bg-opacity-50 z-40"
+    ? "fixed top-0 left-0 h-screen w-screen bg-black bg-opacity-50 z-[55]"
     : "hidden";
   return (
     <div>
@@ -17,7 +17,7 @@ const Drawer = ({ children, isOpen, onCartIconClick }: Props) => {
 
       {/* Contenido del drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-white text-white transition duration-500 ease-in-out transform z-50 ${
+        className={`fixed top-0 right-0 h-full w-80 bg-white text-white transition duration-500 ease-in-out transform z-[60] ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

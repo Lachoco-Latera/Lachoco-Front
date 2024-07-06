@@ -101,7 +101,11 @@ function Cart({ similar }: any) {
         onMouseLeave={() => setShowTooltip(false)}
       >
         <span className="text-lg font-bold">Total:</span>
-        <span className={`text-xl font-bold text-rose-500`}>
+        <span
+          className={`text-xl font-bold ${
+            !completed ? "text-red-500" : "text-slate-500"
+          }`}
+        >
           ${total.toFixed(2)}
         </span>
       </div>

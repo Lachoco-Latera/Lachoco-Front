@@ -10,8 +10,12 @@ const Checkout = ({
   productCategory,
   flavorQuantity,
   confirmedFlavors,
+  product,
 }: any) => {
   const { cart } = useCartStore();
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const isCartItem = cart.some((item) => item.id === id);
   const promise = () =>
     new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -30,9 +34,16 @@ const Checkout = ({
         }
       }, 1100);
     });
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
 
-  const isCartItem = cart.some((item) => item.id === id);
-
+    if (!isCartItem) {
+      // Si el producto no está en el carrito, lo añadimos
+      addToCart(product);
+    }
+    // Después de agregar al carrito, abre el modal o realiza alguna otra acción
+    openModal();
+  };
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     toast.promise(promise, {
@@ -41,7 +52,6 @@ const Checkout = ({
       error: "Debes seleccionar sabores para los bombones.",
     });
   };
-
   return (
     <div
       className="
@@ -58,6 +68,7 @@ const Checkout = ({
       <div>
         $ {price} {currency}
       </div>
+      {/*Acá aclaración del llenado de la caja */}
       <div className="pt-4">
         {productCategory === "bombones" &&
         isCartItem &&
@@ -92,12 +103,12 @@ const Checkout = ({
                 className="
                   shadow rounded-full p-4 hover:drop-shadow-xl 
                   hover:bg-white
-                  hover:text-red-300 text-black 
+                  hover:text-green-300 text-black 
                   hover:scale-105 hover:font-bold text-xl
-                  cursor-not-allowed transition-all ease"
-                disabled
+                  cursor-pointer transition-all ease"
+                onClick={(e) => handleAddToCart(e)}
               >
-                Debes agregar este producto al carrito
+                Agregar
               </button>
             )}
           </>

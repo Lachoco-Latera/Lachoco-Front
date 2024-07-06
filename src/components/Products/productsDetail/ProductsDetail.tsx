@@ -181,6 +181,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
             productCategory={productInfo?.category.name}
             flavorQuantity={maxFlavors}
             confirmedFlavors={actualSelectionLength}
+            product={info}
             openModal={
               info?.category?.name === "bombones" ? openFlavorModal : null
             }

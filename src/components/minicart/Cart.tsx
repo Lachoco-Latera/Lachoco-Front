@@ -8,7 +8,8 @@ function Cart({ similar }: any) {
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const [completed, setCompleted] = useState<boolean>(true);
-  console.log(similar?.length);
+
+  similar;
   useEffect(() => {
     const countFlavorsAndSum = () => {
       let totalFlavors = 0;
@@ -70,11 +71,10 @@ function Cart({ similar }: any) {
         if (hasBombones && !flavorsCompleted) {
           reject("Debes seleccionar sabores para los bombones.");
         } else {
-          resolve((window.location.href = "https://www.mercadopago.com.ar"));
+          resolve((window.location.href = "/ship"));
         }
       }, 1100);
     });
-  console.log(completed);
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>

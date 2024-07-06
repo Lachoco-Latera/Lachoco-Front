@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Favorites from "./components/Favorites/Favorites.tsx";
 import { ClerkProvider } from "@clerk/clerk-react";
+import Ship from "./components/Ship/Ship.tsx";
 
 // Import your publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
     element: <Products />,
   },
   { path: "/favorites", element: <Favorites /> },
+  {
+    path: "/ship",
+    element: <Ship />,
+  },
 ]);
 
 const isSmallScreen = window.innerWidth < 768;

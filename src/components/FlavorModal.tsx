@@ -230,8 +230,16 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
               {product.flavors.map((flavor) => (
                 <div
                   key={flavor.id}
-                  className="flex flex-row items-center gap-2 py-2 px-4 rounded-2xl hover:shadow-lg hover:cursor-pointer hover:scale-105 transition-all ease-out"
-                  onClick={() => handleFlavorClick(flavor)}
+                  className={`flex flex-row items-center gap-2 py-2 px-4 rounded-2xl hover:shadow-lg transition-all ease-out ${
+                    actualSelectionLength === maxFlavors
+                      ? "cursor-not-allowed grayscale"
+                      : "hover:cursor-pointer hover:scale-105"
+                  }`}
+                  onClick={
+                    actualSelectionLength === maxFlavors
+                      ? () => 0
+                      : () => handleFlavorClick(flavor)
+                  }
                 >
                   <div className="flex flex-col justify-center items-center gap-2">
                     <img

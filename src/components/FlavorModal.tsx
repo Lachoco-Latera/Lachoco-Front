@@ -183,6 +183,13 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
+  const handleNeedsReset = () => {
+    toast.error("Debes reiniciar el carrito para elegir nuevos sabores", {
+      duration: 1500,
+      icon: <TbShoppingCartX size={20} />,
+    });
+  };
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -224,20 +231,24 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 </button>
               )}
             </div>
-            <h2 className="text-2xl font-bold mb-4">Elige tus sabores</h2>
-
-            <div className="flex flex-wrap justify-center items-center gap-4 py-12">
+            <h2 className="text-2xl font-bold mb-2">Elige tus sabores</h2>
+            {actualSelectionLength === maxFlavors && (
+              <div className=" bg-white rounded-2xl py-1 font-bold text-slate-600 shadow-xl text-center pointer-events-none">
+                - Debes reiniciar si quieres elegir nuevos sabores
+              </div>
+            )}
+            <div className="flex flex-wrap justify-center items-center gap-4 pb-12 pt-2">
               {product.flavors.map((flavor) => (
                 <div
                   key={flavor.id}
-                  className={`flex flex-row items-center gap-2 py-2 px-4 rounded-2xl hover:shadow-lg transition-all ease-out ${
+                  className={`relative flex flex-row items-center gap-2 py-2 px-4 rounded-2xl hover:shadow-lg transition-all ease-out ${
                     actualSelectionLength === maxFlavors
                       ? "cursor-not-allowed grayscale"
                       : "hover:cursor-pointer hover:scale-105"
                   }`}
                   onClick={
                     actualSelectionLength === maxFlavors
-                      ? () => 0
+                      ? () => handleNeedsReset()
                       : () => handleFlavorClick(flavor)
                   }
                 >

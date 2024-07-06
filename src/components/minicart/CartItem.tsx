@@ -8,9 +8,10 @@ import { useEffect, useState } from "react";
 
 interface Props {
   product: Product;
+  onUpdateFlavors: () => void; // Función para notificar al Cart sobre cambios en sabores
 }
 
-export default function CartItem({ product }: Props) {
+export default function CartItem({ product, onUpdateFlavors }: Props) {
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const addToCart = useCartStore((state) => state.addToCart);
   const delFromCart = useCartStore((state) => state.subtractFromCart);
@@ -18,7 +19,6 @@ export default function CartItem({ product }: Props) {
   const confirmedFlavors = useCartStore((state) => state.confirmedFlavors); // Obtener confirmedFlavors del store
   const [confirmedFlavorsCount, setConfirmedFlavorsCount] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
-  const [, setActualTotalFlavors] = useState<number>(0);
 
   const selectedProductId = product.id;
 
@@ -29,13 +29,6 @@ export default function CartItem({ product }: Props) {
       count = confirmedFlavors[selectedProductId].length;
     }
     setConfirmedFlavorsCount(count);
-
-    // Sumar todos los valores de los arrays en confirmedFlavors
-    let totalFlavors = 0;
-    for (const productId in confirmedFlavors) {
-      totalFlavors += confirmedFlavors[productId].length;
-    }
-    setActualTotalFlavors(totalFlavors);
   }, [confirmedFlavors, selectedProductId]);
 
   const productMaxFlavor = product.quantity * product.presentacion;
@@ -50,6 +43,10 @@ export default function CartItem({ product }: Props) {
       toast.info(`Producto ${product.name} retirado`);
     }
   };
+
+  useEffect(() => {
+    onUpdateFlavors(); // Notificar al padre cada vez que se actualicen los sabores
+  }, [confirmedFlavorsCount, onUpdateFlavors]);
 
   return (
     <li className="flex justify-between items-center gap-4 mb-2 shadow-md p-4">
@@ -72,7 +69,8 @@ export default function CartItem({ product }: Props) {
           <span className="text-gray-600 font-bold">${product.price}</span>
           <span className="flex flex-row gap-2 items-center relative">
             Cajas: {product.quantity}
-            {confirmedFlavorsCount !== productMaxFlavor ? (
+            {confirmedFlavorsCount !== productMaxFlavor &&
+            product.category.name === "bombones" ? (
               <>
                 <FaExclamation
                   className="text-amber-500 cursor-pointer"
@@ -82,7 +80,7 @@ export default function CartItem({ product }: Props) {
                 />
                 {showTooltip && (
                   <span className="tooltip absolute bg-slate-600 opacity-95 text-white text-xs px-2 py-1 rounded-md -left-2 -top-10">
-                    Aún te faltan cargar sabores
+                    - Aún te faltan cargar sabores
                   </span>
                 )}
               </>

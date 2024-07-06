@@ -72,10 +72,6 @@ function App() {
         products={products}
         onCartIconClick={handleCartIconClickAlt}
       />
-      {/* <Login />
-      <Register />
-      <UserConfig /> */}
-
       <Footer />
     </div>
   );

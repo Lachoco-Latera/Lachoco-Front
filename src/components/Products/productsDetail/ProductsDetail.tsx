@@ -13,7 +13,14 @@ import MapComponent from "../../MapComponent";
 import FlavorModal from "../../FlavorModal";
 import { useCartStore } from "../../../stores/useCartStore";
 
-const ProductsDetail = ({ info }: { info: any }) => {
+interface ProductsDetailProps {
+  info: any;
+  onCheckIconClick: () => void;
+}
+const ProductsDetail: React.FC<ProductsDetailProps> = ({
+  info,
+  onCheckIconClick,
+}) => {
   const { cart, confirmedFlavors } = useCartStore();
   const [modalProduct, setModalProduct] = useState<Product | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -185,6 +192,7 @@ const ProductsDetail = ({ info }: { info: any }) => {
             openModal={
               info?.category?.name === "bombones" ? openFlavorModal : null
             }
+            openCartModal={onCheckIconClick}
           />
         </div>
       </div>

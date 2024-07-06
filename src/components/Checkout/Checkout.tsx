@@ -11,6 +11,7 @@ const Checkout = ({
   flavorQuantity,
   confirmedFlavors,
   product,
+  openCartModal,
 }: any) => {
   const { cart } = useCartStore();
   const addToCart = useCartStore((state) => state.addToCart);
@@ -94,7 +95,7 @@ const Checkout = ({
                   hover:text-green-300 text-white 
                   hover:scale-105 hover:font-bold text-xl
                   cursor-pointer transition-all ease"
-                onClick={handleButtonClick}
+                onClick={openCartModal}
               >
                 Comprar ahora
               </button>

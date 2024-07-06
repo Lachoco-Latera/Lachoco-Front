@@ -47,7 +47,11 @@ const Products = () => {
         <Cart similar={info} />
       </Drawer>
       <div className="my-8 flex flex-col justify-center items-center">
-        {info ? <ProductsDetail info={info} /> : <div>Loading...</div>}
+        {info ? (
+          <ProductsDetail info={info} onCheckIconClick={handleCartIconClick} />
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
     </>
   );

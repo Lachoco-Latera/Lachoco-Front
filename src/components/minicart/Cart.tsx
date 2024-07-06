@@ -5,11 +5,10 @@ import { useEffect, useState } from "react";
 
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors } = useCartStore();
-  const [ActualConfirmedFlavorsTotal, setActualConfirmedFlavorsTotal] =
-    useState<number>(0);
+  const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const [completed, setCompleted] = useState<boolean>(true);
-
+  console.log(similar?.length);
   useEffect(() => {
     const countFlavorsAndSum = () => {
       let totalFlavors = 0;

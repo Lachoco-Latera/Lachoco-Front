@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors } = useCartStore();
-  const [actualConfirmedFlavorsTotal, setActualConfirmedFlavorsTotal] =
+  const [ActualConfirmedFlavorsTotal, setActualConfirmedFlavorsTotal] =
     useState<number>(0);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
+  const [completed, setCompleted] = useState<boolean>(true);
 
   useEffect(() => {
     const countFlavorsAndSum = () => {
@@ -34,12 +36,12 @@ function Cart({ similar }: any) {
     (product) => product.category.name === "bombones"
   );
 
-  const totalPresentationQuantity = bombonesProducts.reduce(
-    (total, product: any) => {
-      return total + product.presentacion * product.quantity;
-    },
-    0
-  );
+  // const totalPresentationQuantity = bombonesProducts.reduce(
+  //   (total, product: any) => {
+  //     return total + product.presentacion * product.quantity;
+  //   },
+  //   0
+  // );
 
   const handleUpdateFlavors = () => {
     // Función para verificar si todos los sabores están seleccionados
@@ -48,10 +50,18 @@ function Cart({ similar }: any) {
       const confirmedFlavorsCount = confirmedFlavors[product.id]?.length || 0;
       return confirmedFlavorsCount !== productMaxFlavor;
     });
-
     return !hasIncompleteFlavors;
   };
 
+  useEffect(() => {
+    const hasIncompleteFlavors = bombonesProducts.some((product) => {
+      const productMaxFlavor = product.quantity * product.presentacion;
+      const confirmedFlavorsCount = confirmedFlavors[product.id]?.length || 0;
+      return confirmedFlavorsCount !== productMaxFlavor;
+    });
+
+    setCompleted(!hasIncompleteFlavors);
+  }, [confirmedFlavors, bombonesProducts]);
   const promise = () =>
     new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -65,7 +75,7 @@ function Cart({ similar }: any) {
         }
       }, 1100);
     });
-
+  console.log(completed);
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
@@ -78,11 +88,23 @@ function Cart({ similar }: any) {
           />
         ))}
       </ul>
-      <div className="flex justify-between items-center mt-4">
-        <span className="text-lg font-bold">Total:</span>
-        <span className="text-xl font-bold">${total.toFixed(2)}</span>
+      <div className=" h-2">
+        {showTooltip && !completed && (
+          <span className="tooltip absolute bg-slate-600 opacity-95 text-white text-xs px-2 py-1 rounded-md right-4">
+            - Aún te faltan cargar sabores
+          </span>
+        )}
       </div>
-
+      <div
+        className="flex justify-between items-center mt-4 "
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        <span className="text-lg font-bold">Total:</span>
+        <span className={`text-xl font-bold text-rose-500`}>
+          ${total.toFixed(2)}
+        </span>
+      </div>
       {!handleUpdateFlavors() ? (
         <div className="flex rounded-xl p-2 mt-2 shadow justify-center text-red-300  hover:text-red-500 hover:scale-105 transition-all ease">
           <button
@@ -100,7 +122,7 @@ function Cart({ similar }: any) {
           </button>
         </div>
       ) : (
-        <div className="flex rounded-xl p-2 mt-2 shadow justify-center hover:bg-green-100 hover:scale-105 transition-all ease">
+        <div className="flex rounded-xl p-2 mt-2 shadow justify-center hover:bg-green-500 hover:scale-105 transition-all ease">
           <button
             onClick={() =>
               toast.promise(promise, {
@@ -109,9 +131,9 @@ function Cart({ similar }: any) {
                 error: "Debes seleccionar sabores para los bombones.",
               })
             }
-            className="text-xl text-green-500 font-bold"
+            className="text-xl text-green-500 hover:text-white font-bold"
           >
-            Ordenar Ahora
+            Calcular envio y total
           </button>
         </div>
       )}

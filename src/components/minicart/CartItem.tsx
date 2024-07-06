@@ -80,7 +80,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
                 />
                 {showTooltip && (
                   <span className="tooltip absolute bg-slate-600 opacity-95 text-white text-xs px-2 py-1 rounded-md -left-2 -top-10">
-                    Aún te faltan cargar sabores
+                    - Aún te faltan cargar sabores
                   </span>
                 )}
               </>

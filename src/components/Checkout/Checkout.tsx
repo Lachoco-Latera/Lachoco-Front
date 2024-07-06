@@ -97,7 +97,7 @@ const Checkout = ({
                   cursor-pointer transition-all ease"
                 onClick={openCartModal}
               >
-                Comprar ahora
+                Ordernar ahora
               </button>
             ) : (
               <button

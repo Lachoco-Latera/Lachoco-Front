@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GestionarCarrito } from "./Botonera/GestionarCarrito";
+// import { GestionarCarrito } from "./Botonera/GestionarCarrito";
 import { GestionOrdenCompra } from "./Botonera/GestionOrdenCompra";
 import { GestionFavoritos } from "./Botonera/GestionFavoritos";
 import { GestionRedesSociales } from "./Botonera/GestionRedesSociales";
@@ -12,11 +12,11 @@ import Header from "../Header/Header";
 import { products } from "../../mocks/data";
 
 const buttonConfig = [
-  {
-    label: "Carritos de Compra",
-    state: "gestionCarrito",
-    component: <GestionarCarrito />,
-  },
+  // {
+  //   label: "Carritos de Compra",
+  //   state: "gestionCarrito",
+  //   component: <GestionarCarrito />,
+  // },
   {
     label: "Ordenes de Compra",
     state: "gestionOrdenCompra",
@@ -78,7 +78,10 @@ export const Admin = () => {
           {buttonConfig?.map((button) => (
             <button
               key={button.state}
-              className="text-gray-900 font-bold text-center xl:text-lg capitalize duration-500 hover:text-white m-2"
+              className="text-slate-600 font-bold text-center 
+              xl:text-lg capitalize m-2 hover:bg-rose-400 
+              hover:text-white transition-all ease duration-400
+              p-2 rounded-xl hover:shadow-xl hover:scale-105"
               onClick={() => handleButton(button.state)}
             >
               {button.label}

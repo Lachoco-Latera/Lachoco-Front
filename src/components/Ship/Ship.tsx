@@ -69,7 +69,7 @@ const Ship = () => {
           uniqueId: `state-${state.code_2_digits}-${index}`, // Usando una combinación única
         }))
       );
-      console.log(response.data.data);
+      // console.log(response.data.data);
     } catch (err) {
       setStates([]);
       console.error("Error fetching state data:", err);
@@ -88,29 +88,29 @@ const Ship = () => {
         `https://queries-test.envia.com/carrier?country_code=${countryCode}`,
         config
       );
-      console.log("Carrier:", carrierResponse.data);
-      setCarrierData(carrierResponse.data);
+      console.log("Carrier:", carrierResponse.data.data);
+      setCarrierData(carrierResponse.data.data);
 
       const serviceResponse = await axios.get(
         `https://queries-test.envia.com/service?country_code=${countryCode}`,
         config
       );
-      console.log("Service:", serviceResponse.data);
-      setServiceData(serviceResponse.data);
+      console.log("Service:", serviceResponse.data.data);
+      setServiceData(serviceResponse.data.data);
 
       const printOptionsResponse = await axios.get(
         `https://queries.envia.com/carrier-print-option`,
         config
       );
-      console.log("Print Options:", printOptionsResponse.data);
-      setPrintOptionsData(printOptionsResponse.data);
+      console.log("Print Options:", printOptionsResponse.data.data);
+      setPrintOptionsData(printOptionsResponse.data.data);
 
       const additionalServicesResponse = await axios.get(
         `https://queries.envia.com/additional-services`,
         config
       );
-      console.log("Additional Services:", additionalServicesResponse.data);
-      setAdditionalServicesData(additionalServicesResponse.data);
+      console.log("Additional Services:", additionalServicesResponse.data.data);
+      setAdditionalServicesData(additionalServicesResponse.data.data);
     } catch (err) {
       console.error("Error fetching additional data:", err);
     }

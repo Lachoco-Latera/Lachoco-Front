@@ -84,7 +84,7 @@ function SearchExampleStandard() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://lachoco.onrender.com/products"
+          "https://lachocoback.vercel.app/products"
         );
         const productsWithCategory = response.data.map((product: any) => ({
           ...product,

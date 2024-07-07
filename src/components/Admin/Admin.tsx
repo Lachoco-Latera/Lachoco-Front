@@ -75,7 +75,7 @@ export const Admin = () => {
       <Header onCartIconClick={handleCartIconClick} products={products} />
       <div className="w-full min-h-screen">
         <div className="w-full bg-white shadow-xl p-4 flex flex-wrap justify-evenly items-center">
-          {buttonConfig.map((button) => (
+          {buttonConfig?.map((button) => (
             <button
               key={button.state}
               className="text-gray-900 font-bold text-center xl:text-lg capitalize duration-500 hover:text-white m-2"

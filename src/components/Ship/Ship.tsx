@@ -4,9 +4,15 @@ import { useState, useEffect } from "react";
 const Ship = () => {
   const [info, setInfo] = useState<any>(null);
   const [errors, setErrors] = useState<string[] | null>(null);
-  const [countryCode, setCountryCode] = useState<string>("CO");
+  const [countryCode, setCountryCode] = useState<string>("AR");
   const [countries, setCountries] = useState<any[]>([]);
   const [states, setStates] = useState<any[]>([]);
+  const [carrierData, setCarrierData] = useState<any[]>([]);
+  const [serviceData, setServiceData] = useState<any[]>([]);
+  const [printOptionsData, setPrintOptionsData] = useState<any[]>([]);
+  const [additionalServicesData, setAdditionalServicesData] = useState<any[]>(
+    []
+  );
 
   useEffect(() => {
     fetchCountryData();
@@ -72,25 +78,39 @@ const Ship = () => {
 
   const fetchAdditionalData = async () => {
     try {
+      const token =
+        "e6265b6534aa2c3ff3975b57321c7907eeac368d968f911a4f4042ddd671194c";
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+
       const carrierResponse = await axios.get(
-        `http://queries-test.envia.com/carrier?country_code=${countryCode}`
+        `https://queries-test.envia.com/carrier?country_code=${countryCode}`,
+        config
       );
       console.log("Carrier:", carrierResponse.data);
+      setCarrierData(carrierResponse.data);
 
       const serviceResponse = await axios.get(
-        `https://queries-test.envia.com/service?country_code=${countryCode}`
+        `https://queries-test.envia.com/service?country_code=${countryCode}`,
+        config
       );
       console.log("Service:", serviceResponse.data);
+      setServiceData(serviceResponse.data);
 
       const printOptionsResponse = await axios.get(
-        `https://queries-test.envia.com/carrier-print-option`
+        `https://queries.envia.com/carrier-print-option`,
+        config
       );
       console.log("Print Options:", printOptionsResponse.data);
+      setPrintOptionsData(printOptionsResponse.data);
 
       const additionalServicesResponse = await axios.get(
-        `https://queries-test.envia.com/additional-services`
+        `https://queries.envia.com/additional-services`,
+        config
       );
       console.log("Additional Services:", additionalServicesResponse.data);
+      setAdditionalServicesData(additionalServicesResponse.data);
     } catch (err) {
       console.error("Error fetching additional data:", err);
     }

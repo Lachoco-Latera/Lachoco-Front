@@ -13,7 +13,8 @@ const Ship = () => {
   const [additionalServicesData, setAdditionalServicesData] = useState<any[]>(
     []
   );
-
+  carrierData;
+  serviceData;
   useEffect(() => {
     fetchCountryData();
     fetchCarriers();
@@ -88,34 +89,29 @@ const Ship = () => {
         `https://queries-test.envia.com/carrier?country_code=${countryCode}`,
         config
       );
-      console.log("Carrier:", carrierResponse.data.data);
       setCarrierData(carrierResponse.data.data);
 
       const serviceResponse = await axios.get(
         `https://queries-test.envia.com/service?country_code=${countryCode}`,
         config
       );
-      console.log("Service:", serviceResponse.data.data);
       setServiceData(serviceResponse.data.data);
 
       const printOptionsResponse = await axios.get(
         `https://queries.envia.com/carrier-print-option`,
         config
       );
-      console.log("Print Options:", printOptionsResponse.data.data);
       setPrintOptionsData(printOptionsResponse.data.data);
 
       const additionalServicesResponse = await axios.get(
         `https://queries.envia.com/additional-services`,
         config
       );
-      console.log("Additional Services:", additionalServicesResponse.data.data);
       setAdditionalServicesData(additionalServicesResponse.data.data);
     } catch (err) {
       console.error("Error fetching additional data:", err);
     }
   };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetchCarriers();
@@ -123,6 +119,7 @@ const Ship = () => {
     fetchAdditionalData();
   };
 
+  console.log(printOptionsData.slice(0, 5));
   return (
     <div className="">
       <div className="flex flex-col justify-center items-center p-12 shadow-xl rounded-xl ">
@@ -146,6 +143,9 @@ const Ship = () => {
         </form>
         <div className="md:w-full w-full  overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-yellow-400 pb-2">
           <div className="shadow   border-b border-gray-200 sm:rounded-lg">
+            <b className="flex font-bold text-3xl items-center justify-center py-2">
+              Info de Carriers
+            </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -194,6 +194,9 @@ const Ship = () => {
         </div>
         <div className="md:w-full w-full overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-red-400 pb-2">
           <div className="shadow   border-b border-gray-200 sm:rounded-lg">
+            <b className="flex font-bold text-3xl items-center justify-center py-2">
+              Info de paises
+            </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -235,6 +238,9 @@ const Ship = () => {
         </div>
         <div className="md:w-full w-full  overflow-x-auto overflow-y-auto  max-h-[500px] border-b-4 border-blue-400 pb-2">
           <div className="shadow   border-b border-gray-200 sm:rounded-lg">
+            <b className="flex font-bold text-3xl items-center justify-center py-2">
+              Info de Estados/Provincias/Departamentos
+            </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -277,6 +283,92 @@ const Ship = () => {
             </table>
           </div>
         </div>
+        <div className="md:w-full w-full overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-yellow-400 pb-2">
+          <div className="shadow border-b border-gray-200 sm:rounded-lg">
+            <b className="flex font-bold text-3xl items-center justify-center py-2">
+              Info de Carriers
+            </b>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Print Option ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Option Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Print Format
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Print Size
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {/* Map over Print Options data */}
+                {printOptionsData.map((option, index) => (
+                  <tr key={`print-option-${index}`}>
+                    <td className="px-6 py-4">{option.id}</td>
+                    <td className="px-6 py-4">{option.name}</td>
+                    <td className="px-6 py-4">{option.print_format}</td>
+                    <td className="px-6 py-4">{option.print_size}</td>
+                  </tr>
+                ))}
+                {/* If no Print Options data available */}
+                {printOptionsData.length === 0 && (
+                  <tr key="no-print-options-data">
+                    <td colSpan={4} className="px-6 py-4 text-center">
+                      No print options data available
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="md:w-full w-full overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-pink-400 pb-2">
+          <div className="shadow border-b border-gray-200 sm:rounded-lg">
+            <b className="flex font-bold text-3xl items-center justify-center py-2">
+              Info de Carriers
+            </b>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Service ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Additional Service Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Additional Service Description
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {/* Map over Additional Services data */}
+                {printOptionsData.slice(0, 50).map((option, index) => (
+                  <tr key={`print-option-${index}`}>
+                    <td className="px-6 py-4">{option.id}</td>
+                    <td className="px-6 py-4">{option.name}</td>
+                    <td className="px-6 py-4">{option.print_format}</td>
+                  </tr>
+                ))}
+
+                {/* If no Additional Services data available */}
+                {additionalServicesData.length === 0 && (
+                  <tr key="no-additional-services-data">
+                    <td colSpan={3} className="px-6 py-4 text-center">
+                      No additional services data available
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         {errors && (
           <div className="text-red-500">
             <ul>

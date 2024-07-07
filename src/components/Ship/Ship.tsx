@@ -286,7 +286,7 @@ const Ship = () => {
         <div className="md:w-full w-full overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-yellow-400 pb-2">
           <div className="shadow border-b border-gray-200 sm:rounded-lg">
             <b className="flex font-bold text-3xl items-center justify-center py-2">
-              Info de Carriers
+              Opciones de impresión de Label
             </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -330,7 +330,7 @@ const Ship = () => {
         <div className="md:w-full w-full overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-pink-400 pb-2">
           <div className="shadow border-b border-gray-200 sm:rounded-lg">
             <b className="flex font-bold text-3xl items-center justify-center py-2">
-              Info de Carriers
+              Informacion de servicios
             </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">

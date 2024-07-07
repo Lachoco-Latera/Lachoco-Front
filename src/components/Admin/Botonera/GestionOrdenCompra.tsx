@@ -29,6 +29,7 @@ export const GestionOrdenCompra = () => {
   }, []);
 
   const handleButtonDelete = (id: string) => {
+    id;
     const deleteOrder = async () => {
       try {
         // Aquí se debería agregar la lógica para eliminar la orden usando su ID
@@ -43,7 +44,7 @@ export const GestionOrdenCompra = () => {
 
   return (
     <>
-      <div className="w-full flex flex-row flex-wrap gap-2 p-2 justify-center items-center">
+      <div className="w-full flex flex-row flex-wrap gap-4 p-2 justify-center items-center">
         {editState === true ? (
           <form
             action=""

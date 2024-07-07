@@ -59,10 +59,10 @@ export const GestionSaboresDisponibles = () => {
     event.preventDefault();
     const CreateFlavor = async () => {
       try {
-        const postForm = {
-          name: flavorState.name,
-          stock: flavorState.stock,
-        };
+        // const postForm = {
+        //   name: flavorState.name,
+        //   stock: flavorState.stock,
+        // };
         // Aquí se debería agregar la lógica para crear un nuevo sabor
         alert("sabor creado correctamente");
         setFlavorState({

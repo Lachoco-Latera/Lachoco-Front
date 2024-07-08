@@ -18,14 +18,14 @@ const buttonConfig = [
   //   component: <GestionarCarrito />,
   // },
   {
-    label: "Gestión Productos",
-    state: "gestionImgProductos",
-    component: <GestionImgProductos />,
-  },
-  {
     label: "Gestión Sabores",
     state: "gestionSaboresDisponibles",
     component: <GestionSaboresDisponibles />,
+  },
+  {
+    label: "Gestión Productos",
+    state: "gestionImgProductos",
+    component: <GestionImgProductos />,
   },
   {
     label: "Gestión de Órdenes",

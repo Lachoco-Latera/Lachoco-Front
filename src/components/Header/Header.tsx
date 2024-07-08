@@ -68,7 +68,9 @@ export default function Header({ onCartIconClick }: Props) {
           <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-10">
-          <div className="relative  hidden md:block">
+          {isSignedIn == true &&
+          user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
+          isLoaded ? (
             <button
               type="button"
               title="Suscribete"
@@ -88,7 +90,8 @@ export default function Header({ onCartIconClick }: Props) {
             >
               ¡Suscribete!
             </button>
-          </div>
+          ) : null}
+          <div className="relative  hidden md:block"></div>
           <div className="relative  hidden md:block">
             <button
               type="button"

@@ -99,19 +99,23 @@ export default function Header({ onCartIconClick }: Props) {
               <MdFavoriteBorder size={28} />
             </button>
           </div>
-          <div className="relative  hidden md:block">
-            <button
-              type="button"
-              title="Mini Cart"
-              className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
-              onClick={onCartIconClick}
-            >
-              <FiShoppingCart size={28} />
-              <div className="text-white rounded-full bg-gray-700 w-5 h-5 text-sm -ml-[0.7em] -mt-5">
-                {cart?.length}
-              </div>
-            </button>
-          </div>
+          {isSignedIn == true &&
+          user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
+          isLoaded ? (
+            <div className="relative  hidden md:block">
+              <button
+                type="button"
+                title="Mini Cart"
+                className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
+                onClick={onCartIconClick}
+              >
+                <FiShoppingCart size={28} />
+                <div className="text-white rounded-full bg-gray-700 w-5 h-5 text-sm -ml-[0.7em] -mt-5">
+                  {cart?.length}
+                </div>
+              </button>
+            </div>
+          ) : null}
           {isSignedIn == true &&
           user.id === "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
           isLoaded ? (
@@ -149,15 +153,15 @@ export default function Header({ onCartIconClick }: Props) {
             <button>
               <img src={config} alt="" className="w-[30px] h-[30px]" />
             </button>
-          </div> */}{" "}
-          <div className="md:block hidden">
+          </div> */}
+          <div className="md:block hidden scale-125 hover:scale-150 transition-all ease">
             <SignedOut>
               <SignInButton />
             </SignedOut>
             <SignedIn>
               <UserButton />
             </SignedIn>
-          </div>{" "}
+          </div>
           {/* {stateUser ? (
             <div className="w-[300px] h-[100px] absolute mt-[150px] right-0 bg-gray-300 z-20 flex flex-col justify-evenly">
               <IconoUser />

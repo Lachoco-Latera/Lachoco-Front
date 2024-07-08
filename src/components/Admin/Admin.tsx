@@ -18,44 +18,45 @@ const buttonConfig = [
   //   component: <GestionarCarrito />,
   // },
   {
-    label: "Ordenes de Compra",
-    state: "gestionOrdenCompra",
-    component: <GestionOrdenCompra />,
+    label: "Gestión Productos",
+    state: "gestionImgProductos",
+    component: <GestionImgProductos />,
   },
   {
-    label: "Sabores Disponibles",
+    label: "Gestión Sabores",
     state: "gestionSaboresDisponibles",
     component: <GestionSaboresDisponibles />,
   },
   {
-    label: "Favoritos",
+    label: "Gestión de Órdenes",
+    state: "gestionOrdenCompra",
+    component: <GestionOrdenCompra />,
+  },
+  {
+    label: "Gestión Favoritos",
     state: "gestionFavoritos",
     component: <GestionFavoritos />,
   },
+  {
+    label: "Cupones y Descuentos",
+    state: "gestionCuponesDesc",
+    component: <GestionCuponesDesc />,
+  },
+  {
+    label: "Reviews y Calificaciones",
+    state: "gestionReviwsCalif",
+    component: <GestionReviwsCalif />,
+  },
+
   {
     label: "Redes Sociales",
     state: "gestionRedesSociales",
     component: <GestionRedesSociales />,
   },
   {
-    label: "PdP y Datos de la Empresa",
+    label: "Info de empresa",
     state: "gestionPPyDatosEmpresa",
     component: <GestionPPyDatosEmpresa />,
-  },
-  {
-    label: "Img Productos",
-    state: "gestionImgProductos",
-    component: <GestionImgProductos />,
-  },
-  {
-    label: "Reviws y Calificaciones",
-    state: "gestionReviwsCalif",
-    component: <GestionReviwsCalif />,
-  },
-  {
-    label: "Cupones y Descuentos",
-    state: "gestionCuponesDesc",
-    component: <GestionCuponesDesc />,
   },
 ];
 
@@ -78,7 +79,7 @@ export const Admin = () => {
             <button
               key={button.state}
               className="text-slate-600 font-bold text-center 
-              xl:text-lg capitalize m-2 hover:bg-rose-400 
+              xl:text-lg m-2 hover:bg-rose-400 
               hover:text-white transition-all ease duration-400
               p-2 rounded-xl hover:shadow-xl hover:scale-105"
               onClick={() => handleButton(button.state)}

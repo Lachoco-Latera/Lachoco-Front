@@ -1,6 +1,6 @@
-import { FiShoppingCart } from "react-icons/fi";
-import { useCartStore } from "../../stores/useCartStore";
-import useFromStore from "../../hooks/useFromStore";
+// import { FiShoppingCart } from "react-icons/fi";
+// import { useCartStore } from "../../stores/useCartStore";
+// import useFromStore from "../../hooks/useFromStore";
 import { FiHome } from "react-icons/fi";
 
 import {
@@ -12,14 +12,14 @@ import {
 } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
-import { FaRegHeart } from "react-icons/fa";
 // import { toast } from "sonner";
 interface Props {
   onCartIconClick: () => void;
 }
 
 export default function BottomBar({ onCartIconClick }: Props) {
-  const cart = useFromStore(useCartStore, (state) => state.cart);
+  onCartIconClick;
+  // const cart = useFromStore(useCartStore, (state) => state.cart);
   const { isSignedIn, user, isLoaded } = useUser();
   const navigate = useNavigate();
   // const promise = () =>

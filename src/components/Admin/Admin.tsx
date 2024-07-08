@@ -91,7 +91,9 @@ export const Admin = () => {
         </div>
         {buttonConfig.find((button) => button.state === state)?.component}
       </div>
-      <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
+      <div className="block md:hidden">
+        <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
+      </div>
     </>
   );
 };

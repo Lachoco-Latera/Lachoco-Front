@@ -1,7 +1,6 @@
-import { FiShoppingCart } from "react-icons/fi";
+import { FiHome, FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
 import useFromStore from "../../hooks/useFromStore";
-import { MdFavoriteBorder } from "react-icons/md";
 
 import {
   SignInButton,
@@ -11,6 +10,8 @@ import {
 } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { PiHandHeartBold } from "react-icons/pi";
+import { FaRegHeart } from "react-icons/fa";
 interface Props {
   onCartIconClick: () => void;
 }
@@ -51,19 +52,21 @@ export default function BottomBar({ onCartIconClick }: Props) {
               </div>
             </button>
           </div>
-          <MdFavoriteBorder
-            size={28}
-            className=" text-slate-800 hover:cursor-pointer"
-            onClick={() => navigate(`/favorites`)}
-          />
+          <div>
+            <FaRegHeart
+              size={28}
+              className=" text-slate-800 hover:cursor-pointer"
+              onClick={() => navigate(`/favorites`)}
+            />
+          </div>
           <div>
             <button
               type="button"
               title="Mini Cart"
               className="
-              text-gray-800 hover:text-white hover:bg-pink-500 
+              text-gray-800
               rounded-3xl py-1 px-3 text-xl flex items-center 
-              hover:scale-110 transition-all ease shadow"
+              hover:scale-110 transition-all ease"
               onClick={() =>
                 toast.promise(promise, {
                   loading: `Serás redireccionado para suscribirte...`,
@@ -74,7 +77,20 @@ export default function BottomBar({ onCartIconClick }: Props) {
                 })
               }
             >
-              ¡Suscribete!
+              <PiHandHeartBold size={32} />
+            </button>
+          </div>
+          <div>
+            <button
+              type="button"
+              title="Mini Cart"
+              className="
+              text-gray-800   
+              rounded-3xl py-1 px-3 text-xl flex items-center 
+              hover:scale-110 transition-all ease "
+              onClick={() => navigate(`/`)}
+            >
+              <FiHome size={28} />
             </button>
           </div>
         </div>

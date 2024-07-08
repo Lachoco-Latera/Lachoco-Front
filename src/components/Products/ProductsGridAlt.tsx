@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { products as rawProducts } from "../../mocks/data";
 import { FaStar } from "react-icons/fa";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -7,26 +6,28 @@ import { HiHeart } from "react-icons/hi";
 import { IconContext } from "react-icons";
 import { SlHeart } from "react-icons/sl";
 import { toast } from "sonner";
+import { useCartStore } from "../../stores/useCartStore";
+import { Product } from "@/types.d";
+import { MdAddShoppingCart } from "react-icons/md";
+import { useNavigate, useSearchParams } from "react-router-dom"; // Importa useSearchParams desde react-router-dom
 
-interface ProductProps {
-  name: string;
-  img: string[];
-  price: string | number;
-  ratings: string | number;
-  description: string;
-  advice: string;
+interface Props {
+  products: Product[];
+  onCartIconClick: () => void;
 }
 
-const ProductsGridAlt = () => {
-  const [modalProduct, setModalProduct] = useState<ProductProps | null>(null);
+const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
+  const [modalProduct, setModalProduct] = useState<Product | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const addToCart = useCartStore((state) => state.addToCart);
+  const [searchParams] = useSearchParams(); // Obtén los parámetros de la URL
 
-  const products: ProductProps[] = rawProducts.map((product) => ({
-    ...product,
-    img: [...product.img],
-  }));
+  const redirectToProductDetail = (productId: string) => {
+    navigate(`/products/${productId}`);
+  };
 
-  const handleImageClick = (product: ProductProps) => {
+  const handleImageClick = (product: Product) => {
     setModalProduct(product);
     setShowModal(true);
   };
@@ -36,20 +37,27 @@ const ProductsGridAlt = () => {
     setModalProduct(null);
   };
 
-  const handleFavoriteClick = (
-    event: React.MouseEvent,
-    product: ProductProps
-  ) => {
+  const handleFavoriteClick = (event: React.MouseEvent, product: Product) => {
     event.stopPropagation();
     // Lógica para manejar el favorito del producto
-    console.log(`Producto favorito: ${product.name}`);
+    console.log(`Producto favorito: ${product.description}`);
   };
 
+  // Obtén el valor del parámetro 'category' de la URL
+  const selectedCategory = searchParams.get("category");
+
+  // Filtra los productos basados en la categoría seleccionada
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category.name === selectedCategory)
+    : products;
   return (
     <div>
       <div className="products-grid">
-        {products.map((product, index) => (
-          <div key={index} className="product-card">
+        {filteredProducts.map((product, index) => (
+          <div
+            key={index}
+            className="product-card hover:shadow-xl transition-all ease duration-300"
+          >
             <div className="product-card-main flex flex-col" key={index}>
               <Carousel
                 axis="horizontal"
@@ -62,8 +70,14 @@ const ProductsGridAlt = () => {
                 emulateTouch
                 onClickItem={() => handleImageClick(product)}
               >
-                {product.img.map((image, i) => (
+                {product.images.map((image, i) => (
                   <div key={i} className="relative rounded-xl">
+                    <p className="absolute top-2 left-2 p-1 px-2 product-description rounded-2xl border-1 shadow">
+                      {product.label === "SoloOnline"
+                        ? "Solo Online"
+                        : product.label}
+                    </p>
+
                     <i
                       className="absolute top-2 right-2 drop-shadow"
                       onClick={(e) => handleFavoriteClick(e, product)}
@@ -71,9 +85,7 @@ const ProductsGridAlt = () => {
                       <IconContext.Provider value={{}}>
                         <div
                           className="relative group"
-                          onClick={() =>
-                            toast.success("Añadido a favoritos ❤ ")
-                          }
+                          onClick={() => toast.success("Añadido a favoritos ")}
                         >
                           <HiHeart
                             id="firstHeart"
@@ -92,25 +104,54 @@ const ProductsGridAlt = () => {
 
                     <img
                       alt={`Product image ${i + 1}`}
-                      src={image}
+                      src={image?.img || ""}
                       className=" min-w-48 min-h-48 object-cover rounded-xl outline-none"
                     />
                   </div>
                 ))}
               </Carousel>
-              <div className="flex pt-4">
-                <div className="flex flex-col text-left">
-                  <h2 className="product-name pr-2">{product?.name}</h2>
-                  <h6 className="product-description">
-                    {product?.description}
-                  </h6>
-                  <p className="product-price text-black-800 font-regular">
-                    $ {product?.price}
-                  </p>
+              <div className="flex flex-col pt-4">
+                <div
+                  className="flex flex-row"
+                  onClick={() => redirectToProductDetail(product.id)}
+                >
+                  <div className="flex flex-col text-left">
+                    <h2 className="product-name pr-2">{product.name}</h2>
+                    <h6 className="product-description">
+                      {product.description}
+                    </h6>
+                  </div>
+                  <div className="flex flex-row">
+                    <FaStar size={16} className="pt-1" />
+                    <p className="pl-1 text-sm"> 5.0</p>
+                  </div>
                 </div>
-                <div className="flex flex-row">
-                  <FaStar size={16} className="pt-1" />
-                  <p className="pl-1 text-sm"> {product?.ratings}</p>
+                <div>
+                  <div className="product-price text-black-800 font-regular relative transition-all ease">
+                    <span
+                      className="duration-0 flex flex-row justify-between items-center py-2 "
+                      onClick={() => (
+                        addToCart(product),
+                        toast("✔ Añadido al carrito", {
+                          action: {
+                            label: "Carrito",
+                            onClick: () => onCartIconClick(),
+                          },
+                        })
+                      )}
+                    >
+                      $ {product.price}
+                      <div
+                        className="
+                      rounded-2xl 
+                      hover:shadow p-[0.33em] hover:scale-110
+                      hover:bg-pink-800 hover:text-white 
+                      transition-colors ease duration-100"
+                      >
+                        <MdAddShoppingCart />
+                      </div>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -138,15 +179,17 @@ const ProductsGridAlt = () => {
               emulateTouch
               useKeyboardArrows={true}
             >
-              {modalProduct?.img.map((image, i) => (
-                <div key={i}>
-                  <img
-                    alt={`Modal product image ${i + 1}`}
-                    src={image}
-                    className="object-cover rounded-lg"
-                  />
-                </div>
-              ))}
+              {modalProduct?.images?.map((image, i) => {
+                return (
+                  <div key={i}>
+                    <img
+                      alt={`Modal product image ${i + 1}`}
+                      src={image?.img || ""}
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
+                );
+              })}
             </Carousel>
           </div>
         </div>

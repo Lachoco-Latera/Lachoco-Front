@@ -1,152 +1,38 @@
-export const products = [
+import { Product } from "../types";
+
+export const products: Product[] = [
   {
-    name: "Bombones de Chocolate - Caja x 24",
-    img: [
-      "./images/example1.png",
-      "./images/example2.png",
-      "./images/example3.png",
-      "./images/example4.png",
-      "./images/img-15.webp",
+    id: "123831c5-b4d5-4ac6-9ccf-26e485c97d10",
+    name: "",
+    presentacion: 24,
+    quantity: 1,
+    category: {
+      id: "",
+      name: "",
+      icon: 2,
+    },
+    description:
+      "Chocolate oscuro premium con 70% de cacao, elaborado con ingredientes de alta calidad y un toque de vainilla.",
+    price: "15000.00",
+    currency: "COP",
+    label: "SoloOnline",
+    isActive: true,
+    flavors: [
+      {
+        id: "fde11c41-7476-49e6-b8ae-1b43bbd875af",
+        name: "Vanilla",
+        stock: 0,
+      },
     ],
-    price: "176000,00",
-    ratings: "5,0",
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
-  },
-  {
-    name: "Bombones de Chocolate - Caja x 48",
-    img: [
-      "./images/img-12.webp",
-      "./images/img-13.webp",
-      "./images/img-14.webp",
-      "./images/img-16.webp",
-      "./images/img-15.webp",
+    images: [
+      {
+        id: "12faae98-c3be-4153-9331-61814fa94e75",
+        img: "https://example.com/images/chocolate_oscuro_2.jpg",
+      },
+      {
+        id: "371a7657-dff6-4ab3-89f7-0efb51cddf24",
+        https: "https://example.com/images/chocolate_oscuro_1.jpg",
+      },
     ],
-    price: "91800,00",
-    ratings: "2,0",
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
-  },
-  {
-    name: "Bombones de Chocolate - Caja x 12",
-    img: [
-      "./images/example3.png",
-      "./images/example4.png",
-      "./images/example2.png",
-      "./images/example1.png",
-      "./images/img-15.webp",
-    ],
-    price: "44500,00",
-    ratings: "3,0",
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
-  },
-  {
-    name: "Chocolatina Frutas Deshidratadas",
-    img: [
-      "./images/img-15.webp",
-      "./images/img-13.webp",
-      "./images/img-14.webp",
-      "./images/img-16.webp",
-      "./images/img-15.webp",
-    ],
-    price: "24000,00",
-    ratings: "4,0",
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
-  },
-  {
-    name: "Bombas de Chocolate - Caja x 2",
-    img: [
-      "./images/example1.png",
-      "./images/img-13.webp",
-      "./images/img-14.webp",
-      "./images/img-16.webp",
-      "./images/img-15.webp",
-    ],
-    price: "28000.00",
-    ratings: 5.0,
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
-  },
-  {
-    name: "Bombones de Chocolate - Caja x 6",
-    img: [
-      "./images/example2.png",
-      "./images/img-13.webp",
-      "./images/img-14.webp",
-      "./images/img-16.webp",
-      "./images/img-15.webp",
-    ],
-    price: "22500.00",
-    ratings: 5.0,
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
-  },
-  {
-    name: "Bombones de Chocolate - Caja x 100",
-    img: [
-      "./images/example3.png",
-      "./images/img-13.webp",
-      "./images/img-14.webp",
-      "./images/img-16.webp",
-      "./images/img-15.webp",
-    ],
-    price: 125000,
-    ratings: 5.0,
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
-  },
-  {
-    name: "Bombones de Chocolate - Caja x 60",
-    img: [
-      "./images/example1.png",
-      "./images/img-13.webp",
-      "./images/img-14.webp",
-      "./images/img-16.webp",
-      "./images/img-15.webp",
-    ],
-    price: 82500,
-    ratings: 5.0,
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
-  },
-  {
-    name: "Bombones de Chocolate - Caja x 4",
-    img: [
-      "./images/example3.png",
-      "./images/img-13.webp",
-      "./images/img-14.webp",
-      "./images/img-16.webp",
-      "./images/img-15.webp",
-    ],
-    price: 10500,
-    ratings: 5.0,
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
-  },
-  {
-    name: "Bombones de Chocolate - Caja x 2",
-    img: [
-      "./images/example2.png",
-      "./images/img-13.webp",
-      "./images/img-14.webp",
-      "./images/img-16.webp",
-      "./images/img-15.webp",
-    ],
-    price: 2250,
-    ratings: 5.0,
-    description: "Chocolate natural",
-    advice:
-      "Todos nuestros productos están hechos a mano uno a uno, con un exquisito chocolate real a base de manteca de cacao. Los rellenos (ganache) de los bombones son elaborados con productos naturales; no contienen aditivos, saborizantes ni aromas artificiales.(Todos nuestros precios incluyen Impuesto Nacional al Consumo)",
   },
 ] as const;

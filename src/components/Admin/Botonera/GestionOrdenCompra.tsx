@@ -44,7 +44,7 @@ export const GestionOrdenCompra = () => {
 
   return (
     <>
-      <div className="w-full flex flex-row flex-wrap gap-4 p-2 justify-center items-center">
+      <div className="w-full flex flex-row flex-wrap gap-4 px-4 py-8 justify-center items-center">
         {editState === true ? (
           <form
             action=""
@@ -61,7 +61,11 @@ export const GestionOrdenCompra = () => {
         {ordersState.map((order) => (
           <div
             key={order.id}
-            className="w-[300px] min-h-[350px] flex flex-col justify-evenly px-4 rounded-xl bg-white shadow-xl"
+            className="w-[300px] min-h-[350px] flex flex-col 
+            justify-evenly px-4 rounded-xl 
+            bg-white shadow-xl hover:shadow-xl
+          transition-all ease  
+          hover:scale-105"
           >
             <h2 className="font-bold ">order n°: {order.id}</h2>
             <p className="font-bold ">date: {order.date}</p>

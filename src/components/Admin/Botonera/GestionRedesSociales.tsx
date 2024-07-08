@@ -108,17 +108,15 @@ export const GestionRedesSociales = () => {
             </button>
           </form>
         ) : null}
-        <button
-          className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-400 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize"
-          onClick={handleAdd}
-        >
-          agregar
-        </button>
-        <div className="w-full flex justify-evenly items-center flex-wrap">
+        <div className="w-full flex justify-evenly items-center flex-wrap px-4 py-8 gap-4">
           {data.length > 0 ? (
             data.map((elem) => (
               <div
-                className="w-[300px] min-h-[350px] flex flex-col  justify-evenly px-4 rounded-xl bg-white shadow-xl"
+                className="w-[300px] min-h-[350px] flex flex-col
+          justify-evenly items-center bg-white p-4 
+          rounded-xl shadow-xl hover:shadow-xl
+          transition-all ease  
+          hover:scale-105"
                 key={elem.id}
               >
                 <p className="flex font-bold text-amber-300 text-center">
@@ -149,7 +147,13 @@ export const GestionRedesSociales = () => {
               agregar
             </button>
           )}
-        </div>
+        </div>{" "}
+        <button
+          className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-400 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize"
+          onClick={handleAdd}
+        >
+          agregar
+        </button>
       </div>
     </>
   );

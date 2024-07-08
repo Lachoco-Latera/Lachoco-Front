@@ -12,6 +12,7 @@ import "semantic-ui-css/semantic.min.css";
 import { Footer } from "./components/Footer/Footer";
 import Categories from "./components/Categories/Categories";
 import BottomBar from "./components/BottomBar/BottomBar";
+import { Admin } from "./components/Admin/Admin";
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [products, setProducts] = useState([]);
@@ -72,6 +73,7 @@ function App() {
         products={products}
         onCartIconClick={handleCartIconClickAlt}
       />
+      <Admin/>
       <Footer />
     </div>
   );

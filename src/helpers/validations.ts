@@ -51,3 +51,9 @@ export const validationRegister = (input: IRegisterErrors) => {
 
     return errors;
 }
+
+
+
+// ------------------------------------------------------------------------------ VALIDACION PARA FORMULARIOS DE ADMIN
+
+

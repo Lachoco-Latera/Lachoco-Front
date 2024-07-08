@@ -1,6 +1,7 @@
 import { getRedes, postRedes } from '../../../helpers/service'
 import { IRedes } from '@/helpers/type'
 import React, { useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
 
 export const GestionRedesSociales = () => {
   const [editState, setEditState] = useState<boolean>(false)
@@ -34,6 +35,38 @@ export const GestionRedesSociales = () => {
     setAddState(!addState)
   }
 
+  const handleButtonDelete = () => {
+    const deleteOrder = () => {
+      try {
+        Swal.fire({
+          title: "Estas seguro?",
+          text: "La red social seleccionada se borrara permanentemente!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          cancelButtonText: 'Cancelar',
+          confirmButtonText: "Si, eliminar!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Eliminado",
+              text: "La red social seleccionada fue eliminada.",
+              icon: "success",
+          confirmButtonColor: "#30d66a",
+          confirmButtonText: "Aceptar"
+            });
+            //aca se llamaria al servicio que elimina
+          }
+        });
+        
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    deleteOrder()
+  }
+
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target
 
@@ -46,6 +79,28 @@ export const GestionRedesSociales = () => {
   const handleOnSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     try {
+      Swal.fire({
+        title: "Confirmar",
+        text: "Por favor confirme el envio del formulario.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: "Enviar"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Éxito",
+            text: "El formulario se envio correctamente.",
+            icon: "success",
+        confirmButtonColor: "#30d66a",
+        confirmButtonText: "Aceptar"
+          });
+           //aca se llamaria al servicio que elimina
+        }
+      });
+      
       const postForm = await postRedes(formState)
       console.log(postForm, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<---- PPPPPPP')
       setAddState(!addState)
@@ -84,7 +139,7 @@ export const GestionRedesSociales = () => {
           
           <div className="w-full flex justify-center items-center">
             <button className="w-1/3 h-[40px] xl:text-xl text-white  p-1 block rounded-lg  font-semibold duration-1000 bg-yellow-600 hover:bg-yellow-900  hover:text-yellow-500 m-3 capitalize" onClick={handleEdit}>editar</button>
-            <button className="w-1/3 h-[40px] xl:text-xl text-white  p-1 block rounded-lg  font-semibold duration-1000 bg-red-500 hover:bg-red-900  hover:text-red-500 m-3 capitalize">eliminar</button>
+            <button className="w-1/3 h-[40px] xl:text-xl text-white  p-1 block rounded-lg  font-semibold duration-1000 bg-red-500 hover:bg-red-900  hover:text-red-500 m-3 capitalize" onClick={handleButtonDelete}>eliminar</button>
           </div>
         </div>
         )
@@ -92,9 +147,7 @@ export const GestionRedesSociales = () => {
         })) : (<button className="w-1/3 h-[40px] xl:text-xl text-white  p-1 block rounded-lg  font-semibold duration-1000 bg-yellow-600 hover:bg-yellow-900  hover:text-yellow-500 m-3 capitalize" onClick={handleAdd}>agregar</button>)
       }
       </div>
-       
-
-        
+      
     </div>
     
     </>

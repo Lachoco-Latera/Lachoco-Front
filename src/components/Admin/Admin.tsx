@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { GestionarCarrito } from "./Botonera/GestionarCarrito";
+import { useState } from "react";
+// import { GestionarCarrito } from "./Botonera/GestionarCarrito";
 import { GestionOrdenCompra } from "./Botonera/GestionOrdenCompra";
 import { GestionFavoritos } from "./Botonera/GestionFavoritos";
 import { GestionRedesSociales } from "./Botonera/GestionRedesSociales";
@@ -8,57 +8,91 @@ import { GestionReviwsCalif } from "./Botonera/GestionReviwsCalif";
 import { GestionCuponesDesc } from "./Botonera/GestionCuponesDesc";
 import { GestionSaboresDisponibles } from "./Botonera/GestionSaboresDisponibles";
 import { GestionPPyDatosEmpresa } from "./Botonera/GestionPPyDatosEmpresa";
+import Header from "../Header/Header";
+import { products } from "../../mocks/data";
+import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
+const buttonConfig = [
+  // {
+  //   label: "Carritos de Compra",
+  //   state: "gestionCarrito",
+  //   component: <GestionarCarrito />,
+  // },
+  {
+    label: "Gestión Productos",
+    state: "gestionImgProductos",
+    component: <GestionImgProductos />,
+  },
+  {
+    label: "Gestión Sabores",
+    state: "gestionSaboresDisponibles",
+    component: <GestionSaboresDisponibles />,
+  },
+  {
+    label: "Gestión de Órdenes",
+    state: "gestionOrdenCompra",
+    component: <GestionOrdenCompra />,
+  },
+  {
+    label: "Gestión Favoritos",
+    state: "gestionFavoritos",
+    component: <GestionFavoritos />,
+  },
+  {
+    label: "Cupones y Descuentos",
+    state: "gestionCuponesDesc",
+    component: <GestionCuponesDesc />,
+  },
+  {
+    label: "Reviews y Calificaciones",
+    state: "gestionReviwsCalif",
+    component: <GestionReviwsCalif />,
+  },
+
+  {
+    label: "Redes Sociales",
+    state: "gestionRedesSociales",
+    component: <GestionRedesSociales />,
+  },
+  {
+    label: "Info de empresa",
+    state: "gestionPPyDatosEmpresa",
+    component: <GestionPPyDatosEmpresa />,
+  },
+];
 
 export const Admin = () => {
-    const [state, setState] = useState<string>();
+  const [state, setState] = useState<string>();
+  const handleButton = (prop: string) => {
+    setState(prop);
+  };
 
-    const handleButton = (prop: string) => {
-        setState(prop)
-    }
+  function handleCartIconClick(): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <>
-        <div className="w-full min-h-screen">
-        <div className="w-full bg-gray-600  flex flex-wrap justify-evenly items-center">
-            <button className="text-gray-900 font-bold text-center xl:text-xl  capitalize duration-500  hover:text-white m-3" onClick={() => {handleButton('gestionCarrito')}}> Carritos de Compra</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionOrdenCompra')}}>Ordenes de Compra</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionSaboresDisponibles')}}>Sabores Disponibles</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionFavoritos')}}>Favoritos</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionRedesSociales')}}>Redes Sociales</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionPPyDatosEmpresa')}}>PdP y Datos de la Empresa</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionImgProductos')}}>Img Productos</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionReviwsCalif')}}>Reviws y Calificaciones</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionCuponesDesc')}}>Cupones y Descuentos</button>
-            
+      <Header onCartIconClick={handleCartIconClick} products={products} />
+      <div className="w-full min-h-screen">
+        <div className="w-full bg-white shadow-xl p-4 flex flex-wrap justify-evenly items-center">
+          {buttonConfig?.map((button) => (
+            <button
+              key={button.state}
+              className="text-slate-600 font-bold text-center 
+              xl:text-lg m-2 hover:bg-rose-400 
+              hover:text-white transition-all ease duration-400
+              p-2 rounded-xl hover:shadow-xl hover:scale-105"
+              onClick={() => handleButton(button.state)}
+            >
+              {button.label}
+            </button>
+          ))}
         </div>
-        {
-            state === 'gestionCarrito' ? (<GestionarCarrito/>) : (null) 
-        }
-        {
-            state === 'gestionOrdenCompra' ? (<GestionOrdenCompra/>) : (null) 
-        }
-        {
-            state === 'gestionSaboresDisponibles' ? (<GestionSaboresDisponibles/>) : (null) 
-        }
-        {
-            state === 'gestionFavoritos' ? (<GestionFavoritos/>) : (null) 
-        }
-        {
-            state === 'gestionRedesSociales' ? (<GestionRedesSociales/>) : (null) 
-        }
-        {
-            state === 'gestionPPyDatosEmpresa' ? (<GestionPPyDatosEmpresa/>) : (null) 
-        }
-        {
-            state === 'gestionImgProductos' ? (<GestionImgProductos/>) : (null) 
-        }
-        {
-            state === 'gestionReviwsCalif' ? (<GestionReviwsCalif/>) : (null) 
-        }
-        {
-            state === 'gestionCuponesDesc' ? (<GestionCuponesDesc/>) : (null) 
-        }
-        </div>
+        {buttonConfig.find((button) => button.state === state)?.component}
+      </div>
+      <div className="block md:hidden">
+        <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
+      </div>
     </>
-  )
-}
-
+  );
+};

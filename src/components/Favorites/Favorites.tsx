@@ -14,14 +14,14 @@ const Products = () => {
     const fetchFavorites = async () => {
       try {
         const response = await axios.get(
-          `https://lachoco.onrender.com/products`
+          `https://lachocoback.vercel.app/products`
         );
         setInfo(response.data);
       } catch (err) {
         console.error(err);
       }
     };
-    //                    `https://lachoco.onrender.com/users/favorite/${userId}`
+    //                    `https://lachocoback.vercel.app/users/favorite/${userId}`
 
     fetchFavorites();
   }, []);

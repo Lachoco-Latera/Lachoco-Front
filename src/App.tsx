@@ -27,7 +27,7 @@ function App() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://lachoco.onrender.com/products"
+          "https://lachocoback.vercel.app/products"
         );
         setProducts(response.data);
       } catch (err) {
@@ -38,7 +38,7 @@ function App() {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://lachoco.onrender.com/category"
+          "https://lachocoback.vercel.app/category"
         );
         setCategories(response.data);
       } catch (err) {

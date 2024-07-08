@@ -7,17 +7,20 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
+  useUser,
 } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { PiHandHeartBold } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa";
+import { GrUserAdmin } from "react-icons/gr";
 interface Props {
   onCartIconClick: () => void;
 }
 
 export default function BottomBar({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
+  const { isSignedIn, user, isLoaded } = useUser();
   const navigate = useNavigate();
   const promise = () =>
     new Promise((resolve) =>
@@ -39,6 +42,23 @@ export default function BottomBar({ onCartIconClick }: Props) {
               <UserButton />
             </SignedIn>
           </div>
+          {isSignedIn == true &&
+          user.id === "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
+          isLoaded ? (
+            <div>
+              <button
+                type="button"
+                title="Mini Cart"
+                className="
+              text-gray-800   
+              rounded-3xl py-1 px-3 text-xl flex items-center 
+              hover:scale-110 transition-all ease "
+                onClick={() => navigate(`/admin`)}
+              >
+                <GrUserAdmin size={28} />
+              </button>
+            </div>
+          ) : null}
           <div className="relative">
             <button
               type="button"

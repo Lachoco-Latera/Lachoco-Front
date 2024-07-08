@@ -11,7 +11,6 @@ import { GestionPPyDatosEmpresa } from "./Botonera/GestionPPyDatosEmpresa";
 import Header from "../Header/Header";
 import { products } from "../../mocks/data";
 import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
-
 const buttonConfig = [
   // {
   //   label: "Carritos de Compra",
@@ -62,7 +61,6 @@ const buttonConfig = [
 
 export const Admin = () => {
   const [state, setState] = useState<string>();
-
   const handleButton = (prop: string) => {
     setState(prop);
   };

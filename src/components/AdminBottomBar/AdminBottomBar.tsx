@@ -1,7 +1,6 @@
 import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
 import useFromStore from "../../hooks/useFromStore";
-import { MdFavoriteBorder } from "react-icons/md";
 import { FiHome } from "react-icons/fi";
 
 import {
@@ -9,8 +8,11 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
+  useUser,
 } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import { GrUserAdmin } from "react-icons/gr";
+import { FaRegHeart } from "react-icons/fa";
 // import { toast } from "sonner";
 interface Props {
   onCartIconClick: () => void;
@@ -18,6 +20,7 @@ interface Props {
 
 export default function BottomBar({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
+  const { isSignedIn, user, isLoaded } = useUser();
   const navigate = useNavigate();
   // const promise = () =>
   //   new Promise((resolve) =>
@@ -39,7 +42,24 @@ export default function BottomBar({ onCartIconClick }: Props) {
               <UserButton />
             </SignedIn>
           </div>
-          <div className="relative">
+          {isSignedIn == true &&
+          user.id === "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
+          isLoaded ? (
+            <div>
+              <button
+                type="button"
+                title="Mini Cart"
+                className="
+              text-gray-800   
+              rounded-3xl py-1 px-3 text-xl flex items-center 
+              hover:scale-110 transition-all ease "
+                onClick={() => navigate(`/admin`)}
+              >
+                <GrUserAdmin size={28} />
+              </button>
+            </div>
+          ) : null}
+          {/* <div className="relative">
             <button
               type="button"
               title="Mini Cart"
@@ -51,12 +71,14 @@ export default function BottomBar({ onCartIconClick }: Props) {
                 {cart?.length}
               </div>
             </button>
-          </div>
-          <MdFavoriteBorder
-            size={30}
-            className=" text-slate-800 hover:cursor-pointer hover:scale-110 transition-all ease "
-            onClick={() => navigate(`/favorites`)}
-          />
+          </div> */}
+          {/* <div>
+            <FaRegHeart
+              size={28}
+              className=" text-slate-800 hover:cursor-pointer"
+              onClick={() => navigate(`/favorites`)}
+            />
+          </div> */}
           <div>
             <button
               type="button"

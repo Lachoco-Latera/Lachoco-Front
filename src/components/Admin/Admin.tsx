@@ -8,6 +8,12 @@ import { GestionReviwsCalif } from "./Botonera/GestionReviwsCalif";
 import { GestionCuponesDesc } from "./Botonera/GestionCuponesDesc";
 import { GestionSaboresDisponibles } from "./Botonera/GestionSaboresDisponibles";
 import { GestionPPyDatosEmpresa } from "./Botonera/GestionPPyDatosEmpresa";
+import {
+  AiOutlinePlus,
+  AiOutlineDelete,
+  AiOutlineSearch,
+} from "react-icons/ai"; // Importa los íconos
+
 import Header from "../Header/Header";
 import { products } from "../../mocks/data";
 import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
@@ -18,14 +24,14 @@ const buttonConfig = [
   //   component: <GestionarCarrito />,
   // },
   {
-    label: "Gestión Productos",
-    state: "gestionImgProductos",
-    component: <GestionImgProductos />,
-  },
-  {
     label: "Gestión Sabores",
     state: "gestionSaboresDisponibles",
     component: <GestionSaboresDisponibles />,
+  },
+  {
+    label: "Gestión Productos",
+    state: "gestionImgProductos",
+    component: <GestionImgProductos />,
   },
   {
     label: "Gestión de Órdenes",
@@ -62,19 +68,65 @@ const buttonConfig = [
 
 export const Admin = () => {
   const [state, setState] = useState<string>();
+  const [selectedOption, setSelectedOption] = useState<string>(""); // Estado para almacenar la opción seleccionada
+
   const handleButton = (prop: string) => {
     setState(prop);
   };
-
+  function handleActionButtonClick(): void {
+    switch (selectedOption) {
+      case "añadir":
+        handleAddAction();
+        break;
+      case "eliminar":
+        handleDeleteAction();
+        break;
+      case "buscar":
+        handleSearchAction();
+        break;
+      default:
+        // Puedes manejar un caso por defecto si es necesario
+        break;
+    }
+  }
   function handleCartIconClick(): void {
     throw new Error("Function not implemented.");
   }
 
+  function handleAddAction(): void {
+    console.log("Acción: Añadir");
+    // Implementa aquí la lógica para la acción de añadir
+  }
+
+  function handleDeleteAction(): void {
+    console.log("Acción: Eliminar");
+    // Implementa aquí la lógica para la acción de eliminar
+  }
+
+  function handleSearchAction(): void {
+    console.log("Acción: Buscar");
+    // Implementa aquí la lógica para la acción de buscar
+  }
+  function getIconAndColor(): { icon: JSX.Element; color: string } {
+    switch (selectedOption) {
+      case "añadir":
+        return { icon: <AiOutlinePlus size={24} />, color: "blue" };
+      case "eliminar":
+        return { icon: <AiOutlineDelete size={24} />, color: "orange" };
+      case "buscar":
+        return { icon: <AiOutlineSearch size={24} />, color: "rose" };
+      default:
+        return { icon: <AiOutlinePlus size={24} />, color: "rose" }; // Valor por defecto
+    }
+  }
+
+  const { icon, color } = getIconAndColor();
   return (
     <>
       <Header onCartIconClick={handleCartIconClick} products={products} />
       <div className="w-full min-h-screen">
         <div className="w-full bg-white shadow-xl p-4 flex flex-wrap justify-evenly items-center">
+          {/* Renderiza los botones de configuración */}
           {buttonConfig?.map((button) => (
             <button
               key={button.state}
@@ -88,8 +140,34 @@ export const Admin = () => {
             </button>
           ))}
         </div>
+        {/* Renderiza el componente correspondiente al estado seleccionado */}
         {buttonConfig.find((button) => button.state === state)?.component}
       </div>
+
+      {/* Selector de opciones */}
+      <div className="fixed bottom-4 right-4 flex flex-col gap-2">
+        <select
+          className={`bg-white hover:bg-${color}-400 text-${color}-500 font-bold py-2 px-4 rounded-full shadow-xl`}
+          value={selectedOption}
+          onChange={(e) => setSelectedOption(e.target.value)}
+        >
+          <option value="">Seleccione una opción</option>
+          <option value="añadir">Añadir</option>
+          <option value="eliminar">Eliminar</option>
+          <option value="buscar">Buscar</option>
+        </select>
+
+        {/* Botón de acción */}
+        <button
+          className={`bg-white hover:text-white hover:bg-${color}-600 text-${color}-500 transition-all ease hover:scale-105 p-4 rounded-full shadow-xl drop-shadow-2xl`}
+          onClick={handleActionButtonClick}
+          disabled={!selectedOption} // Deshabilita el botón si no hay opción seleccionada
+        >
+          {icon}
+        </button>
+      </div>
+
+      {/* Barra inferior en dispositivos móviles */}
       <div className="block md:hidden">
         <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
       </div>

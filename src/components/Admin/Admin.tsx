@@ -10,6 +10,7 @@ import { GestionSaboresDisponibles } from "./Botonera/GestionSaboresDisponibles"
 import { GestionPPyDatosEmpresa } from "./Botonera/GestionPPyDatosEmpresa";
 import Header from "../Header/Header";
 import { products } from "../../mocks/data";
+import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
 
 const buttonConfig = [
   // {
@@ -90,6 +91,7 @@ export const Admin = () => {
         </div>
         {buttonConfig.find((button) => button.state === state)?.component}
       </div>
+      <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
     </>
   );
 };

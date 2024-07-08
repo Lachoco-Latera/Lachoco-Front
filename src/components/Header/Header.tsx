@@ -71,7 +71,7 @@ export default function Header({ onCartIconClick }: Props) {
           <div className="relative  hidden md:block">
             <button
               type="button"
-              title="Mini Cart"
+              title="Suscribete"
               className="
               text-gray-800 hover:text-white hover:bg-pink-500 
               rounded-3xl py-1 px-3 text-xl flex items-center 
@@ -92,7 +92,7 @@ export default function Header({ onCartIconClick }: Props) {
           <div className="relative  hidden md:block">
             <button
               type="button"
-              title="Mini Cart"
+              title="Favoritos"
               className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
               onClick={() => navigate("/favorites")}
             >
@@ -105,7 +105,7 @@ export default function Header({ onCartIconClick }: Props) {
             <div className="relative  hidden md:block">
               <button
                 type="button"
-                title="Mini Cart"
+                title="Carrito"
                 className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
                 onClick={onCartIconClick}
               >
@@ -122,7 +122,7 @@ export default function Header({ onCartIconClick }: Props) {
             <div className="relative  hidden md:block">
               <button
                 type="button"
-                title="Mini Cart"
+                title="Admin"
                 className="
               text-gray-800   
               rounded-3xl py-1 px-3 text-xl flex items-center 

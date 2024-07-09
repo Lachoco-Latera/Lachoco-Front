@@ -1,4 +1,4 @@
-import { getRedes, postRedes, putRedes } from "../../../helpers/service";
+import { deleteRed, getRedes, postRedes, putRedes } from "../../../helpers/service";
 import { IRedes } from "@/helpers/type";
 import React, { useEffect, useState } from "react";
 import { toast } from 'sonner';
@@ -43,6 +43,7 @@ export const GestionRedesSociales = () => {
     })
   };
 
+
   const handleAdd = (event: React.MouseEvent) => {
     event.preventDefault();
     setAddState(!addState);
@@ -64,6 +65,28 @@ export const GestionRedesSociales = () => {
       [name]: value,
     });
   };
+  
+  const handleDelete = async (id: string | undefined) => {
+    try {
+      const alertId = toast('¿Deseas eliminar esta red social?', {
+        duration: 5000, // Mantiene la alerta abierta hasta que se haga clic en un botón
+        action: {
+          label: 'Aceptar',
+          onClick: async () => {
+            toast.dismiss(alertId);
+            try {
+              const cardDelete = await deleteRed(id)
+              console.log(cardDelete)
+            } catch (error) {
+              console.log(error);
+            }
+          },
+        },
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleOnSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -93,8 +116,22 @@ export const GestionRedesSociales = () => {
   const handleOnSubmitEdit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const putForm = await putRedes(formEditState)
-      console.log(putForm, '<<<<<-------------- data de putForm ')
+      const alertId = toast('¿Deseas editar esta red social?', {
+        duration: Infinity, // Mantiene la alerta abierta hasta que se haga clic en un botón
+        action: {
+          label: 'Aceptar',
+          onClick: async () => {
+            toast.dismiss(alertId);
+            try {
+              const putForm = await putRedes(formEditState)
+              console.log(putForm, '<<<<<-------------- data de putForm ')
+            } catch (error) {
+              console.log(error);
+            }
+          },
+        },
+      });
+     
     } catch (error) {
       console.log(error)
     }
@@ -187,7 +224,7 @@ export const GestionRedesSociales = () => {
                   >
                     editar
                   </button>
-                  <button className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-red-500 hover:bg-red-900 hover:text-red-500 m-3 capitalize hover:scale-105 transition-all ease">
+                  <button className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-red-500 hover:bg-red-900 hover:text-red-500 m-3 capitalize hover:scale-105 transition-all ease" onClick={()=>handleDelete(elem.id)}>
                     eliminar
                   </button>
                 </div>

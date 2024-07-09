@@ -99,3 +99,33 @@ export interface IFavorites {
     giftcards?: IGitfCards[],
     orders: IOrdersFavorites[]
 }
+
+// ---------------------------------------------------P R O D U C T S
+
+export interface IProducts {
+    category: ICategories,
+    currency?: string,
+    description?: string,
+    expiryDate?: null,
+    flavors: IFlavor[],
+    id?: string,
+    images?: IImages[],
+    isActive?: boolean,
+    label?: string,
+    name?: string,
+    presentacion?: number,
+    price?: string,
+    purchaseDate?: null,
+    status?: string,
+}
+
+export interface IImages {
+    id?: string,
+    img?: string,
+}
+
+export interface ICategories {
+    icon?: string,
+    id?: string,
+    name?: string,
+}

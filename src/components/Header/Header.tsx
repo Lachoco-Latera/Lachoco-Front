@@ -16,6 +16,7 @@ import { MdFavoriteBorder } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface Props {
   onCartIconClick: () => void;
@@ -34,6 +35,8 @@ async function hashPassword(password: string): Promise<string> {
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const { isSignedIn, user, isLoaded } = useUser();
+  const [userCountry, setUserCountry] = useState<string>("GLOBAL");
+
   const navigate = useNavigate();
   const promise = () =>
     new Promise((resolve) =>
@@ -44,114 +47,128 @@ export default function Header({ onCartIconClick }: Props) {
       )
     );
 
-  if (isSignedIn && isLoaded && user && user.primaryEmailAddress) {
-    const passTransform = `${user.id}${import.meta.env.VITE_USER_KEY}`;
-    const sliceKey = import.meta.env.VITE_PASS_SLICE;
-    const start = parseInt(sliceKey[0]);
-    const end = parseInt(sliceKey.slice(1));
-    const specialCharacters = "!@#$%^&*()";
-
-    hashPassword(passTransform).then((hashedPassword) => {
-      let trimmedPassword = hashedPassword.slice(start, end) || "";
-
-      // Ensure at least one uppercase character
-      const firstLowerIndex = trimmedPassword.search(/[a-z]/);
-      if (firstLowerIndex !== -1) {
-        trimmedPassword =
-          trimmedPassword.slice(0, firstLowerIndex) +
-          trimmedPassword[firstLowerIndex].toUpperCase() +
-          trimmedPassword.slice(firstLowerIndex + 1);
+  useEffect(() => {
+    const checkGeolocationPermission = async () => {
+      try {
+        const permission = await navigator.permissions.query({
+          name: "geolocation",
+        });
+        permission;
+      } catch (error) {
+        console.error("Error al verificar permiso de geolocalización:", error);
       }
+    };
 
-      // Choose a special character based on the 'end' variable
-      const specialCharacterIndex = end % specialCharacters.length;
-      const specialCharacter = specialCharacters[specialCharacterIndex];
-      trimmedPassword += specialCharacter;
+    const getUserCountry = async () => {
+      try {
+        if (navigator.geolocation) {
+          const position = await new Promise<GeolocationPosition>(
+            (resolve, reject) => {
+              navigator.geolocation.getCurrentPosition(resolve, reject);
+            }
+          );
+          const response = await axios.get(
+            `https://geocode.xyz/${position.coords.latitude},${position.coords.longitude}?geoit=json`
+          );
+          const country = response.data.country || "GLOBAL";
+          setUserCountry(country);
+        } else {
+          setUserCountry("GLOBAL");
+        }
+      } catch (error) {
+        console.warn("Error obteniendo la ubicación del usuario:", error);
+        setUserCountry("GLOBAL");
+      }
+    };
 
-      if (isSignedIn && isLoaded && user && user.primaryEmailAddress) {
-        const passTransform = `${user.id}${import.meta.env.VITE_USER_KEY}`;
-        const sliceKey = import.meta.env.VITE_PASS_SLICE;
-        const start = parseInt(sliceKey[0]);
-        const end = parseInt(sliceKey.slice(1));
-        const specialCharacters = "!@#$%^&*()";
+    checkGeolocationPermission();
+    getUserCountry();
+  }, []);
 
-        hashPassword(passTransform).then((hashedPassword) => {
-          let trimmedPassword = hashedPassword.slice(start, end) || "";
+  const registerUser = async () => {
+    if (isSignedIn && isLoaded && user && user.primaryEmailAddress) {
+      const passTransform = `${user.id}${import.meta.env.VITE_USER_KEY}`;
+      const sliceKey = import.meta.env.VITE_PASS_SLICE;
+      const start = parseInt(sliceKey[0]);
+      const end = parseInt(sliceKey.slice(1));
+      const specialCharacters = "!@#$%^&*()";
 
-          // Ensure at least one uppercase character
-          const firstLowerIndex = trimmedPassword.search(/[a-z]/);
-          if (firstLowerIndex !== -1) {
-            trimmedPassword =
-              trimmedPassword.slice(0, firstLowerIndex) +
-              trimmedPassword[firstLowerIndex].toUpperCase() +
-              trimmedPassword.slice(firstLowerIndex + 1);
-          }
+      hashPassword(passTransform).then((hashedPassword) => {
+        let trimmedPassword = hashedPassword.slice(start, end) || "";
 
-          // Choose a special character based on the 'end' variable
-          const specialCharacterIndex = end % specialCharacters.length;
-          const specialCharacter = specialCharacters[specialCharacterIndex];
-          trimmedPassword += specialCharacter;
+        // Ensure at least one uppercase character
+        const firstLowerIndex = trimmedPassword.search(/[a-z]/);
+        if (firstLowerIndex !== -1) {
+          trimmedPassword =
+            trimmedPassword.slice(0, firstLowerIndex) +
+            trimmedPassword[firstLowerIndex].toUpperCase() +
+            trimmedPassword.slice(firstLowerIndex + 1);
+        }
 
-          if (user.primaryEmailAddress) {
-            const userData = {
-              name: user.firstName,
-              lastname: user.lastName,
-              email: user.primaryEmailAddress.emailAddress,
-              country: "GLOBAL",
-              password: trimmedPassword,
-            };
+        // Choose a special character based on the 'end' variable
+        const specialCharacterIndex = end % specialCharacters.length;
+        const specialCharacter = specialCharacters[specialCharacterIndex];
+        trimmedPassword += specialCharacter;
 
-            // Check if the email already exists
-            axios
-              .get("https://lachocoback.vercel.app/users")
-              .then((response) => {
-                const existingUser = response.data.find(
-                  (existingUser: any) =>
-                    existingUser.email ===
-                    user.primaryEmailAddress?.emailAddress
-                );
-                if (!existingUser) {
-                  // Email does not exist, proceed with registration
-                  axios
-                    .post(
-                      "https://lachocoback.vercel.app/users/register",
-                      userData
-                    )
-                    .then((response) => {
-                      console.log(
-                        "User registered successfully:",
-                        response.data
-                      );
-                    })
-                    .catch((error) => {
-                      if (error.response) {
-                        if (
-                          error.response.status === 403 ||
-                          error.response.data.message === "User already exists"
-                        ) {
-                          console.log("User already exists");
-                        } else if (error.response.status === 409) {
-                          console.log("Ready!");
-                        } else {
-                          console.error("Error registering user:", error);
-                        }
+        if (user.primaryEmailAddress) {
+          const userData = {
+            name: user.firstName,
+            lastname: user.lastName,
+            email: user.primaryEmailAddress.emailAddress,
+            country: userCountry,
+            password: trimmedPassword,
+          };
+
+          // Check if the email already exists
+          axios
+            .get("https://lachocoback.vercel.app/users")
+            .then((response) => {
+              const existingUser = response.data.find(
+                (existingUser: any) =>
+                  existingUser.email === user.primaryEmailAddress?.emailAddress
+              );
+              if (!existingUser) {
+                // Email does not exist, proceed with registration
+                axios
+                  .post(
+                    "https://lachocoback.vercel.app/users/register",
+                    userData
+                  )
+                  .then((response) => {
+                    console.log("User registered successfully:", response.data);
+                  })
+                  .catch((error) => {
+                    if (error.response) {
+                      if (
+                        error.response.status === 403 ||
+                        error.response.data.message === "User already exists"
+                      ) {
+                        console.log("User already exists");
+                      } else if (error.response.status === 409) {
+                        console.log("Ready!");
                       } else {
                         console.error("Error registering user:", error);
                       }
-                    });
-                } else {
-                  console.log("User already exists: ", user.firstName);
-                }
-              })
-              .catch((error) => {
-                console.error("Error checking existing users:", error);
-              });
-          }
-        });
-      }
-    });
-  }
+                    } else {
+                      console.error("Error registering user:", error);
+                    }
+                  });
+              } else {
+                console.log("User already exists: ", user.firstName);
+              }
+            })
+            .catch((error) => {
+              console.error("Error checking existing users:", error);
+            });
+        }
+      });
+    }
+  };
 
+  // Call the registerUser function when needed
+  if (!isSignedIn && isLoaded) {
+    registerUser();
+  }
   return (
     <header
       className=" 

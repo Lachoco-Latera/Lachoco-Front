@@ -16,7 +16,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `https://lachoco.onrender.com/products/${id}`
+          `https://lachocoback.vercel.app/products/${id}`
         );
         setInfo(response.data);
       } catch (err) {

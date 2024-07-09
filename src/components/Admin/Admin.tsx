@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { GestionarCarrito } from "./Botonera/GestionarCarrito";
+import { useState } from "react";
+// import { GestionarCarrito } from "./Botonera/GestionarCarrito";
 import { GestionOrdenCompra } from "./Botonera/GestionOrdenCompra";
 import { GestionFavoritos } from "./Botonera/GestionFavoritos";
 import { GestionRedesSociales } from "./Botonera/GestionRedesSociales";
@@ -8,193 +8,169 @@ import { GestionReviwsCalif } from "./Botonera/GestionReviwsCalif";
 import { GestionCuponesDesc } from "./Botonera/GestionCuponesDesc";
 import { GestionSaboresDisponibles } from "./Botonera/GestionSaboresDisponibles";
 import { GestionPPyDatosEmpresa } from "./Botonera/GestionPPyDatosEmpresa";
+import {
+  AiOutlinePlus,
+  AiOutlineDelete,
+  AiOutlineSearch,
+} from "react-icons/ai"; // Importa los íconos
+
+import Header from "../Header/Header";
+import { products } from "../../mocks/data";
+import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
+const buttonConfig = [
+  // {
+  //   label: "Carritos de Compra",
+  //   state: "gestionCarrito",
+  //   component: <GestionarCarrito />,
+  // },
+  {
+    label: "Gestión Sabores",
+    state: "gestionSaboresDisponibles",
+    component: <GestionSaboresDisponibles />,
+  },
+  {
+    label: "Gestión Productos",
+    state: "gestionImgProductos",
+    component: <GestionImgProductos />,
+  },
+  {
+    label: "Gestión de Órdenes",
+    state: "gestionOrdenCompra",
+    component: <GestionOrdenCompra />,
+  },
+  {
+    label: "Gestión Favoritos",
+    state: "gestionFavoritos",
+    component: <GestionFavoritos />,
+  },
+  {
+    label: "Cupones y Descuentos",
+    state: "gestionCuponesDesc",
+    component: <GestionCuponesDesc />,
+  },
+  {
+    label: "Reviews y Calificaciones",
+    state: "gestionReviwsCalif",
+    component: <GestionReviwsCalif />,
+  },
+
+  {
+    label: "Redes Sociales",
+    state: "gestionRedesSociales",
+    component: <GestionRedesSociales />,
+  },
+  {
+    label: "Info de empresa",
+    state: "gestionPPyDatosEmpresa",
+    component: <GestionPPyDatosEmpresa />,
+  },
+];
 
 export const Admin = () => {
-    const [state, setState] = useState<string>();
+  const [state, setState] = useState<string>();
+  const [selectedOption, setSelectedOption] = useState<string>(""); // Estado para almacenar la opción seleccionada
 
-    const handleButton = (prop: string) => {
-        setState(prop)
+  const handleButton = (prop: string) => {
+    setState(prop);
+  };
+  function handleActionButtonClick(): void {
+    switch (selectedOption) {
+      case "añadir":
+        handleAddAction();
+        break;
+      case "eliminar":
+        handleDeleteAction();
+        break;
+      case "buscar":
+        handleSearchAction();
+        break;
+      default:
+        // Puedes manejar un caso por defecto si es necesario
+        break;
     }
+  }
+  function handleCartIconClick(): void {
+    throw new Error("Function not implemented.");
+  }
+
+  function handleAddAction(): void {
+    console.log("Acción: Añadir");
+    // Implementa aquí la lógica para la acción de añadir
+  }
+
+  function handleDeleteAction(): void {
+    console.log("Acción: Eliminar");
+    // Implementa aquí la lógica para la acción de eliminar
+  }
+
+  function handleSearchAction(): void {
+    console.log("Acción: Buscar");
+    // Implementa aquí la lógica para la acción de buscar
+  }
+  function getIconAndColor(): { icon: JSX.Element; color: string } {
+    switch (selectedOption) {
+      case "añadir":
+        return { icon: <AiOutlinePlus size={24} />, color: "blue" };
+      case "eliminar":
+        return { icon: <AiOutlineDelete size={24} />, color: "orange" };
+      case "buscar":
+        return { icon: <AiOutlineSearch size={24} />, color: "rose" };
+      default:
+        return { icon: <AiOutlinePlus size={24} />, color: "rose" }; // Valor por defecto
+    }
+  }
+
+  const { icon, color } = getIconAndColor();
   return (
     <>
-        <div className="w-full min-h-screen">
-        <div className="w-full bg-gray-600  flex flex-wrap justify-evenly items-center">
-            <button className="text-gray-900 font-bold text-center xl:text-xl  capitalize duration-500  hover:text-white m-3" onClick={() => {handleButton('gestionCarrito')}}> Carritos de Compra</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionOrdenCompra')}}>Ordenes de Compra</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionSaboresDisponibles')}}>Sabores Disponibles</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionFavoritos')}}>Favoritos</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionRedesSociales')}}>Redes Sociales</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionPPyDatosEmpresa')}}>PdP y Datos de la Empresa</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionImgProductos')}}>Img Productos</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionReviwsCalif')}}>Reviws y Calificaciones</button>
-            <button  className="text-gray-900 font-bold text-center xl:text-lg  capitalize duration-500  hover:text-white m-2" onClick={() => {handleButton('gestionCuponesDesc')}}>Cupones y Descuentos</button>
-            
+      <Header onCartIconClick={handleCartIconClick} products={products} />
+      <div className="w-full min-h-screen">
+        <div className="w-full bg-white shadow-xl p-4 flex flex-wrap justify-evenly items-center">
+          {/* Renderiza los botones de configuración */}
+          {buttonConfig?.map((button) => (
+            <button
+              key={button.state}
+              className="text-slate-600 font-bold text-center 
+              xl:text-lg m-2 hover:bg-rose-400 
+              hover:text-white transition-all ease duration-400
+              p-2 rounded-xl hover:shadow-xl hover:scale-105"
+              onClick={() => handleButton(button.state)}
+            >
+              {button.label}
+            </button>
+          ))}
         </div>
-        {
-            state === 'gestionCarrito' ? (<GestionarCarrito/>) : (null) 
-        }
-        {
-            state === 'gestionOrdenCompra' ? (<GestionOrdenCompra/>) : (null) 
-        }
-        {
-            state === 'gestionSaboresDisponibles' ? (<GestionSaboresDisponibles/>) : (null) 
-        }
-        {
-            state === 'gestionFavoritos' ? (<GestionFavoritos/>) : (null) 
-        }
-        {
-            state === 'gestionRedesSociales' ? (<GestionRedesSociales/>) : (null) 
-        }
-        {
-            state === 'gestionPPyDatosEmpresa' ? (<GestionPPyDatosEmpresa/>) : (null) 
-        }
-        {
-            state === 'gestionImgProductos' ? (<GestionImgProductos/>) : (null) 
-        }
-        {
-            state === 'gestionReviwsCalif' ? (<GestionReviwsCalif/>) : (null) 
-        }
-        {
-            state === 'gestionCuponesDesc' ? (<GestionCuponesDesc/>) : (null) 
-        }
-        </div>
+        {/* Renderiza el componente correspondiente al estado seleccionado */}
+        {buttonConfig.find((button) => button.state === state)?.component}
+      </div>
+
+      {/* Selector de opciones */}
+      <div className="fixed bottom-4 right-4 flex flex-col gap-2">
+        <select
+          className={`bg-white hover:bg-${color}-400 text-${color}-500 font-bold py-2 px-4 rounded-full shadow-xl`}
+          value={selectedOption}
+          onChange={(e) => setSelectedOption(e.target.value)}
+        >
+          <option value="">Seleccione una opción</option>
+          <option value="añadir">Añadir</option>
+          <option value="eliminar">Eliminar</option>
+          <option value="buscar">Buscar</option>
+        </select>
+
+        {/* Botón de acción */}
+        <button
+          className={`bg-white hover:text-white hover:bg-${color}-600 text-${color}-500 transition-all ease hover:scale-105 p-4 rounded-full shadow-xl drop-shadow-2xl`}
+          onClick={handleActionButtonClick}
+          disabled={!selectedOption} // Deshabilita el botón si no hay opción seleccionada
+        >
+          {icon}
+        </button>
+      </div>
+
+      {/* Barra inferior en dispositivos móviles */}
+      <div className="block md:hidden">
+        <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
+      </div>
     </>
-  )
-}
-
-
-[
-    {
-      "id": "de00d029-439f-4914-8cc4-2f646eec7e65",
-      "date": "2024-06-27",
-      "status": "PENDING",
-      "orderDetail": {
-        "id": "8efd2b84-58f1-4f9c-929a-a4f5f366e6c1",
-        "price": "195.00",
-        "orderDetailProducts": [
-          {
-            "id": "122015e4-23ea-4c2e-973c-b3c0c5535b5b",
-            "cantidad": 3,
-            "pickedFlavors": [
-              "fde11c41-7476-49e6-b8ae-1b43bbd875af"
-            ],
-            "product": {
-              "id": "f9d6c0a7-7397-4daf-89c7-2c79afccf850",
-              "name": "Bombas de chocolate",
-              "presentacion": 8,
-              "description": "Bombas de chocolate oscuro premium con 75% de cacao + Salsa de vainilla, elaborado con ingredientes de alta calidad.",
-              "price": "65.00",
-              "currency": "USD",
-              "label": "SoloOnline",
-              "isActive": true,
-              "category": {
-                "id": "11454ea8-a9d6-4798-bcfd-a2bfb9c59f74",
-                "name": "bombas"
-              }
-            },
-            "orderDetailFlavors": []
-          }
-        ]
-      },
-      "user": {
-        "id": "27b817f0-3043-48a5-8ad4-d4e173f07765",
-        "name": "Maria",
-        "lastname": "Perez",
-        "email": "crlziito04@gmail.com",
-        "country": "Colombia",
-        "password": "$2b$10$X/Bg/7xXhO.DFviDVAOQ.ODhTuGS3pOp/C3zq3o/R/XHOd7.UWWw2",
-        "role": "CLIENT",
-        "isActive": true,
-        "suscriptionId": null,
-        "customerId": null
-      }
-    },
-    {
-      "id": "50a747b7-8dd3-4ae7-b054-c934d8da4718",
-      "date": "2024-06-24",
-      "status": "PENDING",
-      "orderDetail": {
-        "id": "91356628-b732-421b-a509-e0ccd75101ef",
-        "price": "80000.00",
-        "orderDetailProducts": []
-      },
-      "user": {
-        "id": "27b817f0-3043-48a5-8ad4-d4e173f07765",
-        "name": "Maria",
-        "lastname": "Perez",
-        "email": "crlziito04@gmail.com",
-        "country": "Colombia",
-        "password": "$2b$10$X/Bg/7xXhO.DFviDVAOQ.ODhTuGS3pOp/C3zq3o/R/XHOd7.UWWw2",
-        "role": "CLIENT",
-        "isActive": true,
-        "suscriptionId": null,
-        "customerId": null
-      }
-    },
-    {
-      "id": "e550317a-dab1-4e79-bba9-42f7c69c8da3",
-      "date": "2024-06-26",
-      "status": "PENDING",
-      "orderDetail": {
-        "id": "8f5d24b1-a126-4cfb-8bec-4057e0b3b786",
-        "price": "28500.00",
-        "orderDetailProducts": []
-      },
-      "user": {
-        "id": "27b817f0-3043-48a5-8ad4-d4e173f07765",
-        "name": "Maria",
-        "lastname": "Perez",
-        "email": "crlziito04@gmail.com",
-        "country": "Colombia",
-        "password": "$2b$10$X/Bg/7xXhO.DFviDVAOQ.ODhTuGS3pOp/C3zq3o/R/XHOd7.UWWw2",
-        "role": "CLIENT",
-        "isActive": true,
-        "suscriptionId": null,
-        "customerId": null
-      }
-    },
-    {
-      "id": "30d9079b-dc47-4968-81fb-41e0f99784af",
-      "date": "2024-06-25",
-      "status": "PENDING",
-      "orderDetail": {
-        "id": "6af925d0-2992-4642-8770-529f8599aca0",
-        "price": "28500.00",
-        "orderDetailProducts": []
-      },
-      "user": {
-        "id": "27b817f0-3043-48a5-8ad4-d4e173f07765",
-        "name": "Maria",
-        "lastname": "Perez",
-        "email": "crlziito04@gmail.com",
-        "country": "Colombia",
-        "password": "$2b$10$X/Bg/7xXhO.DFviDVAOQ.ODhTuGS3pOp/C3zq3o/R/XHOd7.UWWw2",
-        "role": "CLIENT",
-        "isActive": true,
-        "suscriptionId": null,
-        "customerId": null
-      }
-    },
-    {
-      "id": "64ed6010-cf66-4f09-86d2-632aaae51ec5",
-      "date": "2024-06-26",
-      "status": "PENDING",
-      "orderDetail": {
-        "id": "508571f6-cda9-4d3d-9197-5655bd3b8406",
-        "price": "28500.00",
-        "orderDetailProducts": []
-      },
-      "user": {
-        "id": "27b817f0-3043-48a5-8ad4-d4e173f07765",
-        "name": "Maria",
-        "lastname": "Perez",
-        "email": "crlziito04@gmail.com",
-        "country": "Colombia",
-        "password": "$2b$10$X/Bg/7xXhO.DFviDVAOQ.ODhTuGS3pOp/C3zq3o/R/XHOd7.UWWw2",
-        "role": "CLIENT",
-        "isActive": true,
-        "suscriptionId": null,
-        "customerId": null
-      }
-    }
-  ]
+  );
+};

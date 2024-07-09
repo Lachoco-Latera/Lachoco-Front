@@ -15,10 +15,12 @@ import { toast } from "sonner";
 import { MdFavoriteBorder } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
+
 interface Props {
   onCartIconClick: () => void;
   products: Product[];
 }
+
 async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
@@ -27,6 +29,7 @@ async function hashPassword(password: string): Promise<string> {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 }
+
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const { isSignedIn, user, isLoaded } = useUser();
@@ -39,23 +42,26 @@ export default function Header({ onCartIconClick }: Props) {
         1100
       )
     );
+
   if (isSignedIn && isLoaded && user && user.primaryEmailAddress) {
     const passTransform = `${user.id}${import.meta.env.VITE_USER_KEY}`;
-
+    const sliceKey = import.meta.env.VITE_PASS_SLICE;
+    const start = parseInt(sliceKey[0]);
+    const end = parseInt(sliceKey.slice(1));
     hashPassword(passTransform).then((hashedPassword) => {
+      const trimmedPassword = hashedPassword.slice(start, end) || "";
       if (user.primaryEmailAddress) {
         const userData = {
           name: user.firstName,
           lastname: user.lastName,
           email: user.primaryEmailAddress.emailAddress,
           country: "GLOBAL",
-          password: hashedPassword,
-          confirmPassword: hashedPassword,
+          password: trimmedPassword,
         };
-        console.log(userData);
       }
     });
   }
+
   return (
     <header
       className=" 

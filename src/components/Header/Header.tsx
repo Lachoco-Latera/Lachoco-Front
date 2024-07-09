@@ -67,11 +67,50 @@ export default function Header({ onCartIconClick }: Props) {
               navigator.geolocation.getCurrentPosition(resolve, reject);
             }
           );
+
           const response = await axios.get(
-            `https://geocode.xyz/${position.coords.latitude},${position.coords.longitude}?geoit=json`
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
           );
-          const country = response.data.country || "GLOBAL";
-          setUserCountry(country);
+
+          const country = response.data.address.country || "GLOBAL";
+          let userCountry = country;
+
+          switch (country) {
+            case "Argentina":
+              userCountry = "ARG";
+              break;
+            case "Bolivia":
+              userCountry = "BOL";
+              break;
+            case "Brasil":
+              userCountry = "BRA";
+              break;
+            case "Chile":
+              userCountry = "CHL";
+              break;
+            case "Colombia":
+              userCountry = "COL";
+              break;
+            case "Ecuador":
+              userCountry = "ECU";
+              break;
+            case "Paraguay":
+              userCountry = "PRY";
+              break;
+            case "Perú":
+              userCountry = "PER";
+              break;
+            case "Uruguay":
+              userCountry = "URY";
+              break;
+            case "Venezuela":
+              userCountry = "VEN";
+              break;
+            default:
+              userCountry = "GLOBAL";
+              break;
+          }
+          console.log(userCountry);
         } else {
           setUserCountry("GLOBAL");
         }
@@ -80,7 +119,6 @@ export default function Header({ onCartIconClick }: Props) {
         setUserCountry("GLOBAL");
       }
     };
-
     checkGeolocationPermission();
     getUserCountry();
   }, []);

@@ -29,7 +29,7 @@ export const GestionImgProductos = () => {
     };
     getOrders();
   }, []);
-
+  console.log(orderState);
   return (
     <div className="w-full flex flex-row flex-wrap gap-4 px-4 py-8 justify-center items-center">
       {editState && (
@@ -69,6 +69,11 @@ export const GestionImgProductos = () => {
           <h2 className="font-bold text-lg text-gray-800 text-center">
             {order.name}
           </h2>
+          {order.images.length > 0 ? (
+            <div className=" self-center">
+              <img src={order.images[0].img} alt="" className="w-36" />
+            </div>
+          ) : null}
           <p className="text-sm text-gray-600 text-center">
             {order.description}
           </p>

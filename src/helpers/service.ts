@@ -21,3 +21,15 @@ export const postRedes = async (data: IRedes) => {
         console.log(error)
     }
 }
+
+export const putRedes = async (data: IRedes) => {
+    try {
+        // const res = await axios.put('', data)
+        // console.log(res.data, '<<<<<<<<<<<<<<<<<<<<<<<------------ service put redes')
+        // return res.data
+        console.log(data)
+        return( 'Data recibida: CORRECTAMENTE')
+    } catch (error) {
+        console.log(error)
+    }
+}

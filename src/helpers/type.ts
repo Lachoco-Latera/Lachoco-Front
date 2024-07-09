@@ -66,6 +66,7 @@ export interface IGitfCards {
     isUsed?: boolean,
     cantidad?: number,
     product?: IProduct,
+    code?: string,
 }
 
 export interface IRedes {
@@ -75,3 +76,26 @@ export interface IRedes {
 }
 
 
+// -------------------------------------------------------------Favorites
+export interface IOrdersFavorites {
+    cancelByUserId?: null,
+    date?: string,
+    id?: string,
+    label?: string,
+    status?: string,
+    trackingNumber?: null, 
+}
+
+export interface IFavorites {
+    country?: string,
+    customerId?: null,
+    email?: string,
+    id?: string | undefined,
+    isActive?: boolean,
+    lastname?: string,
+    name?: string,
+    role?: string,
+    suscriptionID?: null | string,
+    giftcards?: IGitfCards[],
+    orders: IOrdersFavorites[]
+}

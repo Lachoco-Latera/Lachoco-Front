@@ -124,13 +124,16 @@ export default function Header({ onCartIconClick }: Props) {
   }, []);
 
   const registerUser = async () => {
-    if (isSignedIn && isLoaded && user && user.primaryEmailAddress) {
+    if (
+      isSignedIn &&
+      user.primaryEmailAddress &&
+      user.primaryEmailAddress.emailAddress
+    ) {
       const passTransform = `${user.id}${import.meta.env.VITE_USER_KEY}`;
       const sliceKey = import.meta.env.VITE_PASS_SLICE;
       const start = parseInt(sliceKey[0]);
       const end = parseInt(sliceKey.slice(1));
       const specialCharacters = "!@#$%^&*()";
-
       hashPassword(passTransform).then((hashedPassword) => {
         let trimmedPassword = hashedPassword.slice(start, end) || "";
 
@@ -147,16 +150,15 @@ export default function Header({ onCartIconClick }: Props) {
         const specialCharacterIndex = end % specialCharacters.length;
         const specialCharacter = specialCharacters[specialCharacterIndex];
         trimmedPassword += specialCharacter;
-
-        if (user.primaryEmailAddress) {
+        if (user.primaryEmailAddress && trimmedPassword) {
           const userData = {
             name: user.firstName,
             lastname: user.lastName,
             email: user.primaryEmailAddress.emailAddress,
             country: userCountry,
             password: trimmedPassword,
+            confirmPassword: trimmedPassword,
           };
-
           axios
             .get("https://lachocoback.vercel.app/users")
             .then((response) => {
@@ -172,11 +174,19 @@ export default function Header({ onCartIconClick }: Props) {
                     userData
                   )
                   .then((response) => {
-                    console.log("User registered successfully:", response.data);
+                    response;
                   })
                   .catch((error) => {
                     if (error.response) {
                       if (
+                        error.response.status === 400 &&
+                        error.response.data.message ===
+                          "Password does not Match"
+                      ) {
+                        console.log(
+                          "Error: La contraseña no coincide con los requisitos del servidor."
+                        );
+                      } else if (
                         error.response.status === 403 ||
                         error.response.data.message === "User already exists"
                       ) {
@@ -191,7 +201,7 @@ export default function Header({ onCartIconClick }: Props) {
                     }
                   });
               } else {
-                console.log("User already exists: ", user.firstName);
+                // console.log("User already exists: ", user.firstName);
               }
             })
             .catch((error) => {
@@ -203,7 +213,7 @@ export default function Header({ onCartIconClick }: Props) {
   };
 
   // Call the registerUser function when needed
-  if (!isSignedIn && isLoaded) {
+  if (isSignedIn && isLoaded) {
     registerUser();
   }
   return (

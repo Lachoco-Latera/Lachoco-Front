@@ -35,7 +35,7 @@ async function hashPassword(password: string): Promise<string> {
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const { isSignedIn, user, isLoaded } = useUser();
-  const [userCountry, setUserCountry] = useState<string>("GLOBAL");
+  const [userCountry, setUserCountry] = useState<string>("");
 
   const navigate = useNavigate();
   const promise = () =>

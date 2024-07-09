@@ -24,7 +24,8 @@
     "react-router-dom": "^6.23.1",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "3.0.0-beta.2",
-    "sonner": "^1.5.0"
+    "sonner": "^1.5.0",
+    "sweetalert2": "^11.12.2"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.12",

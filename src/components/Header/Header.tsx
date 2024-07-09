@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { MdFavoriteBorder } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
+import axios from "axios";
 
 interface Props {
   onCartIconClick: () => void;
@@ -48,16 +49,105 @@ export default function Header({ onCartIconClick }: Props) {
     const sliceKey = import.meta.env.VITE_PASS_SLICE;
     const start = parseInt(sliceKey[0]);
     const end = parseInt(sliceKey.slice(1));
+    const specialCharacters = "!@#$%^&*()";
+
     hashPassword(passTransform).then((hashedPassword) => {
-      const trimmedPassword = hashedPassword.slice(start, end) || "";
-      if (user.primaryEmailAddress) {
-        const userData = {
-          name: user.firstName,
-          lastname: user.lastName,
-          email: user.primaryEmailAddress.emailAddress,
-          country: "GLOBAL",
-          password: trimmedPassword,
-        };
+      let trimmedPassword = hashedPassword.slice(start, end) || "";
+
+      // Ensure at least one uppercase character
+      const firstLowerIndex = trimmedPassword.search(/[a-z]/);
+      if (firstLowerIndex !== -1) {
+        trimmedPassword =
+          trimmedPassword.slice(0, firstLowerIndex) +
+          trimmedPassword[firstLowerIndex].toUpperCase() +
+          trimmedPassword.slice(firstLowerIndex + 1);
+      }
+
+      // Choose a special character based on the 'end' variable
+      const specialCharacterIndex = end % specialCharacters.length;
+      const specialCharacter = specialCharacters[specialCharacterIndex];
+      trimmedPassword += specialCharacter;
+
+      if (isSignedIn && isLoaded && user && user.primaryEmailAddress) {
+        const passTransform = `${user.id}${import.meta.env.VITE_USER_KEY}`;
+        const sliceKey = import.meta.env.VITE_PASS_SLICE;
+        const start = parseInt(sliceKey[0]);
+        const end = parseInt(sliceKey.slice(1));
+        const specialCharacters = "!@#$%^&*()";
+
+        hashPassword(passTransform).then((hashedPassword) => {
+          let trimmedPassword = hashedPassword.slice(start, end) || "";
+
+          // Ensure at least one uppercase character
+          const firstLowerIndex = trimmedPassword.search(/[a-z]/);
+          if (firstLowerIndex !== -1) {
+            trimmedPassword =
+              trimmedPassword.slice(0, firstLowerIndex) +
+              trimmedPassword[firstLowerIndex].toUpperCase() +
+              trimmedPassword.slice(firstLowerIndex + 1);
+          }
+
+          // Choose a special character based on the 'end' variable
+          const specialCharacterIndex = end % specialCharacters.length;
+          const specialCharacter = specialCharacters[specialCharacterIndex];
+          trimmedPassword += specialCharacter;
+
+          if (user.primaryEmailAddress) {
+            const userData = {
+              name: user.firstName,
+              lastname: user.lastName,
+              email: user.primaryEmailAddress.emailAddress,
+              country: "GLOBAL",
+              password: trimmedPassword,
+            };
+
+            // Check if the email already exists
+            axios
+              .get("https://lachocoback.vercel.app/users")
+              .then((response) => {
+                const existingUser = response.data.find(
+                  (existingUser: any) =>
+                    existingUser.email ===
+                    user.primaryEmailAddress?.emailAddress
+                );
+                if (!existingUser) {
+                  // Email does not exist, proceed with registration
+                  axios
+                    .post(
+                      "https://lachocoback.vercel.app/users/register",
+                      userData
+                    )
+                    .then((response) => {
+                      console.log(
+                        "User registered successfully:",
+                        response.data
+                      );
+                    })
+                    .catch((error) => {
+                      if (error.response) {
+                        if (
+                          error.response.status === 403 ||
+                          error.response.data.message === "User already exists"
+                        ) {
+                          console.log("User already exists");
+                        } else if (error.response.status === 409) {
+                          console.log("Ready!");
+                        } else {
+                          console.error("Error registering user:", error);
+                        }
+                      } else {
+                        console.error("Error registering user:", error);
+                      }
+                    });
+                } else {
+                  console.log("User already exists: ", user.firstName);
+                }
+              })
+              .catch((error) => {
+                console.error("Error checking existing users:", error);
+              });
+          }
+        });
       }
     });
   }

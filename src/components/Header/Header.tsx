@@ -110,7 +110,7 @@ export default function Header({ onCartIconClick }: Props) {
               userCountry = "GLOBAL";
               break;
           }
-          console.log(userCountry);
+          setUserCountry(userCountry);
         } else {
           setUserCountry("GLOBAL");
         }
@@ -157,7 +157,6 @@ export default function Header({ onCartIconClick }: Props) {
             password: trimmedPassword,
           };
 
-          // Check if the email already exists
           axios
             .get("https://lachocoback.vercel.app/users")
             .then((response) => {

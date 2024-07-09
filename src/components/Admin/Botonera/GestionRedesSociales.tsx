@@ -1,4 +1,4 @@
-import { getRedes, postRedes } from "../../../helpers/service";
+import { getRedes, postRedes, putRedes } from "../../../helpers/service";
 import { IRedes } from "@/helpers/type";
 import React, { useEffect, useState } from "react";
 
@@ -10,6 +10,10 @@ export const GestionRedesSociales = () => {
     img: "",
   });
   console.log(formState, "<<<<<<<----- form state");
+  const [formEditState, setFormEditState] = useState<IRedes>({
+    url: "",
+    img: "",
+  })
   const [data, setData] = useState<IRedes[]>([]);
 
   useEffect(() => {
@@ -42,6 +46,14 @@ export const GestionRedesSociales = () => {
       [name]: value,
     });
   };
+  const handleOnChangeEdit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    setFormEditState({
+      ...formEditState,
+      [name]: value,
+    });
+  };
 
   const handleOnSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -53,6 +65,16 @@ export const GestionRedesSociales = () => {
       console.log(error);
     }
   };
+
+  const handleOnSubmitEdit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      const putForm = await putRedes(formEditState)
+      console.log(putForm, '<<<<<-------------- data de putForm ')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -85,10 +107,14 @@ export const GestionRedesSociales = () => {
             </button>
           </form>
         ) : null}
+        {/* --------------------------------------------------------------------------------- */}
+        {/* F O R M U L A R I O  D E  E D I T A R */}
+        {/* --------------------------------------------------------------------------------- */}
         {editState === true ? (
           <form
             action=""
-            className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+            className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-violet-300"
+            onSubmit={handleOnSubmitEdit}
           >
             <h2>Editar red social</h2>
             <input
@@ -96,12 +122,16 @@ export const GestionRedesSociales = () => {
               placeholder="url"
               name="url"
               className="w-2/3 p-2 rounded-md border-2 border-gray-300"
+              value={formEditState.url}
+              onChange={handleOnChangeEdit}
             />
             <input
               type="text"
               placeholder="img"
               name="img"
               className="w-2/3 p-2 rounded-md border-2 border-gray-300"
+              value={formEditState.img}
+              onChange={handleOnChangeEdit}
             />
             <button className="w-2/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-400 bg-green-500 hover:bg-green-900 hover:text-green-500 m-3 capitalize">
               Guardar Cambios

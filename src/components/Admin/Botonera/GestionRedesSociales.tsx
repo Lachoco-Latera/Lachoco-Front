@@ -1,6 +1,7 @@
 import { getRedes, postRedes, putRedes } from "../../../helpers/service";
 import { IRedes } from "@/helpers/type";
 import React, { useEffect, useState } from "react";
+import { toast } from 'sonner';
 
 export const GestionRedesSociales = () => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -30,7 +31,16 @@ export const GestionRedesSociales = () => {
 
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
-    setEditState(!editState);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const alertId: any = toast('Deceas editar esta red social?', {
+      duration: 5000,
+      action: {
+          label: 'Aceptar',
+        onClick: () => {toast.dismiss(alertId),setEditState(!editState)},
+      },
+      
+    })
   };
 
   const handleAdd = (event: React.MouseEvent) => {
@@ -57,10 +67,24 @@ export const GestionRedesSociales = () => {
 
   const handleOnSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+  
     try {
-      const postForm = await postRedes(formState);
-      console.log(postForm, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<---- PPPPPPP");
-      setAddState(!addState);
+      const alertId = toast('¿Deseas agregar esta red social?', {
+        duration: Infinity, // Mantiene la alerta abierta hasta que se haga clic en un botón
+        action: {
+          label: 'Aceptar',
+          onClick: async () => {
+            toast.dismiss(alertId);
+            try {
+              const postForm = await postRedes(formState);
+              console.log(postForm, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<---- PPPPPPP");
+              setAddState(!addState);
+            } catch (error) {
+              console.log(error);
+            }
+          },
+        },
+      });
     } catch (error) {
       console.log(error);
     }

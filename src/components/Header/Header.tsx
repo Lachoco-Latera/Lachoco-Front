@@ -1,15 +1,7 @@
 import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
-
 import useFromStore from "../../hooks/useFromStore";
-
 import SearchExampleStandard from "../Searchbar/Searchbar";
-
-// import { useState } from "react";
-// import { IconoUser } from "../IconoUser/IconoUser.tsx";
-// import iconoUser from "../../../public/images/iconoUser.svg";
-// import close from "../../../public/images/close.svg";
-// import config from "../../../public/images/configuracion.svg";
 import logo from "../../../public/images/logo.png";
 import { Product } from "@/types.d";
 import {
@@ -27,18 +19,18 @@ interface Props {
   onCartIconClick: () => void;
   products: Product[];
 }
-
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const { isSignedIn, user, isLoaded } = useUser();
   const navigate = useNavigate();
-
-  // const [stateUser, setStateUser] = useState(false);
-
-  // const handleButtonUser = () => {
-  //   setStateUser((prevState) => !prevState);
-  //   // console.log(stateUser);
-  // };
   const promise = () =>
     new Promise((resolve) =>
       setTimeout(
@@ -47,6 +39,23 @@ export default function Header({ onCartIconClick }: Props) {
         1100
       )
     );
+  if (isSignedIn && isLoaded && user && user.primaryEmailAddress) {
+    const passTransform = `${user.id}${import.meta.env.VITE_USER_KEY}`;
+
+    hashPassword(passTransform).then((hashedPassword) => {
+      if (user.primaryEmailAddress) {
+        const userData = {
+          name: user.firstName,
+          lastname: user.lastName,
+          email: user.primaryEmailAddress.emailAddress,
+          country: "GLOBAL",
+          password: hashedPassword,
+          confirmPassword: hashedPassword,
+        };
+        console.log(userData);
+      }
+    });
+  }
   return (
     <header
       className=" 
@@ -136,27 +145,6 @@ export default function Header({ onCartIconClick }: Props) {
               </button>
             </div>
           ) : null}
-          {/* <div className="hidden md:block">
-            {stateUser ? (
-              <button onClick={handleButtonUser}>
-                <img
-                  src={close}
-                  alt=""
-                  className="w-[25px] h-[25px] transition-all ease duration-100"
-                />
-              </button>
-            ) : (
-              <button onClick={handleButtonUser}>
-                <img src={iconoUser} alt="" className="w-[23px] h-[23px]" />
-              </button>
-            )}
-          </div> */}
-          {/* BOTON DE CONFIGURACION */}
-          {/* <div className="hidden md:block">
-            <button>
-              <img src={config} alt="" className="w-[30px] h-[30px]" />
-            </button>
-          </div> */}
           <div className="md:block hidden scale-125 hover:scale-150 transition-all ease">
             <SignedOut>
               <SignInButton />
@@ -165,11 +153,6 @@ export default function Header({ onCartIconClick }: Props) {
               <UserButton />
             </SignedIn>
           </div>
-          {/* {stateUser ? (
-            <div className="w-[300px] h-[100px] absolute mt-[150px] right-0 bg-gray-300 z-20 flex flex-col justify-evenly">
-              <IconoUser />
-            </div>
-          ) : null} */}
         </div>
       </nav>
     </header>

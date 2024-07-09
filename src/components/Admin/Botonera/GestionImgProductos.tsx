@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import logo from "../../../../public/images/logo.png";
 
 export const GestionImgProductos = () => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -73,7 +74,11 @@ export const GestionImgProductos = () => {
             <div className=" self-center">
               <img src={order.images[0].img} alt="" className="w-36" />
             </div>
-          ) : null}
+          ) : (
+            <div className=" self-center">
+              <img src={logo} alt="" className="w-36" />
+            </div>
+          )}
           <p className="text-sm text-gray-600 text-center">
             {order.description}
           </p>

@@ -51,7 +51,7 @@ export const GestionPPyDatosEmpresa = ({ signal, onCloseModal }: any) => {
             >
               <form
                 action=""
-                className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+                className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  "
               >
                 <input type="text" placeholder="probando123" />
                 <input type="text" placeholder="probando123" />

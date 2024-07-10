@@ -62,7 +62,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
             className="bg-white p-6 rounded-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500">
+            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  ">
               <input
                 type="text"
                 placeholder="probando123"

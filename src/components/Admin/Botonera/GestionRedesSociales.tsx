@@ -167,7 +167,7 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
               <form
                 action=""
                 onSubmit={handleOnSubmit}
-                className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+                className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  "
               >
                 <h2>Agregar nueva red social</h2>
                 <input

@@ -139,7 +139,7 @@ export const GestionSaboresDisponibles = ({ signal, onCloseModal }: any) => {
           >
             <form
               onSubmit={handleOnSubmit}
-              className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+              className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  "
             >
               <h2>Agregar nuevo sabor</h2>
               <input

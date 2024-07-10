@@ -48,7 +48,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
             className="bg-white p-6 rounded-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-green-400 p-4 rounded-lg shadow-lg">
+            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  p-4 rounded-lg ">
               <input
                 type="text"
                 placeholder="probando123"

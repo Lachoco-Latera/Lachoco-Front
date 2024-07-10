@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-export const GestionPPyDatosEmpresa = () => {
+export const GestionPPyDatosEmpresa = ({ signal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [products, setProducts] = useState<any[]>([]);
+  signal;
 
   useEffect(() => {
     const fetchProducts = async () => {

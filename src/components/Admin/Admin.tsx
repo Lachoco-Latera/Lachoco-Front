@@ -18,53 +18,95 @@ import Header from "../Header/Header";
 import { products } from "../../mocks/data";
 import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
 
-const buttonConfig = [
-  {
-    label: "Gestión Sabores",
-    state: "gestionSaboresDisponibles",
-    component: <GestionSaboresDisponibles />,
-  },
-  {
-    label: "Gestión Productos",
-    state: "gestionImgProductos",
-    component: <GestionProductos />,
-  },
-  {
-    label: "Gestión de Órdenes",
-    state: "gestionOrdenCompra",
-    component: <GestionOrdenCompra />,
-  },
-  {
-    label: "Gestión Favoritos",
-    state: "gestionFavoritos",
-    component: <GestionFavoritos />,
-  },
-  {
-    label: "Cupones y Descuentos",
-    state: "gestionCuponesDesc",
-    component: <GestionCuponesDesc />,
-  },
-  {
-    label: "Reviews y Calificaciones",
-    state: "gestionReviwsCalif",
-    component: <GestionReviwsCalif />,
-  },
-  {
-    label: "Redes Sociales",
-    state: "gestionRedesSociales",
-    component: <GestionRedesSociales />,
-  },
-  {
-    label: "Info de empresa",
-    state: "gestionPPyDatosEmpresa",
-    component: <GestionPPyDatosEmpresa />,
-  },
-];
-
 export const Admin = () => {
   const [state, setState] = useState<string>();
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [showExtraButtons, setShowExtraButtons] = useState<boolean>(false);
+  const [, setRefreshFlavors] = useState(false);
+  const [signal, setSignal] = useState(false); // Nuevo estado para la señal
+
+  const buttonConfig = [
+    {
+      label: "Gestión Sabores",
+      state: "gestionSaboresDisponibles",
+      component: (
+        <GestionSaboresDisponibles
+          signal={signal}
+          onCloseModal={() => setSignal(false)}
+        />
+      ), // Pasa la señal como prop
+    },
+    {
+      label: "Gestión Productos",
+      state: "gestionImgProductos",
+      component: (
+        <GestionProductos
+          signal={signal}
+          onCloseModal={() => setSignal(false)}
+        />
+      ),
+    },
+    {
+      label: "Gestión de Órdenes",
+      state: "gestionOrdenCompra",
+      component: (
+        <GestionOrdenCompra
+          signal={signal}
+          onCloseModal={() => setSignal(false)}
+        />
+      ),
+    },
+    {
+      label: "Gestión Favoritos",
+      state: "gestionFavoritos",
+      component: (
+        <GestionFavoritos
+          signal={signal}
+          onCloseModal={() => setSignal(false)}
+        />
+      ),
+    },
+    {
+      label: "Cupones y Descuentos",
+      state: "gestionCuponesDesc",
+      component: (
+        <GestionCuponesDesc
+          signal={signal}
+          onCloseModal={() => setSignal(false)}
+        />
+      ),
+    },
+    {
+      label: "Reviews y Calificaciones",
+      state: "gestionReviwsCalif",
+      component: (
+        <GestionReviwsCalif
+          signal={signal}
+          onCloseModal={() => setSignal(false)}
+        />
+      ),
+    },
+    {
+      label: "Redes Sociales",
+      state: "gestionRedesSociales",
+      component: (
+        <GestionRedesSociales
+          signal={signal}
+          onCloseModal={() => setSignal(false)}
+        />
+      ),
+    },
+    {
+      label: "Info de empresa",
+      state: "gestionPPyDatosEmpresa",
+      component: (
+        <GestionPPyDatosEmpresa
+          signal={signal}
+          onCloseModal={() => setSignal(false)}
+        />
+      ),
+    },
+  ];
   setSelectedOption;
   const handleButton = (prop: string) => {
     setState(prop);
@@ -78,11 +120,7 @@ export const Admin = () => {
       case "eliminar":
         handleDeleteAction();
         break;
-      // case "buscar":
-      //   handleSearchAction();
-      //   break;
       default:
-        // Puedes manejar un caso por defecto si es necesario
         break;
     }
     setShowExtraButtons(!showExtraButtons); // Alterna la visibilidad de los botones adicionales
@@ -93,19 +131,13 @@ export const Admin = () => {
   }
 
   function handleAddAction(): void {
-    console.log("Acción: Añadir");
-    // Implementa aquí la lógica para la acción de añadir
+    setRefreshFlavors((prev) => !prev); // Enviar señal para refrescar sabores
+    setSignal((prev) => !prev); // Enviar señal para el console.log
   }
 
   function handleDeleteAction(): void {
     console.log("Acción: Eliminar");
-    // Implementa aquí la lógica para la acción de eliminar
   }
-
-  // function handleSearchAction(): void {
-  //   console.log("Acción: Buscar");
-  //   // Implementa aquí la lógica para la acción de buscar
-  // }
 
   function getIconAndColor(): { icon: JSX.Element; color: string } {
     switch (selectedOption) {
@@ -126,7 +158,6 @@ export const Admin = () => {
       <Header onCartIconClick={handleCartIconClick} products={products} />
       <div className="w-full min-h-screen">
         <div className="w-full bg-white shadow-xl p-4 flex flex-wrap justify-evenly items-center">
-          {/* Renderiza los botones de configuración */}
           {buttonConfig?.map((button) => (
             <button
               key={button.state}
@@ -140,13 +171,10 @@ export const Admin = () => {
             </button>
           ))}
         </div>
-        {/* Renderiza el componente correspondiente al estado seleccionado */}
         {buttonConfig.find((button) => button.state === state)?.component}
       </div>
 
-      {/* Selector de opciones */}
       <div className="fixed md:bottom-4 bottom-20  right-4 flex flex-col gap-2">
-        {/* Botón de acción */}
         <button
           className={`bg-white hover:text-rose-500 
             hover:bg-${color}-600 text-${color}-500 
@@ -154,17 +182,15 @@ export const Admin = () => {
             rounded-full shadow-xl drop-shadow-2xl
             hover:cursor-pointer`}
           onClick={handleActionButtonClick}
-          // disabled={!selectedOption} // Deshabilita el botón si no hay opción seleccionada
         >
           {icon}
         </button>
 
-        {/* Botones adicionales */}
         {showExtraButtons && (
           <div className="flex flex-col gap-2 absolute bottom-16">
             <button
               className={`bg-green-500 text-white hover:bg-white hover:text-green-500 p-4 rounded-full shadow-xl transition-all ease hover:scale-105`}
-              onClick={() => console.log("Extra Button 1 Clicked")}
+              onClick={() => handleAddAction()}
             >
               <AiOutlinePlus size={24} />
             </button>
@@ -174,17 +200,10 @@ export const Admin = () => {
             >
               <AiOutlineDelete size={24} />
             </button>
-            {/* <button
-              className={`bg-blue-500 text-white hover:bg-white hover:text-blue-500 p-4 rounded-full shadow-xl transition-all ease hover:scale-105`}
-              onClick={() => console.log("Extra Button 3 Clicked")}
-            >
-              <AiOutlineSearch size={24} />
-            </button> */}
           </div>
         )}
       </div>
 
-      {/* Barra inferior en dispositivos móviles */}
       <div className="block md:hidden">
         <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
       </div>

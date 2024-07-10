@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export const GestionCuponesDesc = () => {
+export const GestionCuponesDesc = ({ signal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [giftcardsState, setGiftcardsState] = useState<any[]>([]);
+  signal;
 
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();

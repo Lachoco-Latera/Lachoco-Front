@@ -2,9 +2,10 @@ import { IFavorites, IGitfCards, IOrdersFavorites } from "@/helpers/type";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export const GestionFavoritos = () => {
+export const GestionFavoritos = ({ signal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [userState, setUserState] = useState<IFavorites[]>([]);
+  signal;
 
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -23,7 +24,7 @@ export const GestionFavoritos = () => {
           "https://lachocoback.vercel.app/users"
         );
         const data = response.data;
-        console.log(data, '<<<<<<<<<<<<<<<<<----- data getUser FAV')
+        console.log(data, "<<<<<<<<<<<<<<<<<----- data getUser FAV");
         setUserState(data);
       } catch (error) {
         console.log(error);

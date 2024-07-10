@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-export const GestionOrdenCompra = () => {
+export const GestionOrdenCompra = ({ signal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [ordersState, setOrdersState] = useState<any[]>([]); // Cambiado a array para manejar múltiples órdenes
+  signal;
 
   console.log(ordersState, "<<<<<<<<<<<<----- ORDER STATE");
 

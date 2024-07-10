@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-export const GestionReviwsCalif = () => {
+export const GestionReviwsCalif = ({ signal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [products, setProducts] = useState<any[]>([]);
 
@@ -65,9 +65,7 @@ export const GestionReviwsCalif = () => {
           transition-all ease  
           hover:scale-105"
           >
-            <h2 className="font-bold    text-center">
-              Title: {product.name}
-            </h2>
+            <h2 className="font-bold    text-center">Title: {product.name}</h2>
             <p className="font-bold    text-center">
               Description: {product.description}
             </p>
@@ -77,9 +75,7 @@ export const GestionReviwsCalif = () => {
             <p className="font-bold    text-center">
               Category: {product.category.name}
             </p>
-            <p className="font-bold    text-center">
-              Stock: {product.stock}
-            </p>
+            <p className="font-bold    text-center">Stock: {product.stock}</p>
             <div className="w-full flex justify-center items-center">
               <button
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-1000 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize"

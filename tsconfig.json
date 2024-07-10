@@ -18,7 +18,9 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["node"]
   },
   "include": ["src", "next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.jsx"],
   "exclude": ["node_modules", "vite.config.ts"]

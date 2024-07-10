@@ -53,11 +53,31 @@ export const GestionPPyDatosEmpresa = ({ signal, onCloseModal }: any) => {
                 action=""
                 className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  "
               >
-                <input type="text" placeholder="probando123" />
-                <input type="text" placeholder="probando123" />
-                <input type="text" placeholder="probando123" />
-                <input type="text" placeholder="probando123" />
-                <input type="text" placeholder="probando123" />
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
               </form>
             </div>
           </div>

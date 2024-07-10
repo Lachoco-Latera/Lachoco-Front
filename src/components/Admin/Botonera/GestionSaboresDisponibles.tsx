@@ -141,20 +141,23 @@ export const GestionSaboresDisponibles = ({ signal, onCloseModal }: any) => {
               onSubmit={handleOnSubmit}
               className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  "
             >
-              <h2>Agregar nuevo sabor</h2>
+              <h2 className="font-bold text-xl">Agregar nuevo sabor</h2>
               <input
                 type="text"
-                placeholder="Name"
+                placeholder="Nombre del sabor"
                 name="name"
                 value={flavorState.name}
                 onChange={handleOnChange}
+                className="p-2 border rounded-md"
               />
               <input
                 type="number"
                 placeholder="Stock"
                 name="stock"
+                min={0}
                 value={flavorState.stock}
                 onChange={handleOnChange}
+                className="p-2 border rounded-md"
               />
               <button className="w-2/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-green-500 hover:bg-green-900 hover:text-green-500 m-3 capitalize hover:scale-105 transition-all ease">
                 Agregar

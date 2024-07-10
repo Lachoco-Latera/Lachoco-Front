@@ -6,27 +6,20 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
-
-    /* Bundler mode */
     "moduleResolution": "Node",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
-    /* Paths: Se usa para colocar el "@" como atajo en las importaciones: */
     "paths": {
       "@/*": ["./src/*"]
     }
   },
   "include": ["src", "next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.jsx"],
-  "references": [{ "path": "./tsconfig.node.json" }],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "vite.config.ts"]
 }

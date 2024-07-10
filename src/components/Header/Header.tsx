@@ -1,15 +1,7 @@
 import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
-
 import useFromStore from "../../hooks/useFromStore";
-
 import SearchExampleStandard from "../Searchbar/Searchbar";
-
-// import { useState } from "react";
-// import { IconoUser } from "../IconoUser/IconoUser.tsx";
-// import iconoUser from "../../../public/images/iconoUser.svg";
-// import close from "../../../public/images/close.svg";
-// import config from "../../../public/images/configuracion.svg";
 import logo from "../../../public/images/logo.png";
 import { Product } from "@/types.d";
 import {
@@ -23,22 +15,29 @@ import { toast } from "sonner";
 import { MdFavoriteBorder } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 interface Props {
   onCartIconClick: () => void;
   products: Product[];
 }
 
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const { isSignedIn, user, isLoaded } = useUser();
+  const [userCountry, setUserCountry] = useState<string>("");
+
   const navigate = useNavigate();
-
-  // const [stateUser, setStateUser] = useState(false);
-
-  // const handleButtonUser = () => {
-  //   setStateUser((prevState) => !prevState);
-  //   // console.log(stateUser);
-  // };
   const promise = () =>
     new Promise((resolve) =>
       setTimeout(
@@ -47,6 +46,176 @@ export default function Header({ onCartIconClick }: Props) {
         1100
       )
     );
+
+  useEffect(() => {
+    const checkGeolocationPermission = async () => {
+      try {
+        const permission = await navigator.permissions.query({
+          name: "geolocation",
+        });
+        permission;
+      } catch (error) {
+        console.error("Error al verificar permiso de geolocalización:", error);
+      }
+    };
+
+    const getUserCountry = async () => {
+      try {
+        if (navigator.geolocation) {
+          const position = await new Promise<GeolocationPosition>(
+            (resolve, reject) => {
+              navigator.geolocation.getCurrentPosition(resolve, reject);
+            }
+          );
+
+          const response = await axios.get(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+          );
+
+          const country = response.data.address.country || "GLOBAL";
+          let userCountry = country;
+
+          switch (country) {
+            case "Argentina":
+              userCountry = "ARG";
+              break;
+            case "Bolivia":
+              userCountry = "BOL";
+              break;
+            case "Brasil":
+              userCountry = "BRA";
+              break;
+            case "Chile":
+              userCountry = "CHL";
+              break;
+            case "Colombia":
+              userCountry = "COL";
+              break;
+            case "Ecuador":
+              userCountry = "ECU";
+              break;
+            case "Paraguay":
+              userCountry = "PRY";
+              break;
+            case "Perú":
+              userCountry = "PER";
+              break;
+            case "Uruguay":
+              userCountry = "URY";
+              break;
+            case "Venezuela":
+              userCountry = "VEN";
+              break;
+            default:
+              userCountry = "GLOBAL";
+              break;
+          }
+          setUserCountry(userCountry);
+        } else {
+          setUserCountry("GLOBAL");
+        }
+      } catch (error) {
+        console.warn("Error obteniendo la ubicación del usuario:", error);
+        setUserCountry("GLOBAL");
+      }
+    };
+    checkGeolocationPermission();
+    getUserCountry();
+  }, []);
+
+  const registerUser = async () => {
+    if (
+      isSignedIn &&
+      user.primaryEmailAddress &&
+      user.primaryEmailAddress.emailAddress
+    ) {
+      const passTransform = `${user.id}${import.meta.env.VITE_USER_KEY}`;
+      const sliceKey = import.meta.env.VITE_PASS_SLICE;
+      const start = parseInt(sliceKey[0]);
+      const end = parseInt(sliceKey.slice(1));
+      const specialCharacters = "!@#$%^&*()";
+      hashPassword(passTransform).then((hashedPassword) => {
+        let trimmedPassword = hashedPassword.slice(start, end) || "";
+
+        // Ensure at least one uppercase character
+        const firstLowerIndex = trimmedPassword.search(/[a-z]/);
+        if (firstLowerIndex !== -1) {
+          trimmedPassword =
+            trimmedPassword.slice(0, firstLowerIndex) +
+            trimmedPassword[firstLowerIndex].toUpperCase() +
+            trimmedPassword.slice(firstLowerIndex + 1);
+        }
+
+        // Choose a special character based on the 'end' variable
+        const specialCharacterIndex = end % specialCharacters.length;
+        const specialCharacter = specialCharacters[specialCharacterIndex];
+        trimmedPassword += specialCharacter;
+        if (user.primaryEmailAddress && trimmedPassword) {
+          const userData = {
+            name: user.firstName,
+            lastname: user.lastName,
+            email: user.primaryEmailAddress.emailAddress,
+            country: userCountry,
+            password: trimmedPassword,
+            confirmPassword: trimmedPassword,
+          };
+          axios
+            .get("https://lachocoback.vercel.app/users")
+            .then((response) => {
+              const existingUser = response.data.find(
+                (existingUser: any) =>
+                  existingUser.email === user.primaryEmailAddress?.emailAddress
+              );
+              if (!existingUser) {
+                // Email does not exist, proceed with registration
+                axios
+                  .post(
+                    "https://lachocoback.vercel.app/users/register",
+                    userData
+                  )
+                  .then((response) => {
+                    response;
+                  })
+                  .catch((error) => {
+                    if (error.response) {
+                      if (
+                        error.response.status === 400 &&
+                        error.response.data.message ===
+                          "Password does not Match"
+                      ) {
+                        console.log(
+                          "Error: La contraseña no coincide con los requisitos del servidor."
+                        );
+                      } else if (
+                        error.response.status === 403 ||
+                        error.response.data.message === "User already exists"
+                      ) {
+                        console.log("User already exists");
+                      } else if (error.response.status === 409) {
+                        console.log("Ready!");
+                      } else {
+                        console.error("Error registering user:", error);
+                      }
+                    } else {
+                      console.error("Error registering user:", error);
+                    }
+                  });
+              } else {
+                // console.log("User already exists: ", user.firstName);
+              }
+            })
+            .catch((error) => {
+              console.error("Error checking existing users:", error);
+            });
+        }
+      });
+    }
+  };
+
+  // Call the registerUser function when needed
+  if (isSignedIn && isLoaded) {
+    registerUser();
+  }
   return (
     <header
       className=" 
@@ -68,7 +237,9 @@ export default function Header({ onCartIconClick }: Props) {
           <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-10">
-          <div className="relative  hidden md:block">
+          {isSignedIn == true &&
+          user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
+          isLoaded ? (
             <button
               type="button"
               title="Suscribete"
@@ -88,7 +259,8 @@ export default function Header({ onCartIconClick }: Props) {
             >
               ¡Suscribete!
             </button>
-          </div>
+          ) : null}
+          <div className="relative  hidden md:block"></div>
           <div className="relative  hidden md:block">
             <button
               type="button"
@@ -133,27 +305,6 @@ export default function Header({ onCartIconClick }: Props) {
               </button>
             </div>
           ) : null}
-          {/* <div className="hidden md:block">
-            {stateUser ? (
-              <button onClick={handleButtonUser}>
-                <img
-                  src={close}
-                  alt=""
-                  className="w-[25px] h-[25px] transition-all ease duration-100"
-                />
-              </button>
-            ) : (
-              <button onClick={handleButtonUser}>
-                <img src={iconoUser} alt="" className="w-[23px] h-[23px]" />
-              </button>
-            )}
-          </div> */}
-          {/* BOTON DE CONFIGURACION */}
-          {/* <div className="hidden md:block">
-            <button>
-              <img src={config} alt="" className="w-[30px] h-[30px]" />
-            </button>
-          </div> */}
           <div className="md:block hidden scale-125 hover:scale-150 transition-all ease">
             <SignedOut>
               <SignInButton />
@@ -162,11 +313,6 @@ export default function Header({ onCartIconClick }: Props) {
               <UserButton />
             </SignedIn>
           </div>
-          {/* {stateUser ? (
-            <div className="w-[300px] h-[100px] absolute mt-[150px] right-0 bg-gray-300 z-20 flex flex-col justify-evenly">
-              <IconoUser />
-            </div>
-          ) : null} */}
         </div>
       </nav>
     </header>

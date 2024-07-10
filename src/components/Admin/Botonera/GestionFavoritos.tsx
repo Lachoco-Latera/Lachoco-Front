@@ -1,16 +1,17 @@
+import { IFavorites, IGitfCards, IOrdersFavorites } from "@/helpers/type";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 export const GestionFavoritos = () => {
   const [editState, setEditState] = useState<boolean>(false);
-  const [userState, setUserState] = useState<any[]>([]);
+  const [userState, setUserState] = useState<IFavorites[]>([]);
 
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
     setEditState(!editState);
   };
 
-  const handleButtonDelete = (id: string) => {
+  const handleButtonDelete = (id: string | undefined) => {
     // Funcionalidad de eliminación aquí
     console.log(`Eliminar usuario con id: ${id}`);
   };
@@ -22,6 +23,7 @@ export const GestionFavoritos = () => {
           "https://lachocoback.vercel.app/users"
         );
         const data = response.data;
+        console.log(data, '<<<<<<<<<<<<<<<<<----- data getUser FAV')
         setUserState(data);
       } catch (error) {
         console.log(error);
@@ -81,7 +83,7 @@ export const GestionFavoritos = () => {
             Orders:
           </h3>
           <ul className="list-disc list-inside text-sm text-gray-600">
-            {user.orders.slice(0, 1).map((order: any) => (
+            {user.orders.slice(0, 1).map((order: IOrdersFavorites) => (
               <li key={order.id} className="mb-2">
                 <p>Order ID: {order.id}</p>
                 <p>Status: {order.status}</p>
@@ -101,7 +103,7 @@ export const GestionFavoritos = () => {
             Gift Cards:
           </h3>
           <ul className="list-disc list-inside text-sm text-gray-600">
-            {user.giftcards.slice(0, 1).map((giftcard: any) => (
+            {user.giftcards?.slice(0, 1).map((giftcard: IGitfCards) => (
               <li key={giftcard.id} className="mb-2">
                 <p>Code: {giftcard.code}</p>
                 <p>

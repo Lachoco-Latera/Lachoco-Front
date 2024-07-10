@@ -6,16 +6,17 @@ import Cart from "./components/minicart/Cart";
 import { useProductsStore } from "./stores/useProductsStore";
 import ProductsGridAlt from "./components/Products/ProductsGridAlt";
 import "semantic-ui-css/semantic.min.css";
-// import { Login } from "./components/Login/Login";
-// import { Register } from "./components/Register/Register";
-// import { UserConfig } from "./components/UserConfig/UserConfig";
 import { Footer } from "./components/Footer/Footer";
 import Categories from "./components/Categories/Categories";
 import BottomBar from "./components/BottomBar/BottomBar";
+import "./index.css"; // Añade esta línea para los estilos CSS del loading
+import { useUser } from "@clerk/clerk-react";
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const { isLoaded } = useUser();
 
   const { fetchData } = useProductsStore();
 
@@ -46,18 +47,33 @@ function App() {
       }
     };
 
-    fetchProducts();
-    fetchCategories();
-  }, []);
+    const fetchData = async () => {
+      await Promise.all([fetchProducts(), fetchCategories()]);
+      if (isLoaded) {
+        setLoading(false); // Desactivar el loading después de cargar los datos y verificar isLoaded
+      }
+    };
+    fetchData();
+  }, [isLoaded]); // Añade isLoaded como dependencia del useEffect
 
   const handleCartIconClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
+
   const handleCartIconClickAlt = () => {
     return isDrawerOpen === false
       ? setIsDrawerOpen(!isDrawerOpen)
       : setIsDrawerOpen(isDrawerOpen);
   };
+
+  if (loading || !isLoaded) {
+    return (
+      <div className="loading-overlay">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Header onCartIconClick={handleCartIconClick} products={products} />

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { GestionOrdenCompra } from "./Botonera/GestionOrdenCompra";
 import { GestionFavoritos } from "./Botonera/GestionFavoritos";
 import { GestionRedesSociales } from "./Botonera/GestionRedesSociales";
-import { GestionImgProductos } from "./Botonera/GestionImgProductos";
+import { GestionProductos } from "./Botonera/GestionProductos";
 import { GestionReviwsCalif } from "./Botonera/GestionReviwsCalif";
 import { GestionCuponesDesc } from "./Botonera/GestionCuponesDesc";
 import { GestionSaboresDisponibles } from "./Botonera/GestionSaboresDisponibles";
@@ -26,7 +26,7 @@ const buttonConfig = [
   {
     label: "Gestión Productos",
     state: "gestionImgProductos",
-    component: <GestionImgProductos />,
+    component: <GestionProductos />,
   },
   {
     label: "Gestión de Órdenes",

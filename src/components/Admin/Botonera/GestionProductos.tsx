@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import logo from "../../../../public/images/logo.png";
 
 export const GestionProductos = () => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -37,7 +38,7 @@ export const GestionProductos = () => {
     };
     getOrders();
   }, []);
-
+  console.log(orderState);
   return (
     <div className="w-full flex flex-row flex-wrap gap-4 px-4 py-8 justify-center items-center">
       {editState && (
@@ -78,6 +79,15 @@ export const GestionProductos = () => {
           <h2 className="font-bold text-lg text-gray-800 text-center">
             {order.name}
           </h2>
+          {order.images.length > 0 ? (
+            <div className=" self-center">
+              <img src={order.images[0].img} alt="" className="w-36" />
+            </div>
+          ) : (
+            <div className=" self-center">
+              <img src={logo} alt="" className="w-36" />
+            </div>
+          )}
           <p className="text-sm text-gray-600 text-center">
             {order.description}
           </p>

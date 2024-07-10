@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import { GestionarCarrito } from "./Botonera/GestionarCarrito";
 import { GestionOrdenCompra } from "./Botonera/GestionOrdenCompra";
 import { GestionFavoritos } from "./Botonera/GestionFavoritos";
 import { GestionRedesSociales } from "./Botonera/GestionRedesSociales";
@@ -17,12 +16,8 @@ import {
 import Header from "../Header/Header";
 import { products } from "../../mocks/data";
 import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
+
 const buttonConfig = [
-  // {
-  //   label: "Carritos de Compra",
-  //   state: "gestionCarrito",
-  //   component: <GestionarCarrito />,
-  // },
   {
     label: "Gestión Sabores",
     state: "gestionSaboresDisponibles",
@@ -53,7 +48,6 @@ const buttonConfig = [
     state: "gestionReviwsCalif",
     component: <GestionReviwsCalif />,
   },
-
   {
     label: "Redes Sociales",
     state: "gestionRedesSociales",
@@ -69,10 +63,12 @@ const buttonConfig = [
 export const Admin = () => {
   const [state, setState] = useState<string>();
   const [selectedOption, setSelectedOption] = useState<string>(""); // Estado para almacenar la opción seleccionada
-
+  const [showExtraButtons, setShowExtraButtons] = useState<boolean>(false); // Estado para mostrar los botones adicionales
+  setSelectedOption;
   const handleButton = (prop: string) => {
     setState(prop);
   };
+
   function handleActionButtonClick(): void {
     switch (selectedOption) {
       case "añadir":
@@ -88,7 +84,9 @@ export const Admin = () => {
         // Puedes manejar un caso por defecto si es necesario
         break;
     }
+    setShowExtraButtons(!showExtraButtons); // Alterna la visibilidad de los botones adicionales
   }
+
   function handleCartIconClick(): void {
     throw new Error("Function not implemented.");
   }
@@ -107,6 +105,7 @@ export const Admin = () => {
     console.log("Acción: Buscar");
     // Implementa aquí la lógica para la acción de buscar
   }
+
   function getIconAndColor(): { icon: JSX.Element; color: string } {
     switch (selectedOption) {
       case "añadir":
@@ -146,25 +145,42 @@ export const Admin = () => {
 
       {/* Selector de opciones */}
       <div className="fixed bottom-4 right-4 flex flex-col gap-2">
-        <select
-          className={`bg-white hover:bg-${color}-400 text-${color}-500 font-bold py-2 px-4 rounded-full shadow-xl`}
-          value={selectedOption}
-          onChange={(e) => setSelectedOption(e.target.value)}
-        >
-          <option value="">Seleccione una opción</option>
-          <option value="añadir">Añadir</option>
-          <option value="eliminar">Eliminar</option>
-          <option value="buscar">Buscar</option>
-        </select>
-
         {/* Botón de acción */}
         <button
-          className={`bg-white hover:text-white hover:bg-${color}-600 text-${color}-500 transition-all ease hover:scale-105 p-4 rounded-full shadow-xl drop-shadow-2xl`}
+          className={`bg-white hover:text-white 
+            hover:bg-${color}-600 text-${color}-500 
+            transition-all ease hover:scale-105 p-4 
+            rounded-full shadow-xl drop-shadow-2xl
+            hover:cursor-pointer`}
           onClick={handleActionButtonClick}
-          disabled={!selectedOption} // Deshabilita el botón si no hay opción seleccionada
+          // disabled={!selectedOption} // Deshabilita el botón si no hay opción seleccionada
         >
           {icon}
         </button>
+
+        {/* Botones adicionales */}
+        {showExtraButtons && (
+          <div className="flex flex-col gap-2 absolute bottom-16">
+            <button
+              className={`bg-green-500 text-white hover:bg-white hover:text-green-500 p-4 rounded-full shadow-xl transition-all ease hover:scale-105`}
+              onClick={() => console.log("Extra Button 1 Clicked")}
+            >
+              <AiOutlinePlus size={24} />
+            </button>
+            <button
+              className={`bg-red-500 text-white hover:bg-white hover:text-red-500 p-4 rounded-full shadow-xl transition-all ease hover:scale-105`}
+              onClick={() => console.log("Extra Button 2 Clicked")}
+            >
+              <AiOutlineDelete size={24} />
+            </button>
+            <button
+              className={`bg-blue-500 text-white hover:bg-white hover:text-blue-500 p-4 rounded-full shadow-xl transition-all ease hover:scale-105`}
+              onClick={() => console.log("Extra Button 3 Clicked")}
+            >
+              <AiOutlineSearch size={24} />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Barra inferior en dispositivos móviles */}

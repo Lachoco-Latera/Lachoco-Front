@@ -17,42 +17,14 @@ const Checkout = ({
   const addToCart = useCartStore((state) => state.addToCart);
   console.log(productName);
   const isCartItem = cart.some((item) => item.id === id);
-  // const promise = () =>
-  //   new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       const hasBombones = cart.some(
-  //         (item) => item.category.name === "bombones"
-  //       );
-
-  //       if (
-  //         hasBombones &&
-  //         confirmedFlavors !== flavorQuantity &&
-  //         productCategory === "bombones"
-  //       ) {
-  //         reject("Debes seleccionar sabores para los bombones.");
-  //       } else {
-  //         resolve((window.location.href = "https://www.mercadopago.com.ar"));
-  //       }
-  //     }, 1100);
-  //   });
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-
     if (!isCartItem) {
-      // Si el producto no está en el carrito, lo añadimos
       addToCart(product);
     }
-    // Después de agregar al carrito, abre el modal o realiza alguna otra acción
     openModal();
   };
-  // const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.stopPropagation();
-  //   toast.promise(promise, {
-  //     loading: `Serás redireccionado para pagar ${productName}...`,
-  //     success: "¡Muchas gracias de antemano! ❤",
-  //     error: "Debes seleccionar sabores para los bombones.",
-  //   });
-  // };
+
   return (
     <div
       className="

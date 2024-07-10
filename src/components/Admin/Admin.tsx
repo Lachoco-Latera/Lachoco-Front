@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GestionOrdenCompra } from "./Botonera/GestionOrdenCompra";
 import { GestionFavoritos } from "./Botonera/GestionFavoritos";
 import { GestionRedesSociales } from "./Botonera/GestionRedesSociales";
@@ -20,10 +20,11 @@ import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
 
 export const Admin = () => {
   const [state, setState] = useState<string>();
-  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [selectedOption] = useState<string>("");
   const [showExtraButtons, setShowExtraButtons] = useState<boolean>(false);
   const [, setRefreshFlavors] = useState(false);
-  const [signal, setSignal] = useState(false); // Nuevo estado para la señal
+  const [signal, setSignal] = useState(false);
+  const [loading, setLoading] = useState(false); // Estado de carga
 
   const buttonConfig = [
     {
@@ -34,7 +35,7 @@ export const Admin = () => {
           signal={signal}
           onCloseModal={() => setSignal(false)}
         />
-      ), // Pasa la señal como prop
+      ),
     },
     {
       label: "Gestión Productos",
@@ -107,10 +108,17 @@ export const Admin = () => {
       ),
     },
   ];
-  setSelectedOption;
+
   const handleButton = (prop: string) => {
-    setState(prop);
+    if (prop !== state) {
+      setState(prop);
+      setLoading(true); // Activa el estado de carga al seleccionar un nuevo buttonConfig
+    }
   };
+
+  useEffect(() => {
+    setLoading(false); // Desactiva el estado de carga después de renderizar
+  }, [state]); // Añade state como dependencia del useEffect
 
   function handleActionButtonClick(): void {
     switch (selectedOption) {
@@ -156,6 +164,12 @@ export const Admin = () => {
   return (
     <>
       <Header onCartIconClick={handleCartIconClick} products={products} />
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+        </div>
+      )}
+
       <div className="w-full min-h-screen">
         <div className="w-full bg-white shadow-xl p-4 flex flex-wrap justify-evenly items-center">
           {buttonConfig?.map((button) => (

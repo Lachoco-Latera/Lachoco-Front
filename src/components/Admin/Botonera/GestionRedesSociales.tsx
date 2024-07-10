@@ -15,7 +15,6 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
     url: "",
     img: "",
   });
-  console.log(formState, "<<<<<<<----- form state");
   const [formEditState, setFormEditState] = useState<IRedes>({
     url: "",
     img: "",
@@ -61,10 +60,10 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
     });
   };
 
-  const handleAdd = (event: React.MouseEvent) => {
-    event.preventDefault();
-    setAddState(!addState);
-  };
+  // const handleAdd = (event: React.MouseEvent) => {
+  //   event.preventDefault();
+  //   setAddState(!addState);
+  // };
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -117,10 +116,7 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
             toast.dismiss(alertId);
             try {
               const postForm = await postRedes(formState);
-              console.log(
-                postForm,
-                "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<---- PPPPPPP"
-              );
+              postForm;
               setAddState(!addState);
             } catch (error) {
               console.log(error);
@@ -144,7 +140,7 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
             toast.dismiss(alertId);
             try {
               const putForm = await putRedes(formEditState);
-              console.log(putForm, "<<<<<-------------- data de putForm ");
+              putForm;
             } catch (error) {
               console.log(error);
             }
@@ -197,9 +193,6 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
             </div>{" "}
           </div>
         )}
-        {/* --------------------------------------------------------------------------------- */}
-        {/* F O R M U L A R I O  D E  E D I T A R */}
-        {/* --------------------------------------------------------------------------------- */}
         {editState === true ? (
           <form
             action=""
@@ -229,54 +222,41 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
           </form>
         ) : null}
         <div className="w-full flex justify-evenly items-center flex-wrap px-4 py-8 gap-4">
-          {data.length > 0 ? (
-            data.map((elem) => (
-              <div
-                className="w-[300px] min-h-[350px] flex flex-col
+          {data.length > 0
+            ? data.map((elem) => (
+                <div
+                  className="w-[300px] min-h-[350px] flex flex-col
           justify-evenly items-center bg-white p-4 
           rounded-xl shadow-xl hover:shadow-xl
           transition-all ease  
           hover:scale-105"
-                key={elem.id}
-              >
-                <p className="flex font-bold text-amber-300 text-center">
-                  {elem.url}
-                </p>
-                <p className="font-bold text-amber-300 text-center">
-                  <img src={elem.img} alt="" />
-                </p>
+                  key={elem.id}
+                >
+                  <p className="flex font-bold text-amber-300 text-center">
+                    {elem.url}
+                  </p>
+                  <p className="font-bold text-amber-300 text-center">
+                    <img src={elem.img} alt="" />
+                  </p>
 
-                <div className="w-full flex justify-center items-center">
-                  <button
-                    className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize hover:scale-105 transition-all ease"
-                    onClick={handleEdit}
-                  >
-                    editar
-                  </button>
-                  <button
-                    className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-red-500 hover:bg-red-900 hover:text-red-500 m-3 capitalize hover:scale-105 transition-all ease"
-                    onClick={() => handleDelete(elem.id)}
-                  >
-                    eliminar
-                  </button>
+                  <div className="w-full flex justify-center items-center">
+                    <button
+                      className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize hover:scale-105 transition-all ease"
+                      onClick={handleEdit}
+                    >
+                      editar
+                    </button>
+                    <button
+                      className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-red-500 hover:bg-red-900 hover:text-red-500 m-3 capitalize hover:scale-105 transition-all ease"
+                      onClick={() => handleDelete(elem.id)}
+                    >
+                      eliminar
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <button
-              className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-400 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize"
-              onClick={handleAdd}
-            >
-              agregar
-            </button>
-          )}
-        </div>{" "}
-        <button
-          className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-400 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize"
-          onClick={handleAdd}
-        >
-          agregar
-        </button>
+              ))
+            : null}
+        </div>
       </div>
     </>
   );

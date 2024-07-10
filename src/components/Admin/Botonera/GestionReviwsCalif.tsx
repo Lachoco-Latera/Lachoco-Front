@@ -4,7 +4,7 @@ import axios from "axios";
 export const GestionReviwsCalif = ({ signal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [products, setProducts] = useState<any[]>([]);
-
+  signal;
   useEffect(() => {
     const fetchProducts = async () => {
       try {

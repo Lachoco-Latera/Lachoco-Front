@@ -12,6 +12,7 @@ import {
   AiOutlineDelete,
   AiOutlineSearch,
 } from "react-icons/ai"; // Importa los íconos
+import { IoMenu } from "react-icons/io5";
 
 import Header from "../Header/Header";
 import { products } from "../../mocks/data";
@@ -77,9 +78,9 @@ export const Admin = () => {
       case "eliminar":
         handleDeleteAction();
         break;
-      case "buscar":
-        handleSearchAction();
-        break;
+      // case "buscar":
+      //   handleSearchAction();
+      //   break;
       default:
         // Puedes manejar un caso por defecto si es necesario
         break;
@@ -101,10 +102,10 @@ export const Admin = () => {
     // Implementa aquí la lógica para la acción de eliminar
   }
 
-  function handleSearchAction(): void {
-    console.log("Acción: Buscar");
-    // Implementa aquí la lógica para la acción de buscar
-  }
+  // function handleSearchAction(): void {
+  //   console.log("Acción: Buscar");
+  //   // Implementa aquí la lógica para la acción de buscar
+  // }
 
   function getIconAndColor(): { icon: JSX.Element; color: string } {
     switch (selectedOption) {
@@ -115,7 +116,7 @@ export const Admin = () => {
       case "buscar":
         return { icon: <AiOutlineSearch size={24} />, color: "rose" };
       default:
-        return { icon: <AiOutlinePlus size={24} />, color: "rose" }; // Valor por defecto
+        return { icon: <IoMenu size={24} />, color: "rose" }; // Valor por defecto
     }
   }
 
@@ -144,10 +145,10 @@ export const Admin = () => {
       </div>
 
       {/* Selector de opciones */}
-      <div className="fixed bottom-4 right-4 flex flex-col gap-2">
+      <div className="fixed md:bottom-4 bottom-20  right-4 flex flex-col gap-2">
         {/* Botón de acción */}
         <button
-          className={`bg-white hover:text-white 
+          className={`bg-white hover:text-rose-500 
             hover:bg-${color}-600 text-${color}-500 
             transition-all ease hover:scale-105 p-4 
             rounded-full shadow-xl drop-shadow-2xl
@@ -173,12 +174,12 @@ export const Admin = () => {
             >
               <AiOutlineDelete size={24} />
             </button>
-            <button
+            {/* <button
               className={`bg-blue-500 text-white hover:bg-white hover:text-blue-500 p-4 rounded-full shadow-xl transition-all ease hover:scale-105`}
               onClick={() => console.log("Extra Button 3 Clicked")}
             >
               <AiOutlineSearch size={24} />
-            </button>
+            </button> */}
           </div>
         )}
       </div>

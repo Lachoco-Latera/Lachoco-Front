@@ -1,11 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
 /*Cuidado*/
 * {
   user-select: none;
 }
+input:focus {
+  outline-width: 0;
+  transform: scale(1.05);
+  transition: all ease 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 /*Cuidado*/
 
 .products-grid {

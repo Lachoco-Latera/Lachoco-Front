@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-export const GestionPPyDatosEmpresa = () => {
+export const GestionPPyDatosEmpresa = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [products, setProducts] = useState<any[]>([]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (signal) {
+      setModalOpen(true);
+    }
+  }, [signal]);
+
+  const closeModal = () => {
+    setModalOpen(false);
+    onCloseModal();
+  };
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -23,24 +34,54 @@ export const GestionPPyDatosEmpresa = () => {
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
     setEditState(!editState);
+    setModalOpen(true);
   };
 
   return (
     <>
       <div className="w-full flex flex-wrap px-4 py-8 gap-4 justify-center items-center">
-        {editState === true ? (
-          <form
-            action=""
-            className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+        {modalOpen && (
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            onClick={closeModal}
           >
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-          </form>
-        ) : null}
-
+            <div
+              className="bg-white p-6 rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <form
+                action=""
+                className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  "
+              >
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="probando123"
+                  className="p-2 border rounded-md"
+                />
+              </form>
+            </div>
+          </div>
+        )}
         {products.map((product) => (
           <div
             key={product.id}

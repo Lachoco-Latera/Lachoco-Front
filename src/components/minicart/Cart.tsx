@@ -2,6 +2,7 @@ import CartItem from "./CartItem";
 import { useCartStore } from "../../stores/useCartStore";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors } = useCartStore();
@@ -65,16 +66,80 @@ function Cart({ similar }: any) {
   const promise = () =>
     new Promise((resolve, reject) => {
       setTimeout(() => {
-        const hasBombones = bombonesProducts.length > 0;
-        const flavorsCompleted = handleUpdateFlavors();
+        const order = {
+          userId: "27b817f0-3043-48a5-8ad4-d4e173f07765",
+          products: cart.map((product) => ({
+            productId: product.id,
+            cantidad: product.quantity,
+            flavors: product.flavors.map((flavor) => ({
+              flavorId: flavor.id,
+              cantidad: flavor.stock,
+            })),
+            pickedFlavors: confirmedFlavors[product.id] || [],
+          })),
+        };
 
-        if (hasBombones && !flavorsCompleted) {
+        const hasBombones = order.products.some(
+          (product) => product.flavors.length > 0
+        );
+
+        if (!hasBombones) {
           reject("Debes seleccionar sabores para los bombones.");
         } else {
           resolve((window.location.href = "/ship"));
         }
       }, 1100);
     });
+
+  const handlePlaceOrder = () => {
+    const order = {
+      userId: "27b817f0-3043-48a5-8ad4-d4e173f07765",
+      products: cart.map((product) => ({
+        productId: product.id,
+        cantidad: product.quantity,
+        flavors: product.flavors.map((flavor) => ({
+          flavorId: flavor.id,
+          cantidad: flavor.stock,
+        })),
+        pickedFlavors: confirmedFlavors[product.id] || [],
+      })),
+    };
+
+    axios
+      .post("https://lachocoback.vercel.app/orders", order)
+      .then((response) => {
+        toast.success("¡Orden creada exitosamente!");
+        console.log("Objeto order:", order);
+
+        window.location.href = "/ship";
+      })
+      .catch((error) => {
+        console.log("Objeto order:", order);
+
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error(
+            "Server responded with error status:",
+            error.response.status
+          );
+          console.error("Response data:", error.response.data);
+          toast.error(
+            "Error al crear la orden: " + error.response.data.message
+          );
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("No response received:", error.request);
+          toast.error(
+            "Error al crear la orden: No se recibió respuesta del servidor."
+          );
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error("Error setting up the request:", error.message);
+          toast.error("Error al crear la orden: " + error.message);
+        }
+      });
+  };
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
@@ -127,16 +192,10 @@ function Cart({ similar }: any) {
       ) : (
         <div className="flex rounded-xl p-2 mt-2 shadow justify-center hover:bg-green-500 hover:scale-105 transition-all ease">
           <button
-            onClick={() =>
-              toast.promise(promise, {
-                loading: `Serás redireccionado para pagar...`,
-                success: "¡Muchas gracias de antemano! ❤",
-                error: "Debes seleccionar sabores para los bombones.",
-              })
-            }
+            onClick={handlePlaceOrder}
             className="text-xl text-green-500 hover:text-white font-bold"
           >
-            Calcular envio y total
+            Calcular envio
           </button>
         </div>
       )}

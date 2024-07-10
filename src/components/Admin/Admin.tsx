@@ -62,8 +62,8 @@ const buttonConfig = [
 
 export const Admin = () => {
   const [state, setState] = useState<string>();
-  const [selectedOption, setSelectedOption] = useState<string>(""); // Estado para almacenar la opción seleccionada
-  const [showExtraButtons, setShowExtraButtons] = useState<boolean>(false); // Estado para mostrar los botones adicionales
+  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [showExtraButtons, setShowExtraButtons] = useState<boolean>(false);
   setSelectedOption;
   const handleButton = (prop: string) => {
     setState(prop);

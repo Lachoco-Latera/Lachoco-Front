@@ -6,7 +6,7 @@ export const GestionProductos = () => {
   const [editState, setEditState] = useState<boolean>(false);
   const [addState, setAddState] = useState<boolean>(false);
   const [orderState, setOrderState] = useState<any[]>([]);
-  console.log(orderState)
+  console.log(orderState);
 
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -14,11 +14,11 @@ export const GestionProductos = () => {
   };
 
   const handleAdd = (event: React.MouseEvent) => {
-    event.preventDefault()
-    setAddState(!addState)
-    console.log('boton agregar')
-  }
-
+    event.preventDefault();
+    setAddState(!addState);
+    console.log("boton agregar");
+  };
+  handleAdd;
   const handleButtonDelete = (id: string) => {
     // Funcionalidad de eliminación aquí
     console.log(`Eliminar producto con id: ${id}`);
@@ -70,7 +70,6 @@ export const GestionProductos = () => {
           />
         </form>
       )}
-      <button className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-400 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize" onClick={handleAdd}>agregar</button>
       {orderState.map((order) => (
         <div
           key={order.id}

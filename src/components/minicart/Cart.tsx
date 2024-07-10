@@ -96,10 +96,10 @@ function Cart({ similar }: any) {
       userId: "27b817f0-3043-48a5-8ad4-d4e173f07765",
       products: cart.map((product) => ({
         productId: product.id,
-        cantidad: product.quantity,
+        cantidad: 1,
         flavors: product.flavors.map((flavor) => ({
           flavorId: flavor.id,
-          cantidad: flavor.stock,
+          cantidad: 1
         })),
         pickedFlavors: confirmedFlavors[product.id] || [],
       })),

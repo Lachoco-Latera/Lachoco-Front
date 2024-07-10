@@ -1,9 +1,14 @@
-import { deleteRed, getRedes, postRedes, putRedes } from "../../../helpers/service";
+import {
+  deleteRed,
+  getRedes,
+  postRedes,
+  putRedes,
+} from "../../../helpers/service";
 import { IRedes } from "@/helpers/type";
 import React, { useEffect, useState } from "react";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 
-export const GestionRedesSociales = ({ signal }: any) => {
+export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [addState, setAddState] = useState<boolean>(false);
   const [formState, setFormState] = useState<IRedes>({
@@ -17,7 +22,18 @@ export const GestionRedesSociales = ({ signal }: any) => {
   });
   const [data, setData] = useState<IRedes[]>([]);
   signal;
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (signal) {
+      setModalOpen(true);
+    }
+  }, [signal]);
+
+  const closeModal = () => {
+    setModalOpen(false);
+    onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
+  };
   useEffect(() => {
     const dataGet = async () => {
       try {
@@ -32,7 +48,7 @@ export const GestionRedesSociales = ({ signal }: any) => {
 
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
-
+    setModalOpen(true);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const alertId: any = toast("Deceas editar esta red social?", {
       duration: 5000,
@@ -143,34 +159,44 @@ export const GestionRedesSociales = ({ signal }: any) => {
   return (
     <>
       <div className="w-full flex flex-col justify-center items-center">
-        {addState === true ? (
-          <form
-            action=""
-            onSubmit={handleOnSubmit}
-            className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+        {modalOpen && (
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            onClick={closeModal}
           >
-            <h2>Agregar nueva red social</h2>
-            <input
-              type="text"
-              placeholder="url"
-              name="url"
-              value={formState.url}
-              onChange={handleOnChange}
-              className="w-2/3 p-2 rounded-md border-2 border-gray-300"
-            />
-            <input
-              type="text"
-              placeholder="img"
-              name="img"
-              value={formState.img}
-              onChange={handleOnChange}
-              className="w-2/3 p-2 rounded-md border-2 border-gray-300"
-            />
-            <button className="w-2/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-400 bg-green-500 hover:bg-green-900 hover:text-green-500 m-3 capitalize">
-              Agregar
-            </button>
-          </form>
-        ) : null}
+            <div
+              className="bg-white p-6 rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <form
+                action=""
+                onSubmit={handleOnSubmit}
+                className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+              >
+                <h2>Agregar nueva red social</h2>
+                <input
+                  type="text"
+                  placeholder="url"
+                  name="url"
+                  value={formState.url}
+                  onChange={handleOnChange}
+                  className="w-2/3 p-2 rounded-md border-2 border-gray-300"
+                />
+                <input
+                  type="text"
+                  placeholder="img"
+                  name="img"
+                  value={formState.img}
+                  onChange={handleOnChange}
+                  className="w-2/3 p-2 rounded-md border-2 border-gray-300"
+                />
+                <button className="w-2/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-400 bg-green-500 hover:bg-green-900 hover:text-green-500 m-3 capitalize">
+                  Agregar
+                </button>
+              </form>
+            </div>{" "}
+          </div>
+        )}
         {/* --------------------------------------------------------------------------------- */}
         {/* F O R M U L A R I O  D E  E D I T A R */}
         {/* --------------------------------------------------------------------------------- */}

@@ -1,16 +1,27 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export const GestionCuponesDesc = ({ signal }: any) => {
+export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [giftcardsState, setGiftcardsState] = useState<any[]>([]);
   signal;
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
     setEditState(!editState);
+    setModalOpen(true); 
   };
+  useEffect(() => {
+    if (signal) {
+      setModalOpen(true);
+    }
+  }, [signal]);
 
+  const closeModal = () => {
+    setModalOpen(false);
+    onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
+  };
   useEffect(() => {
     const getGiftcards = async () => {
       try {
@@ -28,34 +39,44 @@ export const GestionCuponesDesc = ({ signal }: any) => {
 
   return (
     <div className="w-full flex flex-wrap justify-center items-center px-4 py-8 gap-4">
-      {editState && (
-        <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-green-400 p-4 rounded-lg shadow-lg">
-          <input
-            type="text"
-            placeholder="probando123"
-            className="p-2 border rounded-md mb-2"
-          />
-          <input
-            type="text"
-            placeholder="probando123"
-            className="p-2 border rounded-md mb-2"
-          />
-          <input
-            type="text"
-            placeholder="probando123"
-            className="p-2 border rounded-md mb-2"
-          />
-          <input
-            type="text"
-            placeholder="probando123"
-            className="p-2 border rounded-md mb-2"
-          />
-          <input
-            type="text"
-            placeholder="probando123"
-            className="p-2 border rounded-md mb-2"
-          />
-        </form>
+      {modalOpen && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white p-6 rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-green-400 p-4 rounded-lg shadow-lg">
+              <input
+                type="text"
+                placeholder="probando123"
+                className="p-2 border rounded-md mb-2"
+              />
+              <input
+                type="text"
+                placeholder="probando123"
+                className="p-2 border rounded-md mb-2"
+              />
+              <input
+                type="text"
+                placeholder="probando123"
+                className="p-2 border rounded-md mb-2"
+              />
+              <input
+                type="text"
+                placeholder="probando123"
+                className="p-2 border rounded-md mb-2"
+              />
+              <input
+                type="text"
+                placeholder="probando123"
+                className="p-2 border rounded-md mb-2"
+              />
+            </form>
+          </div>
+        </div>
       )}
 
       {giftcardsState.map((giftcard) => (

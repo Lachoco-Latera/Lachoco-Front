@@ -94,35 +94,6 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       )}
 
       <div className="w-full flex flex-row flex-wrap gap-4 px-4 py-8 justify-center items-center">
-        {editState && (
-          <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500">
-            <input
-              type="text"
-              placeholder="probando123"
-              className="p-2 border rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="probando123"
-              className="p-2 border rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="probando123"
-              className="p-2 border rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="probando123"
-              className="p-2 border rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="probando123"
-              className="p-2 border rounded-md"
-            />
-          </form>
-        )}
         {orderState.map((order) => (
           <div
             key={order.id}

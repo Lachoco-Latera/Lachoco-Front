@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-export const GestionReviwsCalif = ({ signal }: any) => {
+export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [products, setProducts] = useState<any[]>([]);
-  signal;
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (signal) {
+      setModalOpen(true);
+    }
+  }, [signal]);
+
+  const closeModal = () => {
+    setModalOpen(false);
+    onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
+  };
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -23,6 +34,7 @@ export const GestionReviwsCalif = ({ signal }: any) => {
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
     setEditState(!editState);
+    setModalOpen(true);
   };
 
   const handleDelete = async (productId: string) => {
@@ -43,18 +55,28 @@ export const GestionReviwsCalif = ({ signal }: any) => {
   return (
     <>
       <div className="w-full flex flex-wrap justify-center items-center px-4 py-8 gap-4">
-        {editState === true ? (
-          <form
-            action=""
-            className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+        {modalOpen && (
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            onClick={closeModal}
           >
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-          </form>
-        ) : null}
+            <div
+              className="bg-white p-6 rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <form
+                action=""
+                className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+              >
+                <input type="text" placeholder="probando123" />
+                <input type="text" placeholder="probando123" />
+                <input type="text" placeholder="probando123" />
+                <input type="text" placeholder="probando123" />
+                <input type="text" placeholder="probando123" />
+              </form>
+            </div>{" "}
+          </div>
+        )}
 
         {products.map((product) => (
           <div

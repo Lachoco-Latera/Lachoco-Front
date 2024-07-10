@@ -24,8 +24,8 @@ export const Admin = () => {
   const [showExtraButtons, setShowExtraButtons] = useState<boolean>(false);
   const [, setRefreshFlavors] = useState(false);
   const [signal, setSignal] = useState(false);
-  const [loading, setLoading] = useState(false); // Estado de carga
-
+  const [loading, setLoading] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(false);
   const buttonConfig = [
     {
       label: "Gestión Sabores",
@@ -34,6 +34,7 @@ export const Admin = () => {
         <GestionSaboresDisponibles
           signal={signal}
           onCloseModal={() => setSignal(false)}
+          deleteItem={deleteItem}
         />
       ),
     },
@@ -144,7 +145,7 @@ export const Admin = () => {
   }
 
   function handleDeleteAction(): void {
-    console.log("Acción: Eliminar");
+    setDeleteItem((prev) => !prev); // Enviar señal para el console.log
   }
 
   function getIconAndColor(): { icon: JSX.Element; color: string } {
@@ -159,7 +160,7 @@ export const Admin = () => {
         return { icon: <IoMenu size={24} />, color: "rose" }; // Valor por defecto
     }
   }
-
+  
   const { icon, color } = getIconAndColor();
   return (
     <>
@@ -169,7 +170,6 @@ export const Admin = () => {
           <div className="loading-spinner"></div>
         </div>
       )}
-
       <div className="w-full min-h-screen">
         <div className="w-full bg-white shadow-xl p-4 flex flex-wrap justify-evenly items-center">
           {buttonConfig?.map((button) => (
@@ -187,7 +187,6 @@ export const Admin = () => {
         </div>
         {buttonConfig.find((button) => button.state === state)?.component}
       </div>
-
       <div className="fixed md:bottom-4 bottom-20  right-4 flex flex-col gap-2">
         <button
           className={`bg-white hover:text-rose-500 
@@ -218,6 +217,15 @@ export const Admin = () => {
         )}
       </div>
 
+
+      <div className="container">
+        <h2>Resources</h2>
+        <p>
+          <a href="https://github.com/colbyfayock/cloudinary-examples/tree/main/examples/react-upload-widget-preset">
+            See the code on github.com.
+          </a>
+        </p>
+      </div>
       <div className="block md:hidden">
         <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
       </div>

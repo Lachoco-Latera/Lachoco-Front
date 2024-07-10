@@ -99,7 +99,7 @@ function Cart({ similar }: any) {
         cantidad: 1,
         flavors: product.flavors.map((flavor) => ({
           flavorId: flavor.id,
-          cantidad: 1
+          cantidad: 1,
         })),
         pickedFlavors: confirmedFlavors[product.id] || [],
       })),
@@ -108,6 +108,7 @@ function Cart({ similar }: any) {
     axios
       .post("https://lachocoback.vercel.app/orders", order)
       .then((response) => {
+        response;
         toast.success("¡Orden creada exitosamente!");
         console.log("Objeto order:", order);
 

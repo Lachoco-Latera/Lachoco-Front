@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-export const GestionReviwsCalif = () => {
+export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [products, setProducts] = useState<any[]>([]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (signal) {
+      setModalOpen(true);
+    }
+  }, [signal]);
+
+  const closeModal = () => {
+    setModalOpen(false);
+    onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
+  };
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -23,6 +34,7 @@ export const GestionReviwsCalif = () => {
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
     setEditState(!editState);
+    setModalOpen(true);
   };
 
   const handleDelete = async (productId: string) => {
@@ -43,18 +55,28 @@ export const GestionReviwsCalif = () => {
   return (
     <>
       <div className="w-full flex flex-wrap justify-center items-center px-4 py-8 gap-4">
-        {editState === true ? (
-          <form
-            action=""
-            className="w-[500px] h-[300px] flex flex-col justify-evenly items-center bg-lime-500"
+        {modalOpen && (
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            onClick={closeModal}
           >
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-            <input type="text" placeholder="probando123" />
-          </form>
-        ) : null}
+            <div
+              className="bg-white p-6 rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <form
+                action=""
+                className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  "
+              >
+                <input type="text" placeholder="probando123" />
+                <input type="text" placeholder="probando123" />
+                <input type="text" placeholder="probando123" />
+                <input type="text" placeholder="probando123" />
+                <input type="text" placeholder="probando123" />
+              </form>
+            </div>{" "}
+          </div>
+        )}
 
         {products.map((product) => (
           <div
@@ -65,9 +87,7 @@ export const GestionReviwsCalif = () => {
           transition-all ease  
           hover:scale-105"
           >
-            <h2 className="font-bold    text-center">
-              Title: {product.name}
-            </h2>
+            <h2 className="font-bold    text-center">Title: {product.name}</h2>
             <p className="font-bold    text-center">
               Description: {product.description}
             </p>
@@ -77,9 +97,7 @@ export const GestionReviwsCalif = () => {
             <p className="font-bold    text-center">
               Category: {product.category.name}
             </p>
-            <p className="font-bold    text-center">
-              Stock: {product.stock}
-            </p>
+            <p className="font-bold    text-center">Stock: {product.stock}</p>
             <div className="w-full flex justify-center items-center">
               <button
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-1000 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize"

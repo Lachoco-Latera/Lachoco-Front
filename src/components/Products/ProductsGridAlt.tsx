@@ -63,7 +63,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                 axis="horizontal"
                 showArrows={true}
                 showThumbs={false}
-                showIndicators={true}
+                showIndicators={false}
                 showStatus={false}
                 infiniteLoop
                 swipeable={true}

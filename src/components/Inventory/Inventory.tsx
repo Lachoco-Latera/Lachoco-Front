@@ -22,7 +22,7 @@ const Inventory = ({ onCartIconClick }: any) => {
   const [modalProduct, setModalProduct] = useState<any | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [hoveredOrderId, setHoveredOrderId] = useState<string | null>(null); // Estado para almacenar el orderId del hover
-  const { user, isSignedIn } = useUser();
+  const { user, isSignedIn, isLoaded } = useUser();
   const addToCart = useCartStore((state) => state.addToCart);
 
   const navigate = useNavigate();
@@ -65,10 +65,6 @@ const Inventory = ({ onCartIconClick }: any) => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
-  const handleCartIconClickAlt = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
-
   const redirectToProductDetail = (productId: string) => {
     navigate(`/products/${productId}`);
   };
@@ -97,17 +93,25 @@ const Inventory = ({ onCartIconClick }: any) => {
     setHoveredOrderId(null);
   };
 
+  const loading = () => (
+    <div className="flex justify-center items-center h-96 text-xl text-gray-600">
+      Loading...
+    </div>
+  );
+
   return (
     <>
       <Header onCartIconClick={handleCartIconClick} products={info} />
       <div className="block md:hidden">
-        <BottomBar onCartIconClick={handleCartIconClickAlt} />
+        <BottomBar onCartIconClick={handleCartIconClick} />
       </div>
       <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
         <Cart similar={info} />
       </Drawer>
-      <div className="my-8 flex flex-col justify-center items-center">
-        {info && info.length > 0 ? (
+      {!isLoaded ? (
+        loading()
+      ) : info && info.length > 0 ? (
+        <div>
           <div className="products-grid">
             {products.map((product: any, index: any) => (
               <div
@@ -218,7 +222,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                             justify-center items-center drop-shadow 
                             text-black-400 font-bold text-lg py-1 
                             px-2 rounded-md -top-6 left-0 right-0
-                            mx-auto text-center z-10 transition-all ease"
+                             mx-auto text-center z-10 transition-all ease"
                           >
                             <span className="flex transition-all ease">
                               #
@@ -238,13 +242,50 @@ const Inventory = ({ onCartIconClick }: any) => {
               </div>
             ))}
           </div>
-        ) : (
-          <div className="flex justify-center items-center h-96 text-xl text-gray-600">
-            Parece que aún no has ordenado nada, de todas formas, ¡Muchas
-            Gracias!
-          </div>
-        )}
-      </div>
+
+          {showModal && (
+            <div
+              className="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-40"
+              onClick={closeModal}
+            >
+              <div
+                className="modal-content p-4 rounded-lg relative md:w-1/2 z-50 flex justify-center items-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Carousel
+                  axis="horizontal"
+                  showArrows={true}
+                  showThumbs={false}
+                  showIndicators={false}
+                  showStatus={false}
+                  infiniteLoop
+                  swipeable={true}
+                  emulateTouch
+                  useKeyboardArrows={true}
+                >
+                  {modalProduct?.images?.map((image: any, i: any) => {
+                    return (
+                      <div key={i}>
+                        <img
+                          alt={`Modal product image ${i + 1}`}
+                          src={image?.img || ""}
+                          className="object-cover rounded-lg"
+                        />
+                      </div>
+                    );
+                  })}
+                </Carousel>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex justify-center items-center h-96 text-xl text-gray-600">
+          {info && info.length === 0
+            ? "Parece que aún no has ordenado nada, de todas formas, ¡Muchas Gracias!"
+            : "Loading..."}
+        </div>
+      )}
     </>
   );
 };

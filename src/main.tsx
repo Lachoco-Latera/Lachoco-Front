@@ -6,6 +6,8 @@ import "./index.css";
 import { Toaster } from "sonner";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Favorites from "./components/Favorites/Favorites.tsx";
+import Inventory from "./components/Inventory/Inventory.tsx";
+
 import { ClerkProvider } from "@clerk/clerk-react";
 import Ship from "./components/Ship/Ship.tsx";
 import { Admin } from "./components/Admin/Admin.tsx";
@@ -24,6 +26,7 @@ const router = createBrowserRouter([
     element: <Products />,
   },
   { path: "/favorites", element: <Favorites /> },
+  { path: "/inventory", element: <Inventory /> },
   {
     path: "/ship",
     element: <Ship />,

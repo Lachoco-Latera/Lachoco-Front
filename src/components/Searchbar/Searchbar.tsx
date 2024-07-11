@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { GridColumn, Search, Grid } from "semantic-ui-react";
+import { GridColumn, Search, Grid, SearchProps } from "semantic-ui-react";
 import axios from "axios";
 
 const initialState = {
@@ -28,26 +28,25 @@ function SearchExampleStandard() {
   const [state, dispatch] = React.useReducer(exampleReducer, initialState);
   const { loading, results, value } = state;
   const [products, setProducts] = useState([]);
-  const timeoutRef: any = React.useRef();
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
 
   const handleSearchChange = React.useCallback(
-    //@ts-ignore
-    (e: any, data: any) => {
+    (e: React.SyntheticEvent, data: SearchProps) => {
       clearTimeout(timeoutRef.current);
-      dispatch({ type: "START_SEARCH", query: data.value });
+      dispatch({ type: "START_SEARCH", query: data.value || "" });
       timeoutRef.current = setTimeout(() => {
-        if (data.value.length === 0) {
+        if (data.value && data.value.length === 0) {
           dispatch({ type: "CLEAN_QUERY" });
           return;
         }
 
-        const searchTerm = data.value.trim();
+        const searchTerm = data.value?.trim() || "";
         const isNumber = /^\d+(\.\d+)?$/.test(searchTerm);
         const re = new RegExp(_.escapeRegExp(searchTerm), "i");
 
         let filteredResults = _.filter(products, (result: any) => {
           if (isNumber) {
-            return re.test(result.price);
+            return re.test(result.price.toString());
           } else {
             return re.test(result.name) || re.test(result.description);
           }
@@ -93,7 +92,6 @@ function SearchExampleStandard() {
           ...product,
         }));
         setProducts(productsWithCategory);
-        console.log(response);
       } catch (err) {
         console.error(err);
       }
@@ -108,7 +106,7 @@ function SearchExampleStandard() {
           fluid
           category
           loading={loading}
-          placeholder="¿Qué quieres probar?" //@ts-ignore
+          placeholder="¿Qué quieres probar?"
           onResultSelect={(e, data) => {
             dispatch({
               type: "UPDATE_SELECTION",

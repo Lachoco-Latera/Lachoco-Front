@@ -1,9 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { IFavorites, IGitfCards, IOrdersFavorites } from "@/helpers/type";
+import { toast } from "sonner";
 
 export const GestionFavoritos = ({ signal, onCloseModal }: any) => {
-  const [editState, setEditState] = useState<boolean>(false);
+  const [editFormState, setEditFormState] = useState<IFavorites>({
+    id: '',
+    name: '',
+    lastname: '',
+    email: '',
+    country: '',
+    role: '',
+    isActive: false,
+    orders: [],
+    giftcards: []
+  });
   const [userState, setUserState] = useState<IFavorites[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -18,21 +30,72 @@ export const GestionFavoritos = ({ signal, onCloseModal }: any) => {
     onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
   };
 
-  const handleEdit = (event: React.MouseEvent) => {
+  const handleEdit = (event: React.MouseEvent, userId: string | undefined) => {
     event.preventDefault();
-    setEditState(!editState);
-    setModalOpen(true); // Abrir el modal al hacer clic en editar
+    const alertId = toast("¿Estas seguro de editar?", {
+      duration: 5000,
+      action: {
+        label: "Aceptar",
+        onClick: async () => {
+          toast.dismiss(alertId);
+          try {
+            const userToEdit = userState.find(user => user.id === userId);
+            if (userToEdit) {
+              setEditFormState(userToEdit);
+            }
+            setModalOpen(true); // Abrir el modal al hacer clic en editar
+          } catch (error) {
+            console.log(error);
+          }
+        },
+      },
+    });
   };
 
+  const handleOnSubmitEdit = (event: React.FormEvent) => {
+    event.preventDefault()
+    const alertId = toast("¿Estas seguro de editar?", {
+      duration: 5000,
+      action: {
+        label: "Aceptar",
+        onClick: async () => {
+          toast.dismiss(alertId);
+          try {
+            // ACA VA LA LOGICA PARA HACER LA SOLICITUD AL BACK
+            setModalOpen(false); // cerrar el modal al hacer clic en editar
+            console.log('DATOS EDITADOS CON EXITOOOO WEY')
+            toast.success ('Datos editados correctamente',{
+              duration: 5000,
+            } )
+          } catch (error) {
+            console.log(error);
+          }
+        },
+      },
+    });
+  }
+
   const handleButtonDelete = async (id: string | undefined) => {
-    try {
-      // Aquí se debería agregar la lógica para eliminar el usuario usando su ID
-      console.log(`Eliminar usuario con id: ${id}`);
-      // Simulando eliminación
-      setUserState(userState.filter((user) => user.id !== id));
-    } catch (error) {
-      console.log(error);
-    }
+    const alertId = toast("¿Estas seguro de eliminar?", {
+      duration: 5000,
+      action: {
+        label: "Aceptar",
+        onClick: async () => {
+          toast.dismiss(alertId);
+          try {
+            // Aquí se debería agregar la lógica para eliminar el usuario usando su ID
+            console.log(`Eliminar usuario con id: ${id}`);
+            // Simulando eliminación
+            setUserState(userState.filter((user) => user.id !== id));
+            toast.success ('La eliminacion se realizo con éxito',{
+              duration: 5000,
+            } )
+          } catch (error) {
+            console.log(error);
+          }
+        },
+      },
+    });
   };
 
   useEffect(() => {
@@ -50,6 +113,14 @@ export const GestionFavoritos = ({ signal, onCloseModal }: any) => {
     getUsers();
   }, []);
 
+  const handleOnChangeEdit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setEditFormState({
+      ...editFormState,
+      [name]: value,
+    });
+  };
+
   return (
     <>
       {modalOpen && (
@@ -61,32 +132,60 @@ export const GestionFavoritos = ({ signal, onCloseModal }: any) => {
             className="bg-white p-6 rounded-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  ">
+            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  " onSubmit={handleOnSubmitEdit}>
               <input
                 type="text"
-                placeholder="probando123"
+                name="name"
+                value={editFormState.name}
+                placeholder="Nombre"
                 className="p-2 border rounded-md"
+                onChange={handleOnChangeEdit}
               />
               <input
                 type="text"
-                placeholder="probando123"
+                name="lastname"
+                value={editFormState.lastname}
+                placeholder="Apellido"
                 className="p-2 border rounded-md"
+                onChange={handleOnChangeEdit}
               />
               <input
                 type="text"
-                placeholder="probando123"
+                name="email"
+                value={editFormState.email}
+                placeholder="Correo Electrónico"
                 className="p-2 border rounded-md"
+                onChange={handleOnChangeEdit}
               />
               <input
                 type="text"
-                placeholder="probando123"
+                name="country"
+                value={editFormState.country}
+                placeholder="País"
                 className="p-2 border rounded-md"
+                onChange={handleOnChangeEdit}
               />
               <input
                 type="text"
-                placeholder="probando123"
+                name="role"
+                value={editFormState.role}
+                placeholder="Rol"
                 className="p-2 border rounded-md"
+                onChange={handleOnChangeEdit}
               />
+              <input
+                type="checkbox"
+                name="isActive"
+                checked={editFormState.isActive}
+                onChange={(event) => setEditFormState({
+                  ...editFormState,
+                  isActive: event.target.checked
+                })}
+              />
+              <label>Active</label>
+              <button className="w-2/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-green-500 hover:bg-green-900 hover:text-green-500 m-3 capitalize hover:scale-105 transition-all ease">
+                Guardar Cambios
+              </button>
             </form>
           </div>
         </div>
@@ -154,7 +253,7 @@ export const GestionFavoritos = ({ signal, onCloseModal }: any) => {
             <div className="flex justify-center items-center mt-4">
               <button
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize transition-all duration-400 ease-in-out transform hover:scale-105"
-                onClick={handleEdit}
+                onClick={(event) => handleEdit(event, user.id)}
               >
                 Editar
               </button>

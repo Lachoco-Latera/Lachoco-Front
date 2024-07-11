@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   deleteRed,
   getRedes,
@@ -10,7 +11,6 @@ import { toast } from "sonner";
 
 export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
-  const [addState, setAddState] = useState<boolean>(false);
   const [formState, setFormState] = useState<IRedes>({
     url: "",
     img: "",
@@ -47,23 +47,26 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
 
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
-    setModalOpen(true);
+   
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const alertId: any = toast("Deceas editar esta red social?", {
+    const alertId = toast("¿Deseas editar la orden seleccionada?", {
       duration: 5000,
       action: {
         label: "Aceptar",
-        onClick: () => {
-          toast.dismiss(alertId), setEditState(!editState);
+        onClick: async () => {
+          toast.dismiss(alertId);
+          try {
+            // Aquí se debería agregar la lógica para eliminar la orden usando su ID
+           //
+           setModalOpen(true);
+           setEditState(!editState)
+          } catch (error) {
+            console.log(error);
+          }
         },
       },
     });
   };
-
-  // const handleAdd = (event: React.MouseEvent) => {
-  //   event.preventDefault();
-  //   setAddState(!addState);
-  // };
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -84,8 +87,8 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
 
   const handleDelete = async (id: string | undefined) => {
     try {
-      const alertId = toast("¿Deseas eliminar esta red social?", {
-        duration: 5000, // Mantiene la alerta abierta hasta que se haga clic en un botón
+      const alertId = toast("¿Deseas eliminar la red social seleccionada?", {
+        duration: Infinity, // Mantiene la alerta abierta hasta que se haga clic en un botón
         action: {
           label: "Aceptar",
           onClick: async () => {
@@ -93,6 +96,9 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
             try {
               const cardDelete = await deleteRed(id);
               console.log(cardDelete);
+              toast.success ('La orden se elimino correctamente',{
+                duration: 5000,
+              } )
             } catch (error) {
               console.log(error);
             }
@@ -106,7 +112,6 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
 
   const handleOnSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
     try {
       const alertId = toast("¿Deseas agregar esta red social?", {
         duration: Infinity, // Mantiene la alerta abierta hasta que se haga clic en un botón
@@ -117,7 +122,9 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
             try {
               const postForm = await postRedes(formState);
               postForm;
-              setAddState(!addState);
+              toast.success ('La orden se agrego correctamente',{
+                duration: 5000,
+              } )
             } catch (error) {
               console.log(error);
             }

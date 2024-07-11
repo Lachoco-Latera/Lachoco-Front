@@ -64,6 +64,9 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
             console.log(`Orden eliminada correctamente: ${deletedOrder}`);
             // Actualizar la lista de órdenes después de eliminar
             setOrdersState(ordersState.filter((order) => order.id !== id));
+            toast.success (`La orden se elimino correctamente: ${deletedOrder}`,{
+              duration: 5000,
+            } )
           } catch (error) {
             console.log(error);
           }
@@ -80,6 +83,30 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
     });
   };
 
+  const handleOnSubmitEdit = (event: React.FormEvent) => {
+    event.preventDefault()
+    const alertId = toast("¿Deseas editar la orden seleccionada?", {
+      duration: 5000,
+      action: {
+        label: "Aceptar",
+        onClick: async () => {
+          toast.dismiss(alertId);
+          try {
+            // Aquí se debería agregar la lógica para eliminar la orden usando su ID
+           //
+            console.log('Orden editada correctamente');
+            setModalOpen(false);
+            toast.success ('La orden se edito correctamente',{
+              duration: 5000,
+            } )
+          } catch (error) {
+            console.log(error);
+          }
+        },
+      },
+    });
+  }
+
   return (
     <>
       {modalOpen && (
@@ -91,7 +118,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
             className="bg-white p-6 rounded-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center">
+            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center" onSubmit={handleOnSubmitEdit}>
               <div>
                 <label htmlFor="id">ID: </label>
                 <input

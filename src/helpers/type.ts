@@ -117,6 +117,7 @@ export interface IProducts {
     price?: string,
     purchaseDate?: null,
     status?: string,
+    
 }
 
 export interface IImages {

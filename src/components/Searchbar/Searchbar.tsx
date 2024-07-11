@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { GridColumn, Search, Grid, SearchProps } from "semantic-ui-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   loading: false,
@@ -29,7 +30,11 @@ function SearchExampleStandard() {
   const { loading, results, value } = state;
   const [products, setProducts] = useState([]);
   const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const navigate = useNavigate();
 
+  const redirectToProductDetail = (productId: string) => {
+    navigate(`/products/${productId}`);
+  };
   const handleSearchChange = React.useCallback(
     (e: React.SyntheticEvent, data: SearchProps) => {
       clearTimeout(timeoutRef.current);
@@ -112,7 +117,7 @@ function SearchExampleStandard() {
               type: "UPDATE_SELECTION",
               selection: data.result.title,
             });
-            window.location.href = `/products/${data.result.id}`;
+            redirectToProductDetail(data.result.id);
           }}
           onSearchChange={handleSearchChange}
           results={results}

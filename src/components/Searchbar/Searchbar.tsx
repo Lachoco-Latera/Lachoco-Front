@@ -30,7 +30,6 @@ function SearchExampleStandard() {
   const [products, setProducts] = useState([]);
   const timeoutRef: any = React.useRef();
 
-  // Función para manejar el cambio en la búsqueda
   const handleSearchChange = React.useCallback(
     //@ts-ignore
     (e: any, data: any) => {
@@ -54,12 +53,15 @@ function SearchExampleStandard() {
           }
         });
 
-        // Agrupar resultados por categoría
-        const categorizedResults = _.groupBy(filteredResults, "category");
+        const categorizedResults = _.groupBy(
+          filteredResults,
+          (result: any) => result.category.name
+        );
 
         const finalResults = _.map(categorizedResults, (value, key) => ({
           name: key,
           results: value.slice(0, 6).map((result) => ({
+            key: result.id, // Añadir una clave única
             title: result.name,
             description: result.description
               .split(" ")
@@ -68,6 +70,7 @@ function SearchExampleStandard() {
               .concat(result.description.split(" ").length > 12 ? "..." : ""),
             image: result.images.length > 0 ? result.images[0].img : undefined,
             price: result.price,
+            id: result.id,
           })),
         }));
 
@@ -88,14 +91,13 @@ function SearchExampleStandard() {
         );
         const productsWithCategory = response.data.map((product: any) => ({
           ...product,
-          category: "Tabletas", // Hasta que cambien los products por el trabajo en suscripción
         }));
         setProducts(productsWithCategory);
+        console.log(response);
       } catch (err) {
         console.error(err);
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -113,9 +115,6 @@ function SearchExampleStandard() {
               selection: data.result.title,
             });
             window.location.href = `/products/${data.result.id}`;
-            /*NO UTILIZAR "useNavigate" 
-            ROMPE POR COMPLETO EL CICLO DE VIDA DE LOS COMPONENTES 
-            CON EL HOOK */
           }}
           onSearchChange={handleSearchChange}
           results={results}

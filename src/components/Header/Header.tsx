@@ -18,6 +18,7 @@ import { GrUserAdmin } from "react-icons/gr";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { LuPackageOpen } from "react-icons/lu";
+import { PiHandHeartBold } from "react-icons/pi";
 
 interface Props {
   onCartIconClick: () => void;
@@ -222,22 +223,22 @@ export default function Header({ onCartIconClick }: Props) {
       className=" 
     z-10 bg-white text-gray-700 
     py-4 flex items-center 
-    justify-between h-18 
+     h-18  justify-center
     sticky top-0 shadow"
     >
-      <nav className="container mx-auto md:w-10/12 px-4 flex md:justify-between justify-between items-center">
+      <nav className="container self-center md:w-10/12 px-4 flex justify-center items-center md:gap-4">
         <span className="text-lg font-semibold hidden md:block">
           <img
             src={logo}
-            className="w-28 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
+            className="md:w-28 md:min-w-12 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
             alt="Lachoco-Latera logo"
             onClick={() => (window.location.href = "/")}
           />
         </span>
-        <div className="hover:drop-shadow transition-all ease ">
+        <div className="hover:drop-shadow transition-all ease md:op">
           <SearchExampleStandard />
         </div>
-        <div className="flex flex-row items-center gap-10">
+        <div className="flex flex-row items-center gap-4">
           {isSignedIn == true &&
           user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
           isLoaded ? (
@@ -246,8 +247,8 @@ export default function Header({ onCartIconClick }: Props) {
               title="Suscribete"
               className="
               text-gray-800 hover:text-white hover:bg-pink-500 
-              rounded-3xl py-1 px-3 text-xl flex items-center 
-              hover:scale-110 transition-all ease shadow"
+              rounded-3xl py-1 px-3 text-xl  items-center 
+              hover:scale-110 transition-all ease shadow hidden md:block"
               onClick={() =>
                 toast.promise(promise, {
                   loading: `Serás redireccionado para suscribirte...`,
@@ -273,16 +274,39 @@ export default function Header({ onCartIconClick }: Props) {
             </button>
           </div>
           {isSignedIn ? (
-            <div className="relative  hidden md:block">
-              <button
-                type="button"
-                title="Favoritos"
-                className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
-                onClick={() => navigate("/inventory")}
-              >
-                <LuPackageOpen size={24} />
-              </button>
-            </div>
+            <>
+              <div>
+                <button
+                  type="button"
+                  title="Mini Cart"
+                  className="
+              text-gray-800 hidden md:block
+              rounded-3xl py-1 px-3 text-xl items-center 
+              hover:scale-110 transition-all ease"
+                  onClick={() =>
+                    toast.promise(promise, {
+                      loading: `Serás redireccionado para suscribirte...`,
+                      success: () => {
+                        return `Muchas gracias de antemano! ❤`;
+                      },
+                      error: "Error",
+                    })
+                  }
+                >
+                  <PiHandHeartBold size={28} />
+                </button>
+              </div>
+              <div className="relative  hidden md:block">
+                <button
+                  type="button"
+                  title="Favoritos"
+                  className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
+                  onClick={() => navigate("/inventory")}
+                >
+                  <LuPackageOpen size={24} />
+                </button>
+              </div>
+            </>
           ) : null}
           {isSignedIn == true &&
           user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&

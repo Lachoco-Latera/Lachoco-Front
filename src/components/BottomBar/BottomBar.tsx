@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { PiHandHeartBold } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa";
 import { GrUserAdmin } from "react-icons/gr";
+import { LuPackageOpen } from "react-icons/lu";
 interface Props {
   onCartIconClick: () => void;
 }
@@ -33,7 +34,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white text-gray-700 py-4 shadow drop-shadow">
       <div className="container mx-auto md:w-10/12 px-4">
-        <div className="flex md:flex-row flex-row-reverse items-center justify-evenly gap-10">
+        <div className="flex md:flex-row flex-row-reverse items-center justify-evenly gap-4">
           <div>
             <SignedOut>
               <SignInButton />
@@ -72,6 +73,41 @@ export default function BottomBar({ onCartIconClick }: Props) {
               </div>
             </button>
           </div>
+          {isSignedIn ? (
+            <>
+              <div className="relative md:hidden">
+                <button
+                  type="button"
+                  title="Favoritos"
+                  className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
+                  onClick={() => navigate("/inventory")}
+                >
+                  <LuPackageOpen size={28} />
+                </button>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  title="Mini Cart"
+                  className="
+              text-gray-800
+              rounded-3xl py-1 px-3 text-xl flex items-center 
+              hover:scale-110 transition-all ease"
+                  onClick={() =>
+                    toast.promise(promise, {
+                      loading: `Serás redireccionado para suscribirte...`,
+                      success: () => {
+                        return `Muchas gracias de antemano! ❤`;
+                      },
+                      error: "Error",
+                    })
+                  }
+                >
+                  <PiHandHeartBold size={34} />
+                </button>
+              </div>
+            </>
+          ) : null}
           <div>
             <FaRegHeart
               size={28}
@@ -79,27 +115,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
               onClick={() => navigate(`/favorites`)}
             />
           </div>
-          <div>
-            <button
-              type="button"
-              title="Mini Cart"
-              className="
-              text-gray-800
-              rounded-3xl py-1 px-3 text-xl flex items-center 
-              hover:scale-110 transition-all ease"
-              onClick={() =>
-                toast.promise(promise, {
-                  loading: `Serás redireccionado para suscribirte...`,
-                  success: () => {
-                    return `Muchas gracias de antemano! ❤`;
-                  },
-                  error: "Error",
-                })
-              }
-            >
-              <PiHandHeartBold size={32} />
-            </button>
-          </div>
+
           <div>
             <button
               type="button"

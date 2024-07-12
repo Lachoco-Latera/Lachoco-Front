@@ -272,16 +272,18 @@ export default function Header({ onCartIconClick }: Props) {
               <MdFavoriteBorder size={28} />
             </button>
           </div>
-          <div className="relative  hidden md:block">
-            <button
-              type="button"
-              title="Favoritos"
-              className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
-              onClick={() => navigate("/inventory")}
-            >
-              <LuPackageOpen size={24} />
-            </button>
-          </div>
+          {isSignedIn ? (
+            <div className="relative  hidden md:block">
+              <button
+                type="button"
+                title="Favoritos"
+                className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
+                onClick={() => navigate("/inventory")}
+              >
+                <LuPackageOpen size={24} />
+              </button>
+            </div>
+          ) : null}
           {isSignedIn == true &&
           user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
           isLoaded ? (

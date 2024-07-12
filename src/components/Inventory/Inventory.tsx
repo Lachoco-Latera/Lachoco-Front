@@ -12,24 +12,44 @@ import { toast } from "sonner";
 import { HiHeart } from "react-icons/hi";
 import { SlHeart } from "react-icons/sl";
 import { FaStar } from "react-icons/fa";
-import { useCartStore } from "../../stores/useCartStore";
-import { MdAddShoppingCart } from "react-icons/md";
+// import { useCartStore } from "../../stores/useCartStore";
+// import { MdAddShoppingCart } from "react-icons/md";
 
 const Inventory = ({ onCartIconClick }: any) => {
+  onCartIconClick;
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [info, setInfo] = useState<any>(null);
   const [products, setProducts] = useState<any>([]);
   const [modalProduct, setModalProduct] = useState<any | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [hoveredOrderId, setHoveredOrderId] = useState<string | null>(null); // Estado para almacenar el orderId del hover
+  const [hoveredOrderId, setHoveredOrderId] = useState<string | null>(null);
   const { user, isSignedIn, isLoaded } = useUser();
-  const addToCart = useCartStore((state) => state.addToCart);
-
+  // const addToCart = useCartStore((state) => state.addToCart);
+  const [userId, setUserId] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
+  userDetails;
+  userId;
   const navigate = useNavigate();
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `https://lachocoback.vercel.app/users`
+        );
+        const userWithEmail = response.data.find(
+          (user: any) => user.email === userEmail
+        );
+        if (userWithEmail) {
+          setUserId(userWithEmail.id);
+          setUserDetails(userWithEmail);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
@@ -57,6 +77,7 @@ const Inventory = ({ onCartIconClick }: any) => {
     };
 
     if (isSignedIn && userEmail) {
+      fetchUserData();
       fetchOrders();
     }
   }, [isSignedIn, userEmail]);
@@ -179,8 +200,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                       className="flex flex-row"
                       onClick={() => redirectToProductDetail(product.id)}
                     >
-                      {" "}
-                      <div className="flex flex-col text-left">
+                      <div className="flex flex-col text-left hover:scale-105">
                         <h2 className="product-name pr-2">{product.name}</h2>
                         <h6 className="product-description">
                           {product.description}
@@ -195,18 +215,18 @@ const Inventory = ({ onCartIconClick }: any) => {
                       <div className="product-price text-black-800 font-regular relative transition-all ease">
                         <span
                           className="duration-0 flex flex-row justify-between items-center py-2 "
-                          onClick={() => (
-                            addToCart(product),
-                            toast("✔ Añadido al carrito", {
-                              action: {
-                                label: "Carrito",
-                                onClick: () => onCartIconClick(),
-                              },
-                            })
-                          )}
+                          // onClick={() => (
+                          //   addToCart(product),
+                          //   toast("✔ Añadido al carrito", {
+                          //     action: {
+                          //       label: "Carrito",
+                          //       onClick: () => onCartIconClick(),
+                          //     },
+                          //   })
+                          // )}
                         >
                           $ {product.price}
-                          <div
+                          {/* <div
                             className="
                       rounded-2xl 
                       hover:shadow p-[0.33em] hover:scale-110
@@ -214,7 +234,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                       transition-colors ease duration-100"
                           >
                             <MdAddShoppingCart />
-                          </div>
+                          </div> */}
                         </span>
                         {product.orderId === hoveredOrderId && (
                           <div

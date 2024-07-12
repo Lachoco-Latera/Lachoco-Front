@@ -148,7 +148,7 @@ input:focus {
 }
 .ui.search > .results {
   overflow-y: scroll;
-  max-height: 80vh;
+  max-height: 70vh;
 }
 @media (max-width: 767px) {
   .ui.icon.input {

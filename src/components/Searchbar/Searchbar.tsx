@@ -69,9 +69,9 @@ function SearchExampleStandard() {
             title: result.name,
             description: result.description
               .split(" ")
-              .slice(0, 12)
+              .slice(0, 8)
               .join(" ")
-              .concat(result.description.split(" ").length > 12 ? "..." : ""),
+              .concat(result.description.split(" ").length > 8 ? "..." : ""),
             image: result.images.length > 0 ? result.images[0].img : undefined,
             price: result.price,
             id: result.id,

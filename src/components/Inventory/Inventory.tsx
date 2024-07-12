@@ -66,7 +66,7 @@ const Inventory = ({ onCartIconClick }: any) => {
             ...product.product,
             quantity: product.cantidad,
             pickedFlavors: product.pickedFlavors,
-            orderId: order.id, // Agregar orderId para agrupamiento
+            orderId: order.id,
           }))
         );
 
@@ -119,7 +119,7 @@ const Inventory = ({ onCartIconClick }: any) => {
       Loading...
     </div>
   );
-
+  console.log(info);
   return (
     <>
       <Header onCartIconClick={handleCartIconClick} products={info} />
@@ -239,10 +239,10 @@ const Inventory = ({ onCartIconClick }: any) => {
                         {product.orderId === hoveredOrderId && (
                           <div
                             className="order-id-indicator flex flex-col 
-                            justify-center items-center drop-shadow 
-                            text-black-400 font-bold text-lg py-1 
-                            px-2 rounded-md -top-6 left-0 right-0
-                             mx-auto text-center z-10 transition-all ease"
+    justify-center items-center drop-shadow 
+    text-black-400 font-bold text-lg py-1 
+    px-2 rounded-md -top-6 left-0 right-0
+    mx-auto text-center z-10 transition-all ease"
                           >
                             <span className="flex transition-all ease">
                               #
@@ -253,6 +253,30 @@ const Inventory = ({ onCartIconClick }: any) => {
                                 .indexOf(product) + 1}
                             </span>
                             <span className="flex">Id: {hoveredOrderId}</span>
+                            {info && hoveredOrderId && (
+                              <>
+                                {info
+                                  .filter(
+                                    (order: any) => order.id === hoveredOrderId
+                                  )
+                                  .map((order: any) => (
+                                    <div key={order.id}>
+                                      <span className="flex">
+                                        Status: {order.status}
+                                      </span>
+                                      <span className="flex">
+                                        Date: {order.date}
+                                      </span>
+                                      <span className="flex">
+                                        Quantity: {order.orderDetail.orderDetailProducts.length}
+                                      </span>
+                                      <span className="flex">
+                                        Total: {order.orderDetail.price}
+                                      </span>
+                                    </div>
+                                  ))}
+                              </>
+                            )}
                           </div>
                         )}
                       </div>

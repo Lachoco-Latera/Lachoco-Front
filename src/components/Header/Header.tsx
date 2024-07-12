@@ -44,7 +44,10 @@ export default function Header({ onCartIconClick }: Props) {
     new Promise((resolve) =>
       setTimeout(
         () =>
-          resolve((window.location.href = "https://www.mercadopago.com.ar")),
+          resolve(
+            (window.location.href =
+              "https://lachoco-front.vercel.app/?category=cafes")
+          ),
         1100
       )
     );
@@ -267,7 +270,7 @@ export default function Header({ onCartIconClick }: Props) {
             <button
               type="button"
               title="Favoritos"
-              className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
+              className="text-gray-800 text-xl md:flex items-center hover:scale-110 transition-all ease"
               onClick={() => navigate("/favorites")}
             >
               <MdFavoriteBorder size={28} />

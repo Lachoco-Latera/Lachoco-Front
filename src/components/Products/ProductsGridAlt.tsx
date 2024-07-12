@@ -52,7 +52,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
     : products;
   return (
     <div>
-      <div className="products-grid">
+      <div className="products-grid pb-48">
         {filteredProducts.map((product, index) => (
           <div
             key={index}

@@ -77,9 +77,6 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
 
   const actualSelectionLength = confirmedFlavors[info.id]?.length || 0;
 
-  console.log("Selección actual de flavors:", actualSelectionLength);
-  console.log("Maximo de sabores:", maxFlavors);
-
   return (
     <div className="flex flex-col md:px-48 px-12 md:py-10 ">
       <div className="flex flex-col md:flex-row items-center md:justify-between">

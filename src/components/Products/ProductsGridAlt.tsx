@@ -50,7 +50,6 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category.name === selectedCategory)
     : products;
-  console.log(filteredProducts);
   return (
     <div>
       <div className="products-grid pb-48">

@@ -90,10 +90,17 @@ function App() {
       ? setIsDrawerOpen(!isDrawerOpen)
       : setIsDrawerOpen(isDrawerOpen);
   };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false); 
+    }, 12000);
+
+    return () => clearTimeout(timer); 
+  }, []);
 
   return (
     <div>
-      {loading ? (
+      {loading && products.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-screen gap-8">
           <img
             src={logo}

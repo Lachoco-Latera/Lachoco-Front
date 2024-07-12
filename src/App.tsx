@@ -19,13 +19,13 @@ function App() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true); // Estado de carga
   const { isLoaded, user } = useUser();
+  const [isFooterVisible, setIsFooterVisible] = useState(false); // Estado para la visibilidad del Footer
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   const { fetchData } = useProductsStore();
   const [userId, setUserId] = useState(null); // Estado para almacenar el ID de usuario
   const [userDetails, setUserDetails] = useState(null); // Estado para almacenar los detalles del usuario
-  userDetails;
-  userId;
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -49,6 +49,7 @@ function App() {
         setLoading(false); // Desactivar el loading después de intentar cargar los datos
       }
     };
+
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
@@ -79,7 +80,28 @@ function App() {
     };
     fetchData();
   }, [isLoaded, userEmail]); // Añade userEmail como dependencia del useEffect
-  console.log(userId, userDetails);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const footer = document.getElementById("footer");
+      if (footer) {
+        const footerPosition = footer.getBoundingClientRect().top;
+        const viewportHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const scrollPosition = window.scrollY + viewportHeight;
+
+        // Mostrar el footer solo cuando se está en el fondo de la página
+        setIsFooterVisible(
+          scrollPosition >= documentHeight || documentHeight <= viewportHeight
+        );
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Llamar a la función al cargar para ajustar el estado inicial
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleCartIconClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -128,7 +150,14 @@ function App() {
             products={products}
             onCartIconClick={handleCartIconClickAlt}
           />
-          <Footer />
+          <div
+            id="footer"
+            className={`md:fixed w-full md:bottom-0 transition-opacity ${
+              isFooterVisible ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <Footer />
+          </div>
         </>
       )}
     </div>

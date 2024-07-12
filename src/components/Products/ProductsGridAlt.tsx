@@ -50,6 +50,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category.name === selectedCategory)
     : products;
+  console.log(filteredProducts);
   return (
     <div>
       <div className="products-grid pb-48">
@@ -58,34 +59,39 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
             key={index}
             className="product-card hover:shadow-xl transition-all ease duration-300"
           >
-            <div className="mt-4">
-              <p className="absolute ml-12 p-1 px-2 product-description rounded-2xl border-1 shadow z-10">
-                {product.label === "SoloOnline" ? "Solo Online" : product.label}
-              </p>
-              <i
-                className="absolute ml-24 drop-shadow z-10"
-                onClick={(e) => handleFavoriteClick(e, product)}
-              >
-                <IconContext.Provider value={{}}>
-                  <div
-                    className="relative group"
-                    onClick={() => toast.success("Añadido a favoritos ")}
-                  >
-                    <HiHeart
-                      id="firstHeart"
-                      size={24}
-                      className="cursor-pointer group-hover:scale-[1.55] ease-in-out duration-300 drop-shadow absolute scale-[1.21] opacity-30 transparent"
-                    />
-                    <SlHeart
-                      id="secondHeart"
-                      size={24}
-                      color="white"
-                      className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow z-30"
-                    />
-                  </div>
-                </IconContext.Provider>
-              </i>
-            </div>{" "}
+            {product.category.name !== "cafes" ? (
+              <div className="mt-4">
+                <p className="absolute ml-12 p-1 px-2 product-description rounded-2xl border-1 shadow z-10">
+                  {product.label === "SoloOnline"
+                    ? "Solo Online"
+                    : product.label}
+                </p>
+                <i
+                  className="absolute ml-24 drop-shadow z-10"
+                  onClick={(e) => handleFavoriteClick(e, product)}
+                >
+                  <IconContext.Provider value={{}}>
+                    <div
+                      className="relative group"
+                      onClick={() => toast.success("Añadido a favoritos ")}
+                    >
+                      <HiHeart
+                        id="firstHeart"
+                        size={24}
+                        className="cursor-pointer group-hover:scale-[1.55] ease-in-out duration-300 drop-shadow absolute scale-[1.21] opacity-30 transparent"
+                      />
+                      <SlHeart
+                        id="secondHeart"
+                        size={24}
+                        color="white"
+                        className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow z-30"
+                      />
+                    </div>
+                  </IconContext.Provider>
+                </i>
+              </div>
+            ) : null}
+
             <div className="product-card-main flex flex-col" key={index}>
               <Carousel
                 axis="horizontal"

@@ -11,6 +11,7 @@ import Categories from "./components/Categories/Categories";
 import BottomBar from "./components/BottomBar/BottomBar";
 import "./index.css"; // Añade esta línea para los estilos CSS del loading
 import { useUser } from "@clerk/clerk-react";
+import logo from "../public/images/logo.png";
 
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -100,19 +101,44 @@ function App() {
 
   return (
     <div>
-      <Header onCartIconClick={handleCartIconClick} products={products} />
-      <div className="block md:hidden">
-        <BottomBar onCartIconClick={handleCartIconClick} />
-      </div>
-      <Categories categories={categories} />
-      <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
-        <Cart similar={products} />
-      </Drawer>
-      <ProductsGridAlt
-        products={products}
-        onCartIconClick={handleCartIconClickAlt}
-      />
-      <Footer />
+      {loading || products.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-screen gap-8">
+          <img
+            src={logo}
+            className="md:w-48 md:min-w-16 w-48 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
+            alt="Lachoco-Latera logo"
+            onClick={() => (window.location.href = "/")}
+          />
+          <div className="text-xl">
+            {(function () {
+              setTimeout(() => {
+                const loadingText = document.getElementById("loading-text");
+                if (loadingText) {
+                  loadingText.innerText =
+                    "Esto está tardando más de lo esperado, Hacer click al logo para reintentar";
+                }
+              }, 5000);
+              return <span id="loading-text">Buscando productos...</span>;
+            })()}
+          </div>
+        </div>
+      ) : (
+        <>
+          <Header onCartIconClick={handleCartIconClick} products={products} />
+          <div className="block md:hidden">
+            <BottomBar onCartIconClick={handleCartIconClick} />
+          </div>
+          <Categories categories={categories} />
+          <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
+            <Cart similar={products} />
+          </Drawer>
+          <ProductsGridAlt
+            products={products}
+            onCartIconClick={handleCartIconClickAlt}
+          />
+          <Footer />
+        </>
+      )}
     </div>
   );
 }

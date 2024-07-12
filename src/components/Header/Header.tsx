@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { LuPackageOpen } from "react-icons/lu";
 
 interface Props {
   onCartIconClick: () => void;
@@ -271,6 +272,18 @@ export default function Header({ onCartIconClick }: Props) {
               <MdFavoriteBorder size={28} />
             </button>
           </div>
+          {isSignedIn ? (
+            <div className="relative  hidden md:block">
+              <button
+                type="button"
+                title="Favoritos"
+                className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
+                onClick={() => navigate("/inventory")}
+              >
+                <LuPackageOpen size={24} />
+              </button>
+            </div>
+          ) : null}
           {isSignedIn == true &&
           user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
           isLoaded ? (
@@ -281,7 +294,7 @@ export default function Header({ onCartIconClick }: Props) {
                 className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
                 onClick={onCartIconClick}
               >
-                <FiShoppingCart size={28} />
+                <FiShoppingCart size={24} />
                 <div className="text-white rounded-full bg-gray-700 w-5 h-5 text-sm -ml-[0.7em] -mt-5">
                   {cart?.length}
                 </div>

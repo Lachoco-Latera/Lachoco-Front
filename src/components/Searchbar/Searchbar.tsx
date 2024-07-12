@@ -1,7 +1,8 @@
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { GridColumn, Search, Grid } from "semantic-ui-react";
+import { GridColumn, Search, Grid, SearchProps } from "semantic-ui-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   loading: false,
@@ -28,38 +29,43 @@ function SearchExampleStandard() {
   const [state, dispatch] = React.useReducer(exampleReducer, initialState);
   const { loading, results, value } = state;
   const [products, setProducts] = useState([]);
-  const timeoutRef: any = React.useRef();
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const navigate = useNavigate();
 
-  // Función para manejar el cambio en la búsqueda
+  const redirectToProductDetail = (productId: string) => {
+    navigate(`/products/${productId}`);
+  };
   const handleSearchChange = React.useCallback(
-    //@ts-ignore
-    (e: any, data: any) => {
+    (e: React.SyntheticEvent, data: SearchProps) => {
       clearTimeout(timeoutRef.current);
-      dispatch({ type: "START_SEARCH", query: data.value });
+      dispatch({ type: "START_SEARCH", query: data.value || "" });
       timeoutRef.current = setTimeout(() => {
-        if (data.value.length === 0) {
+        if (data.value && data.value.length === 0) {
           dispatch({ type: "CLEAN_QUERY" });
           return;
         }
 
-        const searchTerm = data.value.trim();
+        const searchTerm = data.value?.trim() || "";
         const isNumber = /^\d+(\.\d+)?$/.test(searchTerm);
         const re = new RegExp(_.escapeRegExp(searchTerm), "i");
 
         let filteredResults = _.filter(products, (result: any) => {
           if (isNumber) {
-            return re.test(result.price);
+            return re.test(result.price.toString());
           } else {
             return re.test(result.name) || re.test(result.description);
           }
         });
 
-        // Agrupar resultados por categoría
-        const categorizedResults = _.groupBy(filteredResults, "category");
+        const categorizedResults = _.groupBy(
+          filteredResults,
+          (result: any) => result.category.name
+        );
 
         const finalResults = _.map(categorizedResults, (value, key) => ({
           name: key,
           results: value.slice(0, 6).map((result) => ({
+            key: result.id, // Añadir una clave única
             title: result.name,
             description: result.description
               .split(" ")
@@ -68,6 +74,7 @@ function SearchExampleStandard() {
               .concat(result.description.split(" ").length > 12 ? "..." : ""),
             image: result.images.length > 0 ? result.images[0].img : undefined,
             price: result.price,
+            id: result.id,
           })),
         }));
 
@@ -88,14 +95,12 @@ function SearchExampleStandard() {
         );
         const productsWithCategory = response.data.map((product: any) => ({
           ...product,
-          category: "Tabletas", // Hasta que cambien los products por el trabajo en suscripción
         }));
         setProducts(productsWithCategory);
       } catch (err) {
         console.error(err);
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -106,16 +111,13 @@ function SearchExampleStandard() {
           fluid
           category
           loading={loading}
-          placeholder="¿Qué quieres probar?" //@ts-ignore
+          placeholder="¿Qué quieres probar?"
           onResultSelect={(e, data) => {
             dispatch({
               type: "UPDATE_SELECTION",
               selection: data.result.title,
             });
-            window.location.href = `/products/${data.result.id}`;
-            /*NO UTILIZAR "useNavigate" 
-            ROMPE POR COMPLETO EL CICLO DE VIDA DE LOS COMPONENTES 
-            CON EL HOOK */
+            redirectToProductDetail(data.result.id);
           }}
           onSearchChange={handleSearchChange}
           results={results}

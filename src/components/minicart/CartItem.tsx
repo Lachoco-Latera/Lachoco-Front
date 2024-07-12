@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { IoIosAdd } from "react-icons/io";
 import { LuMinus } from "react-icons/lu";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   product: Product;
@@ -19,7 +20,10 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
   const confirmedFlavors = useCartStore((state) => state.confirmedFlavors); // Obtener confirmedFlavors del store
   const [confirmedFlavorsCount, setConfirmedFlavorsCount] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
-
+  const navigate = useNavigate();
+  const handleNavigate = (productId: any) => {
+    navigate(`/products/${productId}`);
+  };
   const selectedProductId = product.id;
 
   useEffect(() => {
@@ -52,7 +56,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
     <li className="flex justify-between items-center gap-4 mb-2 shadow-md p-4">
       <div
         className="flex items-center md:flex-row flex-col md:text-start text-center hover:cursor-pointer"
-        onClick={() => (window.location.href = `/products/${product.id}`)}
+        onClick={() => handleNavigate(product.id)}
       >
         <img
           src={product.images[1]?.img}

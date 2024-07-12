@@ -266,16 +266,18 @@ export default function Header({ onCartIconClick }: Props) {
             </button>
           ) : null}
           <div className="relative  hidden md:block"></div>
-          <div className="relative  hidden md:block">
-            <button
-              type="button"
-              title="Favoritos"
-              className="text-gray-800 text-xl md:flex items-center hover:scale-110 transition-all ease"
-              onClick={() => navigate("/favorites")}
-            >
-              <MdFavoriteBorder size={28} />
-            </button>
-          </div>
+          {isSignedIn == true && isLoaded ? (
+            <div className="relative  hidden md:block">
+              <button
+                type="button"
+                title="Favoritos"
+                className="text-gray-800 text-xl md:flex items-center hover:scale-110 transition-all ease"
+                onClick={() => navigate("/favorites")}
+              >
+                <MdFavoriteBorder size={28} />
+              </button>
+            </div>
+          ) : null}
           {isSignedIn ? (
             <>
               <div>

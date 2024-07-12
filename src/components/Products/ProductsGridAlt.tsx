@@ -61,13 +61,13 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
           >
             {product.category.name !== "cafes" ? (
               <div className="mt-4">
-                <p className="absolute ml-12 p-1 px-2 product-description rounded-2xl border-1 shadow z-10">
+                <p className="absolute ml-12 p-1 px-2 product-description rounded-2xl border-1 shadow z-[2]">
                   {product.label === "SoloOnline"
                     ? "Solo Online"
                     : product.label}
                 </p>
                 <i
-                  className="absolute ml-24 drop-shadow z-10"
+                  className="absolute ml-24 drop-shadow z-[2]"
                   onClick={(e) => handleFavoriteClick(e, product)}
                 >
                   <IconContext.Provider value={{}}>

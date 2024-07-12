@@ -19,7 +19,7 @@ function App() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true); // Estado de carga
   const { isLoaded, user } = useUser();
-  const [isFooterVisible, setIsFooterVisible] = useState(true); // Estado para la visibilidad del Footer
+  const [isFooterVisible, setIsFooterVisible] = useState(false); // Estado para la visibilidad del Footer
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   const { fetchData } = useProductsStore();

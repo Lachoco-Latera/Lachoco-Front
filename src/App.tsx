@@ -91,17 +91,9 @@ function App() {
       : setIsDrawerOpen(isDrawerOpen);
   };
 
-  if (loading || !isLoaded) {
-    return (
-      <div className="loading-overlay">
-        <div className="loading-spinner"></div>
-      </div>
-    );
-  }
-
   return (
     <div>
-      {loading || products.length === 0 ? (
+      {loading ? (
         <div className="flex flex-col items-center justify-center h-screen gap-8">
           <img
             src={logo}
@@ -117,7 +109,7 @@ function App() {
                   loadingText.innerText =
                     "Esto está tardando más de lo esperado, Hacer click al logo para reintentar";
                 }
-              }, 5000);
+              }, 7000);
               return <span id="loading-text">Buscando productos...</span>;
             })()}
           </div>

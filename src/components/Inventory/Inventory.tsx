@@ -113,7 +113,13 @@ const Inventory = ({ onCartIconClick }: any) => {
   const handleMouseLeave = () => {
     setHoveredOrderId(null);
   };
-
+  const handleCopyOrderId = (orderId: string) => {
+    if (orderId) {
+      navigator.clipboard.writeText(orderId).then(() => {
+        toast.success("Copiado al portapapeles!");
+      });
+    }
+  };
   const loading = () => (
     <div className="flex justify-center items-center h-96 text-xl text-gray-600">
       Loading...
@@ -243,6 +249,9 @@ const Inventory = ({ onCartIconClick }: any) => {
     text-black-400 font-bold text-lg py-1 
     px-2 rounded-md -top-6 left-0 right-0
     mx-auto text-center z-10 transition-all ease"
+                            onClick={() =>
+                              handleCopyOrderId(hoveredOrderId || "")
+                            }
                           >
                             <span className="flex transition-all ease">
                               #
@@ -268,7 +277,11 @@ const Inventory = ({ onCartIconClick }: any) => {
                                         Date: {order.date}
                                       </span>
                                       <span className="flex">
-                                        Quantity: {order.orderDetail.orderDetailProducts.length}
+                                        Quantity:{" "}
+                                        {
+                                          order.orderDetail.orderDetailProducts
+                                            .length
+                                        }
                                       </span>
                                       <span className="flex">
                                         Total: {order.orderDetail.price}

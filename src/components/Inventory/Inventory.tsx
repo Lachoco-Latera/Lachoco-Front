@@ -219,36 +219,16 @@ const Inventory = ({ onCartIconClick }: any) => {
                     </div>
                     <div>
                       <div className="product-price text-black-800 font-regular relative transition-all ease">
-                        <span
-                          className="duration-0 flex flex-row justify-between items-center py-2 "
-                          // onClick={() => (
-                          //   addToCart(product),
-                          //   toast("✔ Añadido al carrito", {
-                          //     action: {
-                          //       label: "Carrito",
-                          //       onClick: () => onCartIconClick(),
-                          //     },
-                          //   })
-                          // )}
-                        >
+                        <span className="duration-0 flex flex-row justify-between items-center py-2 ">
                           $ {product.price}
-                          {/* <div
-                            className="
-                      rounded-2xl 
-                      hover:shadow p-[0.33em] hover:scale-110
-                      hover:bg-pink-800 hover:text-white 
-                      transition-colors ease duration-100"
-                          >
-                            <MdAddShoppingCart />
-                          </div> */}
                         </span>
                         {product.orderId === hoveredOrderId && (
                           <div
                             className="order-id-indicator flex flex-col 
-    justify-center items-center drop-shadow 
-    text-black-400 font-bold text-lg py-1 
-    px-2 rounded-md -top-6 left-0 right-0
-    mx-auto text-center z-10 transition-all ease"
+                            justify-center items-center drop-shadow 
+                            text-black-400 font-bold text-lg py-1 
+                            px-2 rounded-md -top-6 left-0 right-0
+                            mx-auto text-center z-10 transition-all ease"
                             onClick={() =>
                               handleCopyOrderId(hoveredOrderId || "")
                             }

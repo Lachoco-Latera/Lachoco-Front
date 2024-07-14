@@ -140,6 +140,7 @@ function Cart({ similar }: any) {
     axios
       .post("https://lachocoback.vercel.app/orders", order)
       .then((response) => {
+        response;
         toast.success("¡Orden creada exitosamente!");
         console.log("Objeto order:", order);
 

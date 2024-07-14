@@ -215,11 +215,10 @@ function Cart({ similar }: any) {
           </button>
         </div>
       ) : (
-        <div className="flex rounded-xl p-2 mt-2 shadow justify-center hover:bg-green-500 hover:scale-105 transition-all ease">
-          <button
-            onClick={handlePlaceOrder}
-            className="text-xl text-green-500 hover:text-white font-bold"
-          >
+        <div className="flex rounded-xl p-2 mt-2 shadow 
+        justify-center hover:bg-green-500 text-green-500
+         hover:text-white  hover:scale-105 transition-all ease">
+          <button onClick={handlePlaceOrder} className="text-xl font-bold">
             Calcular envio
           </button>
         </div>

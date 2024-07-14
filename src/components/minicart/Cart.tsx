@@ -118,8 +118,8 @@ function Cart({ similar }: any) {
     });
 
   const handlePlaceOrder = () => {
-    const phoneNumbers = "573012985389";
-    const shipReference = "Casa en la montaña";
+    // const phoneNumbers = "573012985389";
+    // const shipReference = "Casa en la montaña";
     const order = {
       userId: userId,
       products: cart.map((product) => ({
@@ -140,6 +140,7 @@ function Cart({ similar }: any) {
     axios
       .post("https://lachocoback.vercel.app/orders", order)
       .then((response) => {
+        response;
         toast.success("¡Orden creada exitosamente!");
         console.log("Objeto order:", order);
         const shipmentData = {

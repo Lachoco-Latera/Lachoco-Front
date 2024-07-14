@@ -3,14 +3,41 @@ import { useCartStore } from "../../stores/useCartStore";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+// import { useNavigate } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const [completed, setCompleted] = useState<boolean>(true);
+  const [userId, setUserId] = useState(null);
+  const { user, isLoaded } = useUser();
+  const [toPayment, setToPayment] = useState(false);
 
+  const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
+  // const navigate = useNavigate();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `https://lachocoback.vercel.app/users`
+        );
+        const userWithEmail = response.data.find(
+          (user: any) => user.email === userEmail
+        );
+        if (userWithEmail) {
+          setUserId(userWithEmail.id);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (isLoaded && userEmail) {
+      fetchUserData();
+    }
+  }, [isLoaded, userEmail]);
   useEffect(() => {
     const countFlavorsAndSum = () => {
       let totalFlavors = 0;
@@ -37,13 +64,6 @@ function Cart({ similar }: any) {
     (product) => product.category.name === "bombones"
   );
 
-  // const totalPresentationQuantity = bombonesProducts.reduce(
-  //   (total, product: any) => {
-  //     return total + product.presentacion * product.quantity;
-  //   },
-  //   0
-  // );
-
   const handleUpdateFlavors = () => {
     // Función para verificar si todos los sabores están seleccionados
     const hasIncompleteFlavors = bombonesProducts.some((product) => {
@@ -53,7 +73,6 @@ function Cart({ similar }: any) {
     });
     return !hasIncompleteFlavors;
   };
-
   useEffect(() => {
     const hasIncompleteFlavors = bombonesProducts.some((product) => {
       const productMaxFlavor = product.quantity * product.presentacion;
@@ -64,44 +83,57 @@ function Cart({ similar }: any) {
     setCompleted(!hasIncompleteFlavors);
   }, [confirmedFlavors, bombonesProducts]);
   const promise = () =>
-    new Promise((resolve, reject) => {
+    new Promise((reject) => {
       setTimeout(() => {
         const order = {
-          userId: "27b817f0-3043-48a5-8ad4-d4e173f07765",
+          userId: userId,
           products: cart.map((product) => ({
             productId: product.id,
             cantidad: product.quantity,
-            flavors: product.flavors.map((flavor) => ({
-              flavorId: flavor.id,
-              cantidad: flavor.stock,
-            })),
-            pickedFlavors: confirmedFlavors[product.id] || [],
+            category: product.category,
+            flavors:
+              product.category.name === "bombones"
+                ? product.flavors.map((flavor) => ({
+                    flavorId: flavor.id,
+                    cantidad: flavor.stock,
+                  }))
+                : [],
+            pickedFlavors:
+              product.category.name === "bombones"
+                ? confirmedFlavors[product.id] || []
+                : product.flavors.map((flavor) => flavor.id),
           })),
         };
 
         const hasBombones = order.products.some(
-          (product) => product.flavors.length > 0
+          (product: any) =>
+            product.category.name === "bombones" &&
+            product.pickedFlavors.length === 0
         );
 
-        if (!hasBombones) {
+        if (hasBombones) {
           reject("Debes seleccionar sabores para los bombones.");
         } else {
-          resolve((window.location.href = "/ship"));
+          // resolve(navigate("/ship"));
         }
       }, 1100);
     });
 
   const handlePlaceOrder = () => {
     const order = {
-      userId: "27b817f0-3043-48a5-8ad4-d4e173f07765",
+      userId: userId,
       products: cart.map((product) => ({
         productId: product.id,
         cantidad: 1,
+        category: product.category.name,
         flavors: product.flavors.map((flavor) => ({
           flavorId: flavor.id,
           cantidad: 1,
         })),
-        pickedFlavors: confirmedFlavors[product.id] || [],
+        pickedFlavors:
+          product.category.name === "bombones"
+            ? confirmedFlavors[product.id] || []
+            : product.flavors.map((flavor) => flavor.id),
       })),
     };
 
@@ -112,14 +144,79 @@ function Cart({ similar }: any) {
         toast.success("¡Orden creada exitosamente!");
         console.log("Objeto order:", order);
 
-        window.location.href = "/ship";
+        const shipmentData = {
+          user: {
+            name: user?.fullName,
+            company: "CLIENT",
+            email: userEmail,
+            phone: user?.phoneNumbers[0] || "573012985389",
+            street: "carretera 4a",
+            number: "a",
+            district: "",
+            city: "cundinamarca",
+            state: "bogotá",
+            country: "colombia",
+            postalCode: "08019",
+          },
+          country: "CO",
+          carrier: "saferbo",
+          carrierService: "ground",
+        };
+
+        return axios.post(
+          "https://lachocoback.vercel.app/shipments/createlabel",
+          shipmentData,
+          {
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_TEST_ENVIA}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      })
+      .then((shipmentResponse) => {
+        console.log("Info del envio:", shipmentResponse);
+        const shipmentData = shipmentResponse.data.data[0];
+        if (shipmentResponse) {
+          toast.info("Creando sesión de pago...");
+        }
+        const paymentData = {
+          /*ORDER ID ES VARIABLE, 
+          Y NO LO TENEMOS EN ESTE COMPONENTE, 
+          BUSCAR LA MANERA DE BUSCARLO SEGÚN 
+          EL ÚLTIMO CARRITO ACTIVO QUE TIENE EL USUARIO ACTIVO
+          Y NO DEJAR USAR SI EL CARRITO ESTÁ ACTIVO*/
+          orderId: "346266a9-02af-4276-b171-88061ece3df9",
+          country: "COL",
+          trackingNumber: shipmentData.trackingNumber,
+          label: shipmentData.label,
+          totalPrice: shipmentData.totalPrice.toString(),
+        };
+
+        return axios.post(
+          "https://lachocoback.vercel.app/pagos/create-checkout-session",
+          paymentData,
+          {
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_TEST_ENVIA}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      })
+      .then((paymentResponse) => {
+        console.log("Respuesta de pago:", paymentResponse.data);
+        toast("Porfavor acceder al pago", {
+          action: {
+            label: "Undo",
+            onClick: () => (window.location.href = paymentResponse.data),
+          },
+        });
+        setToPayment(true);
       })
       .catch((error) => {
         console.log("Objeto order:", order);
-
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
           console.error(
             "Server responded with error status:",
             error.response.status
@@ -129,18 +226,17 @@ function Cart({ similar }: any) {
             "Error al crear la orden: " + error.response.data.message
           );
         } else if (error.request) {
-          // The request was made but no response was received
           console.error("No response received:", error.request);
           toast.error(
             "Error al crear la orden: No se recibió respuesta del servidor."
           );
         } else {
-          // Something happened in setting up the request that triggered an Error
           console.error("Error setting up the request:", error.message);
           toast.error("Error al crear la orden: " + error.message);
         }
       });
   };
+
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
@@ -191,14 +287,30 @@ function Cart({ similar }: any) {
           </button>
         </div>
       ) : (
-        <div className="flex rounded-xl p-2 mt-2 shadow justify-center hover:bg-green-500 hover:scale-105 transition-all ease">
-          <button
-            onClick={handlePlaceOrder}
-            className="text-xl text-green-500 hover:text-white font-bold"
+        <>
+          <div
+            className="flex rounded-xl p-2 mt-2 shadow 
+        justify-center hover:bg-green-500 text-green-500
+         hover:text-white  hover:scale-105 transition-all ease"
           >
-            Calcular envio
-          </button>
-        </div>
+            <button onClick={handlePlaceOrder} className="text-xl font-bold">
+              Calcular envio
+            </button>
+          </div>
+          {toPayment ? (
+            <div
+              className="flex rounded-xl p-2 mt-2 shadow 
+        justify-center hover:bg-black text-black
+         hover:text-white  hover:scale-105 transition-all ease"
+            >
+              <button onClick={handlePlaceOrder} className="text-xl font-bold">
+                Proceder a pagar
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </section>
   );

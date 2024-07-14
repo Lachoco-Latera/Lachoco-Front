@@ -113,7 +113,13 @@ const Inventory = ({ onCartIconClick }: any) => {
   const handleMouseLeave = () => {
     setHoveredOrderId(null);
   };
-
+  const handleCopyOrderId = (orderId: string) => {
+    if (orderId) {
+      navigator.clipboard.writeText(orderId).then(() => {
+        toast.success("Copiado al portapapeles!");
+      });
+    }
+  };
   const loading = () => (
     <div className="flex justify-center items-center h-96 text-xl text-gray-600">
       Loading...
@@ -141,6 +147,38 @@ const Inventory = ({ onCartIconClick }: any) => {
                 onMouseEnter={() => handleMouseEnter(product.orderId)} // Manejar hover
                 onMouseLeave={handleMouseLeave} // Limpiar hover
               >
+                {product.category.name !== "cafes" ? (
+                  <div className="mt-4">
+                    <p className="absolute ml-12 p-1 px-2 product-description rounded-2xl border-1 shadow z-[2]">
+                      {product.label === "SoloOnline"
+                        ? "Solo Online"
+                        : product.label}
+                    </p>
+                    <i
+                      className="absolute ml-24 drop-shadow z-[2]"
+                      onClick={(e) => handleFavoriteClick(e, product)}
+                    >
+                      <IconContext.Provider value={{}}>
+                        <div
+                          className="relative group"
+                          onClick={() => toast.success("Añadido a favoritos ")}
+                        >
+                          <HiHeart
+                            id="firstHeart"
+                            size={24}
+                            className="cursor-pointer group-hover:scale-[1.55] ease-in-out duration-300 drop-shadow absolute scale-[1.21] opacity-30 transparent"
+                          />
+                          <SlHeart
+                            id="secondHeart"
+                            size={24}
+                            color="white"
+                            className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow z-30"
+                          />
+                        </div>
+                      </IconContext.Provider>
+                    </i>
+                  </div>
+                ) : null}
                 <div className="product-card-main flex flex-col">
                   <Carousel
                     axis="horizontal"
@@ -155,38 +193,6 @@ const Inventory = ({ onCartIconClick }: any) => {
                   >
                     {product.images?.map((image: any, i: any) => (
                       <div key={i} className="relative rounded-xl">
-                        <p className="absolute top-2 left-2 p-1 px-2 product-description rounded-2xl border-1 shadow">
-                          {product.label === "SoloOnline"
-                            ? "Solo Online"
-                            : product.label}
-                        </p>
-
-                        <i
-                          className="absolute top-2 right-2 drop-shadow"
-                          onClick={(e) => handleFavoriteClick(e, product)}
-                        >
-                          <IconContext.Provider value={{}}>
-                            <div
-                              className="relative group"
-                              onClick={() =>
-                                toast.success("Añadido a favoritos ")
-                              }
-                            >
-                              <HiHeart
-                                id="firstHeart"
-                                size={24}
-                                className="cursor-pointer group-hover:scale-[1.55] ease-in-out duration-300 drop-shadow absolute scale-[1.21] opacity-30 transparent"
-                              />
-                              <SlHeart
-                                id="secondHeart"
-                                size={24}
-                                color="white"
-                                className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow z-30"
-                              />
-                            </div>
-                          </IconContext.Provider>
-                        </i>
-
                         <img
                           alt={`Product image ${i + 1}`}
                           src={image?.img || ""}
@@ -213,36 +219,19 @@ const Inventory = ({ onCartIconClick }: any) => {
                     </div>
                     <div>
                       <div className="product-price text-black-800 font-regular relative transition-all ease">
-                        <span
-                          className="duration-0 flex flex-row justify-between items-center py-2 "
-                          // onClick={() => (
-                          //   addToCart(product),
-                          //   toast("✔ Añadido al carrito", {
-                          //     action: {
-                          //       label: "Carrito",
-                          //       onClick: () => onCartIconClick(),
-                          //     },
-                          //   })
-                          // )}
-                        >
+                        <span className="duration-0 flex flex-row justify-between items-center py-2 ">
                           $ {product.price}
-                          {/* <div
-                            className="
-                      rounded-2xl 
-                      hover:shadow p-[0.33em] hover:scale-110
-                      hover:bg-pink-800 hover:text-white 
-                      transition-colors ease duration-100"
-                          >
-                            <MdAddShoppingCart />
-                          </div> */}
                         </span>
                         {product.orderId === hoveredOrderId && (
                           <div
                             className="order-id-indicator flex flex-col 
-    justify-center items-center drop-shadow 
-    text-black-400 font-bold text-lg py-1 
-    px-2 rounded-md -top-6 left-0 right-0
-    mx-auto text-center z-10 transition-all ease"
+                            justify-center items-center drop-shadow 
+                            text-black-400 font-bold text-lg py-1 
+                            px-2 rounded-md -top-6 left-0 right-0
+                            mx-auto text-center z-10 transition-all ease"
+                            onClick={() =>
+                              handleCopyOrderId(hoveredOrderId || "")
+                            }
                           >
                             <span className="flex transition-all ease">
                               #
@@ -268,7 +257,11 @@ const Inventory = ({ onCartIconClick }: any) => {
                                         Date: {order.date}
                                       </span>
                                       <span className="flex">
-                                        Quantity: {order.orderDetail.orderDetailProducts.length}
+                                        Quantity:{" "}
+                                        {
+                                          order.orderDetail.orderDetailProducts
+                                            .length
+                                        }
                                       </span>
                                       <span className="flex">
                                         Total: {order.orderDetail.price}

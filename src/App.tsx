@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "./components/Header/Header";
 import Drawer from "./components/Drawer";
@@ -25,7 +25,8 @@ function App() {
   const { fetchData } = useProductsStore();
   const [userId, setUserId] = useState(null); // Estado para almacenar el ID de usuario
   const [userDetails, setUserDetails] = useState(null); // Estado para almacenar los detalles del usuario
-
+  userId;
+  userDetails;
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -40,8 +41,8 @@ function App() {
           (user: any) => user.email === userEmail
         );
         if (userWithEmail) {
-          setUserId(userWithEmail.id); // Almacena el ID de usuario en el estado
-          setUserDetails(userWithEmail); // Almacena los detalles del usuario en el estado
+          setUserId(userWithEmail.id);
+          setUserDetails(userWithEmail);
         }
       } catch (err) {
         console.error(err);
@@ -89,7 +90,7 @@ function App() {
         const viewportHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
         const scrollPosition = window.scrollY + viewportHeight;
-
+        footerPosition;
         // Mostrar el footer solo cuando se está en el fondo de la página
         setIsFooterVisible(
           scrollPosition >= documentHeight || documentHeight <= viewportHeight

@@ -174,18 +174,21 @@ function Cart({ similar }: any) {
         if (shipmentResponse) {
           toast.info("Creando sesión de pago...");
         }
-        const paymentData = {
+        const paymentData =
           /*ORDER ID ES VARIABLE, 
           Y NO LO TENEMOS EN ESTE COMPONENTE, 
           BUSCAR LA MANERA DE BUSCARLO SEGÚN 
           EL ÚLTIMO CARRITO ACTIVO QUE TIENE EL USUARIO ACTIVO
           Y NO DEJAR USAR SI EL CARRITO ESTÁ ACTIVO*/
-          orderId: "346266a9-02af-4276-b171-88061ece3df9",
-          country: "COL",
-          trackingNumber: shipmentData.trackingNumber,
-          label: shipmentData.label,
-          totalPrice: "10.99",
-        };
+          {
+            orderId: "76394a00-77a4-4e54-93b9-f2cb3a6d359f",
+            country: "COL",
+            trackingNumber: "6230002013526301",
+            label:
+              "https://s3.us-east-2.amazonaws.com/envia-staging/uploads/correosExpress/62300020135263012405668a18a0c5118.pdf",
+            totalPrice: "10.99",
+            frecuency: "WEEKLY",
+          };
 
         return axios.post(
           "https://lachocoback.vercel.app/pagos/create-checkout-session",

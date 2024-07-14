@@ -3,7 +3,7 @@ import { useCartStore } from "../../stores/useCartStore";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors } = useCartStore();
@@ -14,7 +14,7 @@ function Cart({ similar }: any) {
   const { user, isLoaded } = useUser();
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -82,7 +82,7 @@ function Cart({ similar }: any) {
     setCompleted(!hasIncompleteFlavors);
   }, [confirmedFlavors, bombonesProducts]);
   const promise = () =>
-    new Promise((resolve, reject) => {
+    new Promise((reject) => {
       setTimeout(() => {
         const order = {
           userId: userId,
@@ -135,7 +135,6 @@ function Cart({ similar }: any) {
             : product.flavors.map((flavor) => flavor.id),
       })),
     };
-
     axios
       .post("https://lachocoback.vercel.app/orders", order)
       .then((response) => {

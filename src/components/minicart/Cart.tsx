@@ -165,13 +165,7 @@ function Cart({ similar }: any) {
 
         return axios.post(
           "https://lachocoback.vercel.app/shipments/createlabel",
-          shipmentData,
-          {
-            headers: {
-              Authorization: `Bearer ${import.meta.env.VITE_TEST_ENVIA}`,
-              "Content-Type": "application/json",
-            },
-          }
+          shipmentData
         );
       })
       .then((shipmentResponse) => {

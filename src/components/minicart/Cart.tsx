@@ -118,8 +118,6 @@ function Cart({ similar }: any) {
     });
 
   const handlePlaceOrder = () => {
-    // const phoneNumbers = "573012985389";
-    // const shipReference = "Casa en la montaña";
     const order = {
       userId: userId,
       products: cart.map((product) => ({
@@ -140,9 +138,9 @@ function Cart({ similar }: any) {
     axios
       .post("https://lachocoback.vercel.app/orders", order)
       .then((response) => {
-        response;
         toast.success("¡Orden creada exitosamente!");
         console.log("Objeto order:", order);
+
         const shipmentData = {
           user: {
             name: user?.fullName,
@@ -174,8 +172,35 @@ function Cart({ similar }: any) {
         );
       })
       .then((shipmentResponse) => {
-        const { data } = shipmentResponse;
-        console.log("Respuesta de envío:", data);
+        console.log("Info del envio:", shipmentResponse);
+        const shipmentData = shipmentResponse.data.data[0];
+
+        const paymentData = {
+          /*ORDER ID ES VARIABLE, 
+          Y NO LO TENEMOS EN ESTE COMPONENTE, 
+          BUSCAR LA MANERA DE BUSCARLO SEGÚN 
+          EL ÚLTIMO CARRITO ACTIVO QUE TIENE EL USUARIO ACTIVO
+          Y NO DEJAR USAR SI EL CARRITO ESTÁ ACTIVO*/
+          orderId: "346266a9-02af-4276-b171-88061ece3df9",
+          country: "COL",
+          trackingNumber: shipmentData.trackingNumber,
+          label: shipmentData.label,
+          totalPrice: shipmentData.totalPrice.toString(),
+        };
+
+        return axios.post(
+          "https://lachocoback.vercel.app/pagos/create-checkout-session",
+          paymentData,
+          {
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_TEST_ENVIA}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      })
+      .then((paymentResponse) => {
+        console.log("Respuesta de pago:", paymentResponse.data);
       })
       .catch((error) => {
         console.log("Objeto order:", order);

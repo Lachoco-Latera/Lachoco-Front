@@ -71,7 +71,7 @@ function Cart({ similar }: any) {
     });
     return !hasIncompleteFlavors;
   };
-
+  console.log(cart[0].price);
   useEffect(() => {
     const hasIncompleteFlavors = bombonesProducts.some((product) => {
       const productMaxFlavor = product.quantity * product.presentacion;
@@ -119,6 +119,8 @@ function Cart({ similar }: any) {
     });
 
   const handlePlaceOrder = () => {
+    const { cart, removeFromCart } = useCartStore.getState(); // Obtener los métodos y el estado actual del store
+
     const order = {
       userId: userId,
       products: cart.map((product) => ({
@@ -135,12 +137,26 @@ function Cart({ similar }: any) {
             : product.flavors.map((flavor) => flavor.id),
       })),
     };
+
     axios
       .post("https://lachocoback.vercel.app/orders", order)
-      .then((response) => {
-        response;
+      .then(() => {
         toast.success("¡Orden creada exitosamente!");
         console.log("Objeto order:", order);
+
+        // Limpiar el carrito
+        cart.forEach((product) => {
+          removeFromCart(product);
+        });
+
+        // Restablecer los estados adicionales
+        // (esto puede depender de cómo se gestionen los estados en tu tienda)
+        useCartStore.setState({
+          totalItems: 0,
+          totalPrice: 0,
+          confirmedFlavors: {},
+        });
+
         // navigate("/ship");
       })
       .catch((error) => {
@@ -165,6 +181,7 @@ function Cart({ similar }: any) {
         }
       });
   };
+
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
@@ -215,9 +232,11 @@ function Cart({ similar }: any) {
           </button>
         </div>
       ) : (
-        <div className="flex rounded-xl p-2 mt-2 shadow 
+        <div
+          className="flex rounded-xl p-2 mt-2 shadow 
         justify-center hover:bg-green-500 text-green-500
-         hover:text-white  hover:scale-105 transition-all ease">
+         hover:text-white  hover:scale-105 transition-all ease"
+        >
           <button onClick={handlePlaceOrder} className="text-xl font-bold">
             Calcular envio
           </button>

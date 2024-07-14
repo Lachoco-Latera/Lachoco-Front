@@ -184,7 +184,7 @@ function Cart({ similar }: any) {
           country: "COL",
           trackingNumber: shipmentData.trackingNumber,
           label: shipmentData.label,
-          totalPrice: shipmentData.totalPrice.toString(),
+          totalPrice: "10.99",
         };
 
         return axios.post(

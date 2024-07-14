@@ -12,6 +12,8 @@ function Cart({ similar }: any) {
   const [completed, setCompleted] = useState<boolean>(true);
   const [userId, setUserId] = useState(null);
   const { user, isLoaded } = useUser();
+  const [toPayment, setToPayment] = useState(false);
+
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
   // const navigate = useNavigate();
@@ -174,7 +176,9 @@ function Cart({ similar }: any) {
       .then((shipmentResponse) => {
         console.log("Info del envio:", shipmentResponse);
         const shipmentData = shipmentResponse.data.data[0];
-
+        if (shipmentResponse) {
+          toast.info("Creando sesión de pago...");
+        }
         const paymentData = {
           /*ORDER ID ES VARIABLE, 
           Y NO LO TENEMOS EN ESTE COMPONENTE, 
@@ -201,6 +205,13 @@ function Cart({ similar }: any) {
       })
       .then((paymentResponse) => {
         console.log("Respuesta de pago:", paymentResponse.data);
+        toast("Porfavor acceder al pago", {
+          action: {
+            label: "Undo",
+            onClick: () => (window.location.href = paymentResponse.data),
+          },
+        });
+        setToPayment(true);
       })
       .catch((error) => {
         console.log("Objeto order:", order);
@@ -275,15 +286,30 @@ function Cart({ similar }: any) {
           </button>
         </div>
       ) : (
-        <div
-          className="flex rounded-xl p-2 mt-2 shadow 
+        <>
+          <div
+            className="flex rounded-xl p-2 mt-2 shadow 
         justify-center hover:bg-green-500 text-green-500
          hover:text-white  hover:scale-105 transition-all ease"
-        >
-          <button onClick={handlePlaceOrder} className="text-xl font-bold">
-            Calcular envio
-          </button>
-        </div>
+          >
+            <button onClick={handlePlaceOrder} className="text-xl font-bold">
+              Calcular envio
+            </button>
+          </div>
+          {toPayment ? (
+            <div
+              className="flex rounded-xl p-2 mt-2 shadow 
+        justify-center hover:bg-black text-black
+         hover:text-white  hover:scale-105 transition-all ease"
+            >
+              <button onClick={handlePlaceOrder} className="text-xl font-bold">
+                Proceder a pagar
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </section>
   );

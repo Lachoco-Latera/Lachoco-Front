@@ -147,6 +147,38 @@ const Inventory = ({ onCartIconClick }: any) => {
                 onMouseEnter={() => handleMouseEnter(product.orderId)} // Manejar hover
                 onMouseLeave={handleMouseLeave} // Limpiar hover
               >
+                {product.category.name !== "cafes" ? (
+                  <div className="mt-4">
+                    <p className="absolute ml-12 p-1 px-2 product-description rounded-2xl border-1 shadow z-[2]">
+                      {product.label === "SoloOnline"
+                        ? "Solo Online"
+                        : product.label}
+                    </p>
+                    <i
+                      className="absolute ml-24 drop-shadow z-[2]"
+                      onClick={(e) => handleFavoriteClick(e, product)}
+                    >
+                      <IconContext.Provider value={{}}>
+                        <div
+                          className="relative group"
+                          onClick={() => toast.success("Añadido a favoritos ")}
+                        >
+                          <HiHeart
+                            id="firstHeart"
+                            size={24}
+                            className="cursor-pointer group-hover:scale-[1.55] ease-in-out duration-300 drop-shadow absolute scale-[1.21] opacity-30 transparent"
+                          />
+                          <SlHeart
+                            id="secondHeart"
+                            size={24}
+                            color="white"
+                            className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow z-30"
+                          />
+                        </div>
+                      </IconContext.Provider>
+                    </i>
+                  </div>
+                ) : null}
                 <div className="product-card-main flex flex-col">
                   <Carousel
                     axis="horizontal"
@@ -161,38 +193,6 @@ const Inventory = ({ onCartIconClick }: any) => {
                   >
                     {product.images?.map((image: any, i: any) => (
                       <div key={i} className="relative rounded-xl">
-                        <p className="absolute top-2 left-2 p-1 px-2 product-description rounded-2xl border-1 shadow">
-                          {product.label === "SoloOnline"
-                            ? "Solo Online"
-                            : product.label}
-                        </p>
-
-                        <i
-                          className="absolute top-2 right-2 drop-shadow"
-                          onClick={(e) => handleFavoriteClick(e, product)}
-                        >
-                          <IconContext.Provider value={{}}>
-                            <div
-                              className="relative group"
-                              onClick={() =>
-                                toast.success("Añadido a favoritos ")
-                              }
-                            >
-                              <HiHeart
-                                id="firstHeart"
-                                size={24}
-                                className="cursor-pointer group-hover:scale-[1.55] ease-in-out duration-300 drop-shadow absolute scale-[1.21] opacity-30 transparent"
-                              />
-                              <SlHeart
-                                id="secondHeart"
-                                size={24}
-                                color="white"
-                                className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow z-30"
-                              />
-                            </div>
-                          </IconContext.Provider>
-                        </i>
-
                         <img
                           alt={`Product image ${i + 1}`}
                           src={image?.img || ""}

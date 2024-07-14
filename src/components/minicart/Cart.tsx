@@ -71,7 +71,6 @@ function Cart({ similar }: any) {
     });
     return !hasIncompleteFlavors;
   };
-  console.log(cart[0].price);
   useEffect(() => {
     const hasIncompleteFlavors = bombonesProducts.some((product) => {
       const productMaxFlavor = product.quantity * product.presentacion;
@@ -119,8 +118,8 @@ function Cart({ similar }: any) {
     });
 
   const handlePlaceOrder = () => {
-    const { cart, removeFromCart } = useCartStore.getState(); // Obtener los métodos y el estado actual del store
-
+    const phoneNumbers = "573012985389";
+    const shipReference = "Casa en la montaña";
     const order = {
       userId: userId,
       products: cart.map((product) => ({
@@ -140,24 +139,42 @@ function Cart({ similar }: any) {
 
     axios
       .post("https://lachocoback.vercel.app/orders", order)
-      .then(() => {
+      .then((response) => {
         toast.success("¡Orden creada exitosamente!");
         console.log("Objeto order:", order);
+        const shipmentData = {
+          user: {
+            name: user?.fullName,
+            company: "CLIENT",
+            email: userEmail,
+            phone: user?.phoneNumbers[0] || "573012985389",
+            street: "carretera 4a",
+            number: "a",
+            district: "",
+            city: "cundinamarca",
+            state: "bogotá",
+            country: "colombia",
+            postalCode: "08019",
+          },
+          country: "CO",
+          carrier: "saferbo",
+          carrierService: "ground",
+        };
 
-        // Limpiar el carrito
-        cart.forEach((product) => {
-          removeFromCart(product);
-        });
-
-        // Restablecer los estados adicionales
-        // (esto puede depender de cómo se gestionen los estados en tu tienda)
-        useCartStore.setState({
-          totalItems: 0,
-          totalPrice: 0,
-          confirmedFlavors: {},
-        });
-
-        // navigate("/ship");
+        return axios.post(
+          "https://lachocoback.vercel.app/shipments/createlabel",
+          shipmentData,
+          {
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_TEST_ENVIA}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      })
+      .then((shipmentResponse) => {
+        const { data } = shipmentResponse;
+        console.log("Respuesta de envío:", data);
       })
       .catch((error) => {
         console.log("Objeto order:", order);

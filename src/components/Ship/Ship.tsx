@@ -118,8 +118,6 @@ const Ship = () => {
     fetchStates();
     fetchAdditionalData();
   };
-
-  console.log(printOptionsData.slice(0, 5));
   return (
     <div className="">
       <div className="flex flex-col justify-center items-center p-12 shadow-xl rounded-xl ">
@@ -138,31 +136,31 @@ const Ship = () => {
             className="p-2 border mb-2 sm:mb-0 sm:mr-2"
           />
           <button type="submit" className="p-2 bg-blue-500 text-white rounded">
-            Fetch Data
+            Buscar Info Extra
           </button>
         </form>
         <div className="md:w-full w-full  overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-yellow-400 pb-2">
           <div className="shadow   border-b border-gray-200 sm:rounded-lg">
             <b className="flex font-bold text-3xl items-center justify-center py-2">
-              Info de Carriers
+              Carriers disponibles por País
             </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Service ID
+                    Servicio ID
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Carrier Name
+                    Nombre de Carrier
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Description
+                    Descripción
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Delivery Estimate
+                    Estimado de envio
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Active
+                    Activo?
                   </th>
                 </tr>
               </thead>
@@ -201,13 +199,13 @@ const Ship = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Country Code
+                    Código de país
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Country Name
+                    Nombre de País
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Phone Code
+                    Codigo de Teléfono
                   </th>
                 </tr>
               </thead>
@@ -245,19 +243,19 @@ const Ship = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    State Name
+                    Provincia/Departamento/Estado
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Code (2 digits)
+                    Código (2 digitos)
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Code (3 digits)
+                    Código (3 digitos)
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Shopify Code
+                    Código shopify
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Country Code
+                    País
                   </th>
                 </tr>
               </thead>
@@ -292,16 +290,16 @@ const Ship = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Print Option ID
+                    ID de Opción
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Option Name
+                    Opción
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Print Format
+                    Formato
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Print Size
+                    Tamaño
                   </th>
                 </tr>
               </thead>
@@ -336,7 +334,7 @@ const Ship = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Service ID
+                    Servicio
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Additional Service Name
@@ -344,15 +342,29 @@ const Ship = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Additional Service Description
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Disponibilidad
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ID Tipo de Envio
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {/* Map over Additional Services data */}
-                {printOptionsData.slice(0, 50).map((option, index) => (
-                  <tr key={`print-option-${index}`}>
+                {additionalServicesData.map((option, index) => (
+                  <tr key={`additional-service-${index}`}>
                     <td className="px-6 py-4">{option.id}</td>
                     <td className="px-6 py-4">{option.name}</td>
-                    <td className="px-6 py-4">{option.print_format}</td>
+                    <td className="px-6 py-4">{option.description}</td>
+                    <td className="px-6 py-4">
+                      {option.active === 1 ? "Activo" : "No disponbile"}
+                    </td>
+                    <td className="px-6 py-4">
+                      {!option.shipment_type_id
+                        ? "No tiene"
+                        : option.shipment_type_id}
+                    </td>
                   </tr>
                 ))}
 

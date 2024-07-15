@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
+
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
@@ -13,7 +14,7 @@ function Cart({ similar }: any) {
   const [userId, setUserId] = useState(null);
   const { user, isLoaded } = useUser();
   const [toPayment, setToPayment] = useState(false);
-
+  const [orderCreatedId, setOrderCreatedId] = useState("");
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
   // const navigate = useNavigate();
@@ -73,6 +74,7 @@ function Cart({ similar }: any) {
     });
     return !hasIncompleteFlavors;
   };
+
   useEffect(() => {
     const hasIncompleteFlavors = bombonesProducts.some((product) => {
       const productMaxFlavor = product.quantity * product.presentacion;
@@ -82,6 +84,9 @@ function Cart({ similar }: any) {
 
     setCompleted(!hasIncompleteFlavors);
   }, [confirmedFlavors, bombonesProducts]);
+
+  let globalOrderId: string; // Declarar fuera del bloque axios.post
+
   const promise = () =>
     new Promise((reject) => {
       setTimeout(() => {
@@ -140,10 +145,8 @@ function Cart({ similar }: any) {
     axios
       .post("https://lachocoback.vercel.app/orders", order)
       .then((response) => {
-        response;
-        toast.success("¡Orden creada exitosamente!");
-        console.log("Objeto order:", order);
-
+        globalOrderId = response.data[0].id; // Asignar aquí
+        setOrderCreatedId(response.data[0].id);
         const shipmentData = {
           user: {
             name: user?.fullName,
@@ -175,18 +178,13 @@ function Cart({ similar }: any) {
           toast.info("Creando sesión de pago...");
         }
         const paymentData = {
-          /*ORDER ID ES VARIABLE, 
-          Y NO LO TENEMOS EN ESTE COMPONENTE, 
-          BUSCAR LA MANERA DE BUSCARLO SEGÚN 
-          EL ÚLTIMO CARRITO ACTIVO QUE TIENE EL USUARIO ACTIVO
-          Y NO DEJAR USAR SI EL CARRITO ESTÁ ACTIVO*/
-          orderId: "346266a9-02af-4276-b171-88061ece3df9",
+          orderId: globalOrderId, // Usar aquí
           country: "COL",
           trackingNumber: shipmentData.trackingNumber,
           label: shipmentData.label,
           totalPrice: shipmentData.totalPrice.toString(),
         };
-
+        console.log(paymentData);
         return axios.post(
           "https://lachocoback.vercel.app/pagos/create-checkout-session",
           paymentData,
@@ -230,7 +228,6 @@ function Cart({ similar }: any) {
         }
       });
   };
-
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>

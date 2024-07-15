@@ -125,6 +125,11 @@ function Cart({ similar }: any) {
         )
         .then((response) => {
           const countryCode = response.data.address.country_code.toUpperCase();
+          console.log(
+            countryCode,
+            `www.google.com/maps/@${latitude},${longitude}`
+          );
+
           if (southAmericaCountries.includes(countryCode)) {
             setCountry("CO");
           } else {
@@ -142,7 +147,6 @@ function Cart({ similar }: any) {
       setCountry("GLOBAL");
     }
   }, []);
-
   const promise = () =>
     new Promise((reject) => {
       setTimeout(() => {
@@ -221,7 +225,7 @@ function Cart({ similar }: any) {
             country: "colombia",
             postalCode: "08019",
           },
-          country: country,
+          country: "CO",
           carrier: "saferbo",
           carrierService: "ground",
         };

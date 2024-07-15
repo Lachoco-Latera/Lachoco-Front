@@ -170,10 +170,10 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
           </div>
         </div>
         <div
-          className={`flex ${
+          className={`flex mb-20 ${
             productInfo?.category?.name === "bombones"
               ? "hover:cursor-pointer"
-              : null
+              : ""
           }`}
         >
           <Checkout

@@ -27,7 +27,10 @@ export default function BottomBar({ onCartIconClick }: Props) {
     new Promise((resolve) =>
       setTimeout(
         () =>
-          resolve((window.location.href = "https://www.mercadopago.com.ar")),
+          resolve(
+            (window.location.href =
+              "https://lachoco-front.vercel.app/?category=cafes")
+          ),
         1100
       )
     );

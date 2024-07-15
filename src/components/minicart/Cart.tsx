@@ -14,7 +14,7 @@ function Cart({ similar }: any) {
   const [userId, setUserId] = useState(null);
   const { user, isLoaded } = useUser();
   const [toPayment, setToPayment] = useState(false);
-  const [orderCreatedId, setOrderCreatedId] = useState("");
+  const [, setOrderCreatedId] = useState("");
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
   // const navigate = useNavigate();

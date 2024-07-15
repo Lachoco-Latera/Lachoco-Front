@@ -18,6 +18,7 @@ function Cart({ similar }: any) {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [country, setCountry] = useState<string>("");
+  const [actualLink, setActualLink] = useState("");
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
@@ -281,6 +282,7 @@ function Cart({ similar }: any) {
           },
         });
         setToPayment(true);
+        setActualLink(paymentResponse.data);
       })
       .catch((error) => {
         console.log("Objeto order:", order);
@@ -370,7 +372,13 @@ function Cart({ similar }: any) {
         justify-center hover:bg-black text-black
          hover:text-white  hover:scale-105 transition-all ease"
             >
-              <button onClick={handlePlaceOrder} className="text-xl font-bold">
+              <button
+                onClick={() =>
+                  (window.location.href =
+                    actualLink || "https://lachoco-front.vercel.app")
+                }
+                className="text-xl font-bold"
+              >
                 Proceder a pagar
               </button>
             </div>

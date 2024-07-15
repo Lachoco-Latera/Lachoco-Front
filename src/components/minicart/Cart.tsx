@@ -15,6 +15,10 @@ function Cart({ similar }: any) {
   const { user, isLoaded } = useUser();
   const [toPayment, setToPayment] = useState(false);
   const [, setOrderCreatedId] = useState("");
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+  const [country, setCountry] = useState<string>("");
+
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
   // const navigate = useNavigate();
@@ -86,21 +90,58 @@ function Cart({ similar }: any) {
   }, [confirmedFlavors, bombonesProducts]);
 
   let globalOrderId: string;
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(success, error);
-  } else {
-    console.log("Geolocation not supported");
-  }
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+      console.log("Geolocation not supported");
+    }
 
-  function success(position:any) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-  }
+    function success(position: any) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      setLatitude(latitude);
+      setLongitude(longitude);
 
-  function error() {
-    console.log("Unable to retrieve your location");
-  }
+      const southAmericaCountries = [
+        "AR",
+        "BO",
+        "BR",
+        "CL",
+        "CO",
+        "EC",
+        "GY",
+        "PY",
+        "PE",
+        "SR",
+        "UY",
+        "VE",
+      ];
+
+      axios
+        .get(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        )
+        .then((response) => {
+          const countryCode = response.data.address.country_code.toUpperCase();
+          if (southAmericaCountries.includes(countryCode)) {
+            setCountry("CO");
+          } else {
+            setCountry("GLOBAL");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching location data:", error);
+          setCountry("GLOBAL");
+        });
+    }
+
+    function error() {
+      console.log("Unable to retrieve your location");
+      setCountry("GLOBAL");
+    }
+  }, []);
+
   const promise = () =>
     new Promise((reject) => {
       setTimeout(() => {
@@ -143,7 +184,7 @@ function Cart({ similar }: any) {
       userId: userId,
       products: cart.map((product) => ({
         productId: product.id,
-        cantidad: 1,
+        cantidad: product.quantity,
         category: product.category.name,
         flavors: product.flavors.map((flavor) => ({
           flavorId: flavor.id,
@@ -154,6 +195,10 @@ function Cart({ similar }: any) {
             ? confirmedFlavors[product.id] || []
             : product.flavors.map((flavor) => flavor.id),
       })),
+      additionalInfo:
+        latitude && longitude
+          ? `www.google.com/maps/@${latitude},${longitude}`
+          : "No se pudo proporcionar ubicación de usuario",
     };
 
     axios

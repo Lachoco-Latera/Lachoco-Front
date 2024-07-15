@@ -85,8 +85,8 @@ function Cart({ similar }: any) {
     setCompleted(!hasIncompleteFlavors);
   }, [confirmedFlavors, bombonesProducts]);
 
-  let globalOrderId: string; // Declarar fuera del bloque axios.post
-
+  let globalOrderId: string;
+  console.log(navigator.geolocation);
   const promise = () =>
     new Promise((reject) => {
       setTimeout(() => {
@@ -147,7 +147,7 @@ function Cart({ similar }: any) {
       .then((response) => {
         globalOrderId = response.data[0].id;
         setOrderCreatedId(response.data[0].id);
-        const shipmentData = {
+        const shipmentDataCO = {
           user: {
             name: user?.fullName,
             company: "CLIENT",
@@ -165,10 +165,27 @@ function Cart({ similar }: any) {
           carrier: "saferbo",
           carrierService: "ground",
         };
-
+        // const shipmentDataGlobal = {
+        //   user: {
+        //     name: user?.fullName,
+        //     company: "CLIENT",
+        //     email: userEmail,
+        //     phone: user?.phoneNumbers[0] || "573012985389",
+        //     street: "carretera 4a",
+        //     number: "a",
+        //     district: "",
+        //     city: "cundinamarca",
+        //     state: "bogotá",
+        //     country: "colombia",
+        //     postalCode: "08019",
+        //   },
+        //   country: "GLOBAL",
+        //   carrier: "saferbo",
+        //   carrierService: "ground",
+        // };
         return axios.post(
           "https://lachocoback.vercel.app/shipments/createlabel",
-          shipmentData
+          shipmentDataCO
         );
       })
       .then((shipmentResponse) => {

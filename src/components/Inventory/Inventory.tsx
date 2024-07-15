@@ -264,6 +264,12 @@ const Inventory = ({ onCartIconClick }: any) => {
                                         }
                                       </span>
                                       <span className="flex">
+                                        Tracking:{" "}
+                                        {order.labels
+                                          ? order.labels.id
+                                          : "Aún sin tracking"}
+                                      </span>
+                                      <span className="flex">
                                         Total: {order.orderDetail.price}
                                       </span>
                                     </div>

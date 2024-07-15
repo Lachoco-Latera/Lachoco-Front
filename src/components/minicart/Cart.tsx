@@ -220,7 +220,7 @@ function Cart({ similar }: any) {
             country: "colombia",
             postalCode: "08019",
           },
-          country: "CO",
+          country: country,
           carrier: "saferbo",
           carrierService: "ground",
         };

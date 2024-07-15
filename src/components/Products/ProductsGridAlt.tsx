@@ -27,10 +27,10 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
     navigate(`/products/${productId}`);
   };
 
-  const handleImageClick = (product: Product) => {
-    setModalProduct(product);
-    setShowModal(true);
-  };
+  // const handleImageClick = (product: Product) => {
+  //   setModalProduct(product);
+  //   setShowModal(true);
+  // };
 
   const closeModal = () => {
     setShowModal(false);
@@ -39,14 +39,11 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
 
   const handleFavoriteClick = (event: React.MouseEvent, product: Product) => {
     event.stopPropagation();
-    // Lógica para manejar el favorito del producto
     console.log(`Producto favorito: ${product.description}`);
   };
 
-  // Obtén el valor del parámetro 'category' de la URL
   const selectedCategory = searchParams.get("category");
 
-  // Filtra los productos basados en la categoría seleccionada
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category.name === selectedCategory)
     : products;
@@ -94,14 +91,14 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
             <div className="product-card-main flex flex-col" key={index}>
               <Carousel
                 axis="horizontal"
-                showArrows={true}
+                showArrows={false}
                 showThumbs={false}
                 showIndicators={false}
                 showStatus={false}
                 infiniteLoop
                 swipeable={true}
                 emulateTouch
-                onClickItem={() => handleImageClick(product)}
+                onClickItem={() => redirectToProductDetail(product.id)}
               >
                 {product.images.map((image, i) => (
                   <div key={i} className="relative rounded-xl">
@@ -115,16 +112,16 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
               </Carousel>
               <div className="flex flex-col pt-4">
                 <div
-                  className="flex flex-row"
+                  className="flex flex-row justify-between"
                   onClick={() => redirectToProductDetail(product.id)}
                 >
                   <div className="flex flex-col text-left">
                     <h2 className="product-name pr-2">{product.name}</h2>
-                    <h6 className="product-description">
+                    {/* <h6 className="product-description">
                       {product.description}
-                    </h6>
+                    </h6> */}
                   </div>
-                  <div className="flex flex-row">
+                  <div className="flex flex-row ">
                     <FaStar size={16} className="pt-1" />
                     <p className="pl-1 text-sm"> 5.0</p>
                   </div>

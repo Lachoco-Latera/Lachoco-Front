@@ -14,7 +14,7 @@ function Cart({ similar }: any) {
   const [userId, setUserId] = useState(null);
   const { user, isLoaded } = useUser();
   const [toPayment, setToPayment] = useState(false);
-  const [orderCreatedId, setOrderCreatedId] = useState("");
+  const [, setOrderCreatedId] = useState("");
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
   // const navigate = useNavigate();
@@ -145,7 +145,7 @@ function Cart({ similar }: any) {
     axios
       .post("https://lachocoback.vercel.app/orders", order)
       .then((response) => {
-        globalOrderId = response.data[0].id; // Asignar aquí
+        globalOrderId = response.data[0].id;
         setOrderCreatedId(response.data[0].id);
         const shipmentData = {
           user: {

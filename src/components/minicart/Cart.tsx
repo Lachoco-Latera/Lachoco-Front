@@ -18,6 +18,7 @@ function Cart({ similar }: any) {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [country, setCountry] = useState<string>("");
+  const [actualLink, setActualLink] = useState("");
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
@@ -124,6 +125,11 @@ function Cart({ similar }: any) {
         )
         .then((response) => {
           const countryCode = response.data.address.country_code.toUpperCase();
+          console.log(
+            countryCode,
+            `www.google.com/maps/@${latitude},${longitude}`
+          );
+
           if (southAmericaCountries.includes(countryCode)) {
             setCountry("CO");
           } else {
@@ -141,7 +147,6 @@ function Cart({ similar }: any) {
       setCountry("GLOBAL");
     }
   }, []);
-
   const promise = () =>
     new Promise((reject) => {
       setTimeout(() => {
@@ -220,7 +225,7 @@ function Cart({ similar }: any) {
             country: "colombia",
             postalCode: "08019",
           },
-          country: country,
+          country: "CO",
           carrier: "saferbo",
           carrierService: "ground",
         };
@@ -281,6 +286,7 @@ function Cart({ similar }: any) {
           },
         });
         setToPayment(true);
+        setActualLink(paymentResponse.data);
       })
       .catch((error) => {
         console.log("Objeto order:", order);
@@ -370,7 +376,13 @@ function Cart({ similar }: any) {
         justify-center hover:bg-black text-black
          hover:text-white  hover:scale-105 transition-all ease"
             >
-              <button onClick={handlePlaceOrder} className="text-xl font-bold">
+              <button
+                onClick={() =>
+                  (window.location.href =
+                    actualLink || "https://lachoco-front.vercel.app")
+                }
+                className="text-xl font-bold"
+              >
                 Proceder a pagar
               </button>
             </div>

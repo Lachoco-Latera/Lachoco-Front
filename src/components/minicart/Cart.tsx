@@ -145,7 +145,7 @@ function Cart({ similar }: any) {
     axios
       .post("https://lachocoback.vercel.app/orders", order)
       .then((response) => {
-        globalOrderId = response.data[0].id; // Asignar aquí
+        globalOrderId = response.data[0].id;
         setOrderCreatedId(response.data[0].id);
         const shipmentData = {
           user: {

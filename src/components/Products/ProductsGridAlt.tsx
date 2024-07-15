@@ -39,14 +39,11 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
 
   const handleFavoriteClick = (event: React.MouseEvent, product: Product) => {
     event.stopPropagation();
-    // Lógica para manejar el favorito del producto
     console.log(`Producto favorito: ${product.description}`);
   };
 
-  // Obtén el valor del parámetro 'category' de la URL
   const selectedCategory = searchParams.get("category");
 
-  // Filtra los productos basados en la categoría seleccionada
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category.name === selectedCategory)
     : products;

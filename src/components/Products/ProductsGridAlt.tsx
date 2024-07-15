@@ -27,10 +27,10 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
     navigate(`/products/${productId}`);
   };
 
-  const handleImageClick = (product: Product) => {
-    setModalProduct(product);
-    setShowModal(true);
-  };
+  // const handleImageClick = (product: Product) => {
+  //   setModalProduct(product);
+  //   setShowModal(true);
+  // };
 
   const closeModal = () => {
     setShowModal(false);

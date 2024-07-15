@@ -1,4 +1,3 @@
-// MapComponent.tsx
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -20,7 +19,7 @@ const MapComponent = () => {
     <MapContainer
       //@ts-ignore
       center={[4.69, -74.2446]}
-      zoom={11}
+      zoom={2}
       style={{ height: "400px", width: "100%" }}
     >
       <TileLayer
@@ -29,7 +28,12 @@ const MapComponent = () => {
       />
       <Marker position={[4.65, -74.06]}>
         <Popup>
-         Lachoco-Latera <br /> Shipping Service.
+          Lachoco-Latera <br /> Shipping Service.
+        </Popup>
+      </Marker>
+      <Marker position={[40.4168, -3.7038]}>
+        <Popup>
+          Madrid, España <br /> Shipping Hub.
         </Popup>
       </Marker>
     </MapContainer>

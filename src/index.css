@@ -169,7 +169,7 @@ input:focus {
     transition: all ease 0.2s;
   }
   .ui.icon.input > input:hover {
-    width: 90vw !important;
+    width: 70vw !important;
     transition: all ease 0.2s;
   }
   .ui.icon.input {

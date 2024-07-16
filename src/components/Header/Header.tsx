@@ -3,6 +3,8 @@ import { useCartStore } from "../../stores/useCartStore";
 import useFromStore from "../../hooks/useFromStore";
 import SearchExampleStandard from "../Searchbar/Searchbar";
 import logo from "../../../public/images/logo.png";
+import tinyLogo from "../../../public/images/tinyLogo.png";
+
 import { Product } from "@/types.d";
 import {
   SignInButton,
@@ -17,8 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { LuPackageOpen } from "react-icons/lu";
-import { PiHandHeartBold } from "react-icons/pi";
+import { BiTask } from "react-icons/bi";
 
 interface Props {
   onCartIconClick: () => void;
@@ -229,11 +230,19 @@ export default function Header({ onCartIconClick }: Props) {
      h-18  justify-center
     sticky top-0 shadow"
     >
-      <nav className="container self-center md:w-10/12 px-4 flex justify-center md:justify-between items-center md:gap-6">
+      <nav className="container self-center md:w-10/12 px-4 flex justify-between md:justify-between items-center md:gap-6">
         <span className="text-lg font-semibold hidden md:block">
           <img
             src={logo}
-            className="md:w-28 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
+            className="block md:hidden md:w-28 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
+            alt="Lachoco-Latera logo"
+            onClick={() => (window.location.href = "/")}
+          />
+        </span>
+        <span className="min-w-12 text-lg font-semibold">
+          <img
+            src={tinyLogo}
+            className="w-12 md:w-28 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
             alt="Lachoco-Latera logo"
             onClick={() => (window.location.href = "/")}
           />
@@ -280,27 +289,6 @@ export default function Header({ onCartIconClick }: Props) {
           ) : null}
           {isSignedIn ? (
             <>
-              <div>
-                <button
-                  type="button"
-                  title="Mini Cart"
-                  className="
-              text-gray-800 hidden md:block
-              rounded-3xl py-1 px-3 text-xl items-center 
-              hover:scale-110 transition-all ease"
-                  onClick={() =>
-                    toast.promise(promise, {
-                      loading: `Serás redireccionado para suscribirte...`,
-                      success: () => {
-                        return `Muchas gracias de antemano! ❤`;
-                      },
-                      error: "Error",
-                    })
-                  }
-                >
-                  <PiHandHeartBold size={28} />
-                </button>
-              </div>
               <div className="relative  hidden md:block">
                 <button
                   type="button"
@@ -308,7 +296,7 @@ export default function Header({ onCartIconClick }: Props) {
                   className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
                   onClick={() => navigate("/inventory")}
                 >
-                  <LuPackageOpen size={24} />
+                  <BiTask size={26}></BiTask>
                 </button>
               </div>
             </>

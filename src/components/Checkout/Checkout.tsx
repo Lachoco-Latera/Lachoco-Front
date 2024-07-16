@@ -30,7 +30,7 @@ const Checkout = ({
       className="
         px-8 py-8 rounded-xl 
         text-slate-700
-        drop-shadow-md
+        drop-shadow-md my-12
         hover:drop-shadow-2xl ease 
         transition-all bg-white     
         flex flex-col gap-2 text-center max-w-sm

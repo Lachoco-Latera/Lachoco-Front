@@ -234,12 +234,12 @@ export default function Header({ onCartIconClick }: Props) {
         <span className="text-lg font-semibold hidden md:block">
           <img
             src={logo}
-            className="block md:hidden md:w-28 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
+            className="md:block hidden md:w-28 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
             alt="Lachoco-Latera logo"
             onClick={() => (window.location.href = "/")}
           />
         </span>
-        <span className="min-w-12 text-lg font-semibold">
+        <span className="block md:hidden min-w-12 text-lg font-semibold">
           <img
             src={tinyLogo}
             className="w-12 md:w-28 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"

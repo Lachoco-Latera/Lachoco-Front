@@ -17,8 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { LuPackageOpen } from "react-icons/lu";
-import { PiHandHeartBold } from "react-icons/pi";
+import { BiTask } from "react-icons/bi";
 
 interface Props {
   onCartIconClick: () => void;
@@ -238,6 +237,14 @@ export default function Header({ onCartIconClick }: Props) {
             onClick={() => (window.location.href = "/")}
           />
         </span>
+        <span className="text-lg font-semibold">
+          <img
+            src={logo}
+            className="md:w-28 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
+            alt="Lachoco-Latera logo"
+            onClick={() => (window.location.href = "/")}
+          />
+        </span>
         <div className="hover:drop-shadow transition-all ease md:op">
           <SearchExampleStandard />
         </div>
@@ -280,27 +287,6 @@ export default function Header({ onCartIconClick }: Props) {
           ) : null}
           {isSignedIn ? (
             <>
-              <div>
-                <button
-                  type="button"
-                  title="Mini Cart"
-                  className="
-              text-gray-800 hidden md:block
-              rounded-3xl py-1 px-3 text-xl items-center 
-              hover:scale-110 transition-all ease"
-                  onClick={() =>
-                    toast.promise(promise, {
-                      loading: `Serás redireccionado para suscribirte...`,
-                      success: () => {
-                        return `Muchas gracias de antemano! ❤`;
-                      },
-                      error: "Error",
-                    })
-                  }
-                >
-                  <PiHandHeartBold size={28} />
-                </button>
-              </div>
               <div className="relative  hidden md:block">
                 <button
                   type="button"
@@ -308,7 +294,7 @@ export default function Header({ onCartIconClick }: Props) {
                   className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
                   onClick={() => navigate("/inventory")}
                 >
-                  <LuPackageOpen size={24} />
+                  <BiTask size={26}></BiTask>
                 </button>
               </div>
             </>

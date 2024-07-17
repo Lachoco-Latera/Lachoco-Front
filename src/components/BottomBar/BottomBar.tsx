@@ -109,15 +109,15 @@ export default function BottomBar({ onCartIconClick }: Props) {
                   <PiHandHeartBold size={34} />
                 </button>
               </div>
+              <div>
+                <FaRegHeart
+                  size={28}
+                  className=" text-slate-800 hover:cursor-pointer"
+                  onClick={() => navigate(`/favorites`)}
+                />
+              </div>
             </>
           ) : null}
-          <div>
-            <FaRegHeart
-              size={28}
-              className=" text-slate-800 hover:cursor-pointer"
-              onClick={() => navigate(`/favorites`)}
-            />
-          </div>
 
           <div>
             <button

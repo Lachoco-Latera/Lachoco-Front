@@ -301,9 +301,7 @@ export default function Header({ onCartIconClick }: Props) {
               </div>
             </>
           ) : null}
-          {isSignedIn == true &&
-          user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
-          isLoaded ? (
+          {user?.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" ? (
             <div className="relative  hidden md:block">
               <button
                 type="button"

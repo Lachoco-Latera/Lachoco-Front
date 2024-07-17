@@ -84,7 +84,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
         <div className="flex items-center gap-2 ease transition-all">
           <a
             className="flex flex-row cursor-pointer items-center hover:scale-110 hover:px-2 gap-2 transition-all ease"
-            href="whatsapp://send?text=Mirá la nueva página de lachoco-latera: https://lachoco-front.vercel.app"
+            href="whatsapp://send?text=Mirá la nueva página de lachoco-latera: https://lachoco-latera.com"
             data-action="share/whatsapp/share"
           >
             <FaShareSquare size={16} />

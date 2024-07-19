@@ -9,7 +9,7 @@ const Failure = () => {
   const navigate = useNavigate();
   const preferenceId = queryParams.get("preference_id");
   const { user } = useUser();
-
+  const fullName = user?.fullName;
   const copyToClipboard = () => {
     navigator.clipboard
       .writeText(preferenceId ? preferenceId : "")
@@ -76,7 +76,7 @@ const Failure = () => {
           </li>
         </ul>
         <a
-          href={`mailto:ventas@lachoco-latera.com?subject=Problema con el pago&body=${encodeURIComponent(
+          href={`mailto:ventas@lachoco-latera.com?subject=${fullName}: Problema con el pago&body=${encodeURIComponent(
             emailBody
           )}`}
           className="text-blue-500 hover:underline mt-4"

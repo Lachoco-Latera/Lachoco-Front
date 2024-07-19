@@ -1,6 +1,9 @@
 import { useLocation } from "react-router-dom";
 import tinyLogo from "../../../public/images/tinyLogo.png";
 import { useNavigate } from "react-router-dom";
+import { useCartStore } from "../../stores/useCartStore"; // Asegúrate de ajustar la ruta de importación
+import { useEffect } from "react";
+
 const Success = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -11,10 +14,16 @@ const Success = () => {
   const paymentType = queryParams.get("payment_type");
   const merchantOrderId = queryParams.get("merchant_order_id");
   const preferenceId = queryParams.get("preference_id");
+  const { clearCart } = useCartStore();
+
+  // Limpia el carrito cuando el componente se monta
+  useEffect(() => {
+    clearCart();
+  }, [clearCart]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-rose-100 p-6">
-      <div className="flex flex-col items-center justify-center  bg-white rounded-lg shadow-lg p-8">
+      <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8">
         <img
           src={tinyLogo}
           className="w-48 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"

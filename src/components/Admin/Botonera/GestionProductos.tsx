@@ -108,8 +108,20 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       );
       console.log("Producto creado:", response.data);
       closeModal();
-      if (response){
-        toast.success("Se ha creado con exito!")
+      if (response) {
+        toast.success("Se ha creado con éxito!");
+        // Limpiar el formulario
+        setFormEditState({
+          name: "",
+          presentacion: 0,
+          description: "",
+          price: 0,
+          currency: "USD",
+          flavors: [],
+          images: [],
+          categoryId: "11454ea8-a9d6-4798-bcfd-a2bfb9c59f74",
+        });
+        setSelectedFlavors([]);
       }
     } catch (error) {
       console.error("Error al crear producto:", error);
@@ -137,6 +149,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       setOrderState((prevState) =>
         prevState.filter((order) => order.id !== id)
       );
+      toast.success("Producto eliminado");
       console.log(`Producto con id: ${id} eliminado`);
     } catch (error) {
       console.error(`Error al eliminar el producto con id: ${id}`, error);

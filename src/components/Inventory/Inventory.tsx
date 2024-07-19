@@ -267,14 +267,21 @@ const Inventory = ({ onCartIconClick }: any) => {
                                         Ubicación:
                                         <span
                                           className="flex break-all"
-                                          onClick={() =>
-                                            order.additionalInfo
-                                              ? (window.location.href =
-                                                  order.additionalInfo)
-                                              : toast.info(
-                                                  "No se puede acceder a esa información"
+                                          onClick={() => {
+                                            if (order.additionalInfo) {
+                                              const url =
+                                                order.additionalInfo.startsWith(
+                                                  "http"
                                                 )
-                                          }
+                                                  ? order.additionalInfo
+                                                  : `https://${order.additionalInfo}`;
+                                              window.open(url, "_blank");
+                                            } else {
+                                              toast.info(
+                                                "No se puede acceder a esa información"
+                                              );
+                                            }
+                                          }}
                                         >
                                           {order.additionalInfo
                                             ? order.additionalInfo

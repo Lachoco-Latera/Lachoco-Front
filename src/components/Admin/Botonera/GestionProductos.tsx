@@ -181,18 +181,18 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
   };
 
   return (
-    <>
+    <div className="overflow-y-scroll">
       {modalOpen && (
         <div
-          className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          className="absolute inset-0 flex items-center justify-center px-12 bg-black bg-opacity-50 z-50 overflow-y-scroll"
           onClick={closeModal}
         >
           <div
-            className="bg-white p-6 rounded-lg"
+            className="bg-white p-6  md:w-full rounded-lg overflow-y-scroll"
             onClick={(e) => e.stopPropagation()}
           >
             <form
-              className="w-[500px] flex flex-col justify-evenly items-center"
+              className=" flex flex-col justify-evenly items-center "
               onSubmit={handleSubmit}
             >
               <div className="flex flex-col gap-2">
@@ -276,46 +276,55 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                     )}
                   </div>
                 </div>
+                <div className="flex flex-col">
+                  <p className="self-start font-semibold drop-shadow">
+                    Precio {"(En euros)"}
+                  </p>
 
-                <p className="self-start font-semibold drop-shadow">
-                  Precio {"(En euros)"}
-                </p>
+                  <input
+                    type="number"
+                    name="price"
+                    placeholder="Precio"
+                    className="p-2 border rounded-md"
+                    value={formEditState.price}
+                    onChange={handleInputChange}
+                  />
+                  <div className="flex flex-wrap justify-center">
+                    {flavors.map((flavor) => (
+                      <div
+                        key={flavor.id}
+                        className="m-2 p-4 border border-gray-300 rounded-lg shadow-sm bg-white flex items-center"
+                      >
+                        <input
+                          type="checkbox"
+                          id={flavor.id}
+                          name="flavor"
+                          value={flavor.id}
+                          className="mr-2 h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          checked={selectedFlavors.some(
+                            (selected: IFlavor) => selected.id === flavor.id
+                          )}
+                          onChange={() => handleFlavorChange(flavor)}
+                        />
+                        <label
+                          htmlFor={flavor.id}
+                          className="text-gray-700 font-medium"
+                        >
+                          {flavor.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
 
-                <input
-                  type="number"
-                  name="price"
-                  placeholder="Precio"
-                  className="p-2 border rounded-md"
-                  value={formEditState.price}
-                  onChange={handleInputChange}
-                />
-                <div className="flex flex-wrap">
-                  {flavors.map((flavor) => (
-                    <div key={flavor.id} className="p-2">
-                      <input
-                        type="checkbox"
-                        id={flavor.id}
-                        name="flavor"
-                        value={flavor.id}
-                        className="mr-2"
-                        checked={selectedFlavors.some(
-                          (selected: IFlavor) => selected.id === flavor.id
-                        )}
-                        onChange={() => handleFlavorChange(flavor)}
-                      />
-                      <label htmlFor={flavor.id}>{flavor.name}</label>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  type="submit"
-                  className="rounded-xl p-2 shadow-md hover:drop-shadow-xl 
+                  <button
+                    type="submit"
+                    className="rounded-xl p-2 shadow-md hover:drop-shadow-xl 
                           hover:scale-105 transition all ease  hover:bg-blue-500 
                           text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
-                >
-                  Crear Producto
-                </button>
+                  >
+                    Crear Producto
+                  </button>
+                </div>
               </div>
             </form>
           </div>
@@ -344,7 +353,6 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                 <img src={logo} alt="" className="w-36" />
               </div>
             )}
-
             <p className="text-sm text-gray-600 text-center">
               {order.description}
             </p>
@@ -378,6 +386,6 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };

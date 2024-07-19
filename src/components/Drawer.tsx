@@ -30,7 +30,7 @@ const Drawer = ({ children, isOpen, onCartIconClick }: Props) => {
               </button>
             </div>
           </header>
-          <main className="bg-white p-4 text-black">{children}</main>
+          <main className="bg-white p-4 px-6 text-black">{children}</main>
         </aside>
       </div>
     </div>

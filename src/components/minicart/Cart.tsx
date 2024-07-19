@@ -16,7 +16,7 @@ function Cart({ similar }: any) {
   const [orderCreatedId, setOrderCreatedId] = useState("");
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
-  const [country, setCountry] = useState<string>("");
+  const [, setCountry] = useState<string>("");
   const [actualLink, setActualLink] = useState("");
   const [infoModal, setInfoModal] = useState(false);
   const userEmail = user?.primaryEmailAddress?.emailAddress;
@@ -237,7 +237,6 @@ function Cart({ similar }: any) {
       .then((response) => {
         globalOrderId = response.data[0].id;
         setOrderCreatedId(response.data[0].id);
-
         const paymentData: any = {
           orderId: globalOrderId,
           country: "COL",
@@ -269,6 +268,7 @@ function Cart({ similar }: any) {
                 paymentResponse.data,
                 paymentResponse
               );
+              setInfoModal(false);
               toast("Por favor, acceder al pago", {
                 duration: 10000,
                 action: {
@@ -340,15 +340,25 @@ function Cart({ similar }: any) {
       ) : (
         <>
           <div
-            className="flex rounded-xl p-2 mt-2 shadow 
-        justify-center  hover:bg-black text-black
-         hover:text-white  hover:scale-105 transition-all ease"
+            className={`flex rounded-xl p-2 mt-2 shadow 
+        justify-center   ${
+          orderCreatedId === ""
+            ? "hover:bg-black text-black hover:text-white hover:scale-105 "
+            : "text-slate-500"
+        }  transition-all ease`}
           >
-            <button onClick={handlePlaceOrder} className="text-xl font-bold">
+            <button
+              onClick={() =>
+                orderCreatedId === ""
+                  ? handlePlaceOrder()
+                  : toast.info("Ya has realizado un pedido")
+              }
+              className="text-xl font-bold"
+            >
               Realizar Pedido
             </button>
           </div>
-          {toPayment ? (
+          {/* {toPayment ? (
             <div
               className="flex rounded-xl p-2 mt-2 shadow 
         justify-center hover:bg-green-500 text-green-500
@@ -366,7 +376,7 @@ function Cart({ similar }: any) {
             </div>
           ) : (
             <></>
-          )}
+          )} */}
         </>
       )}
       {infoModal ? (
@@ -469,6 +479,7 @@ function Cart({ similar }: any) {
                   }
                   onChange={handleChange}
                   required
+                  disabled
                   className="w-full border p-2 rounded"
                 />
               </div>
@@ -484,12 +495,27 @@ function Cart({ similar }: any) {
                   className="w-full border p-2 rounded"
                 />
               </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 rounded"
-              >
-                Enviar
-              </button>
+              <>
+                {toPayment ? (
+                  <div
+                    className="flex rounded-xl p-2 mt-2 shadow 
+        justify-center hover:bg-green-500 text-green-500
+         hover:text-white hover:scale-105 transition-all ease"
+                  >
+                    <button
+                      onClick={() =>
+                        (window.location.href =
+                          actualLink || "https://lachoco-front.vercel.app")
+                      }
+                      className="text-xl font-bold"
+                    >
+                      Proceder a pagar
+                    </button>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </>
             </form>
           </div>
         </>

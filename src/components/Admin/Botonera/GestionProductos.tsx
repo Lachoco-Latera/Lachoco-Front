@@ -19,7 +19,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     currency: "USD",
     flavors: [],
     images: [],
-    categoryId: "11454ea8-a9d6-4798-bcfd-a2bfb9c59f74",
+    categoryId: "",
   });
   const [flavors, setFlavors] = useState<IFlavor[]>([]);
   const [categories, setCategories] = useState<ICategories[]>([]);
@@ -85,20 +85,17 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       currency: product.currency,
       flavors: product.flavors,
       images: product.images,
-      categoryId: product.categoryId,
+      categoryId: product.category.id,
     });
-    console.log(product.images[0].img)
     setSelectedFlavors(product.flavors);
     setModalOpen(true);
   };
-
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     const newValue =
       (name === "presentacion" || name === "price") && value !== ""
-        ? Number(value)
+        ? parseFloat(value.replace(",", ""))
         : value;
-
     setFormEditState({
       ...formEditState,
       [name]: newValue,
@@ -130,12 +127,12 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
           currency: "USD",
           flavors: [],
           images: [],
-          categoryId: "11454ea8-a9d6-4798-bcfd-a2bfb9c59f74",
+          categoryId: "",
         });
         setSelectedFlavors([]);
       }
     } catch (error) {
-      console.error("Error al crear producto:", error);
+      console.warn("Error al crear producto:", error);
     }
   };
 
@@ -252,9 +249,8 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                         <button
                           onClick={handleOnClick}
                           className="rounded-xl p-2 shadow-md hover:drop-shadow-xl 
-                          hover:scale-105 transition all ease  hover:bg-blue-400 
-                          text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer
-                          "
+                          hover:scale-105 transition all ease hover:bg-blue-400 
+                          text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
                         >
                           Cargar imágenes
                         </button>
@@ -262,19 +258,25 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                     }}
                   </UploadWidget>
                   {error && <p>{error}</p>}
-                  {url && (
-                    <div className="flex flex-row justify-center items-center">
-                      <p className="p-2">
-                        <img
-                          src={url}
-                          alt="Uploaded resource"
-                          className="w-20 h-20"
-                        />
-                      </p>
-                      {/* <p className="break-all max-w-[400px]">{url}</p> */}
-                    </div>
-                  )}
+                  <div className="flex flex-row flex-wrap justify-center items-center">
+                    {formEditState.images && formEditState.images.length > 0 ? (
+                      formEditState.images.map(
+                        (image: { id: string; img: string }, index: number) => (
+                          <div key={image.id} className="p-2">
+                            <img
+                              src={image.img}
+                              alt={`Uploaded resource ${index}`}
+                              className="w-20 h-20 object-cover"
+                            />
+                          </div>
+                        )
+                      )
+                    ) : (
+                      <p>No images to display</p>
+                    )}
+                  </div>
                 </div>
+
                 <p className="self-start font-semibold drop-shadow">
                   Precio {"(En euros)"}
                 </p>
@@ -331,13 +333,18 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
             </h2>
             {order.images.length > 0 ? (
               <div className="self-center">
-                <img src={order.images[0].img} alt="" className="w-36" />
+                <img
+                  src={order.images ? order.images[0]?.img : ""}
+                  alt=""
+                  className="w-36"
+                />
               </div>
             ) : (
               <div className="self-center">
                 <img src={logo} alt="" className="w-36" />
               </div>
             )}
+
             <p className="text-sm text-gray-600 text-center">
               {order.description}
             </p>

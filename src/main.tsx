@@ -12,6 +12,7 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import Ship from "./components/Ship/Ship.tsx";
 import { Admin } from "./components/Admin/Admin.tsx";
 import Success from "./components/Success/Success.tsx";
+import Failure from "./components/Failure/Failure.tsx";
 // Import your publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/success",
     element: <Success />,
+  },
+  {
+    path: "/failure",
+    element: <Failure />,
   },
 ]);
 

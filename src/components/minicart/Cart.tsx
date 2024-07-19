@@ -21,6 +21,7 @@ function Cart({ similar }: any) {
   const [, setCountry] = useState<string>("");
   const [actualLink, setActualLink] = useState("");
   const [infoModal, setInfoModal] = useState(false);
+  const [useCustomMap, setUseCustomMap] = useState(false);
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
   // const navigate = useNavigate();
@@ -92,62 +93,61 @@ function Cart({ similar }: any) {
   }, [confirmedFlavors, bombonesProducts]);
 
   let globalOrderId: string;
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, error);
-    } else {
-      console.log("Geolocation not supported");
-    }
-
-    function success(position: any) {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      setLatitude(latitude);
-      setLongitude(longitude);
-
-      const southAmericaCountries = [
-        "AR",
-        "BO",
-        "BR",
-        "CL",
-        "CO",
-        "EC",
-        "GY",
-        "PY",
-        "PE",
-        "SR",
-        "UY",
-        "VE",
-      ];
-
-      axios
-        .get(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-        )
-        .then((response) => {
-          const countryCode = response.data.address.country_code.toUpperCase();
-          console.log(
-            countryCode,
-            `www.google.com/maps/@${latitude},${longitude}`
-          );
-
-          if (southAmericaCountries.includes(countryCode)) {
-            setCountry("CO");
-          } else {
+  if (!useCustomMap) {
+    useEffect(() => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error);
+      } else {
+        console.log("Geolocation not supported");
+      }
+      function success(position: any) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        setLatitude(latitude);
+        setLongitude(longitude);
+        const southAmericaCountries = [
+          "AR",
+          "BO",
+          "BR",
+          "CL",
+          "CO",
+          "EC",
+          "GY",
+          "PY",
+          "PE",
+          "SR",
+          "UY",
+          "VE",
+        ];
+        axios
+          .get(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          )
+          .then((response) => {
+            const countryCode =
+              response.data.address.country_code.toUpperCase();
+            console.log(
+              countryCode,
+              `www.google.com/maps/@${latitude},${longitude}`
+            );
+            if (southAmericaCountries.includes(countryCode)) {
+              setCountry("CO");
+            } else {
+              setCountry("GLOBAL");
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching location data:", error);
             setCountry("GLOBAL");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching location data:", error);
-          setCountry("GLOBAL");
-        });
-    }
+          });
+      }
+      function error() {
+        console.log("Unable to retrieve your location");
+        setCountry("GLOBAL");
+      }
+    }, []);
+  }
 
-    function error() {
-      console.log("Unable to retrieve your location");
-      setCountry("GLOBAL");
-    }
-  }, []);
   const promise = () =>
     new Promise((reject) => {
       setTimeout(() => {
@@ -208,7 +208,7 @@ function Cart({ similar }: any) {
       })),
       additionalInfo:
         latitude && longitude
-          ? `www.google.com/maps/@${latitude},${longitude}`
+          ? `www.google.com/maps/@${latitude},${longitude},20.01z?entry=ttu`
           : "No se pudo proporcionar ubicación de usuario",
     };
 
@@ -261,8 +261,12 @@ function Cart({ similar }: any) {
           setActualLink(paymentResponse.data);
         })
         .catch((error) => {
+          setToPayment(false);
           console.error("Error en el envío de paymentData:", error);
-          toast.error("Error al crear la orden de pago: " + error.message);
+          toast.warning(
+            "Error al crear la orden de pago: " +
+              "Probablemente olvidaste llenar el formulario"
+          );
         }),
       {
         loading: "Procesando orden...",
@@ -363,6 +367,7 @@ function Cart({ similar }: any) {
             .catch((error) => {
               console.error("Error en el envío de paymentData:", error);
               toast.error("Error al crear la orden de pago: " + error.message);
+              setToPayment(false);
             });
         }
       });
@@ -430,6 +435,8 @@ function Cart({ similar }: any) {
             <button
               onClick={() =>
                 orderCreatedId === ""
+                  ? handlePlaceOrder()
+                  : !toPayment && orderCreatedId !== ""
                   ? handlePlaceOrder()
                   : toast.info("Ya has realizado un pedido")
               }
@@ -557,8 +564,8 @@ function Cart({ similar }: any) {
                   name="shipmentCountry"
                   value={
                     longitude && latitude
-                      ? `www.google.com/maps/@${latitude},${longitude}`
-                      : formData.shipmentCountry
+                      ? `www.google.com/maps/@${latitude},${longitude},20.01z?entry=ttu`
+                      : `Sin úbicación`
                   }
                   onChange={handleChange}
                   required
@@ -566,6 +573,7 @@ function Cart({ similar }: any) {
                   className="w-full border p-2 rounded"
                 />
                 <MapSelector
+                  onClick={() => setUseCustomMap(true)}
                   setLatitude={setLatitude}
                   setLongitude={setLongitude}
                 />

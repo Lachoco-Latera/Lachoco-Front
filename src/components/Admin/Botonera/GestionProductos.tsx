@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import logo from "../../../../public/images/logo.png";
 import UploadWidget from "../../../components/UploadWidget";
+import { ICategories, IFlavor } from "../../../helpers/type";
+import { toast } from "sonner";
 
 export const GestionProductos = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -13,16 +15,55 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     name: "",
     presentacion: 0,
     description: "",
-    price: 0.0,
+    price: 0,
     currency: "USD",
     flavors: [],
-    images: [
-      "https://res.cloudinary.com/drtxikwww/image/upload/fl_preserve_transparency/v1719274387/example4_hm9wfy.jpg?_s=public-apps",
-      "https://res.cloudinary.com/drtxikwww/image/upload/fl_preserve_transparency/v1719274387/example4_hm9wfy.jpg?_s=public-apps",
-      "https://res.cloudinary.com/drtxikwww/image/upload/fl_preserve_transparency/v1719274387/example4_hm9wfy.jpg?_s=public-apps",
-    ],
-    categoryId: "11454ea8-a9d6-4798-bcfd-a2bfb9c59f74", // Aquí debes asignar la categoría correspondiente
+    images: [],
+    categoryId: "",
   });
+  const [flavors, setFlavors] = useState<IFlavor[]>([]);
+  const [categories, setCategories] = useState<ICategories[]>([]);
+
+  const [selectedFlavors, setSelectedFlavors] = useState<any>([]);
+
+  useEffect(() => {
+    const getFlavors = async () => {
+      try {
+        const response = await axios.get(
+          "https://lachocoback.vercel.app/flavor"
+        );
+        const data = response.data;
+        setFlavors(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://lachocoback.vercel.app/category"
+        );
+        const data = response.data;
+        setCategories(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getFlavors();
+    getCategories();
+  }, []);
+  const handleFlavorChange = (flavor: IFlavor) => {
+    if (
+      selectedFlavors.some((selected: IFlavor) => selected.id === flavor.id)
+    ) {
+      setSelectedFlavors(
+        selectedFlavors.filter((selected: IFlavor) => selected.id !== flavor.id)
+      );
+    } else {
+      setSelectedFlavors([...selectedFlavors, flavor]);
+    }
+  };
+
   useEffect(() => {
     if (signal) {
       setModalOpen(true);
@@ -34,32 +75,64 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
   };
 
-  const handleEdit = (event: React.MouseEvent) => {
-    event.preventDefault();
-    setEditState(!editState);
-    setModalOpen(true); // Abrir el modal al hacer clic en editar
+  const handleEdit = (product: any) => {
+    setEditState(true);
+    setFormEditState({
+      name: product.name,
+      presentacion: product.presentacion,
+      description: product.description,
+      price: product.price,
+      currency: product.currency,
+      flavors: product.flavors,
+      images: product.images,
+      categoryId: product.category.id,
+    });
+    setSelectedFlavors(product.flavors);
+    setModalOpen(true);
   };
-
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
+    const newValue =
+      (name === "presentacion" || name === "price") && value !== ""
+        ? parseFloat(value.replace(",", ""))
+        : value;
     setFormEditState({
       ...formEditState,
-      [name]: value,
+      [name]: newValue,
     });
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log(formEditState);
+    setFormEditState((prevState: any) => ({
+      ...prevState,
+      flavors: selectedFlavors,
+    }));
     try {
       const response = await axios.post(
         "https://lachocoback.vercel.app/products",
         formEditState
       );
       console.log("Producto creado:", response.data);
-      // Aquí podrías añadir lógica para manejar la respuesta, como actualizar la lista de productos
-      closeModal(); // Cerrar el modal después de enviar el formulario
+      closeModal();
+      if (response) {
+        toast.success("Se ha creado con éxito!");
+        // Limpiar el formulario
+        setFormEditState({
+          name: "",
+          presentacion: 0,
+          description: "",
+          price: 0,
+          currency: "USD",
+          flavors: [],
+          images: [],
+          categoryId: "",
+        });
+        setSelectedFlavors([]);
+      }
     } catch (error) {
-      console.error("Error al crear producto:", error);
+      console.warn("Error al crear producto:", error);
     }
   };
 
@@ -77,11 +150,21 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     };
     getOrders();
   }, []);
-  const handleButtonDelete = (id: string) => {
-    // Funcionalidad de eliminación aquí
-    console.log(`Eliminar producto con id: ${id}`);
+
+  const handleButtonDelete = async (id: string) => {
+    try {
+      await axios.delete(`https://lachocoback.vercel.app/products/${id}`);
+      setOrderState((prevState) =>
+        prevState.filter((order) => order.id !== id)
+      );
+      toast.success("Producto eliminado");
+      console.log(`Producto con id: ${id} eliminado`);
+    } catch (error) {
+      console.error(`Error al eliminar el producto con id: ${id}`, error);
+    }
   };
-  function handleOnUpload(error: any, result: any, widget: any) {
+
+  const handleOnUpload = (error: any, result: any, widget: any) => {
     if (error) {
       updateError(error);
       widget.close({
@@ -89,13 +172,19 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       });
       return;
     }
-    updateUrl(result?.info?.secure_url);
-  }
+    const secureUrl = result?.info?.secure_url;
+    updateUrl(secureUrl);
+    setFormEditState((prevState: any) => ({
+      ...prevState,
+      images: [...prevState.images, secureUrl],
+    }));
+  };
+
   return (
     <>
       {modalOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
           onClick={closeModal}
         >
           <div
@@ -115,6 +204,22 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   value={formEditState.name}
                   onChange={handleInputChange}
                 />
+                <select
+                  name="categoryId"
+                  className="p-2 border rounded-md"
+                  value={formEditState.categoryId}
+                  onChange={handleInputChange}
+                >
+                  <option value="" disabled>
+                    Seleccionar categoría
+                  </option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+
                 <p className="self-start font-semibold drop-shadow">
                   Presentación / Cantidad de productos
                 </p>
@@ -144,57 +249,38 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                         <button
                           onClick={handleOnClick}
                           className="rounded-xl p-2 shadow-md hover:drop-shadow-xl 
-                          hover:scale-105 transition all ease  hover:bg-blue-400 
-                          text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer
-                          "
+                          hover:scale-105 transition all ease hover:bg-blue-400 
+                          text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
                         >
                           Cargar imágenes
                         </button>
                       );
                     }}
                   </UploadWidget>
-
                   {error && <p>{error}</p>}
-
-                  {url && (
-                    <>
-                      {" "}
-                      <div className="flex flex-row justify-center items-center">
-                        <p className="p-2">
-                          <img
-                            src={url}
-                            alt="Uploaded resource"
-                            className="w-20 h-20"
-                          />
-                        </p>
-                        <p className="break-all max-w-[400px]">{url}</p>
-                      </div>{" "}
-                      <div className="flex flex-row justify-center items-center">
-                        <p className="p-2">
-                          <img
-                            src={url}
-                            alt="Uploaded resource"
-                            className="w-20 h-20"
-                          />
-                        </p>
-                        <p className="break-all max-w-[400px]">{url}</p>
-                      </div>{" "}
-                      <div className="flex flex-row justify-center items-center">
-                        <p className="p-2">
-                          <img
-                            src={url}
-                            alt="Uploaded resource"
-                            className="w-20 h-20"
-                          />
-                        </p>
-                        <p className="break-all max-w-[400px]">{url}</p>
-                      </div>
-                    </>
-                  )}
+                  <div className="flex flex-row flex-wrap justify-center items-center">
+                    {formEditState.images && formEditState.images.length > 0 ? (
+                      formEditState.images.map(
+                        (image: { id: string; img: string }, index: number) => (
+                          <div key={image.id} className="p-2">
+                            <img
+                              src={image.img}
+                              alt={`Uploaded resource ${index}`}
+                              className="w-20 h-20 object-cover"
+                            />
+                          </div>
+                        )
+                      )
+                    ) : (
+                      <p>No images to display</p>
+                    )}
+                  </div>
                 </div>
+
                 <p className="self-start font-semibold drop-shadow">
                   Precio {"(En euros)"}
                 </p>
+
                 <input
                   type="number"
                   name="price"
@@ -203,6 +289,25 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   value={formEditState.price}
                   onChange={handleInputChange}
                 />
+                <div className="flex flex-wrap">
+                  {flavors.map((flavor) => (
+                    <div key={flavor.id} className="p-2">
+                      <input
+                        type="checkbox"
+                        id={flavor.id}
+                        name="flavor"
+                        value={flavor.id}
+                        className="mr-2"
+                        checked={selectedFlavors.some(
+                          (selected: IFlavor) => selected.id === flavor.id
+                        )}
+                        onChange={() => handleFlavorChange(flavor)}
+                      />
+                      <label htmlFor={flavor.id}>{flavor.name}</label>
+                    </div>
+                  ))}
+                </div>
+
                 <button
                   type="submit"
                   className="rounded-xl p-2 shadow-md hover:drop-shadow-xl 
@@ -227,14 +332,19 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
               {order.name}
             </h2>
             {order.images.length > 0 ? (
-              <div className=" self-center">
-                <img src={order.images[0].img} alt="" className="w-36" />
+              <div className="self-center">
+                <img
+                  src={order.images ? order.images[0]?.img : ""}
+                  alt=""
+                  className="w-36"
+                />
               </div>
             ) : (
-              <div className=" self-center">
+              <div className="self-center">
                 <img src={logo} alt="" className="w-36" />
               </div>
             )}
+
             <p className="text-sm text-gray-600 text-center">
               {order.description}
             </p>
@@ -254,7 +364,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
             <div className="flex justify-center items-center mt-4">
               <button
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize transition-all duration-400 ease-in-out transform hover:scale-105"
-                onClick={handleEdit}
+                onClick={() => handleEdit(order)}
               >
                 editar
               </button>

@@ -10,7 +10,7 @@ const MapSelector = ({ setLatitude, setLongitude }: any) => {
       click(e: any) {
         setPosition(e.latlng);
         setLatitude(e.latlng.lat);
-        setLongitude(e.latlng.lng);
+          setLongitude(e.latlng.lng);
       },
     });
 

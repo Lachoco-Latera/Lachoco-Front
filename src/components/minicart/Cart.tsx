@@ -3,6 +3,8 @@ import { useCartStore } from "../../stores/useCartStore";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import MapSelector from "../MapSelector"; // Asegúrate de importar el MapSelector
+
 // import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 function Cart({ similar }: any) {
@@ -186,8 +188,90 @@ function Cart({ similar }: any) {
   const handlePlaceOrder = () => {
     if (!infoModal) {
       setInfoModal(true);
+      return;
     }
+
+    const order = {
+      userId: userId,
+      products: cart.map((product) => ({
+        productId: product.id,
+        cantidad: product.quantity,
+        category: product.category.name,
+        flavors: product.flavors.map((flavor) => ({
+          flavorId: flavor.id,
+          cantidad: 1,
+        })),
+        pickedFlavors:
+          product.category.name === "bombones"
+            ? confirmedFlavors[product.id] || []
+            : product.flavors.map((flavor) => flavor.id),
+      })),
+      additionalInfo:
+        latitude && longitude
+          ? `www.google.com/maps/@${latitude},${longitude}`
+          : "No se pudo proporcionar ubicación de usuario",
+    };
+
+    toast.promise(
+      axios
+        .post("https://lachocoback.vercel.app/orders", order)
+        .then((response) => {
+          globalOrderId = response.data[0].id;
+          setOrderCreatedId(response.data[0].id);
+          const paymentData: any = {
+            orderId: globalOrderId,
+            country: "COL",
+            phone: formData.phone,
+            number: formData.number,
+            street: formData.street,
+            city: formData.city,
+            state: formData.state,
+            postalCode: formData.postalCode,
+            shipmentCountry: formData.shipmentCountry || "COL",
+          };
+          // Agregar giftCardId solo si no es vacío
+          if (formData.giftCardId) {
+            paymentData.giftCardId = formData.giftCardId;
+          }
+
+          if (globalOrderId !== "" && globalOrderId.length !== 0) {
+            return axios.post(
+              "https://lachocoback.vercel.app/pagos/create-checkout-session",
+              paymentData
+            );
+          } else {
+            throw new Error("Order ID is invalid");
+          }
+        })
+        .then((paymentResponse) => {
+          console.log(
+            "Respuesta de pago:",
+            paymentResponse.data,
+            paymentResponse
+          );
+          setInfoModal(false);
+          toast("Por favor, acceder al pago", {
+            duration: 10000,
+            action: {
+              label: "Click to continue",
+              onClick: () => (window.location.href = paymentResponse.data),
+            },
+          });
+          setToPayment(true);
+          setActualLink(paymentResponse.data);
+        })
+        .catch((error) => {
+          console.error("Error en el envío de paymentData:", error);
+          toast.error("Error al crear la orden de pago: " + error.message);
+        }),
+      {
+        loading: "Procesando orden...",
+        success: "Orden procesada con éxito",
+        error: "Error al crear la orden de pago",
+      }
+    );
   };
+
   const [formData, setFormData] = useState({
     orderId: orderCreatedId || "",
     giftCardId: "",
@@ -209,7 +293,6 @@ function Cart({ similar }: any) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(formData);
     setInfoModal(true);
     const order = {
       userId: userId,
@@ -248,13 +331,10 @@ function Cart({ similar }: any) {
           postalCode: formData.postalCode,
           shipmentCountry: formData.shipmentCountry || "COL",
         };
-
         // Agregar giftCardId solo si no es vacío
         if (formData.giftCardId) {
           paymentData.giftCardId = formData.giftCardId;
         }
-
-        console.log(paymentData);
 
         if (globalOrderId !== "" && globalOrderId.length !== 0) {
           axios
@@ -358,32 +438,35 @@ function Cart({ similar }: any) {
               Realizar Pedido
             </button>
           </div>
-          {/* {toPayment ? (
-            <div
-              className="flex rounded-xl p-2 mt-2 shadow 
+          <>
+            {toPayment ? (
+              <div
+                className="flex rounded-xl p-2 mt-2 shadow 
         justify-center hover:bg-green-500 text-green-500
          hover:text-white hover:scale-105 transition-all ease"
-            >
-              <button
-                onClick={() =>
-                  (window.location.href =
-                    actualLink || "https://lachoco-front.vercel.app")
-                }
-                className="text-xl font-bold"
               >
-                Proceder a pagar
-              </button>
-            </div>
-          ) : (
-            <></>
-          )} */}
+                <button
+                  onClick={() =>
+                    (window.location.href =
+                      actualLink || "https://lachoco-front.vercel.app")
+                  }
+                  className="text-xl font-bold"
+                >
+                  Proceder a pagar
+                </button>
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
         </>
       )}
       {infoModal ? (
         <>
           <div className="bg-white p-5 mt-5 z-50 shadow-md rounded-xl">
             <h2 className="mb-4 font-bold">
-              Porfavor llene la información de envio:
+              Porfavor llene la información de envio, <br /> Antes de "Realizar
+              el pedido":
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -474,7 +557,7 @@ function Cart({ similar }: any) {
                   name="shipmentCountry"
                   value={
                     longitude && latitude
-                      ? `www.google.com/maps/@${-34.598153},${-58.4411486}`
+                      ? `www.google.com/maps/@${latitude},${longitude}`
                       : formData.shipmentCountry
                   }
                   onChange={handleChange}
@@ -482,7 +565,12 @@ function Cart({ similar }: any) {
                   disabled
                   className="w-full border p-2 rounded"
                 />
+                <MapSelector
+                  setLatitude={setLatitude}
+                  setLongitude={setLongitude}
+                />
               </div>
+
               <div>
                 <label className="block mb-1">
                   Cupón de descuento (opcional)
@@ -495,27 +583,6 @@ function Cart({ similar }: any) {
                   className="w-full border p-2 rounded"
                 />
               </div>
-              <>
-                {toPayment ? (
-                  <div
-                    className="flex rounded-xl p-2 mt-2 shadow 
-        justify-center hover:bg-green-500 text-green-500
-         hover:text-white hover:scale-105 transition-all ease"
-                  >
-                    <button
-                      onClick={() =>
-                        (window.location.href =
-                          actualLink || "https://lachoco-front.vercel.app")
-                      }
-                      className="text-xl font-bold"
-                    >
-                      Proceder a pagar
-                    </button>
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </>
             </form>
           </div>
         </>

@@ -11,10 +11,10 @@ import {
 } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { PiHandHeartBold } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa";
 import { GrUserAdmin } from "react-icons/gr";
 import { LuPackageOpen } from "react-icons/lu";
+import { LiaCrownSolid } from "react-icons/lia";
 interface Props {
   onCartIconClick: () => void;
 }
@@ -106,7 +106,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
                     })
                   }
                 >
-                  <PiHandHeartBold size={34} />
+                  <LiaCrownSolid size={34} />
                 </button>
               </div>
               <div>

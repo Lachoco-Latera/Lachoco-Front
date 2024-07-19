@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
-
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
@@ -14,12 +13,12 @@ function Cart({ similar }: any) {
   const [userId, setUserId] = useState(null);
   const { user, isLoaded } = useUser();
   const [toPayment, setToPayment] = useState(false);
-  const [, setOrderCreatedId] = useState("");
+  const [orderCreatedId, setOrderCreatedId] = useState("");
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [country, setCountry] = useState<string>("");
   const [actualLink, setActualLink] = useState("");
-
+  const [infoModal, setInfoModal] = useState(false);
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
   // const navigate = useNavigate();
@@ -185,6 +184,33 @@ function Cart({ similar }: any) {
     });
 
   const handlePlaceOrder = () => {
+    if (!infoModal) {
+      setInfoModal(true);
+    }
+  };
+  const [formData, setFormData] = useState({
+    orderId: orderCreatedId || "",
+    giftCardId: "",
+    country: "",
+    frecuency: "",
+    phone: "",
+    street: "",
+    number: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    shipmentCountry: "COL",
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log(formData);
+    setInfoModal(true);
     const order = {
       userId: userId,
       products: cart.map((product) => ({
@@ -211,105 +237,57 @@ function Cart({ similar }: any) {
       .then((response) => {
         globalOrderId = response.data[0].id;
         setOrderCreatedId(response.data[0].id);
-        const shipmentDataCO = {
-          user: {
-            name: user?.fullName,
-            company: "CLIENT",
-            email: userEmail,
-            phone: user?.phoneNumbers[0] || "573012985389",
-            street: "carretera 4a",
-            number: "a",
-            district: "",
-            city: "cundinamarca",
-            state: "bogotá",
-            country: "colombia",
-            postalCode: "08019",
-          },
-          country: "CO",
-          carrier: "saferbo",
-          carrierService: "ground",
-        };
-        // const shipmentDataGlobal = {
-        //   user: {
-        //     name: user?.fullName,
-        //     company: "CLIENT",
-        //     email: userEmail,
-        //     phone: user?.phoneNumbers[0] || "573012985389",
-        //     street: "carretera 4a",
-        //     number: "a",
-        //     district: "",
-        //     city: "cundinamarca",
-        //     state: "bogotá",
-        //     country: "colombia",
-        //     postalCode: "08019",
-        //   },
-        //   country: "GLOBAL",
-        //   carrier: "saferbo",
-        //   carrierService: "ground",
-        // };
-        return axios.post(
-          "https://lachocoback.vercel.app/shipments/createlabel",
-          shipmentDataCO
-        );
-      })
-      .then((shipmentResponse) => {
-        console.log("Info del envio:", shipmentResponse);
-        const shipmentData = shipmentResponse.data.data[0];
-        if (shipmentResponse) {
-          toast.info("Creando sesión de pago...");
-        }
-        const paymentData = {
-          orderId: globalOrderId, // Usar aquí
+
+        const paymentData: any = {
+          orderId: globalOrderId,
           country: "COL",
-          trackingNumber: shipmentData.trackingNumber,
-          label: shipmentData.label,
-          totalPrice: shipmentData.totalPrice.toString(),
+          phone: formData.phone,
+          street: formData.street,
+          number: formData.number,
+          city: formData.city,
+          state: formData.state,
+          postalCode: formData.postalCode,
+          shipmentCountry: formData.shipmentCountry || "COL",
         };
+
+        // Agregar giftCardId solo si no es vacío
+        if (formData.giftCardId) {
+          paymentData.giftCardId = formData.giftCardId;
+        }
+
         console.log(paymentData);
-        return axios.post(
-          "https://lachocoback.vercel.app/pagos/create-checkout-session",
-          paymentData,
-          {
-            headers: {
-              Authorization: `Bearer ${import.meta.env.VITE_TEST_ENVIA}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      })
-      .then((paymentResponse) => {
-        console.log("Respuesta de pago:", paymentResponse.data);
-        toast("Porfavor acceder al pago", {
-          action: {
-            label: "Undo",
-            onClick: () => (window.location.href = paymentResponse.data),
-          },
-        });
-        setToPayment(true);
-        setActualLink(paymentResponse.data);
-      })
-      .catch((error) => {
-        console.log("Objeto order:", order);
-        if (error.response) {
-          console.error(
-            "Server responded with error status:",
-            error.response.status
-          );
-          console.error("Response data:", error.response.data);
-          toast.error(
-            "Error al crear la orden: " + error.response.data.message
-          );
-        } else if (error.request) {
-          console.error("No response received:", error.request);
-          toast.error(
-            "Error al crear la orden: No se recibió respuesta del servidor."
-          );
-        } else {
-          console.error("Error setting up the request:", error.message);
-          toast.error("Error al crear la orden: " + error.message);
+
+        if (globalOrderId !== "" && globalOrderId.length !== 0) {
+          axios
+            .post(
+              "https://lachocoback.vercel.app/pagos/create-checkout-session",
+              paymentData
+            )
+            .then((paymentResponse) => {
+              console.log(
+                "Respuesta de pago:",
+                paymentResponse.data,
+                paymentResponse
+              );
+              toast("Por favor, acceder al pago", {
+                duration: 10000,
+                action: {
+                  label: "Click to continue",
+                  onClick: () => (window.location.href = paymentResponse.data),
+                },
+              });
+
+              setToPayment(true);
+              setActualLink(paymentResponse.data);
+            })
+            .catch((error) => {
+              console.error("Error en el envío de paymentData:", error);
+              toast.error("Error al crear la orden de pago: " + error.message);
+            });
         }
       });
   };
+
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
@@ -363,18 +341,18 @@ function Cart({ similar }: any) {
         <>
           <div
             className="flex rounded-xl p-2 mt-2 shadow 
-        justify-center hover:bg-green-500 text-green-500
+        justify-center  hover:bg-black text-black
          hover:text-white  hover:scale-105 transition-all ease"
           >
             <button onClick={handlePlaceOrder} className="text-xl font-bold">
-              Calcular envio
+              Realizar Pedido
             </button>
           </div>
           {toPayment ? (
             <div
               className="flex rounded-xl p-2 mt-2 shadow 
-        justify-center hover:bg-black text-black
-         hover:text-white  hover:scale-105 transition-all ease"
+        justify-center hover:bg-green-500 text-green-500
+         hover:text-white hover:scale-105 transition-all ease"
             >
               <button
                 onClick={() =>
@@ -391,6 +369,131 @@ function Cart({ similar }: any) {
           )}
         </>
       )}
+      {infoModal ? (
+        <>
+          <div className="bg-white p-5 mt-5 z-50 shadow-md rounded-xl">
+            <h2 className="mb-4 font-bold">
+              Porfavor llene la información de envio:
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block mb-1">Teléfono</label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">País</label>
+                <input
+                  type="text"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  required
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">
+                  Estado/Provincia/Departamento
+                </label>
+                <input
+                  type="text"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  required
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">Ciudad</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  required
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">Calle/Barrio</label>
+                <input
+                  type="text"
+                  name="street"
+                  value={formData.street}
+                  onChange={handleChange}
+                  required
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">Número</label>
+                <input
+                  type="text"
+                  name="number"
+                  value={formData.number}
+                  onChange={handleChange}
+                  required
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">Código Postal</label>
+                <input
+                  type="text"
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  required
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">
+                  Geolocalización (Para mejorar la precisión del envio)
+                </label>
+                <input
+                  type="text"
+                  name="shipmentCountry"
+                  value={
+                    longitude && latitude
+                      ? `www.google.com/maps/@${-34.598153},${-58.4411486}`
+                      : formData.shipmentCountry
+                  }
+                  onChange={handleChange}
+                  required
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <div>
+                <label className="block mb-1">
+                  Cupón de descuento (opcional)
+                </label>
+                <input
+                  type="text"
+                  name="giftCardId"
+                  value={formData.giftCardId}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 rounded"
+              >
+                Enviar
+              </button>
+            </form>
+          </div>
+        </>
+      ) : null}
     </section>
   );
 }

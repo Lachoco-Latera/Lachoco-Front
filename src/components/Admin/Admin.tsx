@@ -160,7 +160,7 @@ export const Admin = () => {
         return { icon: <IoMenu size={24} />, color: "rose" }; // Valor por defecto
     }
   }
-  
+
   const { icon, color } = getIconAndColor();
   return (
     <>
@@ -207,16 +207,15 @@ export const Admin = () => {
             >
               <AiOutlinePlus size={24} />
             </button>
-            <button
+            {/* <button
               className={`bg-red-500 text-white hover:bg-white hover:text-red-500 p-4 rounded-full shadow-xl transition-all ease hover:scale-105`}
               onClick={() => console.log("Extra Button 2 Clicked")}
             >
               <AiOutlineDelete size={24} />
-            </button>
+            </button> */}
           </div>
         )}
       </div>
-
 
       <div className="container">
         <h2>Resources</h2>

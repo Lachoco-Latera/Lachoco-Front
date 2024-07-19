@@ -75,10 +75,21 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
   };
 
-  const handleEdit = (event: React.MouseEvent) => {
-    event.preventDefault();
-    setEditState(!editState);
-    setModalOpen(true); // Abrir el modal al hacer clic en editar
+  const handleEdit = (product: any) => {
+    setEditState(true);
+    setFormEditState({
+      name: product.name,
+      presentacion: product.presentacion,
+      description: product.description,
+      price: product.price,
+      currency: product.currency,
+      flavors: product.flavors,
+      images: product.images,
+      categoryId: product.categoryId,
+    });
+    console.log(product.images[0].img)
+    setSelectedFlavors(product.flavors);
+    setModalOpen(true);
   };
 
   const handleInputChange = (event: any) => {
@@ -320,7 +331,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
             </h2>
             {order.images.length > 0 ? (
               <div className="self-center">
-                <img src={order.images[0]} alt="" className="w-36" />
+                <img src={order.images[0].img} alt="" className="w-36" />
               </div>
             ) : (
               <div className="self-center">
@@ -346,7 +357,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
             <div className="flex justify-center items-center mt-4">
               <button
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize transition-all duration-400 ease-in-out transform hover:scale-105"
-                onClick={handleEdit}
+                onClick={() => handleEdit(order)}
               >
                 editar
               </button>

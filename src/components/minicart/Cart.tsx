@@ -190,7 +190,7 @@ function Cart({ similar }: any) {
       setInfoModal(true);
       return;
     }
-  
+
     const order = {
       userId: userId,
       products: cart.map((product) => ({
@@ -212,58 +212,66 @@ function Cart({ similar }: any) {
           : "No se pudo proporcionar ubicación de usuario",
     };
 
-    axios
-      .post("https://lachocoback.vercel.app/orders", order)
-      .then((response) => {
-        globalOrderId = response.data[0].id;
-        setOrderCreatedId(response.data[0].id);
-        const paymentData: any = {
-          orderId: globalOrderId,
-          country: "COL",
-          phone: formData.phone,
-          street: formData.street,
-          number: formData.number,
-          city: formData.city,
-          state: formData.state,
-          postalCode: formData.postalCode,
-          shipmentCountry: formData.shipmentCountry || "COL",
-        };
-        // Agregar giftCardId solo si no es vacío
-        if (formData.giftCardId) {
-          paymentData.giftCardId = formData.giftCardId;
-        }
+    toast.promise(
+      axios
+        .post("https://lachocoback.vercel.app/orders", order)
+        .then((response) => {
+          globalOrderId = response.data[0].id;
+          setOrderCreatedId(response.data[0].id);
+          const paymentData: any = {
+            orderId: globalOrderId,
+            country: "COL",
+            phone: formData.phone,
+            number: formData.number,
+            street: formData.street,
+            city: formData.city,
+            state: formData.state,
+            postalCode: formData.postalCode,
+            shipmentCountry: formData.shipmentCountry || "COL",
+          };
+          // Agregar giftCardId solo si no es vacío
+          if (formData.giftCardId) {
+            paymentData.giftCardId = formData.giftCardId;
+          }
 
-        if (globalOrderId !== "" && globalOrderId.length !== 0) {
-          axios
-            .post(
+          if (globalOrderId !== "" && globalOrderId.length !== 0) {
+            return axios.post(
               "https://lachocoback.vercel.app/pagos/create-checkout-session",
               paymentData
-            )
-            .then((paymentResponse) => {
-              console.log(
-                "Respuesta de pago:",
-                paymentResponse.data,
-                paymentResponse
-              );
-              setInfoModal(false);
-              toast("Por favor, acceder al pago", {
-                duration: 10000,
-                action: {
-                  label: "Click to continue",
-                  onClick: () => (window.location.href = paymentResponse.data),
-                },
-              });
-
-              setToPayment(true);
-              setActualLink(paymentResponse.data);
-            })
-            .catch((error) => {
-              console.error("Error en el envío de paymentData:", error);
-              toast.error("Error al crear la orden de pago: " + error.message);
-            });
-        }
-      });
+            );
+          } else {
+            throw new Error("Order ID is invalid");
+          }
+        })
+        .then((paymentResponse) => {
+          console.log(
+            "Respuesta de pago:",
+            paymentResponse.data,
+            paymentResponse
+          );
+          setInfoModal(false);
+          toast("Por favor, acceder al pago", {
+            duration: 10000,
+            action: {
+              label: "Click to continue",
+              onClick: () => (window.location.href = paymentResponse.data),
+            },
+          });
+          setToPayment(true);
+          setActualLink(paymentResponse.data);
+        })
+        .catch((error) => {
+          console.error("Error en el envío de paymentData:", error);
+          toast.error("Error al crear la orden de pago: " + error.message);
+        }),
+      {
+        loading: "Procesando orden...",
+        success: "Orden procesada con éxito",
+        error: "Error al crear la orden de pago",
+      }
+    );
   };
+
   const [formData, setFormData] = useState({
     orderId: orderCreatedId || "",
     giftCardId: "",

@@ -251,23 +251,35 @@ const Inventory = ({ onCartIconClick }: any) => {
                                   .map((order: any) => (
                                     <div key={order.id}>
                                       <span className="flex">
-                                        Status: {order.status}
+                                        Estado: {order.status}
                                       </span>
                                       <span className="flex">
-                                        Date: {order.date}
+                                        Comprado en: {order.date}
                                       </span>
                                       <span className="flex">
-                                        Quantity:{" "}
+                                        Cantidad:
                                         {
                                           order.orderDetail.orderDetailProducts
                                             .length
                                         }
                                       </span>
-                                      <span className="flex">
-                                        Tracking:{" "}
-                                        {order.labels
-                                          ? order.labels.id
-                                          : "Aún sin tracking"}
+                                      <span className="flex flex-col items-start max-w-48">
+                                        Ubicación:
+                                        <span
+                                          className="flex break-all"
+                                          onClick={() =>
+                                            order.additionalInfo
+                                              ? (window.location.href =
+                                                  order.additionalInfo)
+                                              : toast.info(
+                                                  "No se puede acceder a esa información"
+                                                )
+                                          }
+                                        >
+                                          {order.additionalInfo
+                                            ? order.additionalInfo
+                                            : "Aún sin localización"}
+                                        </span>
                                       </span>
                                       <span className="flex">
                                         Total: {order.orderDetail.price}

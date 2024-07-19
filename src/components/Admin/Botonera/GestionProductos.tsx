@@ -268,6 +268,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                               alt={`Uploaded resource ${index}`}
                               className="w-20 h-20 object-cover"
                             />
+                            {image.img.substring(0, 80)}
                           </div>
                         )
                       )

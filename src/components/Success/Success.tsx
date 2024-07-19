@@ -17,7 +17,7 @@ const Success = () => {
       <div className="flex flex-col items-center justify-center  bg-white rounded-lg shadow-lg p-8">
         <img
           src={tinyLogo}
-          className="w-12 md:w-48 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
+          className="w-48 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
           alt="Lachoco-Latera logo"
           onClick={() => navigate("/inventory")}
         />
@@ -30,16 +30,10 @@ const Success = () => {
         <p className="text-md text-gray-600">Detalles de la transacción:</p>
         <ul className="list-disc list-inside text-gray-600">
           <li>
-            <strong>ID de Colección:</strong> {collectionId}
-          </li>
-          <li>
-            <strong>Estado de Colección:</strong> {paymentStatus}
-          </li>
-          <li>
             <strong>ID de Pago:</strong> {paymentId}
           </li>
           <li>
-            <strong>Tipo de Pago:</strong> {paymentType}
+            <strong>ID de Colección:</strong> {collectionId}
           </li>
           <li>
             <strong>ID de Orden de Comerciante:</strong> {merchantOrderId}
@@ -47,13 +41,19 @@ const Success = () => {
           <li>
             <strong>ID de Preferencia:</strong> {preferenceId}
           </li>
+          <li>
+            <strong>Estado del pago:</strong> {paymentStatus}
+          </li>
+          <li>
+            <strong>Tipo de Pago:</strong> {paymentType}
+          </li>
         </ul>
         <p className="text-md text-gray-600 mt-4">
           Nos alegra que hayas elegido comprar con nosotros. ¡Esperamos verte de
           nuevo pronto!
         </p>
         <small
-          className="hover:cursor-pointer hover:scale-105 hover:font-bold transition-all ease" 
+          className="hover:cursor-pointer hover:scale-105 hover:font-bold transition-all ease py-6"
           onClick={() => navigate("/inventory")}
         >
           Haz click aquí o al Logo para ir a tu inventario, o cierra está página

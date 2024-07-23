@@ -212,7 +212,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
           onClick={closeModal}
         >
           <div
-            className="bg-white p-6 md:max-w-3xl w-full rounded-lg overflow-y-auto max-h-[90vh]"
+            className="bg-white p-4 md:p-6 md:max-w-3xl w-full rounded-lg overflow-y-auto max-h-[80vh] md:mb-0 mb-16 md:max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-row justify-end pb-2">

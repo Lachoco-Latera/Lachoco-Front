@@ -290,13 +290,13 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   <div className="flex flex-row flex-wrap justify-center items-center">
                     {formEditState.images.length > 0 ? (
                       formEditState.images.map(
-                        (image: string, index: number) => (
+                        (image: { img: string }, index: number) => (
                           <div
                             key={index}
                             className="relative p-2 max-w-40 break-words"
                           >
                             <img
-                              src={image}
+                              src={image.img} // Accede a image.img
                               alt={`Uploaded resource ${index}`}
                               className="w-20 h-20 object-cover"
                             />

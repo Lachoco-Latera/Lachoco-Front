@@ -86,8 +86,10 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       name: product.name,
       presentacion: product.presentacion,
       description: product.description,
-      price: product.price,
+      price: Number(product.price),
       currency: product.currency,
+      label: product.label,
+      isActive: product.isActive,
       flavors: product.flavors,
       images: product.images,
       categoryId: product.category.id,
@@ -117,15 +119,29 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       flavors: selectedFlavors,
       price: Number(prevState.price),
     }));
-    console.log("Producto actualizado:", formEditState);
+
     try {
-      const response = await axios.patch(
-        `http://localhost:3000/products/${formEditState.id}`,
-        formEditState
-      );
+      let response;
+      if (formEditState.id) {
+        response = await axios.patch(
+          `http://localhost:3000/products/${formEditState.id}`,
+          formEditState
+        );
+      } else {
+        response = await axios.post(
+          `http://localhost:3000/products`,
+          formEditState
+        );
+      }
+
       closeModal();
+
       if (response) {
-        toast.success("Producto actualizado con éxito!");
+        toast.success(
+          formEditState.id
+            ? "Producto actualizado con éxito!"
+            : "Producto creado con éxito!"
+        );
         setFormEditState({
           name: "",
           presentacion: 0,
@@ -140,7 +156,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
         setSelectedFlavors([]);
       }
     } catch (error) {
-      console.warn("Error al actualizar producto:", error);
+      console.warn("Error al guardar producto:", error);
     }
   };
 

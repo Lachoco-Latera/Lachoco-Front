@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import UploadWidget from "../../../components/UploadWidget";
+import { IoMdClose } from "react-icons/io";
+import tinyLogo from "../../../../public/images/tinyLogo.png";
 
 export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -25,7 +28,6 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
       }); // Limpia el formulario
     }
   }, [signal]);
-
   useEffect(() => {
     const getGiftcards = async () => {
       try {
@@ -57,7 +59,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     setSelectedGiftCard(giftcard);
     setFormData({
       discount: Number(giftcard.discount) || 0,
-      img: giftcard.img || "",
+      img: giftcard.img,
       userId: giftcard.user?.id || "", // Asigna el userId seleccionado
     });
     setEditState(true);
@@ -142,7 +144,15 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
       console.log(error);
     }
   };
-
+  const handleOnUpload = (result: any) => {
+    if (result && result.event === "success") {
+      const uploadedImageUrl = result.info.secure_url;
+      setFormData((prev) => ({
+        ...prev,
+        img: uploadedImageUrl,
+      }));
+    }
+  };
   return (
     <div className="w-full flex flex-wrap justify-center items-center px-4 py-8 gap-4">
       {modalOpen && (
@@ -166,14 +176,45 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
                 className="p-2 border rounded-md mb-2 w-full"
                 onChange={handleChange}
               />
-              <input
-                type="text"
-                name="img"
-                value={formData.img}
-                placeholder="URL de Imagen"
-                className="p-2 border rounded-md mb-2 w-full"
-                onChange={handleChange}
-              />
+              <div className="flex flex-col items-center w-full mb-2">
+                <UploadWidget onUpload={handleOnUpload}>
+                  {({ open }: any) => {
+                    function handleOnClick(e: any) {
+                      e.preventDefault();
+                      open();
+                    }
+                    return (
+                      <button
+                        onClick={handleOnClick}
+                        className="rounded-xl p-2 shadow-md hover:drop-shadow-xl hover:scale-105 transition-all ease hover:bg-rose-400 text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
+                      >
+                        Cargar imágenes
+                      </button>
+                    );
+                  }}
+                </UploadWidget>
+                {formData.img && (
+                  <div className="relative p-2 mt-2 max-w-40 break-words">
+                    <img
+                      src={formData.img}
+                      alt="Imagen del cupón"
+                      className="w-20 h-20 object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          img: "",
+                        }))
+                      }
+                      className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                    >
+                      <IoMdClose size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
               <div className="w-full mb-2">
                 <select
                   name="userId"
@@ -214,9 +255,15 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
           <p className="font-bold text-gray-800 text-center text-sm sm:text-base">
             Estado: {giftcard.isUsed ? "Usado" : "No usado"}
           </p>
-          {giftcard.img && (
+          {giftcard.img ? (
             <img
               src={giftcard.img}
+              alt="Imagen del cupón"
+              className="w-16 h-16 object-cover mt-2"
+            />
+          ) : (
+            <img
+              src={tinyLogo}
               alt="Imagen del cupón"
               className="w-16 h-16 object-cover mt-2"
             />

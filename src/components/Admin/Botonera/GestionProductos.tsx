@@ -25,7 +25,8 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
   const [categories, setCategories] = useState<ICategories[]>([]);
 
   const [selectedFlavors, setSelectedFlavors] = useState<any>([]);
-
+  editState;
+  url;
   useEffect(() => {
     const getFlavors = async () => {
       try {
@@ -184,11 +185,11 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     <div className="overflow-y-scroll">
       {modalOpen && (
         <div
-          className="absolute inset-0 flex items-center justify-center px-12 bg-black bg-opacity-50 z-50 overflow-y-scroll"
+          className="fixed inset-0 flex items-center justify-center px-12 bg-black bg-opacity-50 z-50"
           onClick={closeModal}
         >
           <div
-            className="bg-white p-6  md:w-full rounded-lg overflow-y-scroll"
+            className="bg-white p-6 md:max-w-3xl w-full rounded-lg overflow-y-auto max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             <form
@@ -262,7 +263,10 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                     {formEditState.images && formEditState.images.length > 0 ? (
                       formEditState.images.map(
                         (image: { id: string; img: string }, index: number) => (
-                          <div key={image.id} className="p-2">
+                          <div
+                            key={image.id}
+                            className="p-2 max-w-40 break-words"
+                          >
                             <img
                               src={image.img}
                               alt={`Uploaded resource ${index}`}

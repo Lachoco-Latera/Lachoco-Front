@@ -5,6 +5,7 @@ import UploadWidget from "../../../components/UploadWidget";
 import { ICategories, IFlavor } from "../../../helpers/type";
 import { toast } from "sonner";
 import { IoMdExit } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 
 export const GestionProductos = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -111,7 +112,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       [name]: newValue,
     });
   };
-
+  console.log(formEditState);
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setFormEditState((prevState: any) => ({
@@ -119,17 +120,17 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       flavors: selectedFlavors,
       price: Number(prevState.price),
     }));
-
+    console.log(formEditState);
     try {
       let response;
       if (formEditState.id) {
-        response = await axios.patch(
-          `http://localhost:3000/products/${formEditState.id}`,
+        response = await axios.put(
+          `https://lachocoback.vercel.app/products/${formEditState.id}`,
           formEditState
         );
       } else {
         response = await axios.post(
-          `http://localhost:3000/products`,
+          `https://lachocoback.vercel.app/products`,
           formEditState
         );
       }
@@ -278,9 +279,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                       return (
                         <button
                           onClick={handleOnClick}
-                          className="rounded-xl p-2 shadow-md hover:drop-shadow-xl 
-                          hover:scale-105 transition all ease hover:bg-rose-400 
-                          text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
+                          className="rounded-xl p-2 shadow-md hover:drop-shadow-xl hover:scale-105 transition all ease hover:bg-rose-400 text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
                         >
                           Cargar imágenes
                         </button>
@@ -289,19 +288,31 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   </UploadWidget>
                   {error && <p>{error}</p>}
                   <div className="flex flex-row flex-wrap justify-center items-center">
-                    {formEditState.images && formEditState.images.length > 0 ? (
+                    {formEditState.images.length > 0 ? (
                       formEditState.images.map(
-                        (image: { id: string; img: string }, index: number) => (
+                        (image: string, index: number) => (
                           <div
-                            key={image.id}
-                            className="p-2 max-w-40 break-words"
+                            key={index}
+                            className="relative p-2 max-w-40 break-words"
                           >
                             <img
-                              src={image.img}
+                              src={image}
                               alt={`Uploaded resource ${index}`}
                               className="w-20 h-20 object-cover"
                             />
-                            {image.img.substring(0, 80)}
+                            <button
+                              onClick={() =>
+                                setFormEditState((prevState: any) => ({
+                                  ...prevState,
+                                  images: prevState.images.filter(
+                                    (_: any, i: any) => i !== index
+                                  ),
+                                }))
+                              }
+                              className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                            >
+                              <IoMdClose size={16} />
+                            </button>
                           </div>
                         )
                       )
@@ -310,6 +321,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                     )}
                   </div>
                 </div>
+
                 <div className="flex flex-col gap-2">
                   <p className="self-start font-semibold drop-shadow">
                     Precio {"(En euros)"}

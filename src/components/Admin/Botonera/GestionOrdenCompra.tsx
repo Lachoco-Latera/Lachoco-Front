@@ -6,13 +6,13 @@ import { IOrders } from "@/helpers/type";
 
 export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
   const [editFormState, setEditFormState] = useState<IOrders>({
-    id: '',
-    date: '',
-    status: '',
+    id: "",
+    date: "",
+    status: "",
   });
   const [ordersState, setOrdersState] = useState<any[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-
+  const [editingOrderId, setEditingOrderId] = useState<string | null>(null);
   useEffect(() => {
     if (signal) {
       setModalOpen(true);
@@ -24,14 +24,15 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
     onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
   };
 
-  const handleEdit = (event: React.MouseEvent, orderId:string) => {
-    event.preventDefault();
-    const orderToEdit = ordersState.find(order => order.id === orderId);
-    if (orderToEdit) {
-      setEditFormState(orderToEdit);
-    }
-    setModalOpen(true); // Abrir el modal al hacer clic en editar
-  };
+  // const handleEdit = (event: React.MouseEvent, orderId: string) => {
+  //   event.preventDefault();
+  //   const orderToEdit = ordersState.find((order) => order.id === orderId);
+  //   if (orderToEdit) {
+  //     setEditFormState(orderToEdit);
+  //     setEditingOrderId(orderId);
+  //   }
+  //   setModalOpen(true); // Abrir el modal al hacer clic en editar
+  // };
 
   useEffect(() => {
     const getOrders = async () => {
@@ -47,7 +48,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
     };
     getOrders();
   }, []);
-
+  console.log(ordersState);
   const handleButtonDelete = async (id: string) => {
     const alertId = toast("¿Deseas eliminar la orden seleccionada?", {
       duration: 5000,
@@ -56,17 +57,18 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
         onClick: async () => {
           toast.dismiss(alertId);
           try {
-            // Aquí se debería agregar la lógica para eliminar la orden usando su ID
             const response = await axios.delete(
               `https://lachocoback.vercel.app/orders/${id}`
             );
             const deletedOrder = response.data;
             console.log(`Orden eliminada correctamente: ${deletedOrder}`);
-            // Actualizar la lista de órdenes después de eliminar
             setOrdersState(ordersState.filter((order) => order.id !== id));
-            toast.success (`La orden se elimino correctamente: ${deletedOrder}`,{
-              duration: 5000,
-            } )
+            toast.success(
+              `La orden se elimino correctamente: ${deletedOrder}`,
+              {
+                duration: 5000,
+              }
+            );
           } catch (error) {
             console.log(error);
           }
@@ -83,8 +85,9 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
     });
   };
 
-  const handleOnSubmitEdit = (event: React.FormEvent) => {
-    event.preventDefault()
+  const handleOnSubmitEdit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log(editFormState);
     const alertId = toast("¿Deseas editar la orden seleccionada?", {
       duration: 5000,
       action: {
@@ -92,24 +95,39 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
         onClick: async () => {
           toast.dismiss(alertId);
           try {
-            // Aquí se debería agregar la lógica para eliminar la orden usando su ID
-           //
-            console.log('Orden editada correctamente');
+            const response = await axios.patch(
+              `http://localhost:3000/orders/${editFormState.id}`,
+              {
+                date: editFormState.date,
+                status: editFormState.status,
+              }
+            );
+            const updatedOrder = response.data;
+            console.log(`Orden editada correctamente: ${updatedOrder}`);
+            setOrdersState((prevOrders) =>
+              prevOrders.map((order) =>
+                order.id === updatedOrder.id ? updatedOrder : order
+              )
+            );
             setModalOpen(false);
-            toast.success ('La orden se edito correctamente',{
+            setEditingOrderId(null);
+            toast.success("La orden se editó correctamente", {
               duration: 5000,
-            } )
+            });
           } catch (error) {
             console.log(error);
+            toast.error("Error al editar la orden", {
+              duration: 5000,
+            });
           }
         },
       },
     });
-  }
+  };
 
   return (
     <>
-      {modalOpen && (
+      {modalOpen && 1 < 0 && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
           onClick={closeModal}
@@ -118,7 +136,10 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
             className="bg-white p-6 rounded-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center" onSubmit={handleOnSubmitEdit}>
+            <form
+              className="w-[500px] h-[300px] flex flex-col justify-evenly items-center"
+              onSubmit={handleOnSubmitEdit}
+            >
               <div>
                 <label htmlFor="id">ID: </label>
                 <input
@@ -126,7 +147,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
                   name="id"
                   value={editFormState.id}
                   className="p-2 border rounded-md"
-                  onChange={handleOnChangeEdit}
+                  readOnly // ID no debería ser editable
                 />
               </div>
               <div>
@@ -180,14 +201,16 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
               user: {order.user?.name} {order.user?.lastname}
             </p>
             <p className="font-bold">id user: {order.user?.id}</p>
-            <p className="font-bold">user active: {order.user?.isActive}</p>
+            <p className="font-bold">
+              user is active?: {order.user.isActive ? "True" : "False"}
+            </p>
             <div className="w-full flex justify-center items-center">
-              <button
+              {/* <button
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize transition-all duration-400 ease-in-out transform hover:scale-105"
                 onClick={(event) => handleEdit(event, order.id)}
               >
                 editar
-              </button>
+              </button> */}
               <button
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold bg-red-500 hover:bg-red-900 hover:text-red-500 m-3 capitalize transition-all duration-400 ease-in-out transform hover:scale-105"
                 onClick={() => handleButtonDelete(order.id)}

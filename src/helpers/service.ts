@@ -35,10 +35,9 @@ export const putRedes = async (id: string, data: IRedes) => {
   }
 };
 
-
-export const deleteRed = async (id: string | undefined) => {
+export const deleteRed = async (id: string | any) => {
   try {
-    const res = await axios.delete(`${id}`);
+    const res = await axios.delete(`http://localhost:3000/redes/${id}`);
     console.log(
       res.data,
       "<<<<<<<<<<<<<<<<<<<<<<<------------ service delete redes"

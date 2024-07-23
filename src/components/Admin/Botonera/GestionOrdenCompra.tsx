@@ -96,7 +96,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
           toast.dismiss(alertId);
           try {
             const response = await axios.patch(
-              `http://localhost:3000/orders/${editFormState.id}`,
+              `https://lachocoback.vercel.app/orders/${editFormState.id}`,
               {
                 date: editFormState.date,
                 status: editFormState.status,

@@ -31,7 +31,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   useEffect(() => {
     const getGiftcards = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/gitfcards");
+        const response = await axios.get("https://lachocoback.vercel.app/gitfcards");
         const data = response.data;
         setGiftcardsState(data);
       } catch (error) {

@@ -255,6 +255,12 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
           <p className="font-bold text-gray-800 text-center text-sm sm:text-base">
             Estado: {giftcard.isUsed ? "Usado" : "No usado"}
           </p>
+          <p className="font-bold text-gray-800 text-center text-sm sm:text-base">
+            Cliente:
+          </p>
+          <span>
+            {giftcard.user.email ? giftcard.user.email : "Usuario no asignado"}
+          </span>
           {giftcard.img ? (
             <img
               src={giftcard.img}

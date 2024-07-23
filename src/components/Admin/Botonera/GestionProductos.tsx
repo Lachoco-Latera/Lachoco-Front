@@ -301,6 +301,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                               className="w-20 h-20 object-cover"
                             />
                             <button
+                              type="button"
                               onClick={() =>
                                 setFormEditState((prevState: any) => ({
                                   ...prevState,

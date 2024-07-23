@@ -4,30 +4,30 @@ import React, { useEffect, useState } from "react";
 export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [giftcardsState, setGiftcardsState] = useState<any[]>([]);
-  signal;
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [selectedGiftCard, setSelectedGiftCard] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    discount: 0,
+    img: "",
+    userId: "",
+  });
 
-  const handleEdit = (event: React.MouseEvent) => {
-    event.preventDefault();
-    setEditState(!editState);
-    setModalOpen(true); 
-  };
   useEffect(() => {
     if (signal) {
       setModalOpen(true);
+      setEditState(false); // Resetea el estado para mostrar formulario de agregar
+      setFormData({
+        discount: 0,
+        img: "",
+        userId: "",
+      }); // Limpia el formulario
     }
   }, [signal]);
 
-  const closeModal = () => {
-    setModalOpen(false);
-    onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
-  };
   useEffect(() => {
     const getGiftcards = async () => {
       try {
-        const response = await axios.get(
-          "https://lachocoback.vercel.app/gitfcards"
-        );
+        const response = await axios.get("http://localhost:3000/gitfcards");
         const data = response.data;
         setGiftcardsState(data);
       } catch (error) {
@@ -36,6 +36,64 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     };
     getGiftcards();
   }, []);
+
+  const handleEdit = (giftcard: any) => {
+    setSelectedGiftCard(giftcard);
+    setFormData({
+      discount: Number(giftcard.discount) || 0,
+      img: giftcard.img || "",
+      userId: giftcard.user?.id || "",
+    });
+    setEditState(true);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditState(false);
+    onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const updatedFormData = {
+      ...formData,
+      discount: Number(formData.discount),
+    };
+
+    if (editState && selectedGiftCard) {
+      try {
+        await axios.put(
+          `http://localhost:3000/gitfcards/${selectedGiftCard.id}`,
+          updatedFormData
+        );
+        // Actualiza la lista de giftcards después de editar
+        const response = await axios.get(
+          "https://lachocoback.vercel.app/gitfcards"
+        );
+        setGiftcardsState(response.data);
+        closeModal();
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        await axios.post("http://localhost:3000/gitfcards", updatedFormData);
+        // Actualiza la lista de giftcards después de agregar
+        const response = await axios.get(
+          "https://lachocoback.vercel.app/gitfcards"
+        );
+        setGiftcardsState(response.data);
+        closeModal();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <div className="w-full flex flex-wrap justify-center items-center px-4 py-8 gap-4">
@@ -48,32 +106,40 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
             className="bg-white p-6 rounded-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <form className="w-[500px] h-[300px] flex flex-col justify-evenly items-center  p-4 rounded-lg ">
+            <form
+              className="w-[500px] h-[300px] flex flex-col justify-evenly items-center p-4 rounded-lg"
+              onSubmit={handleSubmit}
+            >
               <input
-                type="text"
-                placeholder="probando123"
-                className="p-2 border rounded-md mb-2"
+                type="number"
+                name="discount"
+                value={formData.discount}
+                placeholder="Descuento"
+                className="p-2 border rounded-md mb-2 w-full md:w-3/4"
+                onChange={handleChange}
               />
               <input
                 type="text"
-                placeholder="probando123"
-                className="p-2 border rounded-md mb-2"
+                name="img"
+                value={formData.img}
+                placeholder="URL de Imagen"
+                className="p-2 border rounded-md mb-2 w-full md:w-3/4"
+                onChange={handleChange}
               />
               <input
                 type="text"
-                placeholder="probando123"
-                className="p-2 border rounded-md mb-2"
+                name="userId"
+                value={formData.userId}
+                placeholder="ID de Usuario"
+                className="p-2 border rounded-md mb-2 w-full md:w-3/4"
+                onChange={handleChange}
               />
-              <input
-                type="text"
-                placeholder="probando123"
-                className="p-2 border rounded-md mb-2"
-              />
-              <input
-                type="text"
-                placeholder="probando123"
-                className="p-2 border rounded-md mb-2"
-              />
+              <button
+                type="submit"
+                className="w-full h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold bg-blue-500 hover:bg-blue-600 m-3 capitalize transition-all duration-300 ease-in-out transform hover:scale-105"
+              >
+                {editState ? "Guardar Cambios" : "Agregar Nuevo"}
+              </button>
             </form>
           </div>
         </div>
@@ -82,11 +148,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
       {giftcardsState.map((giftcard) => (
         <div
           key={giftcard.id}
-          className="w-[300px] min-h-[350px] flex flex-col
-          justify-evenly items-center bg-white p-4 
-          rounded-xl shadow-xl hover:shadow-xl
-          transition-all ease  
-          hover:scale-105"
+          className="w-[300px] min-h-[350px] flex flex-col justify-evenly items-center bg-white p-4 rounded-xl shadow-xl hover:shadow-xl transition-all ease hover:scale-105"
         >
           <h2 className="font-bold text-gray-800 text-center">
             Cupón ID: {giftcard.id}
@@ -107,7 +169,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
           <div className="w-full flex justify-center items-center mt-4">
             <button
               className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold bg-yellow-500 hover:bg-yellow-600 hover:text-yellow-200 m-3 capitalize transition-all duration-300 ease-in-out transform hover:scale-105"
-              onClick={handleEdit}
+              onClick={() => handleEdit(giftcard)}
             >
               Editar
             </button>

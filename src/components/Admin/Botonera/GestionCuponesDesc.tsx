@@ -11,6 +11,8 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     img: "",
     userId: "",
   });
+  const [users, setUsers] = useState<any[]>([]); // Estado para almacenar usuarios
+  const [selectedUser, setSelectedUser] = useState<any>(null); // Estado para almacenar usuario seleccionado
 
   useEffect(() => {
     if (signal) {
@@ -37,6 +39,21 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     getGiftcards();
   }, []);
 
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const response = await axios.get(
+          "https://lachocoback.vercel.app/users"
+        );
+        const data = response.data;
+        setUsers(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUsers();
+  }, []);
+
   const handleEdit = (giftcard: any) => {
     setSelectedGiftCard(giftcard);
     setFormData({
@@ -44,6 +61,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
       img: giftcard.img || "",
       userId: giftcard.user?.id || "",
     });
+    setSelectedUser(giftcard.user || null); // Ajusta según el formato de tu objeto
     setEditState(true);
     setModalOpen(true);
   };
@@ -53,9 +71,17 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     setEditState(false);
     onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const userId = e.target.value;
+    const user = users.find((user) => user.id === userId);
+    setFormData((prev) => ({ ...prev, userId }));
+    setSelectedUser(user || null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,10 +139,13 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
               <input
                 type="number"
                 name="discount"
+                min={1}
+                max={100}
                 value={formData.discount}
                 placeholder="Descuento"
                 className="p-2 border rounded-md mb-2 w-full md:w-3/4"
                 onChange={handleChange}
+                required
               />
               <input
                 type="text"
@@ -126,14 +155,27 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
                 className="p-2 border rounded-md mb-2 w-full md:w-3/4"
                 onChange={handleChange}
               />
-              <input
-                type="text"
-                name="userId"
-                value={formData.userId}
-                placeholder="ID de Usuario"
-                className="p-2 border rounded-md mb-2 w-full md:w-3/4"
-                onChange={handleChange}
-              />
+              <div className="w-full md:w-3/4 mb-2">
+                <select
+                  name="userId"
+                  value={formData.userId}
+                  onChange={handleUserChange}
+                  className="p-2 border rounded-md w-full"
+                  required
+                >
+                  <option value="">Seleccionar Usuario</option>
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      "{user.name} {user.lastname}" - {user.email}
+                    </option>
+                  ))}
+                </select>
+                {selectedUser && (
+                  <p className="mt-2 text-gray-700">
+                    Seleccionado: {selectedUser.name} {selectedUser.lastname}
+                  </p>
+                )}
+              </div>
               <button
                 type="submit"
                 className="w-full h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold bg-blue-500 hover:bg-blue-600 m-3 capitalize transition-all duration-300 ease-in-out transform hover:scale-105"

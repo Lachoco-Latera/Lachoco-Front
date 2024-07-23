@@ -151,11 +151,11 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
           onClick={closeModal}
         >
           <div
-            className="bg-white p-6 rounded-lg"
+            className="bg-white p-6 rounded-lg max-w-full md:max-w-[500px] mx-4 md:mx-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <form
-              className="w-[500px] h-[300px] flex flex-col justify-evenly items-center p-4 rounded-lg"
+              className="w-full h-auto flex flex-col justify-evenly items-center p-4 rounded-lg"
               onSubmit={handleSubmit}
             >
               <input
@@ -163,7 +163,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
                 name="discount"
                 value={formData.discount}
                 placeholder="Descuento"
-                className="p-2 border rounded-md mb-2 w-full md:w-3/4"
+                className="p-2 border rounded-md mb-2 w-full"
                 onChange={handleChange}
               />
               <input
@@ -171,10 +171,10 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
                 name="img"
                 value={formData.img}
                 placeholder="URL de Imagen"
-                className="p-2 border rounded-md mb-2 w-full md:w-3/4"
+                className="p-2 border rounded-md mb-2 w-full"
                 onChange={handleChange}
               />
-              <div className="w-full md:w-3/4 mb-2">
+              <div className="w-full mb-2">
                 <select
                   name="userId"
                   value={formData.userId}
@@ -191,7 +191,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
               </div>
               <button
                 type="submit"
-                className="w-full h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold bg-blue-500 hover:bg-blue-600 m-3 capitalize transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-full h-[40px] text-white p-1 block rounded-lg font-semibold bg-blue-500 hover:bg-blue-600 m-3 capitalize transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 {editState ? "Guardar Cambios" : "Agregar Nuevo"}
               </button>
@@ -203,15 +203,15 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
       {giftcardsState.map((giftcard) => (
         <div
           key={giftcard.id}
-          className="w-[300px] min-h-[350px] flex flex-col justify-evenly items-center bg-white p-4 rounded-xl shadow-xl hover:shadow-xl transition-all ease hover:scale-105"
+          className="w-full sm:w-[300px] min-h-[350px] flex flex-col justify-evenly items-center bg-white p-4 rounded-xl shadow-xl hover:shadow-xl transition-all ease hover:scale-105"
         >
-          <h2 className="font-bold text-gray-800 text-center">
+          <h2 className="font-bold text-gray-800 text-center text-sm sm:text-base">
             Cupón ID: {giftcard.id}
           </h2>
-          <p className="font-bold text-gray-800 text-center">
+          <p className="font-bold text-gray-800 text-center text-sm sm:text-base">
             Descuento: {giftcard.discount ? `${giftcard.discount}%` : "N/A"}
           </p>
-          <p className="font-bold text-gray-800 text-center">
+          <p className="font-bold text-gray-800 text-center text-sm sm:text-base">
             Estado: {giftcard.isUsed ? "Usado" : "No usado"}
           </p>
           {giftcard.img && (
@@ -221,19 +221,16 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
               className="w-16 h-16 object-cover mt-2"
             />
           )}
-          <div className="w-full flex justify-center items-center mt-4">
+          <div className="w-full flex flex-col sm:flex-row justify-center items-center mt-4 gap-2">
             <button
-              className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold bg-yellow-500 hover:bg-yellow-600 hover:text-yellow-200 m-3 capitalize transition-all duration-300 ease-in-out transform hover:scale-105"
+              className="w-full sm:w-1/2 h-[40px] text-white p-1 block rounded-lg font-semibold bg-yellow-500 hover:bg-yellow-600 hover:text-yellow-200 m-1 capitalize transition-all duration-300 ease-in-out transform hover:scale-105"
               onClick={() => handleEdit(giftcard)}
             >
               Editar
             </button>
             <button
               onClick={() => handleDelete(giftcard)}
-              className="w-1/3 h-[40px] xl:text-xl text-white 
-            p-1 block rounded-lg font-semibold bg-red-500 
-            hover:bg-red-600 hover:text-red-200 m-3 capitalize 
-            transition-all duration-300 ease-in-out transform hover:scale-105"
+              className="w-full sm:w-1/2 h-[40px] text-white p-1 block rounded-lg font-semibold bg-red-500 hover:bg-red-600 hover:text-red-200 m-1 capitalize transition-all duration-300 ease-in-out transform hover:scale-105"
             >
               Eliminar
             </button>

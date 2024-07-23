@@ -112,7 +112,6 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       [name]: newValue,
     });
   };
-  console.log(formEditState);
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setFormEditState((prevState: any) => ({
@@ -120,7 +119,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       flavors: selectedFlavors,
       price: Number(prevState.price),
     }));
-    console.log(formEditState);
+    toast("Esperando al servidor...", { id: "loading-submit" });
     try {
       let response;
       if (formEditState.id) {
@@ -158,6 +157,8 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       }
     } catch (error) {
       console.warn("Error al guardar producto:", error);
+    } finally {
+      toast.dismiss("loading-submit");
     }
   };
 
@@ -175,8 +176,8 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     };
     getOrders();
   }, []);
-
   const handleButtonDelete = async (id: string) => {
+    toast("Esperando al servidor...", { id: "loading-delete" });
     try {
       await axios.delete(`https://lachocoback.vercel.app/products/${id}`);
       setOrderState((prevState) =>
@@ -186,23 +187,25 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       console.log(`Producto con id: ${id} eliminado`);
     } catch (error) {
       console.error(`Error al eliminar el producto con id: ${id}`, error);
+    } finally {
+      toast.dismiss("loading-delete");
     }
   };
 
   const handleOnUpload = (error: any, result: any, widget: any) => {
     if (error) {
       updateError(error);
-      widget.close({
-        quiet: true,
-      });
+      widget.close({ quiet: true });
       return;
     }
+    toast("Esperando al servidor...", { id: "loading-upload" });
     const secureUrl = result?.info?.secure_url;
     updateUrl(secureUrl);
     setFormEditState((prevState: any) => ({
       ...prevState,
       images: [...prevState.images, secureUrl],
     }));
+    toast.dismiss("loading-upload");
   };
   return (
     <div className="overflow-y-scroll">

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [giftcardsState, setGiftcardsState] = useState<any[]>([]);
+  const [usersState, setUsersState] = useState<any[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedGiftCard, setSelectedGiftCard] = useState<any>(null);
   const [formData, setFormData] = useState({
@@ -11,8 +12,6 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     img: "",
     userId: "",
   });
-  const [users, setUsers] = useState<any[]>([]); // Estado para almacenar usuarios
-  const [selectedUser, setSelectedUser] = useState<any>(null); // Estado para almacenar usuario seleccionado
 
   useEffect(() => {
     if (signal) {
@@ -29,28 +28,29 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   useEffect(() => {
     const getGiftcards = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/gitfcards");
+        const response = await axios.get(
+          "http://localhost:3000/gitfcards"
+        );
         const data = response.data;
         setGiftcardsState(data);
       } catch (error) {
         console.log(error);
       }
     };
-    getGiftcards();
-  }, []);
-
-  useEffect(() => {
+console.log(giftcardsState);
     const getUsers = async () => {
       try {
         const response = await axios.get(
           "https://lachocoback.vercel.app/users"
         );
         const data = response.data;
-        setUsers(data);
+        setUsersState(data);
       } catch (error) {
         console.log(error);
       }
     };
+
+    getGiftcards();
     getUsers();
   }, []);
 
@@ -59,9 +59,8 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     setFormData({
       discount: Number(giftcard.discount) || 0,
       img: giftcard.img || "",
-      userId: giftcard.user?.id || "",
+      userId: giftcard.user?.id || "", // Asigna el userId seleccionado
     });
-    setSelectedUser(giftcard.user || null); // Ajusta según el formato de tu objeto
     setEditState(true);
     setModalOpen(true);
   };
@@ -72,16 +71,11 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     onCloseModal(); // Llama a la función para cerrar el modal y actualizar signal en Admin
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const userId = e.target.value;
-    const user = users.find((user) => user.id === userId);
-    setFormData((prev) => ({ ...prev, userId }));
-    setSelectedUser(user || null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -94,7 +88,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     if (editState && selectedGiftCard) {
       try {
         await axios.put(
-          `http://localhost:3000/gitfcards/${selectedGiftCard.id}`,
+          `https://lachocoback.vercel.app/gitfcards/${selectedGiftCard.id}`,
           updatedFormData
         );
         // Actualiza la lista de giftcards después de editar
@@ -108,7 +102,10 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
       }
     } else {
       try {
-        await axios.post("http://localhost:3000/gitfcards", updatedFormData);
+        await axios.post(
+          "https://lachocoback.vercel.app/gitfcards",
+          updatedFormData
+        );
         // Actualiza la lista de giftcards después de agregar
         const response = await axios.get(
           "https://lachocoback.vercel.app/gitfcards"
@@ -139,13 +136,10 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
               <input
                 type="number"
                 name="discount"
-                min={1}
-                max={100}
                 value={formData.discount}
                 placeholder="Descuento"
                 className="p-2 border rounded-md mb-2 w-full md:w-3/4"
                 onChange={handleChange}
-                required
               />
               <input
                 type="text"
@@ -159,22 +153,16 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
                 <select
                   name="userId"
                   value={formData.userId}
-                  onChange={handleUserChange}
+                  onChange={handleChange}
                   className="p-2 border rounded-md w-full"
-                  required
                 >
                   <option value="">Seleccionar Usuario</option>
-                  {users.map((user) => (
+                  {usersState.map((user) => (
                     <option key={user.id} value={user.id}>
-                      "{user.name} {user.lastname}" - {user.email}
+                      {user.name} {user.lastname} - {user.email}
                     </option>
                   ))}
                 </select>
-                {selectedUser && (
-                  <p className="mt-2 text-gray-700">
-                    Seleccionado: {selectedUser.name} {selectedUser.lastname}
-                  </p>
-                )}
               </div>
               <button
                 type="submit"

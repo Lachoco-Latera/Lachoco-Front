@@ -4,6 +4,7 @@ import logo from "../../../../public/images/logo.png";
 import UploadWidget from "../../../components/UploadWidget";
 import { ICategories, IFlavor } from "../../../helpers/type";
 import { toast } from "sonner";
+import { IoMdExit } from "react-icons/io";
 
 export const GestionProductos = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -192,6 +193,13 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
             className="bg-white p-6 md:max-w-3xl w-full rounded-lg overflow-y-auto max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
+            <div className="flex flex-row justify-end pb-2">
+              <IoMdExit
+                onClick={closeModal}
+                className="hover:scale-105 hover:cursor-pointer transition-all ease"
+                size={28}
+              />
+            </div>
             <form
               className=" flex flex-col justify-evenly items-center "
               onSubmit={handleSubmit}
@@ -239,7 +247,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   value={formEditState.description}
                   onChange={handleInputChange}
                 />
-                <div className="self-center">
+                <div className="flex flex-col items-center">
                   <UploadWidget onUpload={handleOnUpload}>
                     {({ open }: any) => {
                       function handleOnClick(e: any) {
@@ -250,7 +258,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                         <button
                           onClick={handleOnClick}
                           className="rounded-xl p-2 shadow-md hover:drop-shadow-xl 
-                          hover:scale-105 transition all ease hover:bg-blue-400 
+                          hover:scale-105 transition all ease hover:bg-rose-400 
                           text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
                         >
                           Cargar imágenes
@@ -324,7 +332,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   <button
                     type="submit"
                     className="rounded-xl p-2 shadow-md hover:drop-shadow-xl 
-                          hover:scale-105 transition all ease  hover:bg-blue-500 
+                          hover:scale-105 transition all ease  hover:bg-rose-400 
                           text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
                   >
                     Crear Producto

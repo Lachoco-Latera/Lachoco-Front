@@ -13,18 +13,20 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
   const [url, updateUrl] = useState();
   const [error, updateError] = useState();
   const [formEditState, setFormEditState] = useState<any>({
+    id: null,
     name: "",
     presentacion: 0,
     description: "",
     price: 0,
     currency: "USD",
+    label: "nuevo",
+    isActive: false,
     flavors: [],
     images: [],
     categoryId: "",
   });
   const [flavors, setFlavors] = useState<IFlavor[]>([]);
   const [categories, setCategories] = useState<ICategories[]>([]);
-
   const [selectedFlavors, setSelectedFlavors] = useState<any>([]);
   editState;
   url;
@@ -80,6 +82,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
   const handleEdit = (product: any) => {
     setEditState(true);
     setFormEditState({
+      id: product.id,
       name: product.name,
       presentacion: product.presentacion,
       description: product.description,
@@ -93,11 +96,14 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     setModalOpen(true);
   };
   const handleInputChange = (event: any) => {
-    const { name, value } = event.target;
+    const { name, value, type, checked } = event.target;
     const newValue =
-      (name === "presentacion" || name === "price") && value !== ""
+      type === "checkbox"
+        ? checked
+        : (name === "presentacion" || name === "price") && value !== ""
         ? parseFloat(value.replace(",", ""))
         : value;
+
     setFormEditState({
       ...formEditState,
       [name]: newValue,
@@ -106,27 +112,27 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formEditState);
     setFormEditState((prevState: any) => ({
       ...prevState,
       flavors: selectedFlavors,
+      price: Number(prevState.price),
     }));
+    console.log("Producto actualizado:", formEditState);
     try {
-      const response = await axios.post(
-        "https://lachocoback.vercel.app/products",
+      const response = await axios.patch(
+        `http://localhost:3000/products/${formEditState.id}`,
         formEditState
       );
-      console.log("Producto creado:", response.data);
       closeModal();
       if (response) {
-        toast.success("Se ha creado con éxito!");
-        // Limpiar el formulario
+        toast.success("Producto actualizado con éxito!");
         setFormEditState({
           name: "",
           presentacion: 0,
           description: "",
           price: 0,
           currency: "USD",
+          label: "nuevo",
           flavors: [],
           images: [],
           categoryId: "",
@@ -134,7 +140,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
         setSelectedFlavors([]);
       }
     } catch (error) {
-      console.warn("Error al crear producto:", error);
+      console.warn("Error al actualizar producto:", error);
     }
   };
 
@@ -181,7 +187,6 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       images: [...prevState.images, secureUrl],
     }));
   };
-
   return (
     <div className="overflow-y-scroll">
       {modalOpen && (
@@ -289,11 +294,10 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-2">
                   <p className="self-start font-semibold drop-shadow">
                     Precio {"(En euros)"}
                   </p>
-
                   <input
                     type="number"
                     name="price"
@@ -302,6 +306,35 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                     value={formEditState.price}
                     onChange={handleInputChange}
                   />
+                  <select
+                    name="label"
+                    className="p-2 border rounded-md"
+                    value={formEditState.label}
+                    onChange={handleInputChange}
+                  >
+                    <option value="" disabled>
+                      Seleccionar etiqueta
+                    </option>
+                    <option value="SoloOnline">SoloOnline</option>
+                    <option value="nuevo">Nuevo</option>
+                  </select>
+
+                  <div className="flex items-center space-x-2 py-2">
+                    <label
+                      htmlFor="isActive"
+                      className="font-semibold text-gray-700"
+                    >
+                      Is Active
+                    </label>
+                    <input
+                      type="checkbox"
+                      name="isActive"
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      checked={formEditState.isActive}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
                   <div className="flex flex-wrap justify-center">
                     {flavors.map((flavor) => (
                       <div

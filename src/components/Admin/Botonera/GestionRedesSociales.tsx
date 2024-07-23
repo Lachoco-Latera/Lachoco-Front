@@ -7,6 +7,8 @@ import {
 import { IRedes } from "@/helpers/type";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import UploadWidget from "../../../components/UploadWidget";
+import { IoMdClose } from "react-icons/io";
 
 export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -146,6 +148,16 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
       console.log(error);
     }
   };
+  const handleOnUpload = (result: any) => {
+    console.log(result); // Para verificar el objeto result
+    if (result && result.event === "success") {
+      const uploadedImageUrl = result.info.secure_url;
+      setFormState((prev) => ({
+        ...prev,
+        img: uploadedImageUrl,
+      }));
+    }
+  };
 
   return (
     <>
@@ -179,9 +191,48 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
                   placeholder="Imagen"
                   name="img"
                   value={formState.img}
-                  onChange={handleOnChange}
+                  readOnly
                   className="p-2 border rounded-md mb-2 w-full"
                 />
+                <div className="flex flex-col items-center w-full mb-2">
+                  <UploadWidget onUpload={handleOnUpload}>
+                    {({ open }: any) => {
+                      function handleOnClick(e: any) {
+                        e.preventDefault();
+                        open();
+                      }
+                      return (
+                        <button
+                          onClick={handleOnClick}
+                          className="rounded-xl p-2 shadow-md hover:drop-shadow-xl hover:scale-105 transition-all ease hover:bg-rose-400 text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
+                        >
+                          Cargar imágenes
+                        </button>
+                      );
+                    }}
+                  </UploadWidget>
+                  {formState.img && (
+                    <div className="relative p-2 mt-2 max-w-40 break-words">
+                      <img
+                        src={formState.img}
+                        alt="Imagen del cupón"
+                        className="w-20 h-20 object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormState((prev) => ({
+                            ...prev,
+                            img: "",
+                          }))
+                        }
+                        className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                      >
+                        <IoMdClose size={16} />
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <button className="w-full h-[40px] text-white p-1 block rounded-lg font-semibold bg-green-500 hover:bg-green-600 m-3 capitalize transition-all duration-300 ease-in-out transform hover:scale-105">
                   {editState ? "Guardar Cambios" : "Agregar"}
                 </button>

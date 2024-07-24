@@ -53,7 +53,6 @@ export const GestionSaboresDisponibles = ({
     const { name, value } = event.target;
     setFormEditState({ ...formEditState, [name]: value });
   };
-
   const handleSubmitEdit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -65,9 +64,10 @@ export const GestionSaboresDisponibles = ({
             toast.dismiss(alertId);
             try {
               const response = await axios.put(
-                `https://lachocoback.vercel.app/flavor/${formEditState.id}`,
+                `https://lachocoback.vercel.app/flavor/${formEditState.id}`, // Verifica que esta URL sea correcta
                 formEditState
               );
+
               setFlavors((prevFlavors) =>
                 prevFlavors.map((flavor) =>
                   flavor.id === response.data.id ? response.data : flavor
@@ -197,7 +197,13 @@ export const GestionSaboresDisponibles = ({
                   onChange={handleOnChangeEdit}
                   className="p-2 border rounded-md"
                 />
-                <button className="w-2/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-green-500 hover:bg-green-900 hover:text-green-500 m-3 capitalize hover:scale-105 transition-all ease">
+                <button
+                  type="submit"
+                  className="w-2/3 h-[40px] xl:text-xl 
+                text-white p-1 block rounded-2xl font-semibold 
+                duration-400 bg-green-500 hover:bg-green-900
+                 hover:text-green-500 m-3 capitalize hover:scale-105 transition-all ease"
+                >
                   Guardar Cambios
                 </button>
               </form>

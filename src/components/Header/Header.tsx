@@ -3,6 +3,8 @@ import { useCartStore } from "../../stores/useCartStore";
 import useFromStore from "../../hooks/useFromStore";
 import SearchExampleStandard from "../Searchbar/Searchbar";
 import logo from "../../../public/images/logo.png";
+import tinyLogo from "../../../public/images/tinyLogo.png";
+
 import { Product } from "@/types.d";
 import {
   SignInButton,
@@ -17,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BiTask } from "react-icons/bi";
 
 interface Props {
   onCartIconClick: () => void;
@@ -42,7 +45,10 @@ export default function Header({ onCartIconClick }: Props) {
     new Promise((resolve) =>
       setTimeout(
         () =>
-          resolve((window.location.href = "https://www.mercadopago.com.ar")),
+          resolve(
+            (window.location.href =
+              "https://lachoco-latera.com/?category=cafes")
+          ),
         1100
       )
     );
@@ -221,22 +227,30 @@ export default function Header({ onCartIconClick }: Props) {
       className=" 
     z-10 bg-white text-gray-700 
     py-4 flex items-center 
-    justify-between h-18 
+     h-18  justify-center
     sticky top-0 shadow"
     >
-      <nav className="container mx-auto md:w-10/12 px-4 flex md:justify-between justify-between items-center">
+      <nav className="container self-center md:w-10/12 px-4 flex justify-between md:justify-between items-center md:gap-6">
         <span className="text-lg font-semibold hidden md:block">
           <img
             src={logo}
-            className="w-28 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
+            className="md:block hidden md:w-28 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
             alt="Lachoco-Latera logo"
             onClick={() => (window.location.href = "/")}
           />
         </span>
-        <div className="hover:drop-shadow transition-all ease ">
+        <span className="block md:hidden min-w-12 text-lg font-semibold">
+          <img
+            src={tinyLogo}
+            className="w-12 md:w-28 md:min-w-16 cursor-pointer hover:scale-105 hover:drop-shadow-sm transition-all ease duration-200"
+            alt="Lachoco-Latera logo"
+            onClick={() => (window.location.href = "/")}
+          />
+        </span>
+        <div className="hover:drop-shadow transition-all ease md:op">
           <SearchExampleStandard />
         </div>
-        <div className="flex flex-row items-center gap-10">
+        <div className="flex flex-row items-center gap-4">
           {isSignedIn == true &&
           user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
           isLoaded ? (
@@ -245,8 +259,8 @@ export default function Header({ onCartIconClick }: Props) {
               title="Suscribete"
               className="
               text-gray-800 hover:text-white hover:bg-pink-500 
-              rounded-3xl py-1 px-3 text-xl flex items-center 
-              hover:scale-110 transition-all ease shadow"
+              rounded-3xl py-1 px-3 text-xl  items-center 
+              hover:scale-110 transition-all ease shadow hidden md:block"
               onClick={() =>
                 toast.promise(promise, {
                   loading: `Serás redireccionado para suscribirte...`,
@@ -261,19 +275,33 @@ export default function Header({ onCartIconClick }: Props) {
             </button>
           ) : null}
           <div className="relative  hidden md:block"></div>
-          <div className="relative  hidden md:block">
-            <button
-              type="button"
-              title="Favoritos"
-              className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
-              onClick={() => navigate("/favorites")}
-            >
-              <MdFavoriteBorder size={28} />
-            </button>
-          </div>
-          {isSignedIn == true &&
-          user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
-          isLoaded ? (
+          {isSignedIn == true && isLoaded ? (
+            <div className="relative  hidden md:block">
+              <button
+                type="button"
+                title="Favoritos"
+                className="text-gray-800 text-xl md:flex items-center hover:scale-110 transition-all ease"
+                onClick={() => navigate("/favorites")}
+              >
+                <MdFavoriteBorder size={28} />
+              </button>
+            </div>
+          ) : null}
+          {isSignedIn ? (
+            <>
+              <div className="relative  hidden md:block">
+                <button
+                  type="button"
+                  title="Favoritos"
+                  className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
+                  onClick={() => navigate("/inventory")}
+                >
+                  <BiTask size={26}></BiTask>
+                </button>
+              </div>
+            </>
+          ) : null}
+          {user?.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" ? (
             <div className="relative  hidden md:block">
               <button
                 type="button"
@@ -281,7 +309,7 @@ export default function Header({ onCartIconClick }: Props) {
                 className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
                 onClick={onCartIconClick}
               >
-                <FiShoppingCart size={28} />
+                <FiShoppingCart size={24} />
                 <div className="text-white rounded-full bg-gray-700 w-5 h-5 text-sm -ml-[0.7em] -mt-5">
                   {cart?.length}
                 </div>

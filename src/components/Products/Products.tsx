@@ -39,14 +39,17 @@ const Products = () => {
 
   return (
     <>
-      <Header onCartIconClick={handleCartIconClick} products={info} />
+      {" "}
+      <div className="hidden md:block">
+        <Header onCartIconClick={handleCartIconClick} products={info} />{" "}
+      </div>
       <div className="block md:hidden">
         <BottomBar onCartIconClick={handleCartIconClickAlt} />
       </div>
       <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
         <Cart similar={info} />
       </Drawer>
-      <div className="my-8 flex flex-col justify-center items-center">
+      <div className="my-0 md:my-8 flex flex-col justify-center items-center">
         {info ? (
           <ProductsDetail info={info} onCheckIconClick={handleCartIconClick} />
         ) : (

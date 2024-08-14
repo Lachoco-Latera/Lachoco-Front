@@ -15,7 +15,8 @@ interface Actions {
   subtractFromCart: (product: Product) => void;
   selectFlavors: (productId: string, pickedFlavors: string[]) => void;
   addConfirmedFlavors: (productId: string, confirmedFlavors: string[]) => void;
-  removeConfirmedFlavors: (productId: string) => void; // Nueva función para eliminar sabores confirmados
+  removeConfirmedFlavors: (productId: string) => void;
+  clearCart: () => void;
 }
 
 const INITIAL_STATE: State = {
@@ -142,6 +143,14 @@ export const useCartStore = create(
           ...state,
           confirmedFlavors,
         }));
+      },
+      clearCart: () => {
+        set({
+          cart: [],
+          totalItems: 0,
+          totalPrice: 0,
+          confirmedFlavors: {},
+        });
       },
     }),
     {

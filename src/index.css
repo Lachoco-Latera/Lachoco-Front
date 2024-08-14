@@ -143,14 +143,51 @@ input:focus {
 .ui.icon.input > input {
   transition: all ease 0.2s;
 }
-
-@media (max-width: 768px) {
+.results .transition {
+  overflow: visible;
+}
+.ui.search > .results {
+  overflow-y: scroll;
+  max-height: 70vh;
+}
+.ui.search > .results .result .image + .content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ui.search > .results .result .image {
+  display: flex;
+  width: 5em;
+  height: unset;
+}
+@media (max-width: 767px) {
+  .ui.icon.input {
+    display: flex;
+  }
   .ui.icon.input > input {
     width: 42vmax; /* Ocupa todo el ancho disponible */
     transition: all ease 0.2s;
   }
+  .ui.icon.input > input:hover {
+    width: 70vw !important;
+    transition: all ease 0.2s;
+  }
   .ui.icon.input {
     min-width: 10vmax;
+  }
+  .ui.search > .results .result .description {
+    max-width: 80px;
+  }
+  .ui.search > .results .result .title {
+    max-width: 80px;
+  }
+  .ui.search > .results .result .image {
+    display: flex;
+    width: 5em;
+    height: unset;
+  }
+  .ui.search > .results .result .image + .content {
+    gap: 4px;
   }
 }
 .loading-overlay {

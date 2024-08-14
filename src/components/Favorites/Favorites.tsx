@@ -6,7 +6,7 @@ import Drawer from "../Drawer";
 import Cart from "../minicart/Cart";
 import { MdFavoriteBorder } from "react-icons/md";
 
-const Products = () => {
+const Favorites = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [info, setInfo] = useState<any>(null);
 
@@ -59,4 +59,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Favorites;

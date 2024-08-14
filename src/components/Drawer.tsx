@@ -5,6 +5,7 @@ interface Props {
   children: React.ReactNode;
   onCartIconClick: () => void;
 }
+import { IoMdExit } from "react-icons/io";
 
 const Drawer = ({ children, isOpen, onCartIconClick }: Props) => {
   const backdropClass = isOpen
@@ -17,7 +18,7 @@ const Drawer = ({ children, isOpen, onCartIconClick }: Props) => {
 
       {/* Contenido del drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-white text-white transition duration-500 ease-in-out transform z-[60] ${
+        className={`fixed top-0 right-0 h-full md:w-1/2 w-full bg-white text-white transition duration-500 ease-in-out transform z-[60] ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -25,11 +26,11 @@ const Drawer = ({ children, isOpen, onCartIconClick }: Props) => {
           <header className=" bg-gray-100 text-white py-4 flex items-center justify-end px-4 h-14">
             <div>
               <button className="text-gray-800" onClick={onCartIconClick}>
-                Close
+                <IoMdExit size={28}/>
               </button>
             </div>
           </header>
-          <main className="bg-white p-4 text-black">{children}</main>
+          <main className="bg-white p-4 px-6 text-black">{children}</main>
         </aside>
       </div>
     </div>

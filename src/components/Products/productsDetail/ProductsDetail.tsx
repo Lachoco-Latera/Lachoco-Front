@@ -77,9 +77,6 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
 
   const actualSelectionLength = confirmedFlavors[info.id]?.length || 0;
 
-  console.log("Selección actual de flavors:", actualSelectionLength);
-  console.log("Maximo de sabores:", maxFlavors);
-
   return (
     <div className="flex flex-col md:px-48 px-12 md:py-10 ">
       <div className="flex flex-col md:flex-row items-center md:justify-between">
@@ -87,7 +84,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
         <div className="flex items-center gap-2 ease transition-all">
           <a
             className="flex flex-row cursor-pointer items-center hover:scale-110 hover:px-2 gap-2 transition-all ease"
-            href="whatsapp://send?text=Mirá la nueva página de lachoco-latera: https://lachoco-front.vercel.app"
+            href="whatsapp://send?text=Mirá la nueva página de lachoco-latera: https://lachoco-latera.com"
             data-action="share/whatsapp/share"
           >
             <FaShareSquare size={16} />
@@ -173,10 +170,10 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
           </div>
         </div>
         <div
-          className={`flex ${
+          className={`flex mb-20 ${
             productInfo?.category?.name === "bombones"
               ? "hover:cursor-pointer"
-              : null
+              : ""
           }`}
         >
           <Checkout

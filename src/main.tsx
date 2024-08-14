@@ -6,9 +6,13 @@ import "./index.css";
 import { Toaster } from "sonner";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Favorites from "./components/Favorites/Favorites.tsx";
+import Inventory from "./components/Inventory/Inventory.tsx";
+
 import { ClerkProvider } from "@clerk/clerk-react";
 import Ship from "./components/Ship/Ship.tsx";
 import { Admin } from "./components/Admin/Admin.tsx";
+import Success from "./components/Success/Success.tsx";
+import Failure from "./components/Failure/Failure.tsx";
 // Import your publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
@@ -24,6 +28,7 @@ const router = createBrowserRouter([
     element: <Products />,
   },
   { path: "/favorites", element: <Favorites /> },
+  { path: "/inventory", element: <Inventory /> },
   {
     path: "/ship",
     element: <Ship />,
@@ -31,6 +36,14 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <Admin />,
+  },
+  {
+    path: "/success",
+    element: <Success />,
+  },
+  {
+    path: "/failure",
+    element: <Failure />,
   },
 ]);
 

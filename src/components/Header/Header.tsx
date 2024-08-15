@@ -31,7 +31,7 @@ async function hashPassword(password: string): Promise<string> {
   const data = encoder.encode(password);
   const hash = await crypto.subtle.digest("SHA-256", data);
   return Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, "0"))
+    .map((b) => b.toString(16).padStart(2, "0")) 
     .join("");
 }
 
@@ -66,6 +66,7 @@ export default function Header({ onCartIconClick }: Props) {
     };
 
     const getUserCountry = async () => {
+      console.log('hola')
       try {
         if (navigator.geolocation) {
           const position = await new Promise<GeolocationPosition>(

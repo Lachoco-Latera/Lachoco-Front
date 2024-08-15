@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import tinyLogo from "../../../public/images/tinyLogo.png";
+import tinyLogo from "../../assets/images/tinyLogo.png";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../../stores/useCartStore"; // Asegúrate de ajustar la ruta de importación
 import { useEffect } from "react";

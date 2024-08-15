@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import tinyLogo from "../../../public/images/tinyLogo.png";
+import tinyLogo from "../../assets/images/tinyLogo.png";
 import { toast } from "sonner";
 import { useUser } from "@clerk/clerk-react";
 

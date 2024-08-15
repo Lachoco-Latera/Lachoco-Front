@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import logo from "../../../../public/images/logo.png";
+import logo from "../../../assets/images/logo.png";
 import UploadWidget from "../../../components/UploadWidget";
 import { ICategories, IFlavor } from "../../../helpers/type";
 import { toast } from "sonner";

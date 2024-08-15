@@ -2,8 +2,8 @@ import { FiShoppingCart } from "react-icons/fi";
 import { useCartStore } from "../../stores/useCartStore";
 import useFromStore from "../../hooks/useFromStore";
 import SearchExampleStandard from "../Searchbar/Searchbar";
-import logo from "../../../public/images/logo.png";
-import tinyLogo from "../../../public/images/tinyLogo.png";
+import logo from "../../assets/images/logo.png";
+import tinyLogo from "../../assets/images/tinyLogo.png";
 
 import { Product } from "@/types.d";
 import {

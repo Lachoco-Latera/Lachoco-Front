@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import UploadWidget from "../../../components/UploadWidget";
 import { IoMdClose } from "react-icons/io";
-import tinyLogo from "../../../../public/images/tinyLogo.png";
+import tinyLogo from "../../../assets/images/tinyLogo.png";
 
 export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { IOrders } from "@/helpers/type";
+import { VITE_BASE_URL } from "@/config/envs";
 
 export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
   const [editFormState, setEditFormState] = useState<IOrders>({
@@ -38,7 +39,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
     const getOrders = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/orders"
+          `${VITE_BASE_URL}/orders`
         );
         const data = response.data;
         setOrdersState(data);
@@ -58,7 +59,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
           toast.dismiss(alertId);
           try {
             const response = await axios.delete(
-              `https://lachocoback.vercel.app/orders/${id}`
+              `${VITE_BASE_URL}/orders/${id}`
             );
             const deletedOrder = response.data;
             console.log(`Orden eliminada correctamente: ${deletedOrder}`);
@@ -96,7 +97,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
           toast.dismiss(alertId);
           try {
             const response = await axios.patch(
-              `https://lachocoback.vercel.app/orders/${editFormState.id}`,
+              `${VITE_BASE_URL}/orders/${editFormState.id}`,
               {
                 date: editFormState.date,
                 status: editFormState.status,

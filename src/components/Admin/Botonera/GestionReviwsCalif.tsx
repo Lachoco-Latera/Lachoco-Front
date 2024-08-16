@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { VITE_BASE_URL } from "@/config/envs";
 
 export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -20,7 +21,7 @@ export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/products"
+          `${VITE_BASE_URL}/products`
         );
         setProducts(response.data);
       } catch (error) {
@@ -40,7 +41,7 @@ export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
   const handleDelete = async (productId: string) => {
     try {
       const response = await axios.delete(
-        `https://lachocoback.vercel.app/products/${productId}`
+        `${VITE_BASE_URL}/products/${productId}`
       );
       console.log(response.data);
       // Actualizar el estado de los productos después de eliminar

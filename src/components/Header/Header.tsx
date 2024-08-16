@@ -20,6 +20,7 @@ import { GrUserAdmin } from "react-icons/gr";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiTask } from "react-icons/bi";
+import { VITE_BASE_URL } from "@/config/envs";
 
 interface Props {
   onCartIconClick: () => void;
@@ -166,7 +167,7 @@ export default function Header({ onCartIconClick }: Props) {
             confirmPassword: trimmedPassword,
           };
           axios
-            .get("https://lachocoback.vercel.app/users")
+            .get(`${VITE_BASE_URL}/users`)
             .then((response) => {
               const existingUser = response.data.find(
                 (existingUser: any) =>
@@ -176,7 +177,7 @@ export default function Header({ onCartIconClick }: Props) {
                 // Email does not exist, proceed with registration
                 axios
                   .post(
-                    "https://lachocoback.vercel.app/users/register",
+                    `${VITE_BASE_URL}/users/register`,
                     userData
                   )
                   .then((response) => {

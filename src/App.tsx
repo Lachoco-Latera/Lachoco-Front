@@ -12,6 +12,7 @@ import BottomBar from "./components/BottomBar/BottomBar";
 import "./index.css"; // Añade esta línea para los estilos CSS del loading
 import { useUser } from "@clerk/clerk-react";
 import logo from "./assets/images/logo.png";
+import { VITE_BASE_URL } from "./config/envs";
 
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -35,7 +36,7 @@ function App() {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `https://lachocoback.vercel.app/users`
+          `${VITE_BASE_URL}/users`
         );
         const userWithEmail = response.data.find(
           (user: any) => user.email === userEmail
@@ -54,7 +55,7 @@ function App() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/products"
+          `${VITE_BASE_URL}/products`
         );
         setProducts(response.data);
       } catch (err) {
@@ -65,7 +66,7 @@ function App() {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/category"
+          `${VITE_BASE_URL}/category`
         );
         setCategories(response.data);
       } catch (err) {

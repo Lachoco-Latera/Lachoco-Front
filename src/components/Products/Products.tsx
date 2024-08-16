@@ -6,6 +6,7 @@ import Drawer from "../Drawer";
 import Cart from "../minicart/Cart";
 import { useParams } from "react-router-dom";
 import ProductsDetail from "./productsDetail/ProductsDetail";
+import { VITE_BASE_URL } from "@/config/envs";
 
 const Products = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `https://lachocoback.vercel.app/products/${id}`
+          `${VITE_BASE_URL}/products/${id}`
         );
         setInfo(response.data);
       } catch (err) {

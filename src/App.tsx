@@ -28,6 +28,7 @@ function App() {
   const [userDetails, setUserDetails] = useState(null); // Estado para almacenar los detalles del usuario
   userId;
   userDetails;
+  console.log(products)
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -153,12 +154,10 @@ function App() {
             onCartIconClick={handleCartIconClickAlt}
           />
           <div
-            id="footer"
-            className={`md:fixed w-full md:bottom-0 transition-opacity -z-[1] ${
-              isFooterVisible ? "opacity-100" : "opacity-0"
-            }`}
+            // id="footer"
+            className={`md:static w-full md:bottom-0 transition-opacity opacity-100`}
           >
-            <Footer />
+            {products.length > 0 ? <Footer /> : null}
           </div>
         </>
       )}

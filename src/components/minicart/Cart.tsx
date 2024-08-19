@@ -7,6 +7,7 @@ import MapSelector from "../MapSelector"; // Asegúrate de importar el MapSelect
 
 // import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
+import { VITE_BASE_URL } from "@/config/envs";
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
@@ -29,7 +30,7 @@ function Cart({ similar }: any) {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `https://lachocoback.vercel.app/users`
+          `${VITE_BASE_URL}/users`
         );
         const userWithEmail = response.data.find(
           (user: any) => user.email === userEmail
@@ -214,7 +215,7 @@ function Cart({ similar }: any) {
 
     toast.promise(
       axios
-        .post("https://lachocoback.vercel.app/orders", order)
+        .post(`${VITE_BASE_URL}/orders`, order)
         .then((response) => {
           globalOrderId = response.data[0].id;
           setOrderCreatedId(response.data[0].id);
@@ -236,7 +237,7 @@ function Cart({ similar }: any) {
 
           if (globalOrderId !== "" && globalOrderId.length !== 0) {
             return axios.post(
-              "https://lachocoback.vercel.app/pagos/create-checkout-session",
+              `${VITE_BASE_URL}/pagos/create-checkout-session`,
               paymentData
             );
           } else {
@@ -320,7 +321,7 @@ function Cart({ similar }: any) {
     };
 
     axios
-      .post("https://lachocoback.vercel.app/orders", order)
+      .post(`${VITE_BASE_URL}/orders`, order)
       .then((response) => {
         globalOrderId = response.data[0].id;
         setOrderCreatedId(response.data[0].id);
@@ -343,7 +344,7 @@ function Cart({ similar }: any) {
         if (globalOrderId !== "" && globalOrderId.length !== 0) {
           axios
             .post(
-              "https://lachocoback.vercel.app/pagos/create-checkout-session",
+              `${VITE_BASE_URL}/pagos/create-checkout-session`,
               paymentData
             )
             .then((paymentResponse) => {

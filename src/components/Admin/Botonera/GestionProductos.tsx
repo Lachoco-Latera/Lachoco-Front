@@ -6,6 +6,7 @@ import { ICategories, IFlavor } from "../../../helpers/type";
 import { toast } from "sonner";
 import { IoMdExit } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
+import { VITE_BASE_URL } from "@/config/envs";
 
 export const GestionProductos = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -35,7 +36,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     const getFlavors = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/flavor"
+          `${VITE_BASE_URL}/flavor`
         );
         const data = response.data;
         setFlavors(data);
@@ -46,7 +47,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     const getCategories = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/category"
+          `${VITE_BASE_URL}/category`
         );
         const data = response.data;
         setCategories(data);
@@ -124,12 +125,12 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       let response;
       if (formEditState.id) {
         response = await axios.put(
-          `https://lachocoback.vercel.app/products/${formEditState.id}`,
+          `${VITE_BASE_URL}/products/${formEditState.id}`,
           formEditState
         );
       } else {
         response = await axios.post(
-          `https://lachocoback.vercel.app/products`,
+          `${VITE_BASE_URL}/products`,
           formEditState
         );
       }
@@ -166,7 +167,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     const getOrders = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/products"
+          `${VITE_BASE_URL}/products`
         );
         const data = response.data;
         setOrderState(data);
@@ -179,7 +180,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
   const handleButtonDelete = async (id: string) => {
     toast("Esperando al servidor...", { id: "loading-delete" });
     try {
-      await axios.delete(`https://lachocoback.vercel.app/products/${id}`);
+      await axios.delete(`${VITE_BASE_URL}/products/${id}`);
       setOrderState((prevState) =>
         prevState.filter((order) => order.id !== id)
       );

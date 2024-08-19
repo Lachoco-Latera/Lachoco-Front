@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { VITE_BASE_URL } from "@/config/envs";
 
 export const GestionPPyDatosEmpresa = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -20,7 +21,7 @@ export const GestionPPyDatosEmpresa = ({ signal, onCloseModal }: any) => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/products"
+          `${VITE_BASE_URL}/products`
         );
         setProducts(response.data);
       } catch (error) {

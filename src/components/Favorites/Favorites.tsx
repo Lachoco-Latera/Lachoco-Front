@@ -5,6 +5,7 @@ import axios from "axios";
 import Drawer from "../Drawer";
 import Cart from "../minicart/Cart";
 import { MdFavoriteBorder } from "react-icons/md";
+import { VITE_BASE_URL } from "@/config/envs";
 
 const Favorites = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -14,7 +15,7 @@ const Favorites = () => {
     const fetchFavorites = async () => {
       try {
         const response = await axios.get(
-          `https://lachocoback.vercel.app/products`
+          `${VITE_BASE_URL}/products`
         );
         setInfo(response.data);
       } catch (err) {

@@ -4,9 +4,17 @@ import { CambioMoneda } from "../CambioMoneda/CambioMoneda";
 import logo1 from "../../assets/images/facebook.png";
 import logo2 from "../../assets/images/whatsapp.png";
 import logo3 from "../../assets/images/instagram.png";
+import idioma from "../../assets/images/idioma.svg"
+import { useTranslation } from "react-i18next";
 
 export const Footer = () => {
   const [monedaState, setMonedaState] = useState(false);
+  const { t, i18n } = useTranslation()
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem("i18nextLng", lng);
+  };
 
   const handleOnClick = () => {
     setMonedaState(!monedaState);
@@ -81,11 +89,24 @@ export const Footer = () => {
               </li>
             </ul>
           </div>
-          <span className="flex text-sm sm:text-center text-gray-600 py-4">
-            © 2024 Tiempo de Chocolatear
-          </span>
+          <div className="flex items-center gap-3 z-30 ">
+          <h1>{t('welcome_message')}</h1>
+          <button onClick={() => changeLanguage('en')}>English</button>
+          <button onClick={() => changeLanguage('es')}>Español</button>
+            <p className="flex text-sm sm:text-center text-gray-600 py-4">
+              © 2024 Tiempo de Chocolatear
+            </p>
+          </div>
         </div>
       </footer>
     </>
   );
 };
+
+/*
+            <button type="button" className="flex items-center gap-2">
+            <span>
+              <img src={idioma} alt="" className="w-5 h-5" />
+            </span>
+              <span className="text-sm text-gray-600">Español(AR)</span>
+            </button>*/

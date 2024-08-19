@@ -153,7 +153,7 @@ function App() {
           />
           <div
             id="footer"
-            className={`md:fixed w-full md:bottom-0 transition-opacity -z-[1] ${
+            className={`md:fixed w-full md:bottom-0 transition-opacity ${
               isFooterVisible ? "opacity-100" : "opacity-0"
             }`}
           >

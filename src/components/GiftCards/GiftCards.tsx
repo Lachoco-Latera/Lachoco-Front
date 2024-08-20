@@ -5,11 +5,28 @@ import Cart from "../minicart/Cart";
 import { Product } from "@/types";
 import logo from "@/assets/images/img-5.webp";
 import { Button, Divider, Form, Grid, GridColumn, GridRow, Icon, Input as Inputs, TextArea } from "semantic-ui-react";
+import { useCartStore } from "@/stores/useCartStore";
+import { useForm, SubmitHandler } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+
+type FormData = {
+  designCard: string;
+  amountCard: string;
+  nameRecipient: string;
+  emailRecipient: string;
+  nameSender: string;
+  emailSender: string;
+  message?: string;
+}
 
 export const GiftCards = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [amountGiftCard, setAmountGiftCard] = useState<string>('');
   const [designGiftCard, setDesignGiftCard] = useState<string>('');
+
+  const addToCart = useCartStore((state) => state.addToCart);
+
   const products: Product[] = [ 
     {
       id: "1",
@@ -53,6 +70,23 @@ export const GiftCards = () => {
     }
   ]
 
+  const schema = yup
+    .object({
+      designCard: yup.string().required(),
+      amountCard: yup.string().required(),
+      nameRecipient: yup.string().required(),
+      emailRecipient: yup.string().email('Coloque un formato valido de email.').required(),
+      nameSender: yup.string().required(),
+      emailSender: yup.string().email('Coloque un formato valido de email.').required('Coloque un formato valido de email.'),
+      message: yup.string().optional(),
+    }).required()
+
+  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema)});
+
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log(data);
+  }
+
   const handleSelectPrice = (price: string) => {
     if (price) {
       setAmountGiftCard(price);
@@ -71,7 +105,7 @@ export const GiftCards = () => {
     return (
       <div 
         className={`flex justify-center items-center h-28 w-full bg-white rounded-lg cursor-pointer 
-        ${amountGiftCard === price ? 'outline outline-[#0071e3] outline-[2px]' : 'border-[#86868b] border-[1px]'}`}
+        ${amountGiftCard === price ? 'outline outline-[#0071e3] outline-[2px]' : 'border-[#a8a8ad] border-[1px]'}`}
         onClick={()=> handleSelectPrice(price)}> 
         <span className="font-semibold text-2xl">{price}</span>
       </div>
@@ -81,12 +115,17 @@ export const GiftCards = () => {
   const DesignCard = ({img}: {img: string}) => (
     <div 
         className={`flex justify-center items-center h-28 w-full bg-white rounded-lg cursor-pointer px-3 py-5 
-        ${designGiftCard === img ? 'outline outline-[#0071e3] outline-[2px]' : 'border-[#86868b] border-[1px]'}`}
+        ${designGiftCard === img ? 'outline outline-[#0071e3] outline-[2px]' : 'border-[#a8a8ad] border-[1px]'}`}
         onClick={()=> handleDesign(img)}> 
         <img className="w-full h-full object-fill" src={img}/>
       </div>
   )
 
+  const InputError = ({message}: {message: string}) => (
+    <p className="text-lg text-red-600 dark:text-red-500">
+      {message}
+    </p>
+  )
 
   return (
     <>
@@ -101,7 +140,7 @@ export const GiftCards = () => {
             <div className="w-[50%]">
               <img src={logo} alt="bombon" className="w-full h-[500px] object-contain sticky top-36" />
             </div>
-            <Form className="w-[40%]">
+            <Form className="w-[40%]" onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full pl-6">
               <h2 className="text-5xl font-bold mb-2">Comprar gift Card</h2>
               <p className="text-gray-600 mb-4 text-[18px]">
@@ -158,11 +197,46 @@ export const GiftCards = () => {
               <h3 className="font-semibold mb-6 text-2xl">Indica tus datos de envio</h3>
               <div className="flex flex-col">
                 <p className="font-semibold text-[1.125rem] mb-4">¿Para quién es?</p>
-                <Inputs placeholder="Nombre del destinatario" size="big" className="mb-2 border-gray-800" focus={true} />
-                <Inputs placeholder="Email del destinatario" size="big" className="mb-2 rounded-lg" focus={true} icon={<Icon name="mail" size="large" />}/>
+
+                <Inputs
+                  placeholder="Nombre del destinatario" 
+                  focus={true} 
+                  size="big" 
+                  {...register("nameRecipient", { required: true})} 
+                  error={errors.nameRecipient ? true : false} 
+                />
+                {errors.nameRecipient && <InputError message="El nombre del destinatario es requerido." />}
+
+                <Inputs
+                  placeholder="Email del destinatario" 
+                  size="big" 
+                  className="mt-4" 
+                  focus={true} 
+                  icon={<Icon name="mail" size="large" />}
+                  {...register("emailRecipient", { required: true})} 
+                  error={errors.emailRecipient ? true : false}
+                  />
+                {errors.emailRecipient && <InputError message={errors.emailRecipient.message || "El email del remitente es requerido."} />}
+
                 <p className="font-semibold text-[1.125rem] mb-4 mt-6">¿Quien la envía?</p>
-                <Inputs placeholder="Nombre del remitente" size="big" className="mb-2 " focus={true} />
-                <Inputs placeholder="Email del remitente" size="big" className="mb-2 " focus={true} icon={<Icon name="mail" size="large" />}/>
+                <Inputs
+                  placeholder="Nombre del remitente" 
+                  size="big" 
+                  focus={true}
+                  {...register("nameSender", { required: true})} 
+                  error={errors.nameSender ? true : false}
+                  />
+                {errors.nameSender && <InputError message="El nombre del remitente es requerido." />}
+
+                <Inputs
+                  placeholder="Email del remitente" 
+                  size="big" className="mt-4" 
+                  focus={true} 
+                  icon={<Icon name="mail" size="large" />}
+                  {...register("emailSender", { required: true, })} 
+                  error={errors.emailSender ? true : false}
+                  />
+                {errors.emailSender && <InputError message={errors.emailSender.message || "El email del remitente es requerido."} />}
 
               <Divider />
 

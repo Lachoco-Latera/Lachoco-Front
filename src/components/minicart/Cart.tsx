@@ -8,8 +8,10 @@ import MapSelector from "../MapSelector"; // Asegúrate de importar el MapSelect
 // import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import { VITE_BASE_URL } from "@/config/envs";
+import CartItemGiftCard from "../GiftCards/CartItemGiftCard";
+
 function Cart({ similar }: any) {
-  const { cart, confirmedFlavors } = useCartStore();
+  const { cart, confirmedFlavors, giftCards } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const [completed, setCompleted] = useState<boolean>(true);
@@ -62,11 +64,16 @@ function Cart({ similar }: any) {
   }, [confirmedFlavors]);
 
   let total = 0;
+  let totalGiftCards = 0;
   if (cart) {
+    if(giftCards){
+      totalGiftCards = giftCards.reduce((acc, giftCards: any) => acc + giftCards.amountCard, 0);
+    }
     total = cart.reduce((acc, product: any) => {
       const quantity = Math.max(product.quantity as number, 0);
       return acc + product.price * quantity;
     }, 0);
+    total = total + Number(totalGiftCards);
   }
 
   const bombonesProducts = cart.filter(
@@ -374,10 +381,17 @@ function Cart({ similar }: any) {
       });
   };
 
+
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
       <ul>
+        {giftCards?.map((giftCard, index) => (
+          <CartItemGiftCard
+            key={index}
+            giftCard={giftCard}
+          />
+        ))}
         {cart?.map((product) => (
           <CartItem
             key={product.id}

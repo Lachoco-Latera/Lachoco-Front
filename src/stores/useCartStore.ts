@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Product } from "../types";
+import { GiftCard, Product } from "../types";
 
 interface State {
   cart: Product[];
+  giftCards: GiftCard[];
   totalItems: number;
   totalPrice: number;
   confirmedFlavors: { [productId: string]: string[] };
@@ -11,6 +12,8 @@ interface State {
 
 interface Actions {
   addToCart: (product: Product) => void;
+  addGiftCard: (giftCard: GiftCard) => void;
+  removeFromGiftCard: (giftCard: GiftCard) => void;
   removeFromCart: (product: Product) => void;
   subtractFromCart: (product: Product) => void;
   selectFlavors: (productId: string, pickedFlavors: string[]) => void;
@@ -21,6 +24,7 @@ interface Actions {
 
 const INITIAL_STATE: State = {
   cart: [],
+  giftCards: [],
   totalItems: 0,
   totalPrice: 0,
   confirmedFlavors: {},
@@ -30,6 +34,7 @@ export const useCartStore = create(
   persist<State & Actions>(
     (set, get) => ({
       cart: INITIAL_STATE.cart,
+      giftCards: INITIAL_STATE.giftCards,
       totalItems: INITIAL_STATE.totalItems,
       totalPrice: INITIAL_STATE.totalPrice,
       confirmedFlavors: INITIAL_STATE.confirmedFlavors,
@@ -59,6 +64,18 @@ export const useCartStore = create(
             totalPrice: state.totalPrice + parseFloat(product.price),
           }));
         }
+      },
+      addGiftCard: (giftCard: GiftCard) => {
+        set((state) => ({
+          ...state,
+          giftCards: [giftCard],
+        }))
+        
+
+      },
+      removeFromGiftCard: (giftCard: GiftCard) => {
+        const giftCards = get().giftCards;
+        // const giftCardIndex = giftCards.findIndex((item) => item.id === giftCard.id);
       },
       removeFromCart: (product: Product) => {
         const cart = get().cart;

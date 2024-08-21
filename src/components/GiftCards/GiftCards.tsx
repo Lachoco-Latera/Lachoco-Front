@@ -11,8 +11,8 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 
 type FormData = {
-  designCard: string;
-  amountCard: string;
+  designCard?: string;
+  amountCard?: string;
   nameRecipient: string;
   emailRecipient: string;
   nameSender: string;
@@ -21,11 +21,12 @@ type FormData = {
 }
 
 export const GiftCards = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [amountGiftCard, setAmountGiftCard] = useState<string>('');
   const [designGiftCard, setDesignGiftCard] = useState<string>('');
 
-  const addToCart = useCartStore((state) => state.addToCart);
+  const addGiftCard = useCartStore((state) => state.addGiftCard);
+  const { giftCards } = useCartStore()
 
   const products: Product[] = [ 
     {
@@ -72,19 +73,28 @@ export const GiftCards = () => {
 
   const schema = yup
     .object({
-      designCard: yup.string().required(),
-      amountCard: yup.string().required(),
+      designCard: yup.string(),
+      amountCard: yup.string(),
       nameRecipient: yup.string().required(),
       emailRecipient: yup.string().email('Coloque un formato valido de email.').required(),
       nameSender: yup.string().required(),
-      emailSender: yup.string().email('Coloque un formato valido de email.').required('Coloque un formato valido de email.'),
+      emailSender: yup.string().email('Coloque un formato valido de email.').required(),
       message: yup.string().optional(),
     }).required()
 
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema)});
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
+    const order = {
+      designCard: designGiftCard,
+      amountCard: amountGiftCard,
+      nameRecipient: data.nameRecipient,
+      emailRecipient: data.emailRecipient,
+      nameSender: data.nameSender,
+      emailSender: data.emailSender,
+      message: data.message,
+    }
+    addGiftCard(order);
   }
 
   const handleSelectPrice = (price: string) => {
@@ -97,7 +107,7 @@ export const GiftCards = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
-  const handleDesign = (img: string) => {
+  const handleDesign = async  (img: string) => {
     setDesignGiftCard(img);
   }
 
@@ -107,19 +117,20 @@ export const GiftCards = () => {
         className={`flex justify-center items-center h-28 w-full bg-white rounded-lg cursor-pointer 
         ${amountGiftCard === price ? 'outline outline-[#0071e3] outline-[2px]' : 'border-[#a8a8ad] border-[1px]'}`}
         onClick={()=> handleSelectPrice(price)}> 
-        <span className="font-semibold text-2xl">{price}</span>
+        <span className="font-semibold text-2xl">${price}</span>
       </div>
     )
   }
 
-  const DesignCard = ({img}: {img: string}) => (
+  const DesignCard = ({img}: {img: string}) => {
+    return (
     <div 
-        className={`flex justify-center items-center h-28 w-full bg-white rounded-lg cursor-pointer px-3 py-5 
+        className={`flex justify-center items-center h-36 w-full bg-white rounded-lg cursor-pointer px-3 py-4 
         ${designGiftCard === img ? 'outline outline-[#0071e3] outline-[2px]' : 'border-[#a8a8ad] border-[1px]'}`}
         onClick={()=> handleDesign(img)}> 
-        <img className="w-full h-full object-fill" src={img}/>
+        <img className="w-full h-full object-cover rounded-lg" src={img}/>
       </div>
-  )
+  )}
 
   const InputError = ({message}: {message: string}) => (
     <p className="text-lg text-red-600 dark:text-red-500">
@@ -162,13 +173,7 @@ export const GiftCards = () => {
                   <GridRow>
                     <GridColumn>
                       <div className="mb-6 mt-6">
-                      <DesignCard  img="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" /> 
-                      </div>
-                    </GridColumn>
-                    <GridColumn>
-                      <div className="mb-6 mt-6">
-
-                      <DesignCard  img="algo" /> 
+                      <DesignCard img='https://res.cloudinary.com/dine1x1iy/image/upload/v1724174932/uc1kbe1jufmj4gbv3f4x.png' /> 
                       </div>
                     </GridColumn>
                   </GridRow>
@@ -180,14 +185,14 @@ export const GiftCards = () => {
                 <GridRow >
                   <GridColumn>
                     <div className="mb-6 mt-6">
-                    {priceCard('50$')}
+                    {priceCard('50')}
 
                     </div>
                   </GridColumn>
                   <GridColumn>
                     <div className="mb-6 mt-6">
 
-                    {priceCard('100$')}
+                    {priceCard('100')}
                     </div>
                   </GridColumn>
                 </GridRow>
@@ -259,7 +264,7 @@ export const GiftCards = () => {
                     </div>
 
                     <div>
-                      <Button className="w-full mt-10" color="blue" size="big">
+                      <Button type="submit" className="w-full mt-10" color="blue" size="big">
                         Añadir a la bolsa</Button>
                     </div>
 

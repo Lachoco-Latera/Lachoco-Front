@@ -38,6 +38,7 @@ async function hashPassword(password: string): Promise<string> {
 
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
+  const giftCard = useFromStore(useCartStore, (state) => state.giftCards)
   const { isSignedIn, user, isLoaded } = useUser();
   const [userCountry, setUserCountry] = useState<string>("");
 
@@ -312,7 +313,7 @@ export default function Header({ onCartIconClick }: Props) {
               >
                 <FiShoppingCart size={24} />
                 <div className="text-white rounded-full bg-gray-700 w-5 h-5 text-sm -ml-[0.7em] -mt-5">
-                  {cart?.length}
+                  {(cart?.length || 0) + (giftCard?.length || 0)}
                 </div>
               </button>
             </div>

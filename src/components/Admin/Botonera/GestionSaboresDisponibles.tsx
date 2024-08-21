@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { IFlavor } from "../../../helpers/type";
 import { toast } from "sonner";
+import { VITE_BASE_URL } from "@/config/envs";
 
 export const GestionSaboresDisponibles = ({
   signal,
@@ -38,7 +39,7 @@ export const GestionSaboresDisponibles = ({
     const getFlavors = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/flavor"
+          `${VITE_BASE_URL}/flavor`
         );
         const data = response.data;
         setFlavors(data);
@@ -64,7 +65,7 @@ export const GestionSaboresDisponibles = ({
             toast.dismiss(alertId);
             try {
               const response = await axios.put(
-                `https://lachocoback.vercel.app/flavor/${formEditState.id}`, // Verifica que esta URL sea correcta
+                `${VITE_BASE_URL}/flavor/${formEditState.id}`,
                 formEditState
               );
 
@@ -99,7 +100,7 @@ export const GestionSaboresDisponibles = ({
               toast.dismiss(alertId);
               try {
                 await axios.delete(
-                  `https://lachocoback.vercel.app/flavor/${id}`
+                  `${VITE_BASE_URL}/flavor/${id}`
                 );
                 setFlavors((prevFlavors) =>
                   prevFlavors.filter((flavor) => flavor.id !== id)
@@ -142,7 +143,7 @@ export const GestionSaboresDisponibles = ({
               toast.dismiss(alertId);
               try {
                 const response = await axios.post(
-                  "https://lachocoback.vercel.app/flavor",
+                  `${VITE_BASE_URL}/flavor`,
                   flavorState
                 );
                 setFlavors((prevFlavors) => [...prevFlavors, response.data]);

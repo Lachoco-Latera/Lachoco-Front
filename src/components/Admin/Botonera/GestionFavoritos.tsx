@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { IFavorites, IGitfCards, IOrdersFavorites } from "@/helpers/type";
 import { toast } from "sonner";
+import { VITE_BASE_URL } from "@/config/envs";
 
 export const GestionFavoritos = ({ signal, onCloseModal }: any) => {
   const [editFormState, setEditFormState] = useState<IFavorites>({
@@ -102,7 +103,7 @@ export const GestionFavoritos = ({ signal, onCloseModal }: any) => {
     const getUsers = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/users"
+          `${VITE_BASE_URL}/users`
         );
         const data = response.data;
         setUserState(data);

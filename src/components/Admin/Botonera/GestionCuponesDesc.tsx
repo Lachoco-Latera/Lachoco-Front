@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import UploadWidget from "../../../components/UploadWidget";
 import { IoMdClose } from "react-icons/io";
 import tinyLogo from "../../../assets/images/tinyLogo.png";
+import { VITE_BASE_URL } from "@/config/envs";
 
 export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
@@ -31,7 +32,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   useEffect(() => {
     const getGiftcards = async () => {
       try {
-        const response = await axios.get("https://lachocoback.vercel.app/gitfcards");
+        const response = await axios.get(`${VITE_BASE_URL}/gitfcards`);
         const data = response.data;
         setGiftcardsState(data);
       } catch (error) {
@@ -42,7 +43,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     const getUsers = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/users"
+          `${VITE_BASE_URL}/users`
         );
         const data = response.data;
         setUsersState(data);
@@ -89,14 +90,14 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     if (editState && selectedGiftCard) {
       try {
         await axios.put(
-          `https://lachocoback.vercel.app/gitfcards/${selectedGiftCard.id}`,
+          `${VITE_BASE_URL}/gitfcards/${selectedGiftCard.id}`,
           updatedFormData
         );
         // Notificación de éxito
         toast.success("Gift card actualizada exitosamente");
         // Actualiza la lista de giftcards después de editar
         const response = await axios.get(
-          "https://lachocoback.vercel.app/gitfcards"
+        ` ${VITE_BASE_URL}/gitfcards`
         );
         setGiftcardsState(response.data);
         closeModal();
@@ -108,14 +109,14 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
     } else {
       try {
         await axios.post(
-          "https://lachocoback.vercel.app/gitfcards",
+          `${VITE_BASE_URL}/gitfcards`,
           updatedFormData
         );
         // Notificación de éxito
         toast.success("Gift card agregada exitosamente");
         // Actualiza la lista de giftcards después de agregar
         const response = await axios.get(
-          "https://lachocoback.vercel.app/gitfcards"
+          `${VITE_BASE_URL}/gitfcards`
         );
         setGiftcardsState(response.data);
         closeModal();
@@ -129,13 +130,13 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
   const handleDelete = async (giftcard: any) => {
     try {
       await axios.delete(
-        `https://lachocoback.vercel.app/gitfcards/${giftcard?.id}`
+        `${VITE_BASE_URL}/gitfcards/${giftcard?.id}`
       );
       // Notificación de éxito
       toast.success("Gift card eliminada exitosamente");
       // Actualiza la lista de giftcards después de eliminar
       const response = await axios.get(
-        "https://lachocoback.vercel.app/gitfcards"
+        `${VITE_BASE_URL}/gitfcards`
       );
       setGiftcardsState(response.data);
     } catch (error) {

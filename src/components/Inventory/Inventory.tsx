@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { HiHeart } from "react-icons/hi";
 import { SlHeart } from "react-icons/sl";
 import { FaStar } from "react-icons/fa";
+import { VITE_BASE_URL } from "@/config/envs";
 // import { useCartStore } from "../../stores/useCartStore";
 // import { MdAddShoppingCart } from "react-icons/md";
 
@@ -37,7 +38,7 @@ const Inventory = ({ onCartIconClick }: any) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `https://lachocoback.vercel.app/users`
+          `${VITE_BASE_URL}/users`
         );
         const userWithEmail = response.data.find(
           (user: any) => user.email === userEmail
@@ -53,7 +54,7 @@ const Inventory = ({ onCartIconClick }: any) => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          `https://lachocoback.vercel.app/orders`
+          `${VITE_BASE_URL}/orders`
         );
         const filteredOrders = response.data.filter(
           (order: any) => order.user.email === userEmail

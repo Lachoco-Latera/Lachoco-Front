@@ -1,10 +1,11 @@
 import axios from "axios";
 import { IFlavor, IRedes } from "./type";
+import { VITE_BASE_URL } from "@/config/envs";
 
 // ------------------------------------- REDES
 export const getRedes = async () => {
   try {
-    const res = await axios.get("https://lachocoback.vercel.app/redes");
+    const res = await axios.get(`${VITE_BASE_URL}/redes`);
     // console.log(res.data, '<<<<<------ service get')
     return res.data;
   } catch (error) {
@@ -14,7 +15,7 @@ export const getRedes = async () => {
 
 export const postRedes = async (data: IRedes) => {
   try {
-    const res = await axios.post("https://lachocoback.vercel.app/redes", data);
+    const res = await axios.post(`${VITE_BASE_URL}/redes`, data);
     console.log(res.data, "<<<<<<<<<<<<<<------ service post");
     return res.data;
   } catch (error) {
@@ -24,7 +25,7 @@ export const postRedes = async (data: IRedes) => {
 
 export const putRedes = async (id: string, data: IRedes) => {
   try {
-    const res = await axios.put(`http://localhost:3000/redes/${id}`, data);
+    const res = await axios.put(`${VITE_BASE_URL}/redes/${id}`, data);
     console.log(
       res.data,
       "<<<<<<<<<<<<<<<<<<<<<<<------------ service put redes"
@@ -37,7 +38,7 @@ export const putRedes = async (id: string, data: IRedes) => {
 
 export const deleteRed = async (id: string | any) => {
   try {
-    const res = await axios.delete(`http://localhost:3000/redes/${id}`);
+    const res = await axios.delete(`${VITE_BASE_URL}/redes/${id}`);
     console.log(
       res.data,
       "<<<<<<<<<<<<<<<<<<<<<<<------------ service delete redes"

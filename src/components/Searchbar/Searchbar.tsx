@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { GridColumn, Search, Grid, SearchProps } from "semantic-ui-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { VITE_BASE_URL } from "@/config/envs";
 
 const initialState = {
   loading: false,
@@ -91,7 +92,7 @@ function SearchExampleStandard() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://lachocoback.vercel.app/products"
+          `${VITE_BASE_URL}/products`
         );
         const productsWithCategory = response.data.map((product: any) => ({
           ...product,

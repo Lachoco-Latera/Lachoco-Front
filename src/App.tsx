@@ -154,10 +154,12 @@ function App() {
             onCartIconClick={handleCartIconClickAlt}
           />
           <div
-            // id="footer"
-            className={`md:static w-full md:bottom-0 transition-opacity opacity-100`}
+            id="footer"
+            className={`md:fixed w-full md:bottom-0 transition-opacity ${
+              isFooterVisible ? "opacity-100" : "opacity-0"
+            }`}
           >
-            {products.length > 0 ? <Footer /> : <Footer />}
+            <Footer />
           </div>
         </>
       )}

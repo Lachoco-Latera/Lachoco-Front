@@ -7,6 +7,7 @@ import Cart from "../minicart/Cart";
 import { useParams } from "react-router-dom";
 import ProductsDetail from "./productsDetail/ProductsDetail";
 import { VITE_BASE_URL } from "@/config/envs";
+import { Footer } from "../Footer/Footer";
 
 const Products = () => {
   const { id } = useParams();
@@ -52,9 +53,17 @@ const Products = () => {
       </Drawer>
       <div className="my-0 md:my-8 flex flex-col justify-center items-center">
         {info ? (
+          <>
           <ProductsDetail info={info} onCheckIconClick={handleCartIconClick} />
-        ) : (
-          <div>Loading...</div>
+          <div className="w-full relative bottom-0">
+          <Footer/>
+          </div>
+          </>
+        ) 
+        : (
+          <div className="flex flex-col">
+            <p className="text-2xl font-semibold text-center">Loading...</p>
+          </div>
         )}
       </div>
     </>

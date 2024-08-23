@@ -21,6 +21,7 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { BiTask } from "react-icons/bi";
 import { VITE_BASE_URL } from "@/config/envs";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onCartIconClick: () => void;
@@ -41,6 +42,7 @@ export default function Header({ onCartIconClick }: Props) {
   const giftCard = useFromStore(useCartStore, (state) => state.giftCards)
   const { isSignedIn, user, isLoaded } = useUser();
   const [userCountry, setUserCountry] = useState<string>("");
+  const {t} = useTranslation()
 
   const navigate = useNavigate();
   const promise = () =>
@@ -263,7 +265,7 @@ export default function Header({ onCartIconClick }: Props) {
                 })
               }
             >
-              ¡Suscribete!
+              {t("Subscribe")}
             </button>
           ) : null}
           <div className="relative  hidden md:block"></div>

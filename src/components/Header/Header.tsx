@@ -4,6 +4,7 @@ import useFromStore from "../../hooks/useFromStore";
 import SearchExampleStandard from "../Searchbar/Searchbar";
 import logo from "../../assets/images/logo.png";
 import tinyLogo from "../../assets/images/tinyLogo.png";
+import { useTranslation } from "react-i18next";
 
 import { Product } from "@/types.d";
 import {
@@ -17,11 +18,10 @@ import { toast } from "sonner";
 import { MdFavoriteBorder } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiTask } from "react-icons/bi";
 import { VITE_BASE_URL } from "@/config/envs";
-import { useTranslation } from "react-i18next";
 
 interface Props {
   onCartIconClick: () => void;
@@ -139,33 +139,27 @@ export default function Header({ onCartIconClick }: Props) {
       user.primaryEmailAddress &&
       user.primaryEmailAddress.emailAddress
     ) {
-
       const passTransform = `${user.id}${import.meta.env.VITE_USER_KEY}`;
       const sliceKey = import.meta.env.VITE_PASS_SLICE;
       const start = parseInt(sliceKey[0]);
       const end = parseInt(sliceKey.slice(1));
       const specialCharacters = "!@#$%^&*()";
-
-      try {
-
-      const hashedPassword = await hashPassword(passTransform)
+      hashPassword(passTransform).then((hashedPassword) => {
         let trimmedPassword = hashedPassword.slice(start, end) || "";
-        
+
         // Ensure at least one uppercase character
         const firstLowerIndex = trimmedPassword.search(/[a-z]/);
         if (firstLowerIndex !== -1) {
           trimmedPassword =
-          trimmedPassword.slice(0, firstLowerIndex) +
-          trimmedPassword[firstLowerIndex].toUpperCase() +
-          trimmedPassword.slice(firstLowerIndex + 1);
+            trimmedPassword.slice(0, firstLowerIndex) +
+            trimmedPassword[firstLowerIndex].toUpperCase() +
+            trimmedPassword.slice(firstLowerIndex + 1);
         }
-        
+
         // Choose a special character based on the 'end' variable
         const specialCharacterIndex = end % specialCharacters.length;
         const specialCharacter = specialCharacters[specialCharacterIndex];
         trimmedPassword += specialCharacter;
-        console.log(trimmedPassword.length)
-
         if (user.primaryEmailAddress && trimmedPassword) {
           const userData = {
             name: user.firstName,
@@ -175,42 +169,58 @@ export default function Header({ onCartIconClick }: Props) {
             password: trimmedPassword,
             confirmPassword: trimmedPassword,
           };
-
-          const users = await axios.get(`${VITE_BASE_URL}/users`);
-
-          const existingUser = users.data.find(
+          axios
+            .get(`${VITE_BASE_URL}/users`)
+            .then((response) => {
+              const existingUser = response.data.find(
                 (existingUser: any) =>
                   existingUser.email === user.primaryEmailAddress?.emailAddress
               );
-
-              if (typeof existingUser === "undefined") {
-                const userRegistered = await axios.post(`${VITE_BASE_URL}/users/register`, userData)
-                console.log(userRegistered)
+              if (!existingUser) {
+                // Email does not exist, proceed with registration
+                axios
+                  .post(
+                    `${VITE_BASE_URL}/users/register`,
+                    userData
+                  )
+                  .then((response) => {
+                    response;
+                  })
+                  .catch((error) => {
+                    if (error.response) {
+                      if (
+                        error.response.status === 400 &&
+                        error.response.data.message ===
+                          "Password does not Match"
+                      ) {
+                        console.log(
+                          "Error: La contraseña no coincide con los requisitos del servidor."
+                        );
+                      } else if (
+                        error.response.status === 403 ||
+                        error.response.data.message === "User already exists"
+                      ) {
+                        console.log("User already exists");
+                      } else if (error.response.status === 409) {
+                        console.log("Ready!");
+                      } else {
+                        console.error("Error registering user:", error);
+                      }
+                    } else {
+                      console.error("Error registering user:", error);
+                    }
+                  });
+              } else {
+                // console.log("User already exists: ", user.firstName);
               }
+            })
+            .catch((error) => {
+              console.error("Error checking existing users:", error);
+            });
         }
-      } catch (error) {
-        if(error instanceof AxiosError) {
-          if (
-              error.response?.status === 400 &&
-              error.response?.data.message ===
-                "Password does not Match"
-            ) {
-              console.log(
-                "Error: La contraseña no coincide con los requisitos del servidor."
-              );
-            } else if (error.response?.status === 403 ||
-              error.response?.data.message === "User already exists"
-            ) {
-              console.log("User already exists")
-            } else if (error.response?.status === 409) {
-              console.log("Ready!")
-            } else {
-              console.error("Error registering user:", error)
-            }
-          }
-        }
-      }
-    };
+      });
+    }
+  };
 
   // Call the registerUser function when needed
   if (isSignedIn && isLoaded) {
@@ -340,36 +350,3 @@ export default function Header({ onCartIconClick }: Props) {
     </header>
   );
 }
-
-
-  // .catch((error) => {
-  //                   if (error.response) {
-  //                     if (
-  //                       error.response.status === 400 &&
-  //                       error.response.data.message ===
-  //                         "Password does not Match"
-  //                     ) {
-  //                       console.log(
-  //                         "Error: La contraseña no coincide con los requisitos del servidor."
-  //                       );
-  //                     } else if (
-  //                       error.response.status === 403 ||
-  //                       error.response.data.message === "User already exists"
-  //                     ) {
-  //                       console.log("User already exists");
-  //                     } else if (error.response.status === 409) {
-  //                       console.log("Ready!");
-  //                     } else {
-  //                       console.error("Error registering user1:", error);
-  //                     }
-  //                   } else {
-  //                     console.error("Error registering user:", error);
-  //                   }
-  //                 });
-  //             } else {
-  //               // console.log("User already exists: ", user.firstName);
-  //             }
-  //           })
-  //           .catch((error) => {
-  //             console.error("Error checking existing users:", error);
-  //           });

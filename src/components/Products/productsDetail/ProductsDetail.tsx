@@ -12,6 +12,7 @@ import { FaBookOpen } from "react-icons/fa";
 import MapComponent from "../../MapComponent";
 import FlavorModal from "../../FlavorModal";
 import { useCartStore } from "../../../stores/useCartStore";
+import { useTranslation } from "react-i18next";
 
 interface ProductsDetailProps {
   info: any;
@@ -28,6 +29,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
   const [heartColor, setHeartColor] = useState("transparent");
   const [showFlavorModal, setShowFlavorModal] = useState(false);
   const altLabel = ["Solo Online", "Nuevo", "Importado"];
+  const {t} = useTranslation();
   const handleImageClick = (product: Product) => {
     setModalProduct(product);
     setShowModal(true);
@@ -147,21 +149,21 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
           <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
             <p className="flex gap-2 text-3xl">
               <LuPackageOpen />
-              Presentación
+              {t("Products_presentation")}
             </p>
             <p className=""> {productInfo?.description}</p>
           </h2>
           <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
             <p className="flex gap-2 text-3xl">
               <FaBookOpen />
-              Descripción
+              {t("Products_description")}
             </p>
             <p className=""> {productInfo?.description}</p>
           </h2>
           <h2 className="self-start max-w-2xl pt-12 pb-12 md:font-semibold">
             <p className="flex gap-2 text-3xl">
               <GrDeliver />
-              Envios
+              {t("Products_shipping")}
             </p>
             <p className=""> {productInfo?.description}</p>
           </h2>

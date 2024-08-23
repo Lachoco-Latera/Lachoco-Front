@@ -1,4 +1,31 @@
 {
-    "welcome_message": "¡Bienvenido a nuestra aplicación!"
+    "footer_copyright": "© 2024 Tiempo de Chocolatear",
+    "currency_change": "Cambio de moneda ^",
+    "company_info": "Datos de la empresa",
+    "privacy_policy": "Política de privacidad",
+    "gift_cards": "Tarjetas de regalo",
+    "help_center": "Centro de ayuda",
+
+    "Subscribe": "!Susbribite!",
+
+    "Individual_Price":"Precio Individual",
+    "Select_flavors":"Seleccionar sabores",
+    "Order_now": "Ordernar ahora",
+    "Add":"Agregar",
+
+    "Products_presentation": "Productos",
+    "Products_description": "Descripcion",
+    "Products_shipping": "Envios",
+
+    "Flavor_choose":"Elige tus sabores",
+    "Flavor_reset":"Debes reiniciar si quieres elegir nuevos sabores",
+    "Flavor_number":"Cantidad de sabores",
+    "Flavor_max":"maximo",
+    "Flavor_total":"Total de sabores elegidos:",
+    "Flavor_priceT":"Precio total:",
+    "Flavor_save":"Guardar seleccion",
+    "Flavor_latest":"Rellenar con último sabor",
+    "Flavor_random":"Añadir aleatoriamente"
+    
 }
   

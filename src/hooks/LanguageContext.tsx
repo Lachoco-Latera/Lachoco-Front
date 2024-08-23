@@ -1,6 +1,7 @@
-import { createContext, ReactNode } from "react";
-import { useTranslation } from "react-i18next";
+import React, { createContext, useState, useContext, ReactNode } from "react";
+import i18n from "../locales/i18n"
 
+// Definimos el tipo para el contexto
 interface LanguageContextProps {
   language: string;
   changeLanguage: (lng: string) => void;
@@ -8,19 +9,29 @@ interface LanguageContextProps {
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
-const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { i18n } = useTranslation();
+interface LanguageProviderProps {
+  children: ReactNode;
+}
+
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
+  const [language, setLanguage] = useState<string>(i18n.language);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
-    localStorage.setItem("i18nextLng", lng);
+    setLanguage(lng);
   };
 
   return (
-    <LanguageContext.Provider value={{ language: i18n.language, changeLanguage }}>
+    <LanguageContext.Provider value={{ language, changeLanguage }}>
       {children}
     </LanguageContext.Provider>
   );
 };
 
-export { LanguageProvider, LanguageContext };
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error("useLanguage must be used within a LanguageProvider");
+  }
+  return context;
+};

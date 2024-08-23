@@ -4,21 +4,14 @@ import { CambioMoneda } from "../CambioMoneda/CambioMoneda";
 import logo1 from "../../assets/images/facebook.png";
 import logo2 from "../../assets/images/whatsapp.png";
 import logo3 from "../../assets/images/instagram.png";
-import idioma from "../../assets/images/idioma.svg"
+import idioma from "../../assets/images/idioma.svg";
 import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../hooks/LanguageContext";
 
 export const Footer = () => {
   const [monedaState, setMonedaState] = useState(false);
-  const { t, i18n } = useTranslation()
-
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-    localStorage.setItem("i18nextLng", lng);
-  };
-
-  const handleOnClick = () => {
-    setMonedaState(!monedaState);
-  };
+  const { language, changeLanguage } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -27,11 +20,8 @@ export const Footer = () => {
           <div className="md:flex flex-col ">
             <ul className="flex flex-wrap justify-center items-center mt-3 text-sm font-medium text-gray-600 sm:mt-0 py-4">
               <li>
-                <button
-                  className="hover:underline me-4 md:me-6 hover:text-sky-700"
-                  onClick={handleOnClick}
-                >
-                  Cambio de moneda ^
+                <button className="hover:underline me-4 md:me-6 hover:text-sky-700">
+                  {t("currency_change")}
                 </button>
               </li>
 
@@ -46,7 +36,7 @@ export const Footer = () => {
                   href="#"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
-                  Datos de la empresa
+                  {t("company_info")}
                 </a>
               </li>
               <li>
@@ -54,7 +44,7 @@ export const Footer = () => {
                   href="#"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
-                  Politica de privacidad
+                  {t("privacy_policy")}
                 </a>
               </li>
               <li>
@@ -62,12 +52,12 @@ export const Footer = () => {
                   href="#"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
-                  Tarjetas de regalo
+                  {t("gift_cards")}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:underline text-gray-600 me-4">
-                  Centro de ayuda
+                {t("help_center")}
                 </a>
               </li>
             </ul>
@@ -90,11 +80,21 @@ export const Footer = () => {
             </ul>
           </div>
           <div className="flex items-center gap-3 z-30 ">
-          <h1>{t('welcome_message')}</h1>
-          <button onClick={() => changeLanguage('en')}>English</button>
-          <button onClick={() => changeLanguage('es')}>Español</button>
+            <div className="flex items-center justify-center my-4">
+              <label htmlFor="language-select" className="sr-only">
+                Select Language
+              </label>
+              <select
+                id="language-select"
+                className="p-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer transition-colors hover:border-y-fuchsia-600 focus:border-fuchsia-500"
+                onChange={(e) => changeLanguage(e.target.value)}
+              >
+                <option value="es">Español</option>
+                <option value="en">English</option>
+              </select>
+            </div>
             <p className="flex text-sm sm:text-center text-gray-600 py-4">
-              © 2024 Tiempo de Chocolatear
+              {t("footer_copyright")}
             </p>
           </div>
         </div>

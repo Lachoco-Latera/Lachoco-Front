@@ -14,7 +14,7 @@ import Ship from "./components/Ship/Ship.tsx";
 import { Admin } from "./components/Admin/Admin.tsx";
 import Success from "./components/Success/Success.tsx";
 import Failure from "./components/Failure/Failure.tsx";
-import "./locales/i18n.js"
+import "./locales/i18n.ts"
 // Import your publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
@@ -57,13 +57,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <LanguageProvider>
+      <RouterProvider router={router} />
       <Toaster
         position={toasterPosition}
         duration={toasterDuration}
         richColors
         />
         </LanguageProvider>
-      <RouterProvider router={router} />
     </ClerkProvider>
   </React.StrictMode>
 );

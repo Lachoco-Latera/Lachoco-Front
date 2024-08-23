@@ -1,4 +1,30 @@
 {
-    "welcome_message": "Welcome to our application!"
+    "footer_copyright": "© 2024 Chocolate Time",
+    "currency_change": "Currency change ^",
+    "company_info": "Company information",
+    "privacy_policy": "Privacy policy",
+    "gift_cards": "Gift cards",
+    "help_center": "Help center",
+
+    "Subscribe": "!Subscribe!", 
+
+    "Individual_Price":"Individual Price",
+    "Select_flavors":"Select flavors",
+    "Order_now": "Order now",
+    "Add": "Add",
+
+    "Products_presentation": "Presentation",
+    "Products_description": "Descripcion",
+    "Products_shipping": "shipping",
+
+    "Flavor_choose": "Choose your flavors",
+    "Flavor_reset":"You must restart if you want to choose new flavors",
+    "Flavor_number":"Number of flavors",
+    "Flavor_max":"maximum",
+    "Flavor_total":"Total flavors chosen:",
+    "Flavor_priceT":"Total Price",
+    "Flavor_save":"Save selection",
+    "Flavor_latest":"Fill with latest flavor",
+    "Flavor_random":"Add randomly"
 }
   

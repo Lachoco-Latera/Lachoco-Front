@@ -28,3 +28,8 @@ dist-ssr
 *.vscode
 *.env
 .env
+.vercel
+.firebaserc
+firebase.json
+.firebase
+y

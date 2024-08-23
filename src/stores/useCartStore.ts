@@ -75,7 +75,15 @@ export const useCartStore = create(
       },
       removeFromGiftCard: (giftCard: GiftCard) => {
         const giftCards = get().giftCards;
-        // const giftCardIndex = giftCards.findIndex((item) => item.id === giftCard.id);
+        const giftCardIndex = giftCards.find((item) => item.emailRecipient === giftCard.emailRecipient);
+
+        if (giftCardIndex) {
+          const updatedGiftCards = giftCards.filter((item) => item.emailRecipient !== giftCard.emailRecipient);
+          set((state) => ({
+            ...state,
+            giftCards: updatedGiftCards,
+          }));
+        }
       },
       removeFromCart: (product: Product) => {
         const cart = get().cart;

@@ -28,7 +28,6 @@ function App() {
   const [userDetails, setUserDetails] = useState(null); // Estado para almacenar los detalles del usuario
   userId;
   userDetails;
-  console.log(products)
   useEffect(() => {
     fetchData();
   }, [fetchData]);

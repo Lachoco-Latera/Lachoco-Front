@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../Header/Header"
 import Drawer from "../Drawer";
 import Cart from "../minicart/Cart";
 import { Product } from "@/types";
-import logo from "@/assets/images/img-5.webp";
 import { Button, Divider, Form, Grid, GridColumn, GridRow, Icon, Input as Inputs, TextArea } from "semantic-ui-react";
 import { useCartStore } from "@/stores/useCartStore";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import { Footer } from "../Footer/Footer";
 
 type FormData = {
   designCard?: string;
@@ -20,13 +22,15 @@ type FormData = {
   message?: string;
 }
 
+const defaultDesignGiftCard = import.meta.env.VITE_DESIGN_GIFT_CARD;
+
 export const GiftCards = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [amountGiftCard, setAmountGiftCard] = useState<string>('');
   const [designGiftCard, setDesignGiftCard] = useState<string>('');
+  const { t } = useTranslation()
 
   const addGiftCard = useCartStore((state) => state.addGiftCard);
-  const { giftCards } = useCartStore()
 
   const products: Product[] = [ 
     {
@@ -76,13 +80,20 @@ export const GiftCards = () => {
       designCard: yup.string(),
       amountCard: yup.string(),
       nameRecipient: yup.string().required(),
-      emailRecipient: yup.string().email('Coloque un formato valido de email.').required(),
+      emailRecipient: yup.string().email(t("enter_a_valid_email_format")).required(t("recipient_email_is_required")),
       nameSender: yup.string().required(),
-      emailSender: yup.string().email('Coloque un formato valido de email.').required(),
+      emailSender: yup.string().email(t("enter_a_valid_email_format")).required(t("sender_email_is_required")),
       message: yup.string().optional(),
     }).required()
 
-  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema)});
+  const { register, handleSubmit, formState: { errors, isValid, isSubmitSuccessful,  }, reset } = useForm({ resolver: yupResolver(schema)});
+
+  useEffect(() => {
+    if (isSubmitSuccessful && isValid) {
+      toast.success(t("added_to_cart"))
+      reset()
+    }
+  },[errors, isSubmitSuccessful, isValid])
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     const order = {
@@ -149,26 +160,26 @@ export const GiftCards = () => {
           <div className="flex justify-between w-full">
             
             <div className="w-[50%]">
-              <img src={logo} alt="bombon" className="w-full h-[500px] object-contain sticky top-36" />
+              <img src={designGiftCard || defaultDesignGiftCard} alt="gift-card" className="w-full h-[500px] object-contain sticky top-36" />
             </div>
-            <Form className="w-[40%]" onSubmit={handleSubmit(onSubmit)}>
+            <Form className="w-[40%]" onSubmit={handleSubmit(onSubmit)} >
             <div className="w-full pl-6">
-              <h2 className="text-5xl font-bold mb-2">Comprar gift Card</h2>
+              <h2 className="text-5xl font-bold mb-2">{t("buy_gift_card")}</h2>
               <p className="text-gray-600 mb-4 text-[18px]">
-                Úsala para comprar en el App Store, Apple TV, Apple Music, iTunes, Apple Arcade, la app Apple Store, apple.com y en las tiendas Apple Store.</p>
-              <p className="font-semibold text-2xl">Envío rápido y sencillo por email.</p>
+                {t("description_to_buy")}</p>
+              <p className="font-semibold text-2xl">{t("send_email_gift_card")}</p>
 
               <div className="mb-6 mt-6">
                 <div 
                   className={`flex justify-center items-center h-28 max-w-60 bg-white rounded-lg cursor-pointer border-[#0071e3] border-[2px]`}
                   > 
-                  <span className="font-semibold text-2xl">Email</span>
+                  <span className="font-semibold text-2xl">{t("email")}</span>
                 </div>
               </div>
 
               <Divider />
 
-                <p className="font-semibold text-2xl">Elige un diseño.</p>
+                <p className="font-semibold text-2xl">{t("choose_design")}</p>
                 <Grid columns={2}>
                   <GridRow>
                     <GridColumn>
@@ -176,11 +187,16 @@ export const GiftCards = () => {
                       <DesignCard img='https://res.cloudinary.com/dine1x1iy/image/upload/v1724174932/uc1kbe1jufmj4gbv3f4x.png' /> 
                       </div>
                     </GridColumn>
+                    <GridColumn>
+                      <div className="mb-6 mt-6">
+                      <DesignCard img='https://res.cloudinary.com/dine1x1iy/image/upload/v1724431015/antcp3okhfbkwm8jfcsu.png' /> 
+                      </div>
+                    </GridColumn>
                   </GridRow>
                 </Grid>
               <Divider />
 
-              <p className="font-semibold text-2xl">Elige un importe.</p>
+              <p className="font-semibold text-2xl">{t("choose_amount")}</p>
               <Grid columns={2}>
                 <GridRow >
                   <GridColumn>
@@ -199,73 +215,87 @@ export const GiftCards = () => {
               </Grid>
               <Divider />
 
-              <h3 className="font-semibold mb-6 text-2xl">Indica tus datos de envio</h3>
+              <h3 className="font-semibold mb-6 text-2xl">{t("enter_your_shipping_information")}</h3>
               <div className="flex flex-col">
-                <p className="font-semibold text-[1.125rem] mb-4">¿Para quién es?</p>
+                <p className="font-semibold text-[1.125rem] mb-4">{t("who_is_it_for")}</p>
 
                 <Inputs
-                  placeholder="Nombre del destinatario" 
+                  placeholder={t("name_recipient")}
                   focus={true} 
                   size="big" 
+                  disabled={!(amountGiftCard && designGiftCard)}
                   {...register("nameRecipient", { required: true})} 
                   error={errors.nameRecipient ? true : false} 
                 />
-                {errors.nameRecipient && <InputError message="El nombre del destinatario es requerido." />}
+                {errors.nameRecipient && <InputError message={t("recipient_name_is_required")} />}
 
                 <Inputs
-                  placeholder="Email del destinatario" 
+                  placeholder={t("email_recipient")}
                   size="big" 
                   className="mt-4" 
                   focus={true} 
                   icon={<Icon name="mail" size="large" />}
+                  disabled={!(amountGiftCard && designGiftCard)}
                   {...register("emailRecipient", { required: true})} 
                   error={errors.emailRecipient ? true : false}
                   />
-                {errors.emailRecipient && <InputError message={errors.emailRecipient.message || "El email del remitente es requerido."} />}
+                {errors.emailRecipient && <InputError message={errors.emailRecipient.message || t("recipient_email_is_required")} />}
 
-                <p className="font-semibold text-[1.125rem] mb-4 mt-6">¿Quien la envía?</p>
+                <p className="font-semibold text-[1.125rem] mb-4 mt-6">{t("who_sends_it")}</p>
                 <Inputs
-                  placeholder="Nombre del remitente" 
+                  placeholder={t("sender_name")}
                   size="big" 
                   focus={true}
+                  disabled={!(amountGiftCard && designGiftCard)}
                   {...register("nameSender", { required: true})} 
                   error={errors.nameSender ? true : false}
                   />
-                {errors.nameSender && <InputError message="El nombre del remitente es requerido." />}
+                {errors.nameSender && <InputError message={t("sender_name_is_required")} />}
 
                 <Inputs
-                  placeholder="Email del remitente" 
+                  placeholder={t("email_sender")}
                   size="big" className="mt-4" 
                   focus={true} 
                   icon={<Icon name="mail" size="large" />}
+                  disabled={!(amountGiftCard && designGiftCard)}
                   {...register("emailSender", { required: true, })} 
                   error={errors.emailSender ? true : false}
                   />
-                {errors.emailSender && <InputError message={errors.emailSender.message || "El email del remitente es requerido."} />}
+                {errors.emailSender && <InputError message={errors.emailSender.message || t("sender_email_is_required")} />}
 
               <Divider />
 
-              <p className="font-semibold mb-2 text-2xl">¿Quieres añadir un mensaje personalizado?</p>
+              <p className="font-semibold mb-2 text-2xl">{t("do_you_want_to_add_a_message")}</p>
 
-                  <TextArea rows={4} placeholder="Escribe aquí tu mensaje" size="big" style={{marginBottom: '15px', marginTop: '24px', fontSize: "18px"}} />
+                  <TextArea 
+                    rows={4} 
+                    placeholder={t("write_your_message")}
+                    size="big" style={{marginBottom: '15px', marginTop: '24px', fontSize: "18px"}}
+                    disabled={!(amountGiftCard && designGiftCard)}
+                  />
 
                   <div className="pt-[30px] pr-[30px] pl-[30px] pb-[12px] bg-[#fafafc] rounded-md">
+
+                  {amountGiftCard && designGiftCard ? (
                     <div>
-                      <p className="text-4xl font-semibold leading-none">50$</p>
+                      <p className="text-4xl font-semibold leading-none">${amountGiftCard}</p>
                     </div>
+                    
+                  ) : null}
                     
                     <Divider />
 
                     <div className="flex items-center pt-5 pb-7">
                         <Icon  name="mail" size="large" />
                         <p className="text-lg ml-3">
-                        Suele llegar dentro de una hora.</p>
+                        {t("usually_delivered_within_an_hour")}</p>
 
                     </div>
 
                     <div>
-                      <Button type="submit" className="w-full mt-10" color="blue" size="big">
-                        Añadir a la bolsa</Button>
+                      <Button type="submit" className="w-full mt-10" color="blue" size="big" disabled={!(amountGiftCard && designGiftCard)}>
+                        {t("add_to_cart")}
+                      </Button>
                     </div>
 
                   </div>
@@ -275,6 +305,7 @@ export const GiftCards = () => {
             </Form>
           </div>
         </div>
+        <Footer/>
     </>
   )
 }

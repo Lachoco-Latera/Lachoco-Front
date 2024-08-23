@@ -68,7 +68,8 @@ export const useCartStore = create(
       addGiftCard: (giftCard: GiftCard) => {
         set((state) => ({
           ...state,
-          giftCards: [giftCard],
+          giftCards: [...state.giftCards, giftCard],
+          totalPrice: state.totalPrice + parseFloat(giftCard.amountCard),
         }))
         
 
@@ -82,6 +83,7 @@ export const useCartStore = create(
           set((state) => ({
             ...state,
             giftCards: updatedGiftCards,
+            totalPrice: state.totalPrice - parseFloat(giftCard.amountCard),
           }));
         }
       },

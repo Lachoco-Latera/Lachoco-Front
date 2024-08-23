@@ -67,13 +67,13 @@ function Cart({ similar }: any) {
   let totalGiftCards = 0;
   if (cart) {
     if(giftCards){
-      totalGiftCards = giftCards.reduce((acc, giftCards: any) => acc + giftCards.amountCard, 0);
+      totalGiftCards = giftCards.reduce((acc, giftCards: any) => acc + Number(giftCards.amountCard), 0);
     }
     total = cart.reduce((acc, product: any) => {
       const quantity = Math.max(product.quantity as number, 0);
       return acc + product.price * quantity;
     }, 0);
-    total = total + Number(totalGiftCards);
+    total = total + totalGiftCards;
   }
 
   const bombonesProducts = cart.filter(

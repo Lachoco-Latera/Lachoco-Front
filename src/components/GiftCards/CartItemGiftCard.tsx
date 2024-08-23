@@ -26,7 +26,7 @@ export default function CartItemGiftCard({ giftCard }: CartItemGiftCardProps) {
             Gift Card 
             <span className="font-light"> x 1</span>
           </span>
-          <span className="text-gray-600 font-bold">${giftCard?.amountCard}</span>
+          <span className="text-gray-600 font-bold">${Number(giftCard?.amountCard).toFixed(2)}</span>
         </div>
             </div>
           <div className="flex md:flex-col flex-row-reverse md:items-center">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "../Header/Header"
 import Drawer from "../Drawer";
 import Cart from "../minicart/Cart";
@@ -11,6 +11,9 @@ import * as yup from "yup"
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Footer } from "../Footer/Footer";
+import { createGiftCard } from "@/module/gift-card";
+import { useUser } from "@clerk/clerk-react";
+import { getUser } from "@/module/users";
 
 type FormData = {
   designCard?: string;
@@ -28,7 +31,10 @@ export const GiftCards = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [amountGiftCard, setAmountGiftCard] = useState<string>('');
   const [designGiftCard, setDesignGiftCard] = useState<string>('');
+  const [userId, setUserId] = useState<string>('');
   const { t } = useTranslation()
+  const { user } = useUser()
+  const userFetchedRef = useRef(false);
 
   const addGiftCard = useCartStore((state) => state.addGiftCard);
 
@@ -88,15 +94,36 @@ export const GiftCards = () => {
 
   const { register, handleSubmit, formState: { errors, isValid, isSubmitSuccessful,  }, reset } = useForm({ resolver: yupResolver(schema)});
 
+    useEffect(() => {
+      const fetchUserData = async () => {
+        if (userFetchedRef.current || !user) return
+        try {
+          const response = await getUser()
+          const userWithEmail = 
+            response
+            .data
+            .find((userData: Record<string, string>)=> user?.primaryEmailAddress?.emailAddress === userData.email)
+          setUserId(userWithEmail.id)
+          userFetchedRef.current = true
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchUserData()
+    }, [user])
+
   useEffect(() => {
     if (isSubmitSuccessful && isValid) {
       toast.success(t("added_to_cart"))
       reset()
+      setAmountGiftCard('')
+      setDesignGiftCard('')
     }
-  },[errors, isSubmitSuccessful, isValid])
+  },[isSubmitSuccessful, isValid])
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     const order = {
+      userId: userId,
       designCard: designGiftCard,
       amountCard: amountGiftCard,
       nameRecipient: data.nameRecipient,
@@ -105,7 +132,11 @@ export const GiftCards = () => {
       emailSender: data.emailSender,
       message: data.message,
     }
-    addGiftCard(order);
+    const response = await createGiftCard(order);
+    console.log(response.data)
+    if(response.status === 201) {
+      addGiftCard(order);
+    }
   }
 
   const handleSelectPrice = (price: string) => {
@@ -114,13 +145,13 @@ export const GiftCards = () => {
     }
   }
 
-  const handleCartIconClick = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
-
   const handleDesign = async  (img: string) => {
     setDesignGiftCard(img);
   }
+  
+  const handleCartIconClick = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
 
   const priceCard = (price: string) => {
     return (

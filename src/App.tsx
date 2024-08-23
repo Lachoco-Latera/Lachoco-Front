@@ -157,7 +157,7 @@ function App() {
             // id="footer"
             className={`md:static w-full md:bottom-0 transition-opacity opacity-100`}
           >
-            {products.length > 0 ? <Footer /> : null}
+            {products.length > 0 ? <Footer /> : <Footer />}
           </div>
         </>
       )}

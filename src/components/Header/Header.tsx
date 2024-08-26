@@ -254,9 +254,9 @@ export default function Header({ onCartIconClick }: Props) {
           <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-4">
-          {isSignedIn == true &&
+          {(isSignedIn == true &&
           user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
-          isLoaded ? (
+          isLoaded) || isSignedIn === false ? (
             <button
               type="button"
               title="Suscribete"

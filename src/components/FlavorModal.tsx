@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Product } from "@/types.d";
 import { IoIosRefresh, IoMdExit } from "react-icons/io";
 import { TbShoppingCartX } from "react-icons/tb";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   product: Product;
@@ -20,17 +21,18 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     removeConfirmedFlavors,
   } = useCartStore(); // Usando useCartStore dentro del componente
 
-  const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
+  const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]); //guarda los sabores seleccionados ej ["chocolate-id, vainilla-id"]
   const [lastSelectedProductId, setLastSelectedProductId] =
-    useState<string>("");
-  const [lastPickedFlavor, setLastPickedFlavor] = useState<string>("");
-  const [flavorCounts, setFlavorCounts] = useState<{ [key: string]: number }>(
-    {}
-  );
+    useState<string>(""); //guarda el ultimo id del producto seleccionado ej ["vainilla-id"]
+  const [lastPickedFlavor, setLastPickedFlavor] = useState<string>(""); //guarda el ultimo sabor seleccionado ej "fresa-id"
+  const [flavorCounts, setFlavorCounts] = useState<{ [key: string]: number }>({}); //guarda un objeto donde cada clave es un id de sabor ej si se selecciona una vez chocolate y dos veces fresa {"chocolate-id": 2,"fresa-id": 1}
   const [moreOptions, setMoreOptions] = useState(false);
+
+  const {t} = useTranslation()
 
   let total = 0;
   if (cart) {
+    //calcula el precio total de los productos del carrito
     total = cart.reduce((acc, product) => {
       const quantity = Math.max(product.quantity as number, 0);
       const price = parseFloat(product.price);
@@ -38,41 +40,30 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     }, 0);
   }
 
-  const handleFlavorClick = (flavor: any) => {
-    if (
-      selectedFlavors.length < product.presentacion &&
-      (!flavorCounts[flavor.id] ||
-        flavorCounts[flavor.id] < product.presentacion)
-    ) {
-      setLastSelectedProductId(product.id);
-      setLastPickedFlavor(flavor.id);
-      setSelectedFlavors([...selectedFlavors, flavor.id]);
-
+  const handleIncreaseFlavor = (flavorId: string) => {
+    if (selectedFlavors.length < product.presentacion) {
+      //los sabores seleccionados son la cantidad maxima permitida por la presentacion
+      setSelectedFlavors([...selectedFlavors, flavorId]); //se agrega el nuevo sabor
       setFlavorCounts((prevCounts) => ({
         ...prevCounts,
-        [flavor.id]: (prevCounts[flavor.id] || 0) + 1,
+        [flavorId]: (prevCounts[flavorId] || 0) + 1, //se agrega el nuevo sabor a el count que quedaria algo asi flavorCounts = { chocolate: 2, vainilla: 1,}
       }));
-
-      toast(`Sabor ${flavor.name} seleccionado!`, {
-        action: {
-          label: "Okay!",
-          onClick: () => {
-            console.log(`Cerrar modal de ${flavor.name}`);
-            closeModal();
-          },
-        },
-      });
     } else {
-      toast.error(
-        `Ya has alcanzado el límite de sabores para ${product.name}.`
-      );
+      toast.error("Ya has alcanzado el límite de sabores.");
     }
   };
 
-  const handleResetFlavors = () => {
-    setMoreOptions(false);
-    setSelectedFlavors([]);
-    setFlavorCounts({});
+  const handleDecreaseFlavor = (flavorId: string) => {
+    if (flavorCounts[flavorId] > 0) {
+      //pregunta si el sabor tiene un conteo mayor a 0 para eliminar
+      setSelectedFlavors(selectedFlavors.filter((id) => id !== flavorId)); //elimina todas las intancias del sabor seleccionado
+      setFlavorCounts((prevCounts) => ({
+        ...prevCounts,
+        [flavorId]: prevCounts[flavorId] - 1, //actualiza el objeto { chocolate: 2, vainilla: 1 } y se elimina 'chocolate', el nuevo objeto será { chocolate: 1, vainilla: 1 }
+      }));
+    } else {
+      toast.error("No puedes tener menos de 0.");
+    }
   };
 
   const handleFillWithLastFlavor = () => {
@@ -80,19 +71,20 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       let flavorToAdd = lastPickedFlavor;
 
       if (!flavorToAdd && product.flavors.length > 0) {
+        //si el flavorToAdd esta vacio y quedan sabores disponibles
         flavorToAdd =
-          product.flavors[Math.floor(Math.random() * product.flavors.length)]
+          product.flavors[Math.floor(Math.random() * product.flavors.length)] //agrega uno random
             .id;
       }
 
       const flavorName =
-        product.flavors.find((flavor) => flavor.id === flavorToAdd)?.name || "";
+        product.flavors.find((flavor) => flavor.id === flavorToAdd)?.name || ""; //nombre del sabor
 
-      setSelectedFlavors([...selectedFlavors, flavorToAdd]);
+      setSelectedFlavors([...selectedFlavors, flavorToAdd]); //se agrega el ultimo sabor
 
       setFlavorCounts((prevCounts) => ({
         ...prevCounts,
-        [flavorToAdd]: (prevCounts[flavorToAdd] || 0) + 1,
+        [flavorToAdd]: (prevCounts[flavorToAdd] || 0) + 1, //el objeto se incrementa
       }));
 
       setLastSelectedProductId(flavorToAdd);
@@ -144,7 +136,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     }
   }, [selectedFlavors]);
 
-  const maxFlavors =
+  const maxFlavors = //calcula el maximo de sabores permitidos
     product.presentacion *
     cart.reduce((acc, item: any) => {
       if (item.id === product.id) {
@@ -170,6 +162,13 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     }
   };
 
+  const handleResetFlavors = () => {
+    setMoreOptions(false);
+    setSelectedFlavors([]);
+    setFlavorCounts({});
+    removeConfirmedFlavors(product.id);
+  };
+
   const handleDeleteConfirmedFlavors = () => {
     const updatedConfirmedFlavors = { ...confirmedFlavors };
     delete updatedConfirmedFlavors[product.id];
@@ -180,14 +179,9 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
 
     closeModal();
   };
+
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-  };
-  const handleNeedsReset = () => {
-    toast.error("Debes reiniciar el carrito para elegir nuevos sabores", {
-      duration: 1500,
-      icon: <TbShoppingCartX size={20} />,
-    });
   };
 
   return (
@@ -231,13 +225,13 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 </button>
               )}
             </div>
-            <h2 className="text-2xl font-bold mb-2">Elige tus sabores</h2>
+            <h2 className="text-2xl font-bold mb-2">{t("Flavor_choose")}</h2>
             {actualSelectionLength === maxFlavors && (
               <div className=" bg-white rounded-2xl py-1 font-bold text-slate-600 shadow-xl text-center pointer-events-none">
-                - Debes reiniciar si quieres elegir nuevos sabores
+                {t("Flavor_reset")}
               </div>
             )}
-            <div className="flex flex-wrap justify-center items-center gap-4 pb-12 pt-2">
+            <div className="flex flex-wrap justify-center items-center gap-4 pb-12 pt-2 ">
               {product.flavors.map((flavor) => (
                 <div
                   key={flavor.id}
@@ -246,13 +240,10 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                       ? "cursor-not-allowed grayscale"
                       : "hover:cursor-pointer hover:scale-105"
                   }`}
-                  onClick={
-                    actualSelectionLength === maxFlavors
-                      ? () => handleNeedsReset()
-                      : () => handleFlavorClick(flavor)
-                  }
                 >
-                  <div className="flex flex-col justify-center items-center gap-2">
+                  <div
+                    className="flex flex-col justify-center items-center gap-2"
+                  >
                     <img
                       src={product.images[0]?.img}
                       alt={flavor.name}
@@ -261,21 +252,44 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                     <div>
                       <p className="text-lg font-semibold">{flavor.name}</p>
                     </div>
-                    {flavorCounts[flavor.id] && (
-                      <div className="absolute bg-green-400 font-bold text-lg text-white py-1 px-2 shadow rounded-full">
-                        <span>{`x${flavorCounts[flavor.id]}`}</span>
-                      </div>
-                    )}
+                    <div className="flex justify-center items-center gap-2 mt-2">
+                      <button
+                        className={`${
+                          !flavorCounts[flavor.id] ||
+                          selectedFlavors.length >= product.presentacion
+                            ? "bg-gray-800 opacity-50 hover:bg-gray-950"
+                            : "bg-red-500 hover:bg-red-600"
+                        } text-white font-bold py-0 px-[7px] rounded-full`}
+                        onClick={() => handleDecreaseFlavor(flavor.id)}
+                        disabled={
+                          !flavorCounts[flavor.id] ||
+                          selectedFlavors.length >= product.presentacion
+                        }
+                      >
+                        -
+                      </button>
+                      <span>{flavorCounts[flavor.id] || 0}</span>{" "}
+                      {/* Muestra la cantidad seleccionada */}
+                      <button
+                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-0 px-[6px] rounded-full"
+                        onClick={() => handleIncreaseFlavor(flavor.id)}
+                        disabled={
+                          selectedFlavors.length >= product.presentacion
+                        } // Deshabilita si se alcanzó el máximo
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           <div className="w-1/2 pl-6 border-l border-gray-200">
-            <h2 className="text-2xl font-bold mb-4">Cantidad de sabores</h2>
+            <h2 className="text-2xl font-bold mb-4">{t("Flavor_number")}</h2>
             <div>
               <div className=" text-lg">
-                Maximo <b className=" text-red-600">{maxFlavors}</b>
+              {t("Flavor_max")} <b className=" text-red-600">{maxFlavors}</b>
               </div>
               <div className="flex flex-row justify-center items-center gap-2">
                 <span className=" text-2xl">{selectedFlavors.length}</span>
@@ -287,7 +301,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
             </div>
             <div className="flex flex-col justify-center gap-2 mt-6">
               <p className="flex flex-row text-lg justify-center items-center gap-2">
-                Total de sabores elegidos:
+                {t("Flavor_total")}
                 <b
                   className={` ${
                     actualSelectionLength === maxFlavors
@@ -308,7 +322,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                   <TbShoppingCartX size={20} />
                 </i>
               </p>
-              <p className="text-lg ">Precio total: ${total.toFixed(2)}</p>
+              <p className="text-lg">{t("Flavor_priceT")} ${total}</p>
             </div>
             <div className="pt-4">
               {selectedFlavors.length > 0 && (
@@ -326,7 +340,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                   rounded-full p-4 hover:drop-shadow-xl`}
                     onClick={handleGuardarSeleccion} // Llama a handleGuardarSeleccion en lugar del onClick original
                   >
-                    Guardar selección
+                    {t("Flavor_save")}
                   </button>
 
                   {selectedFlavors.length < product.presentacion &&
@@ -337,13 +351,13 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                           className="bg-orange-500 hover:bg-white hover:text-orange-500 text-white font-bold py-2 px-4 rounded-2xl shadow-xl mr-2 transition-all ease hover:scale-105"
                           onClick={handleFillWithLastFlavor}
                         >
-                          Rellenar con último sabor
+                          {t("Flavor_latest")}
                         </button>
                         <button
                           className="bg-yellow-500 hover:bg-white hover:text-yellow-500 text-white font-bold py-2 px-4 rounded-2xl shadow-xl transition-all ease hover:scale-105"
                           onClick={handleAddRandomFlavor}
                         >
-                          Añadir aleatoriamente
+                          {t("Flavor_random")}
                         </button>
                       </div>
                     )}

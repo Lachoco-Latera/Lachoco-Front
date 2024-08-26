@@ -21,6 +21,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiTask } from "react-icons/bi";
 import { VITE_BASE_URL } from "@/config/envs";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onCartIconClick: () => void;
@@ -40,6 +41,7 @@ export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const { isSignedIn, user, isLoaded } = useUser();
   const [userCountry, setUserCountry] = useState<string>("");
+  const {t} = useTranslation()
 
   const navigate = useNavigate();
   const promise = () =>
@@ -252,9 +254,9 @@ export default function Header({ onCartIconClick }: Props) {
           <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-4">
-          {isSignedIn == true &&
+          {(isSignedIn == true &&
           user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
-          isLoaded ? (
+          isLoaded) || isSignedIn === false ? (
             <button
               type="button"
               title="Suscribete"
@@ -272,7 +274,7 @@ export default function Header({ onCartIconClick }: Props) {
                 })
               }
             >
-              ¡Suscribete!
+              {t("Subscribe")}
             </button>
           ) : null}
           <div className="relative  hidden md:block"></div>

@@ -14,11 +14,14 @@ import {
 } from "react-icons/ai"; // Importa los íconos
 import { IoMenu } from "react-icons/io5";
 
+import { Footer } from "../Footer/Footer";
 import Header from "../Header/Header";
 import { products } from "../../mocks/data";
 import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
+import { useTranslation } from "react-i18next";
 
 export const Admin = () => {
+  const {t} = useTranslation()
   const [state, setState] = useState<string>();
   const [selectedOption] = useState<string>("");
   const [showExtraButtons, setShowExtraButtons] = useState<boolean>(false);
@@ -28,7 +31,7 @@ export const Admin = () => {
   const [deleteItem, setDeleteItem] = useState(false);
   const buttonConfig = [
     {
-      label: "Gestión Sabores",
+      label: t("Admin_Flavor"),
       state: "gestionSaboresDisponibles",
       component: (
         <GestionSaboresDisponibles
@@ -228,6 +231,7 @@ export const Admin = () => {
       <div className="block md:hidden">
         <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
       </div>
+      <Footer/>
     </>
   );
 };

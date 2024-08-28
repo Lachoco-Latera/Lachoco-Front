@@ -89,6 +89,7 @@ export const Footer = () => {
                 id="language-select"
                 className="p-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer transition-colors hover:border-y-fuchsia-600 focus:border-fuchsia-500"
                 onChange={(e) => changeLanguage(e.target.value)}
+                value={language}
               >
                 <option value="es">Español</option>
                 <option value="en">English</option>
@@ -103,11 +104,3 @@ export const Footer = () => {
     </>
   );
 };
-
-/*
-            <button type="button" className="flex items-center gap-2">
-            <span>
-              <img src={idioma} alt="" className="w-5 h-5" />
-            </span>
-              <span className="text-sm text-gray-600">Español(AR)</span>
-            </button>*/

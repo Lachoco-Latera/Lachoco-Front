@@ -7,8 +7,10 @@ import { toast } from "sonner";
 import { IoMdExit } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 import { VITE_BASE_URL } from "@/config/envs";
+import { useTranslation } from "react-i18next";
 
 export const GestionProductos = ({ signal, onCloseModal }: any) => {
+  const {t} = useTranslation()
   const [editState, setEditState] = useState<boolean>(false);
   const [orderState, setOrderState] = useState<any[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -234,7 +236,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                 <input
                   type="text"
                   name="name"
-                  placeholder="Nombre del producto"
+                  placeholder={t("Management_name")}
                   className="p-2 border rounded-md"
                   value={formEditState.name}
                   onChange={handleInputChange}
@@ -246,7 +248,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   onChange={handleInputChange}
                 >
                   <option value="" disabled>
-                    Seleccionar categoría
+                    {t("Management_category")}
                   </option>
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
@@ -256,19 +258,19 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                 </select>
 
                 <p className="self-start font-semibold drop-shadow">
-                  Presentación / Cantidad de productos
+                  {t("Management_quantity")}
                 </p>
                 <input
                   type="number"
                   name="presentacion"
-                  placeholder="Presentación"
+                  placeholder={t("Management_presentation")}
                   className="p-2 border rounded-md"
                   value={formEditState.presentacion}
                   onChange={handleInputChange}
                 />
                 <textarea
                   name="description"
-                  placeholder="Descripción"
+                  placeholder={t("Management_description")}
                   className="p-2 border rounded-md"
                   value={formEditState.description}
                   onChange={handleInputChange}
@@ -285,7 +287,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                           onClick={handleOnClick}
                           className="rounded-xl p-2 shadow-md hover:drop-shadow-xl hover:scale-105 transition all ease hover:bg-rose-400 text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
                         >
-                          Cargar imágenes
+                          {t("Management_images")}
                         </button>
                       );
                     }}
@@ -322,19 +324,19 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                         )
                       )
                     ) : (
-                      <p>No images to display</p>
+                      <p>{t("Management_notdisplay")}</p>
                     )}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
                   <p className="self-start font-semibold drop-shadow">
-                    Precio {"(En euros)"}
+                    {t("Price")} {"(Euros)"}
                   </p>
                   <input
                     type="number"
                     name="price"
-                    placeholder="Precio"
+                    placeholder={t("Price")}
                     className="p-2 border rounded-md"
                     value={formEditState.price}
                     onChange={handleInputChange}
@@ -346,10 +348,10 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                     onChange={handleInputChange}
                   >
                     <option value="" disabled>
-                      Seleccionar etiqueta
+                      {t("Management_label")}
                     </option>
-                    <option value="SoloOnline">SoloOnline</option>
-                    <option value="nuevo">Nuevo</option>
+                    <option value="SoloOnline">{t("Management_online")}</option>
+                    <option value="nuevo">{t("new")}</option>
                   </select>
 
                   <div className="flex items-center space-x-2 py-2">
@@ -357,7 +359,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                       htmlFor="isActive"
                       className="font-semibold text-gray-700"
                     >
-                      Is Active
+                     {t("Management_isActive")}
                     </label>
                     <input
                       type="checkbox"
@@ -401,7 +403,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                           hover:scale-105 transition all ease  hover:bg-rose-400 
                           text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
                   >
-                    Crear Producto
+                    {t("Management_create")}
                   </button>
                 </div>
               </div>
@@ -453,13 +455,13 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize transition-all duration-400 ease-in-out transform hover:scale-105"
                 onClick={() => handleEdit(order)}
               >
-                editar
+                {t("Management_edit")}
               </button>
               <button
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold bg-red-500 hover:bg-red-900 hover:text-red-500 m-3 capitalize transition-all duration-400 ease-in-out transform hover:scale-105"
                 onClick={() => handleButtonDelete(order.id)}
               >
-                eliminar
+                {t("Management_delet")}
               </button>
             </div>
           </div>

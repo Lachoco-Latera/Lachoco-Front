@@ -2,8 +2,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import tinyLogo from "../../assets/images/tinyLogo.png";
 import { toast } from "sonner";
 import { useUser } from "@clerk/clerk-react";
+import { useTranslation } from "react-i18next";
 
 const Failure = () => {
+  const {t} = useTranslation()
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
@@ -38,15 +40,15 @@ const Failure = () => {
           onClick={() => navigate("/inventory")}
         />
         <h1 className="text-3xl font-bold text-red-600 mb-4">
-          Ocurrió un problema con tu compra
+          {t("Failure_problem")}
         </h1>
         <p className="text-lg text-gray-700 mb-2">
-          Lamentablemente, no pudimos procesar tu compra.
+          {t("Failure_process")}
         </p>
-        <p className="text-md text-gray-600">Detalles de la transacción:</p>
+        <p className="text-md text-gray-600">{t("Failure_transaction")}</p>
         <ul className="list-disc list-inside text-gray-600">
           <li className="select-text">
-            <strong>ID de Preferencia:</strong>
+            <strong>{t("Failure_id")}</strong>
             <span
               onClick={copyToClipboard}
               className="hover:cursor-pointer hover:text-blue-500 hover:font-bold px-2 transition-all ease"
@@ -56,22 +58,21 @@ const Failure = () => {
           </li>
         </ul>
         <p className="text-md text-gray-600 mt-4">
-          Por favor, intenta nuevamente más tarde o contacta a nuestro soporte.
+          {t("Failure_suport")}
         </p>
         <small
           className="hover:cursor-pointer hover:scale-105 hover:font-bold transition-all ease"
           onClick={() => navigate("/inventory")}
         >
-          Haz click aquí o al Logo para ir a tu inventario, o cierra esta
-          página.
+          {t("Failure_close")}
         </small>
-        <p className="text-md text-gray-600 mt-4">Información del usuario:</p>
+        <p className="text-md text-gray-600 mt-4">{t("Failure_info")}</p>
         <ul className="list-disc list-inside text-gray-600">
           <li>
-            <strong>Nombre:</strong> {user?.firstName} {user?.lastName}
+            <strong>{t("name")}:</strong> {user?.firstName} {user?.lastName}
           </li>
           <li>
-            <strong>Correo electrónico:</strong>{" "}
+            <strong>{t("email")}:</strong>{" "}
             {user?.primaryEmailAddress?.emailAddress}
           </li>
         </ul>
@@ -82,7 +83,7 @@ const Failure = () => {
           className="text-blue-500 hover:underline mt-4"
           title="Enviar correo a ventas@lachoco-latera.com"
         >
-          Contacta a soporte
+          {t("Failure_contact")}
         </a>
       </div>
     </div>

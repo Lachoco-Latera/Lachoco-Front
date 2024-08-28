@@ -6,6 +6,7 @@ import { IoIosAdd } from "react-icons/io";
 import { LuMinus } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   product: Product;
@@ -21,6 +22,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
   const [confirmedFlavorsCount, setConfirmedFlavorsCount] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const navigate = useNavigate();
+  const {t} =useTranslation()
   const handleNavigate = (productId: any) => {
     navigate(`/products/${productId}`);
   };
@@ -41,10 +43,10 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
     const cartItem = cart.find((item) => item.id === product.id);
     if (cartItem?.quantity === 1) {
       removeFromCart(product);
-      toast.error(`Producto ${product.name} fue eliminado 🗑`);
+      toast.error(`${t("Toast_product")} ${product.name} ${t("Toast_delet")}`);
     } else {
       delFromCart(product);
-      toast.info(`Producto ${product.name} retirado`);
+      toast.info(`${t("Toast_product")} ${product.name} ${t("withdrawn")}`);
     }
   };
 
@@ -84,7 +86,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
                 />
                 {showTooltip && (
                   <span className="tooltip absolute bg-slate-600 opacity-95 text-white text-xs px-2 py-1 rounded-md -left-2 -top-10">
-                    - Aún te faltan cargar sabores
+                    - {t("Cart_load")}
                   </span>
                 )}
               </>
@@ -100,7 +102,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
           className="text-gray-500 hover:text-gray-600 ml-4 hover:md:scale-110 md:scale-110 scale-150"
           onClick={() => (
             addToCart(product),
-            toast("✔ Añadido al carrito", {
+            toast(t("Toast_add"), {
               action: {
                 label: "Carrito",
                 onClick: () => console.log(`Producto ${product} añadido`),
@@ -115,7 +117,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
           className="text-red-300 hover:text-red-600 hover:md:scale-110 ml-4 pt-3 pb-2"
           onClick={() => (
             removeFromCart(product),
-            toast.error(`Producto ${product.name} eliminado 🗑 `)
+            toast.error(`${t("Toast_product")} ${product.name} ${t("Toast_delet")}`)
           )}
         >
           <FaTrashAlt size={18} />

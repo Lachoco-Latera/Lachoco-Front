@@ -13,6 +13,7 @@ import { HiHeart } from "react-icons/hi";
 import { SlHeart } from "react-icons/sl";
 import { FaStar } from "react-icons/fa";
 import { VITE_BASE_URL } from "@/config/envs";
+import { useTranslation } from "react-i18next";
 // import { useCartStore } from "../../stores/useCartStore";
 // import { MdAddShoppingCart } from "react-icons/md";
 
@@ -31,15 +32,14 @@ const Inventory = ({ onCartIconClick }: any) => {
   userDetails;
   userId;
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(
-          `${VITE_BASE_URL}/users`
-        );
+        const response = await axios.get(`${VITE_BASE_URL}/users`);
         const userWithEmail = response.data.find(
           (user: any) => user.email === userEmail
         );
@@ -53,9 +53,7 @@ const Inventory = ({ onCartIconClick }: any) => {
     };
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(
-          `${VITE_BASE_URL}/orders`
-        );
+        const response = await axios.get(`${VITE_BASE_URL}/orders`);
         const filteredOrders = response.data.filter(
           (order: any) => order.user.email === userEmail
         );
@@ -117,13 +115,13 @@ const Inventory = ({ onCartIconClick }: any) => {
   const handleCopyOrderId = (orderId: string) => {
     if (orderId) {
       navigator.clipboard.writeText(orderId).then(() => {
-        toast.success("Copiado al portapapeles!");
+        toast.success(t("Toast_clipboard"));
       });
     }
   };
   const loading = () => (
     <div className="flex justify-center items-center h-96 text-xl text-gray-600">
-      Loading...
+      {t("Loading")}
     </div>
   );
   console.log(info);
@@ -162,7 +160,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                       <IconContext.Provider value={{}}>
                         <div
                           className="relative group"
-                          onClick={() => toast.success("Añadido a favoritos ")}
+                          onClick={() => toast.success(t("Fav_add2"))}
                         >
                           <HiHeart
                             id="firstHeart"
@@ -252,20 +250,20 @@ const Inventory = ({ onCartIconClick }: any) => {
                                   .map((order: any) => (
                                     <div key={order.id}>
                                       <span className="flex">
-                                        Estado: {order.status}
+                                        {t("status")}: {order.status}
                                       </span>
                                       <span className="flex">
-                                        Comprado en: {order.date}
+                                        {t("purchased")}: {order.date}
                                       </span>
                                       <span className="flex">
-                                        Cantidad:
+                                        {t("quantity")}:
                                         {
                                           order.orderDetail.orderDetailProducts
                                             .length
                                         }
                                       </span>
                                       <span className="flex flex-col items-start max-w-48">
-                                        Ubicación:
+                                        {t("location")}:
                                         <span
                                           className="flex break-all"
                                           onClick={() => {
@@ -278,9 +276,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                                                   : `https://${order.additionalInfo}`;
                                               window.open(url, "_blank");
                                             } else {
-                                              toast.info(
-                                                "No se puede acceder a esa información"
-                                              );
+                                              toast.info(t("Toast_acces"));
                                             }
                                           }}
                                         >

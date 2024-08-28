@@ -114,7 +114,7 @@ function SearchExampleStandard() {
           fluid
           category
           loading={loading}
-          placeholder={t("what_do_you_want_to_try")}
+          placeholder={t("Search")}
           onResultSelect={(e, data) => {
             dispatch({
               type: "UPDATE_SELECTION",

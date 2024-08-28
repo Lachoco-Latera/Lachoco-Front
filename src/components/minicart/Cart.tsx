@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MapSelector from "../MapSelector"; // Asegúrate de importar el MapSelector
+import { useTranslation } from "react-i18next";
 
 // import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
@@ -11,6 +12,7 @@ import { VITE_BASE_URL, VITE_FRONTEND_URL } from "@/config/envs";
 import CartItemGiftCard from "../GiftCards/CartItemGiftCard";
 
 function Cart({ similar }: any) {
+  const {t} = useTranslation()
   const { cart, confirmedFlavors, giftCards } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
@@ -262,6 +264,39 @@ function Cart({ similar }: any) {
         country: "COL",
       }
 
+          if (globalOrderId !== "" && globalOrderId.length !== 0) {
+            return axios.post(
+              `${VITE_BASE_URL}/pagos/create-checkout-session`,
+              paymentData
+            );
+          } else {
+            throw new Error("Order ID is invalid");
+          }
+        })
+        .then((paymentResponse) => {
+          console.log(
+            "Respuesta de pago:",
+            paymentResponse.data,
+            paymentResponse
+          );
+          setInfoModal(false);
+          toast("Por favor, acceder al pago", {
+            duration: 10000,
+            action: {
+              label: "Click to continue",
+              onClick: () => (window.location.href = paymentResponse.data),
+            },
+          });
+          setToPayment(true);
+          setActualLink(paymentResponse.data);
+        })
+        .catch((error) => {
+          setToPayment(false);
+          console.error("Error en el envío de paymentData:", error);
+          toast.warning(
+            t("Toast_createOrder") + t("Toast_form")
+          );
+        }),
       if (globalOrderId !== "" && globalOrderId.length !== 0) {
         toast.promise(
           requestPayment(paymentData), 
@@ -425,7 +460,7 @@ const handleClickPlaceOrder = () => {
 
   return (
     <section>
-      <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
+      <h3 className="text-2xl font-bold mb-4">{t("Cart_your")}</h3>
       <ul>
         {giftCards?.map((giftCard, index) => (
           <CartItemGiftCard
@@ -444,7 +479,7 @@ const handleClickPlaceOrder = () => {
       <div className=" h-2">
         {showTooltip && !completed && (
           <span className="tooltip absolute bg-slate-600 opacity-95 text-white text-xs px-2 py-1 rounded-md right-4">
-            - Aún te faltan cargar sabores
+            - {t("Cart_load")}
           </span>
         )}
       </div>
@@ -467,15 +502,15 @@ const handleClickPlaceOrder = () => {
           <button
             onClick={() =>
               toast.promise(promise, {
-                loading: `Serás redireccionado para pagar...`,
-                success: "¡Muchas gracias de antemano! ❤",
-                error: "Debes seleccionar sabores para los bombones.",
+                loading: t("Toast_checkout"),
+                success: t("Toast_thanks"),
+                error: t("Toast_flavors"),
               })
             }
             className="text-xl font-bold"
             disabled
           >
-            Aún tienes sabores pendientes
+            {t("Cart_pending")}
           </button>
         </div>
       ) : (
@@ -485,11 +520,18 @@ const handleClickPlaceOrder = () => {
               justify-center ${buttonClass} transition-all ease`}
           >
             <button
+              onClick={() =>
+                orderCreatedId === ""
+                  ? handlePlaceOrder()
+                  : !toPayment && orderCreatedId !== ""
+                  ? handlePlaceOrder()
+                  : toast.info(t("Toast_order"))
+              }
               onClick={() => handleClickPlaceOrder()}
               className="text-xl font-bold"
               disabled={isDisabled}
             >
-              Realizar Pedido
+              {t("Cart_order")}
             </button>
           </div>
           <>
@@ -506,7 +548,7 @@ const handleClickPlaceOrder = () => {
                   }
                   className="text-xl font-bold"
                 >
-                  Proceder a pagar
+                  {t("Cart_pay")}
                 </button>
               </div>
             ) : (
@@ -519,12 +561,11 @@ const handleClickPlaceOrder = () => {
         <>
           <div className="bg-white p-5 mt-5 z-50 shadow-md rounded-xl">
             <h2 className="mb-4 font-bold">
-              Porfavor llene la información de envio, <br /> Antes de "Realizar
-              el pedido":
+            {t("Cart_shipping")} <br /> {t("Cart_shipping2")}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block mb-1">Teléfono</label>
+                <label className="block mb-1">{t("Cart_phone")}</label>
                 <input
                   type="text"
                   name="phone"
@@ -535,7 +576,7 @@ const handleClickPlaceOrder = () => {
                 />
               </div>
               <div>
-                <label className="block mb-1">País</label>
+                <label className="block mb-1">{t("Cart_Country")}</label>
                 <input
                   type="text"
                   name="country"
@@ -547,7 +588,7 @@ const handleClickPlaceOrder = () => {
               </div>
               <div>
                 <label className="block mb-1">
-                  Estado/Provincia/Departamento
+                {t("Cart_state")}
                 </label>
                 <input
                   type="text"
@@ -559,7 +600,7 @@ const handleClickPlaceOrder = () => {
                 />
               </div>
               <div>
-                <label className="block mb-1">Ciudad</label>
+                <label className="block mb-1">{t("Cart_city")}</label>
                 <input
                   type="text"
                   name="city"
@@ -570,7 +611,7 @@ const handleClickPlaceOrder = () => {
                 />
               </div>
               <div>
-                <label className="block mb-1">Calle/Barrio</label>
+                <label className="block mb-1">{t("Cart_street")}</label>
                 <input
                   type="text"
                   name="street"
@@ -581,7 +622,7 @@ const handleClickPlaceOrder = () => {
                 />
               </div>
               <div>
-                <label className="block mb-1">Número</label>
+                <label className="block mb-1">{t("Cart_number")}</label>
                 <input
                   type="text"
                   name="number"
@@ -592,7 +633,7 @@ const handleClickPlaceOrder = () => {
                 />
               </div>
               <div>
-                <label className="block mb-1">Código Postal</label>
+                <label className="block mb-1">{t("Cart_code")}</label>
                 <input
                   type="text"
                   name="postalCode"
@@ -604,7 +645,7 @@ const handleClickPlaceOrder = () => {
               </div>
               <div>
                 <label className="block mb-1">
-                  Geolocalización (Para mejorar la precisión del envio)
+                  {t("Cart_geolocation")}
                 </label>
                 <input
                   type="text"
@@ -628,7 +669,7 @@ const handleClickPlaceOrder = () => {
 
               <div>
                 <label className="block mb-1">
-                  Cupón de descuento (opcional)
+                  {t("Cart_coupon")}
                 </label>
                 <input
                   type="text"

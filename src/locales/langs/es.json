@@ -178,9 +178,7 @@
     "Toast_added":"agregado!",
     "Toast_savedFlavor":"Selección de sabores guardada para",
     "Toast_check":"Por favor fijarse sabores restantes, Ó selecciona todos los sabores que puedas antes de guardar.",
-    "Toast_removed":"Sabores eliminados para "
-}
-    "Flavor_random":"Añadir aleatoriamente",
+    "Toast_removed":"Sabores eliminados para ",
     
     "what_do_you_want_to_try": "¿Qué quieres probar?",
     
@@ -188,7 +186,6 @@
     "add_to_cart": "Añadir al carrito",
     "description_to_buy": "Úsala para comprar en Lachoco Latera: Chocolates, Bombones, Barras de Chocolate, Chocolate Especializado, Cafés, Delicias.",
     "send_email_gift_card": "Entrega rápida y sencilla por correo electrónico.",
-    "email": "Correo electrónico",
     "choose_design": "Elige un diseño.",
     "choose_amount": "Elige un monto.",
     "enter_your_shipping_information": "Introduce tu información de envío",

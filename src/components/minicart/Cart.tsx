@@ -4,11 +4,13 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MapSelector from "../MapSelector"; // Asegúrate de importar el MapSelector
+import { useTranslation } from "react-i18next";
 
 // import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import { VITE_BASE_URL } from "@/config/envs";
 function Cart({ similar }: any) {
+  const {t} = useTranslation()
   const { cart, confirmedFlavors } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
@@ -265,8 +267,7 @@ function Cart({ similar }: any) {
           setToPayment(false);
           console.error("Error en el envío de paymentData:", error);
           toast.warning(
-            "Error al crear la orden de pago: " +
-              "Probablemente olvidaste llenar el formulario"
+            t("Toast_createOrder") + t("Toast_form")
           );
         }),
       {
@@ -376,7 +377,7 @@ function Cart({ similar }: any) {
 
   return (
     <section>
-      <h3 className="text-2xl font-bold mb-4">Tu carrito</h3>
+      <h3 className="text-2xl font-bold mb-4">{t("Cart_your")}</h3>
       <ul>
         {cart?.map((product) => (
           <CartItem
@@ -389,7 +390,7 @@ function Cart({ similar }: any) {
       <div className=" h-2">
         {showTooltip && !completed && (
           <span className="tooltip absolute bg-slate-600 opacity-95 text-white text-xs px-2 py-1 rounded-md right-4">
-            - Aún te faltan cargar sabores
+            - {t("Cart_load")}
           </span>
         )}
       </div>
@@ -412,15 +413,15 @@ function Cart({ similar }: any) {
           <button
             onClick={() =>
               toast.promise(promise, {
-                loading: `Serás redireccionado para pagar...`,
-                success: "¡Muchas gracias de antemano! ❤",
-                error: "Debes seleccionar sabores para los bombones.",
+                loading: t("Toast_checkout"),
+                success: t("Toast_thanks"),
+                error: t("Toast_flavors"),
               })
             }
             className="text-xl font-bold"
             disabled
           >
-            Aún tienes sabores pendientes
+            {t("Cart_pending")}
           </button>
         </div>
       ) : (
@@ -439,11 +440,11 @@ function Cart({ similar }: any) {
                   ? handlePlaceOrder()
                   : !toPayment && orderCreatedId !== ""
                   ? handlePlaceOrder()
-                  : toast.info("Ya has realizado un pedido")
+                  : toast.info(t("Toast_order"))
               }
               className="text-xl font-bold"
             >
-              Realizar Pedido
+              {t("Cart_order")}
             </button>
           </div>
           <>
@@ -460,7 +461,7 @@ function Cart({ similar }: any) {
                   }
                   className="text-xl font-bold"
                 >
-                  Proceder a pagar
+                  {t("Cart_pay")}
                 </button>
               </div>
             ) : (
@@ -473,12 +474,11 @@ function Cart({ similar }: any) {
         <>
           <div className="bg-white p-5 mt-5 z-50 shadow-md rounded-xl">
             <h2 className="mb-4 font-bold">
-              Porfavor llene la información de envio, <br /> Antes de "Realizar
-              el pedido":
+            {t("Cart_shipping")} <br /> {t("Cart_shipping2")}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block mb-1">Teléfono</label>
+                <label className="block mb-1">{t("Cart_phone")}</label>
                 <input
                   type="text"
                   name="phone"
@@ -489,7 +489,7 @@ function Cart({ similar }: any) {
                 />
               </div>
               <div>
-                <label className="block mb-1">País</label>
+                <label className="block mb-1">{t("Cart_Country")}</label>
                 <input
                   type="text"
                   name="country"
@@ -501,7 +501,7 @@ function Cart({ similar }: any) {
               </div>
               <div>
                 <label className="block mb-1">
-                  Estado/Provincia/Departamento
+                {t("Cart_state")}
                 </label>
                 <input
                   type="text"
@@ -513,7 +513,7 @@ function Cart({ similar }: any) {
                 />
               </div>
               <div>
-                <label className="block mb-1">Ciudad</label>
+                <label className="block mb-1">{t("Cart_city")}</label>
                 <input
                   type="text"
                   name="city"
@@ -524,7 +524,7 @@ function Cart({ similar }: any) {
                 />
               </div>
               <div>
-                <label className="block mb-1">Calle/Barrio</label>
+                <label className="block mb-1">{t("Cart_street")}</label>
                 <input
                   type="text"
                   name="street"
@@ -535,7 +535,7 @@ function Cart({ similar }: any) {
                 />
               </div>
               <div>
-                <label className="block mb-1">Número</label>
+                <label className="block mb-1">{t("Cart_number")}</label>
                 <input
                   type="text"
                   name="number"
@@ -546,7 +546,7 @@ function Cart({ similar }: any) {
                 />
               </div>
               <div>
-                <label className="block mb-1">Código Postal</label>
+                <label className="block mb-1">{t("Cart_code")}</label>
                 <input
                   type="text"
                   name="postalCode"
@@ -558,7 +558,7 @@ function Cart({ similar }: any) {
               </div>
               <div>
                 <label className="block mb-1">
-                  Geolocalización (Para mejorar la precisión del envio)
+                  {t("Cart_geolocation")}
                 </label>
                 <input
                   type="text"
@@ -582,7 +582,7 @@ function Cart({ similar }: any) {
 
               <div>
                 <label className="block mb-1">
-                  Cupón de descuento (opcional)
+                  {t("Cart_coupon")}
                 </label>
                 <input
                   type="text"

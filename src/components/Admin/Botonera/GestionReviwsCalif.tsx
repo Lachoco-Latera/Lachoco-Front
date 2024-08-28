@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { VITE_BASE_URL } from "@/config/envs";
+import { useTranslation } from "react-i18next";
 
 export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
   const [editState, setEditState] = useState<boolean>(false);
   const [products, setProducts] = useState<any[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const {t} = useTranslation()
 
   useEffect(() => {
     if (signal) {
@@ -88,15 +90,15 @@ export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
           transition-all ease  
           hover:scale-105"
           >
-            <h2 className="font-bold    text-center">Title: {product.name}</h2>
+            <h2 className="font-bold    text-center">{t("title")}: {product.name}</h2>
             <p className="font-bold    text-center">
-              Description: {product.description}
+              {t("Management_description")}: {product.description}
             </p>
             <p className="font-bold    text-center">
-              Price: {product.price} {product.currency}
+            {t("Price")}: {product.price} {product.currency}
             </p>
             <p className="font-bold    text-center">
-              Category: {product.category.name}
+              {t("category")}: {product.category.name}
             </p>
             <p className="font-bold    text-center">Stock: {product.stock}</p>
             <div className="w-full flex justify-center items-center">
@@ -104,13 +106,13 @@ export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-1000 bg-yellow-600 hover:bg-yellow-900 hover:text-yellow-500 m-3 capitalize"
                 onClick={handleEdit}
               >
-                Editar
+                {t("Management_edit")}
               </button>
               <button
                 className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-lg font-semibold duration-1000 bg-red-500 hover:bg-red-900 hover:text-red-500 m-3 capitalize"
                 onClick={() => handleDelete(product.id)}
               >
-                Eliminar
+                {t("Management_delet")}
               </button>
             </div>
           </div>

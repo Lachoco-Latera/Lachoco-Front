@@ -31,7 +31,7 @@ export const Admin = () => {
   const [deleteItem, setDeleteItem] = useState(false);
   const buttonConfig = [
     {
-      label: t("Admin_Flavor"),
+      label:t("Admin_Flavor"),
       state: "gestionSaboresDisponibles",
       component: (
         <GestionSaboresDisponibles
@@ -42,7 +42,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Gestión Productos",
+      label:t("Admin_Product"),
       state: "gestionImgProductos",
       component: (
         <GestionProductos
@@ -52,7 +52,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Gestión de Órdenes",
+      label:t("Admin_order"),
       state: "gestionOrdenCompra",
       component: (
         <GestionOrdenCompra
@@ -62,7 +62,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Gestión Favoritos",
+      label:t("Admin_favorites"),
       state: "gestionFavoritos",
       component: (
         <GestionFavoritos
@@ -72,7 +72,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Cupones y Descuentos",
+      label:t("Admin_coupons"),
       state: "gestionCuponesDesc",
       component: (
         <GestionCuponesDesc
@@ -82,7 +82,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Reviews y Calificaciones",
+      label:t("Admin_reviews"),
       state: "gestionReviwsCalif",
       component: (
         <GestionReviwsCalif
@@ -92,7 +92,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Redes Sociales",
+      label:t("Admin_social"),
       state: "gestionRedesSociales",
       component: (
         <GestionRedesSociales
@@ -102,7 +102,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Info de empresa",
+      label:t("Admin_info"),
       state: "gestionPPyDatosEmpresa",
       component: (
         <GestionPPyDatosEmpresa

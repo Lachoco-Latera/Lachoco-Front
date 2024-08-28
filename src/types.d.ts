@@ -26,6 +26,7 @@ export interface Product {
 }
 
 export interface GiftCard {
+  id:string
   designCard: string;
   amountCard: string;
   nameRecipient: string;

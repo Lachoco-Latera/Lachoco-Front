@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import Header from "../Header/Header"
 import Drawer from "../Drawer";
@@ -92,7 +93,7 @@ export const GiftCards = () => {
       message: yup.string().optional(),
     }).required()
 
-  const { register, handleSubmit, formState: { errors, isValid, isSubmitSuccessful,  }, reset } = useForm({ resolver: yupResolver(schema)});
+  const { register, handleSubmit, formState: { errors, isValid, isSubmitSuccessful }, reset } = useForm({ resolver: yupResolver(schema)});
 
     useEffect(() => {
       const fetchUserData = async () => {
@@ -135,7 +136,7 @@ export const GiftCards = () => {
     const response = await createGiftCard(order);
     console.log(response.data)
     if(response.status === 201) {
-      addGiftCard(order);
+      addGiftCard({...order, id: response.data.gift.id});
     }
   }
 
@@ -232,14 +233,26 @@ export const GiftCards = () => {
                 <GridRow >
                   <GridColumn>
                     <div className="mb-6 mt-6">
-                    {priceCard('50')}
+                    {priceCard('20000')}
 
                     </div>
                   </GridColumn>
                   <GridColumn>
                     <div className="mb-6 mt-6">
 
-                    {priceCard('100')}
+                    {priceCard('50000')}
+                    </div>
+                  </GridColumn>
+                  <GridColumn>
+                    <div className="mb-6 mt-6">
+
+                    {priceCard('70000')}
+                    </div>
+                  </GridColumn>
+                  <GridColumn>
+                    <div className="mb-6 mt-6">
+
+                    {priceCard('100000')}
                     </div>
                   </GridColumn>
                 </GridRow>
@@ -302,6 +315,7 @@ export const GiftCards = () => {
                     rows={4} 
                     placeholder={t("write_your_message")}
                     size="big" style={{marginBottom: '15px', marginTop: '24px', fontSize: "18px"}}
+                    {...register("message")}
                     disabled={!(amountGiftCard && designGiftCard)}
                   />
 

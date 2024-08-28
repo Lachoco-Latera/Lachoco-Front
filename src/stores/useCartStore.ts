@@ -174,6 +174,7 @@ export const useCartStore = create(
       clearCart: () => {
         set({
           cart: [],
+          giftCards: [],
           totalItems: 0,
           totalPrice: 0,
           confirmedFlavors: {},

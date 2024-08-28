@@ -7,7 +7,7 @@ import MapSelector from "../MapSelector"; // Asegúrate de importar el MapSelect
 
 // import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
-import { VITE_BASE_URL } from "@/config/envs";
+import { VITE_BASE_URL, VITE_FRONTEND_URL } from "@/config/envs";
 import CartItemGiftCard from "../GiftCards/CartItemGiftCard";
 
 function Cart({ similar }: any) {
@@ -193,10 +193,37 @@ function Cart({ similar }: any) {
       }, 1100);
     });
 
-  const handlePlaceOrder = () => {
-    if (!infoModal) {
+    const requestPayment = async (paymentData: Record<string, any>) => {
+      return axios.post(`${VITE_BASE_URL}/pagos/create-checkout-session`, paymentData)
+      .then((paymentResponse) => {
+        console.log(
+          "Respuesta de pago:",
+          paymentResponse.data,
+          paymentResponse
+          );
+          setInfoModal(false);
+          toast("Por favor, acceder al pago", {
+            duration: 10000,
+            action: {
+              label: "Click to continue",
+              onClick: () => (window.location.href = paymentResponse.data),
+            },
+          });
+          setToPayment(true);
+          setActualLink(paymentResponse.data)
+      }).catch((error) => {
+          setToPayment(false);
+          console.error("Error en el envío de paymentData:", error);
+          toast.warning(
+            "Error al crear la orden de pago: " +
+              "Probablemente olvidaste llenar el formulario"
+          );
+      })
+    }
+
+  const handlePlaceOrder2 = async () => {
+    if ((cart.length > 0 && giftCards.length === 0) || (cart.length > 0 && giftCards.length > 0)){
       setInfoModal(true);
-      return;
     }
 
     const order = {
@@ -214,74 +241,71 @@ function Cart({ similar }: any) {
             ? confirmedFlavors[product.id] || []
             : product.flavors.map((flavor) => flavor.id),
       })),
+      giftCards: giftCards.map((giftCard) => ({
+        giftCardId: giftCard.id,
+        nameRecipient: giftCard.nameRecipient,
+        emailRecipient: giftCard.emailRecipient,
+        message: giftCard.message,
+      })),
       additionalInfo:
         latitude && longitude
           ? `www.google.com/maps/@${latitude},${longitude},20.01z?entry=ttu`
           : "No se pudo proporcionar ubicación de usuario",
     };
+    const response = await axios.post(`${VITE_BASE_URL}/orders`, order)
+    globalOrderId = response.data[0].id;
+    setOrderCreatedId(response.data[0].id);
 
-    toast.promise(
-      axios
-        .post(`${VITE_BASE_URL}/orders`, order)
-        .then((response) => {
-          globalOrderId = response.data[0].id;
-          setOrderCreatedId(response.data[0].id);
-          const paymentData: any = {
-            orderId: globalOrderId,
-            country: "COL",
-            phone: formData.phone,
-            number: formData.number,
-            street: formData.street,
-            city: formData.city,
-            state: formData.state,
-            postalCode: formData.postalCode,
-            shipmentCountry: formData.shipmentCountry || "COL",
-          };
-          // Agregar giftCardId solo si no es vacío
-          if (formData.giftCardId) {
-            paymentData.giftCardId = formData.giftCardId;
-          }
-
-          if (globalOrderId !== "" && globalOrderId.length !== 0) {
-            return axios.post(
-              `${VITE_BASE_URL}/pagos/create-checkout-session`,
-              paymentData
-            );
-          } else {
-            throw new Error("Order ID is invalid");
-          }
-        })
-        .then((paymentResponse) => {
-          console.log(
-            "Respuesta de pago:",
-            paymentResponse.data,
-            paymentResponse
-          );
-          setInfoModal(false);
-          toast("Por favor, acceder al pago", {
-            duration: 10000,
-            action: {
-              label: "Click to continue",
-              onClick: () => (window.location.href = paymentResponse.data),
-            },
-          });
-          setToPayment(true);
-          setActualLink(paymentResponse.data);
-        })
-        .catch((error) => {
-          setToPayment(false);
-          console.error("Error en el envío de paymentData:", error);
-          toast.warning(
-            "Error al crear la orden de pago: " +
-              "Probablemente olvidaste llenar el formulario"
-          );
-        }),
-      {
-        loading: "Procesando orden...",
-        success: "Orden procesada con éxito",
-        error: "Error al crear la orden de pago",
+    if (cart.length === 0 && giftCards.length > 0){
+      const paymentData = {
+        orderId: globalOrderId,
+        country: "COL",
       }
-    );
+
+      if (globalOrderId !== "" && globalOrderId.length !== 0) {
+        toast.promise(
+          requestPayment(paymentData), 
+        {
+          loading: "Procesando orden...",
+          success: "Orden procesada con éxito",
+          error: "Error al crear la orden de pago",
+        })
+      } else {
+          throw new Error("Order ID is invalid");
+        }
+    }
+  }
+
+  const handlePlaceOrder = () => {
+    const {orderId, shipmentCountry, giftCardId, frecuency,...rest} = formData;
+    const paymentData: any = {
+      orderId: orderCreatedId,
+      country: "COL",
+    };
+    if(Object.values(rest).every(value => value !== "")) {
+      paymentData.order = {
+        phone: rest.phone,
+        number: rest.number,
+        street: rest.street,
+        city: rest.city,
+        state: rest.state,
+        postalCode: rest.postalCode,
+        shipmentCountry: shipmentCountry || "COL",
+      }
+    }
+    if (giftCardId) {
+      paymentData.order.giftCardId = giftCardId;
+    }
+    if (orderCreatedId !== "" && orderCreatedId.length !== 0) {
+      toast.promise(requestPayment(paymentData),
+      {
+          loading: "Procesando orden...",
+          success: "Orden procesada con éxito",
+          error: "Error al crear la orden de pago",
+        })
+    } else {
+        throw new Error("Order ID is invalid");
+      }
   };
 
   const [formData, setFormData] = useState({
@@ -381,6 +405,23 @@ function Cart({ similar }: any) {
       });
   };
 
+  const isDisabled = orderCreatedId === "" ? false : !toPayment && orderCreatedId !== "" ? false : true;
+  const buttonClass = orderCreatedId === ""
+  ? "hover:bg-black text-black hover:text-white hover:scale-105"
+  : !toPayment && orderCreatedId
+  ? "hover:bg-black text-black hover:text-white hover:scale-105"
+  : "text-slate-500";
+
+const handleClickPlaceOrder = () => {
+  if (orderCreatedId === "") {
+    handlePlaceOrder2();
+  } else if (!toPayment && orderCreatedId !== "") {
+    handlePlaceOrder();
+  } else {
+    toast.info("Ya has realizado un pedido");
+  }
+};
+
 
   return (
     <section>
@@ -441,21 +482,12 @@ function Cart({ similar }: any) {
         <>
           <div
             className={`flex rounded-xl p-2 mt-2 shadow 
-        justify-center   ${
-          orderCreatedId === ""
-            ? "hover:bg-black text-black hover:text-white hover:scale-105 "
-            : "text-slate-500"
-        }  transition-all ease`}
+              justify-center ${buttonClass} transition-all ease`}
           >
             <button
-              onClick={() =>
-                orderCreatedId === ""
-                  ? handlePlaceOrder()
-                  : !toPayment && orderCreatedId !== ""
-                  ? handlePlaceOrder()
-                  : toast.info("Ya has realizado un pedido")
-              }
+              onClick={() => handleClickPlaceOrder()}
               className="text-xl font-bold"
+              disabled={isDisabled}
             >
               Realizar Pedido
             </button>
@@ -464,13 +496,13 @@ function Cart({ similar }: any) {
             {toPayment ? (
               <div
                 className="flex rounded-xl p-2 mt-2 shadow 
-        justify-center hover:bg-green-500 text-green-500
-         hover:text-white hover:scale-105 transition-all ease"
+                justify-center hover:bg-green-500 text-green-500
+                  hover:text-white hover:scale-105 transition-all ease"
               >
                 <button
                   onClick={() =>
                     (window.location.href =
-                      actualLink || "https://lachoco-front.vercel.app")
+                      actualLink || `${VITE_FRONTEND_URL}`)
                   }
                   className="text-xl font-bold"
                 >

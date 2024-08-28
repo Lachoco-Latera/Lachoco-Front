@@ -1,7 +1,7 @@
 import { IRegisterErrors, validationRegister } from '../../helpers/validations'
 import React, { useEffect, useState } from 'react'
-import verPass from '../../../public/images/verPass.svg'
-import ocultarPass from '../../../public/images/ocultarPass.svg'
+import verPass from '../../assets/images/verPass.svg'
+import ocultarPass from '../../assets/images/ocultarPass.svg'
 
 export const Register: React.FC = () => {
     const [registerState, setRegisterState] = useState({

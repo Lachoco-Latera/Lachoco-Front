@@ -12,8 +12,8 @@
     "Subscribe": "!Subscribe!", 
     "Search":"¿What do you want to try?",
 
-    "Individual_Price":"Individual Price",
-    "Select_flavors":"Select flavors",
+    "Individual_Price": "Individual Price",
+    "Select_flavors": "Select flavors",
     "Order_now": "Order now",
     "Add": "Add",
     "flavor":"flavor",
@@ -37,6 +37,7 @@
     "Format":"Format",
     "Size":"Size",
     
+    "added_to_cart": "Added to cart",
 
     "Products_presentation": "Presentation",
     "Products_description": "Descripcion",
@@ -86,7 +87,7 @@
     "Cart_order":"Place Order",
     "Cart_pay":"Proceed to pay",
     "Cart_shipping":"Please fill out the shipping information,",
-    "Cart_shipping2":"Before Place the order:",
+    "Cart_shipping2":"Before Place the order",
     "Cart_phone":"Phone",
     "Cart_Country":"Country",
     "Cart_state":"State/Province/Department",
@@ -181,6 +182,29 @@
     "Toast_added":"added!",
     "Toast_savedFlavor":"Flavor selection saved for",
     "Toast_check":"Please check remaining flavors, OR select as many flavors as you can before saving.",
-    "Toast_removed":"Flavors removed for"
+    "Toast_removed":"Flavors removed for",
+
+    "what_do_you_want_to_try": "What do you want to try?",
+
+    "buy_gift_card": "Buy Gift Card",
+    "add_to_cart": "Add to cart",
+    "description_to_buy": "Use it to buy at Lachoco Latera, Chocolates, Bombs, Chocolate Bars, Specialty Chocolate, Coffees, Delicacies.",
+    "send_email_gift_card": "Fast and easy delivery by email.",
+    "choose_design": "Choose a design.",
+    "choose_amount": "Choose an amount.",
+    "enter_your_shipping_information": "Enter your shipping information",
+    "who_is_it_for": "Who is it for?",
+    "enter_a_valid_email_format": "Enter a valid email format.",
+    "name_recipient": "Name Recipient",
+    "recipient_name_is_required": "Recipient email is required.",
+    "who_sends_it": "Who sends it?",
+    "email_recipient": "Email Recipient",
+    "recipient_email_is_required": "Recipient email is required.",
+    "sender_name": "Sender name",
+    "sender_name_is_required": "Sender name is required.",
+    "email_sender": "Email Sender",
+    "sender_email_is_required": "Sender email is required.",
+    "write_your_message": "Write your message here",
+    "do_you_want_to_add_a_message": "Do you want to add a personalized message?",
+    "usually_delivered_within_an_hour": "Usually delivered within an hour."
 }
-  

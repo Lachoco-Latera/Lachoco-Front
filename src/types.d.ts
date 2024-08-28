@@ -24,3 +24,14 @@ export interface Product {
     https?: string;
   }[];
 }
+
+export interface GiftCard {
+  id:string
+  designCard: string;
+  amountCard: string;
+  nameRecipient: string;
+  emailRecipient: string;
+  nameSender: string;
+  emailSender: string;
+  message?: string;
+}

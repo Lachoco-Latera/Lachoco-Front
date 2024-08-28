@@ -31,9 +31,9 @@ function SearchExampleStandard() {
   const [state, dispatch] = React.useReducer(exampleReducer, initialState);
   const { loading, results, value } = state;
   const [products, setProducts] = useState([]);
+  const { t } = useTranslation()
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const navigate = useNavigate();
-  const {t} = useTranslation()
 
   const redirectToProductDetail = (productId: string) => {
     navigate(`/products/${productId}`);

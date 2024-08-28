@@ -4,6 +4,7 @@ import { CambioMoneda } from "../CambioMoneda/CambioMoneda";
 import logo1 from "../../assets/images/facebook.png";
 import logo2 from "../../assets/images/whatsapp.png";
 import logo3 from "../../assets/images/instagram.png";
+import { NavLink } from "react-router-dom";
 import idioma from "../../assets/images/idioma.svg";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../hooks/LanguageContext";
@@ -26,7 +27,7 @@ export const Footer = () => {
               </li>
 
               {monedaState ? (
-                <div className="w-[100px] h-[100px] absolute mb-[150px] right-96 bg-gray-600 z-20 flex flex-col justify-evenly">
+                <div className="w-[100px] h-[100px] absolute mb-[150px] right-96 bg-gray-600 z-10 flex flex-col justify-evenly">
                   <CambioMoneda />
                 </div>
               ) : null}
@@ -49,7 +50,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/gift-cards"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
                   {t("gift_cards")}

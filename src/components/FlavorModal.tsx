@@ -25,10 +25,12 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const [lastSelectedProductId, setLastSelectedProductId] =
     useState<string>(""); //guarda el ultimo id del producto seleccionado ej ["vainilla-id"]
   const [lastPickedFlavor, setLastPickedFlavor] = useState<string>(""); //guarda el ultimo sabor seleccionado ej "fresa-id"
-  const [flavorCounts, setFlavorCounts] = useState<{ [key: string]: number }>({}); //guarda un objeto donde cada clave es un id de sabor ej si se selecciona una vez chocolate y dos veces fresa {"chocolate-id": 2,"fresa-id": 1}
+  const [flavorCounts, setFlavorCounts] = useState<{ [key: string]: number }>(
+    {}
+  ); //guarda un objeto donde cada clave es un id de sabor ej si se selecciona una vez chocolate y dos veces fresa {"chocolate-id": 2,"fresa-id": 1}
   const [moreOptions, setMoreOptions] = useState(false);
 
-  const {t} = useTranslation()
+  const { t } = useTranslation();
 
   let total = 0;
   if (cart) {
@@ -49,23 +51,31 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         [flavorId]: (prevCounts[flavorId] || 0) + 1, //se agrega el nuevo sabor a el count que quedaria algo asi flavorCounts = { chocolate: 2, vainilla: 1,}
       }));
     } else {
-      toast.error("Ya has alcanzado el límite de sabores.");
+      toast.error(t("Toast_limitFlavors"));
     }
   };
 
   const handleDecreaseFlavor = (flavorId: string) => {
     if (flavorCounts[flavorId] > 0) {
-      //pregunta si el sabor tiene un conteo mayor a 0 para eliminar
-      setSelectedFlavors(selectedFlavors.filter((id) => id !== flavorId)); //elimina todas las intancias del sabor seleccionado
+      setSelectedFlavors((prevSelectedFlavors) => {
+        const index = prevSelectedFlavors.indexOf(flavorId);
+        if (index !== -1) {
+          return [
+            ...prevSelectedFlavors.slice(0, index),
+            ...prevSelectedFlavors.slice(index + 1),
+          ];
+        }
+        return prevSelectedFlavors;
+      });
       setFlavorCounts((prevCounts) => ({
         ...prevCounts,
-        [flavorId]: prevCounts[flavorId] - 1, //actualiza el objeto { chocolate: 2, vainilla: 1 } y se elimina 'chocolate', el nuevo objeto será { chocolate: 1, vainilla: 1 }
+        [flavorId]: prevCounts[flavorId] - 1,
       }));
     } else {
-      toast.error("No puedes tener menos de 0.");
+      toast.error(t("Toast_0"));
     }
   };
-
+  
   const handleFillWithLastFlavor = () => {
     if (selectedFlavors.length < product.presentacion) {
       let flavorToAdd = lastPickedFlavor;
@@ -89,7 +99,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
 
       setLastSelectedProductId(flavorToAdd);
 
-      toast(`Sabor ${flavorName} seleccionado!`, {
+      toast(`${t("flavor")} ${flavorName} ${t("Toast_select")}`, {
         action: {
           label: "Okay!",
           onClick: () => {
@@ -110,7 +120,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         ...prevCounts,
         [randomFlavor.id]: (prevCounts[randomFlavor.id] || 0) + 1,
       }));
-      toast(`Sabor ${randomFlavor.name} agregado!`, {
+      toast(`${t("flavor")} ${randomFlavor.name} ${t("Toast_added")}`, {
         action: {
           label: "Okay!",
           onClick: () => {
@@ -153,10 +163,10 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       actualSelectionLength < maxFlavors
     ) {
       addConfirmedFlavors(product.id, selectedFlavors);
-      toast.success(`Selección de sabores guardada para ${product.name}`);
+      toast.success(`${t("Toast_savedFlavor")} ${product.name}`);
     } else {
       toast.error(
-        "Por favor fijarse sabores restantes, Ó selecciona todos los sabores que puedas antes de guardar."
+        t("Toast_check")
       );
       setMoreOptions(true);
     }
@@ -175,7 +185,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
 
     removeConfirmedFlavors(product.id);
 
-    toast.success(`Sabores eliminados para ${product.name}`);
+    toast.success(`${t("Toast_removed")} ${product.name}`);
 
     closeModal();
   };
@@ -241,9 +251,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                       : "hover:cursor-pointer hover:scale-105"
                   }`}
                 >
-                  <div
-                    className="flex flex-col justify-center items-center gap-2"
-                  >
+                  <div className="flex flex-col justify-center items-center gap-2">
                     <img
                       src={product.images[0]?.img}
                       alt={flavor.name}
@@ -255,16 +263,12 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                     <div className="flex justify-center items-center gap-2 mt-2">
                       <button
                         className={`${
-                          !flavorCounts[flavor.id] ||
-                          selectedFlavors.length >= product.presentacion
+                          !flavorCounts[flavor.id]
                             ? "bg-gray-800 opacity-50 hover:bg-gray-950"
                             : "bg-red-500 hover:bg-red-600"
                         } text-white font-bold py-0 px-[7px] rounded-full`}
                         onClick={() => handleDecreaseFlavor(flavor.id)}
-                        disabled={
-                          !flavorCounts[flavor.id] ||
-                          selectedFlavors.length >= product.presentacion
-                        }
+                        disabled={!flavorCounts[flavor.id]}
                       >
                         -
                       </button>
@@ -289,7 +293,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
             <h2 className="text-2xl font-bold mb-4">{t("Flavor_number")}</h2>
             <div>
               <div className=" text-lg">
-              {t("Flavor_max")} <b className=" text-red-600">{maxFlavors}</b>
+                {t("Flavor_max")} <b className=" text-red-600">{maxFlavors}</b>
               </div>
               <div className="flex flex-row justify-center items-center gap-2">
                 <span className=" text-2xl">{selectedFlavors.length}</span>
@@ -322,7 +326,9 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                   <TbShoppingCartX size={20} />
                 </i>
               </p>
-              <p className="text-lg">{t("Flavor_priceT")} ${total}</p>
+              <p className="text-lg">
+                {t("Flavor_priceT")} ${total}
+              </p>
             </div>
             <div className="pt-4">
               {selectedFlavors.length > 0 && (

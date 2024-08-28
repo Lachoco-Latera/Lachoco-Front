@@ -266,9 +266,9 @@ export default function Header({ onCartIconClick }: Props) {
               hover:scale-110 transition-all ease shadow hidden md:block"
               onClick={() =>
                 toast.promise(promise, {
-                  loading: `Serás redireccionado para suscribirte...`,
+                  loading: t("Toast_suscribe"),
                   success: () => {
-                    return `Muchas gracias de antemano! ❤`;
+                    return t("Toast_thanks");
                   },
                   error: "Error",
                 })

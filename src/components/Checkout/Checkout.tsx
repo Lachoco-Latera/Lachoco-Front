@@ -15,9 +15,12 @@ const Checkout = ({
   openCartModal,
 }: any) => {
   const { cart } = useCartStore();
+  
   const addToCart = useCartStore((state) => state.addToCart);
   console.log(productName);
+
   const isCartItem = cart.some((item) => item.id === id);
+
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (!isCartItem) {

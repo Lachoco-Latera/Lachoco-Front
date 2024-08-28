@@ -55,15 +55,15 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
   }, [info]);
 
   if (!productInfo) {
-    return <div>Loading...</div>;
+    return <div>{t("Loading")}</div>;
   }
   const handleHeartClick = () => {
     setHeartColor((prevColor) => {
       if (prevColor === "transparent") {
-        toast.success("Añadido a favoritos");
+        toast.success(t("Fav_add2"));
         return "red";
       } else {
-        toast.error("Se ha eliminado de favoritos");
+        toast.error(t("Fav_remove"));
         return "transparent";
       }
     });
@@ -90,7 +90,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
             data-action="share/whatsapp/share"
           >
             <FaShareSquare size={16} />
-            {"Compartir"}{" "}
+            {t("share")}{" "}
           </a>
           <div
             className="relative group flex cursor-pointer items-center gap-2 hover:scale-110 hover:px-2 transition-all ease"
@@ -109,7 +109,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
               color="white"
               className="cursor-pointer group-hover:scale-[1.1] ease-in-out duration-300 drop-shadow z-[8]"
             />
-            {"Añadir a favoritos"}
+            {t("Fav_add")}
           </div>
         </div>
       </div>

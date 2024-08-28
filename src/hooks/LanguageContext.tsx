@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
 import i18n from "../locales/i18n"
 
 // Definimos el tipo para el contexto
@@ -14,13 +14,19 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<string>(i18n.language);
+  const [language, setLanguage] = useState<string>(() => {
+    return localStorage.getItem("language") || i18n.language;
+  });
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
     setLanguage(lng);
+    localStorage.setItem("language", lng);
   };
-
   return (
     <LanguageContext.Provider value={{ language, changeLanguage }}>
       {children}

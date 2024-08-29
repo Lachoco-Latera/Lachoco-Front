@@ -188,7 +188,7 @@ function Cart({ similar }: any) {
         );
 
         if (hasBombones) {
-          reject("Debes seleccionar sabores para los bombones.");
+          reject(t("Toast_flavors"));
         } else {
           // resolve(navigate("/ship"));
         }
@@ -204,7 +204,7 @@ function Cart({ similar }: any) {
           paymentResponse
           );
           setInfoModal(false);
-          toast("Por favor, acceder al pago", {
+          toast(t("please_access_to_payment"), {
             duration: 10000,
             action: {
               label: "Click to continue",
@@ -267,12 +267,12 @@ function Cart({ similar }: any) {
         toast.promise(
           requestPayment(paymentData), 
         {
-          loading: "Procesando orden...",
-          success: "Orden procesada con éxito",
-          error: "Error al crear la orden de pago",
+          loading: t("processing_order"),
+          success: t("order_processed_successfully"),
+          error: t("error_creating_order"),
         })
       } else {
-          throw new Error("Order ID is invalid");
+          throw new Error(t("order_id_is_invalid"));
         }
     }
   }
@@ -300,12 +300,12 @@ function Cart({ similar }: any) {
     if (orderCreatedId !== "" && orderCreatedId.length !== 0) {
       toast.promise(requestPayment(paymentData),
       {
-          loading: "Procesando orden...",
-          success: "Orden procesada con éxito",
-          error: "Error al crear la orden de pago",
-        })
+        loading: t("processing_order"),
+        success: t("order_processed_successfully"),
+        error: t("error_creating_order"),
+      })
     } else {
-        throw new Error("Order ID is invalid");
+        throw new Error(t("order_id_is_invalid"));
       }
   };
 

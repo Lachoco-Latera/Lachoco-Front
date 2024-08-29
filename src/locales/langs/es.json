@@ -6,7 +6,7 @@
     "gift_cards": "Tarjetas de regalo",
     "help_center": "Centro de ayuda",
 
-    "Subscribe": "!Susbribite!",
+    "Subscribe": "!Suscribete!",
     "Search":"¿Qué quieres probar?",
 
     "App_retry":"Esto está tardando más de lo esperado, Hacer click al logo para reintentar",
@@ -179,6 +179,11 @@
     "Toast_savedFlavor":"Selección de sabores guardada para",
     "Toast_check":"Por favor fijarse sabores restantes, Ó selecciona todos los sabores que puedas antes de guardar.",
     "Toast_removed":"Sabores eliminados para ",
+    "processing_order": "Procesando orden...",
+    "order_processed_successfully": "Orden procesada con éxito",
+    "error_creating_order": "Error al crear la orden de pago",
+    "order_id_is_invalid": "El ID del pedido no es válido",
+    "please_access_to_payment": "Por favor acceda a la página de pago",
     
     "what_do_you_want_to_try": "¿Qué quieres probar?",
     

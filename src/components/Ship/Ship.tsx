@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const Ship = () => {
+  const {t} = useTranslation()
   const [info, setInfo] = useState<any>(null);
   const [errors, setErrors] = useState<string[] | null>(null);
   const [countryCode, setCountryCode] = useState<string>("AR");
@@ -126,7 +128,7 @@ const Ship = () => {
           className="flex flex-col items-center mb-4 border-b-4 border-green-400 pb-2 sm:flex-row sm:items-center sm:justify-center"
         >
           <label htmlFor="countryCode" className="mr-2">
-            Country Code:
+            {t("Ship_code")}
           </label>
           <input
             type="text"
@@ -136,31 +138,31 @@ const Ship = () => {
             className="p-2 border mb-2 sm:mb-0 sm:mr-2"
           />
           <button type="submit" className="p-2 bg-blue-500 text-white rounded">
-            Buscar Info Extra
+            {t("Ship_search")}
           </button>
         </form>
         <div className="md:w-full w-full  overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-yellow-400 pb-2">
           <div className="shadow   border-b border-gray-200 sm:rounded-lg">
             <b className="flex font-bold text-3xl items-center justify-center py-2">
-              Carriers disponibles por País
+              {t("Ship_carriers")}
             </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Servicio ID
+                    {t("Ship_serviceId")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Nombre de Carrier
+                  {t("Ship_carrierName")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Descripción
+                  {t("Products_description")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Estimado de envio
+                  {t("Ship_shipping")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Activo?
+                    {t("Ship_active")}
                   </th>
                 </tr>
               </thead>
@@ -182,7 +184,7 @@ const Ship = () => {
                 ) : (
                   <tr key="no-data">
                     <td colSpan={5} className="px-6 py-4  text-center">
-                      No data available
+                      {t("Ship_data")}
                     </td>
                   </tr>
                 )}
@@ -193,19 +195,19 @@ const Ship = () => {
         <div className="md:w-full w-full overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-red-400 pb-2">
           <div className="shadow   border-b border-gray-200 sm:rounded-lg">
             <b className="flex font-bold text-3xl items-center justify-center py-2">
-              Info de paises
+            {t("Ship_country")}
             </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Código de país
+                  {t("Ship_country2")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Nombre de País
+                  {t("Ship_nameCountry")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Codigo de Teléfono
+                  {t("Ship_phone")}
                   </th>
                 </tr>
               </thead>
@@ -226,7 +228,7 @@ const Ship = () => {
                 ) : (
                   <tr key="no-country-data">
                     <td colSpan={3} className="px-6 py-4  text-center">
-                      No country data available
+                      {t("Ship_countryData")}
                     </td>
                   </tr>
                 )}
@@ -237,13 +239,13 @@ const Ship = () => {
         <div className="md:w-full w-full  overflow-x-auto overflow-y-auto  max-h-[500px] border-b-4 border-blue-400 pb-2">
           <div className="shadow   border-b border-gray-200 sm:rounded-lg">
             <b className="flex font-bold text-3xl items-center justify-center py-2">
-              Info de Estados/Provincias/Departamentos
+              {t("Ship_info")}
             </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Provincia/Departamento/Estado
+                    {t("Cart_state")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Código (2 digitos)
@@ -255,7 +257,7 @@ const Ship = () => {
                     Código shopify
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    País
+                    {t("Cart_Country")}
                   </th>
                 </tr>
               </thead>
@@ -273,7 +275,7 @@ const Ship = () => {
                 ) : (
                   <tr key="no-state-data">
                     <td colSpan={5} className="px-6 py-4  text-center">
-                      No state data available
+                      {t("Ship_notData")}
                     </td>
                   </tr>
                 )}
@@ -284,22 +286,22 @@ const Ship = () => {
         <div className="md:w-full w-full overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-yellow-400 pb-2">
           <div className="shadow border-b border-gray-200 sm:rounded-lg">
             <b className="flex font-bold text-3xl items-center justify-center py-2">
-              Opciones de impresión de Label
+              {t("Ship_label")}
             </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ID de Opción
+                    {t("Ship_option")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Opción
+                  {t("Option")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Formato
+                  {t("Format")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Tamaño
+                  {t("Size")}
                   </th>
                 </tr>
               </thead>
@@ -317,7 +319,7 @@ const Ship = () => {
                 {printOptionsData.length === 0 && (
                   <tr key="no-print-options-data">
                     <td colSpan={4} className="px-6 py-4 text-center">
-                      No print options data available
+                      {t("Ship_data2")}
                     </td>
                   </tr>
                 )}
@@ -328,25 +330,25 @@ const Ship = () => {
         <div className="md:w-full w-full overflow-x-auto overflow-y-auto mb-4 max-h-[500px] border-b-4 border-pink-400 pb-2">
           <div className="shadow border-b border-gray-200 sm:rounded-lg">
             <b className="flex font-bold text-3xl items-center justify-center py-2">
-              Informacion de servicios
+              {t("Ship_service")}
             </b>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Servicio
+                    {t("Servicio")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Additional Service Name
+                  {t("Ship_nameService")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Additional Service Description
+                  {t("Ship_dataAvailable")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Disponibilidad
+                  {t("Ship_availability")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ID Tipo de Envio
+                  {t("Ship_typeId")}
                   </th>
                 </tr>
               </thead>
@@ -372,7 +374,7 @@ const Ship = () => {
                 {additionalServicesData.length === 0 && (
                   <tr key="no-additional-services-data">
                     <td colSpan={3} className="px-6 py-4 text-center">
-                      No additional services data available
+                      {t("Ship_noAdditional")}
                     </td>
                   </tr>
                 )}

@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const OrderInfo = ({userInfo}: any) => {
+  const {t} = useTranslation()
   console.log(userInfo);
   const [formData, setFormData] = useState({
     orderId: "",
@@ -38,10 +40,10 @@ const OrderInfo = ({userInfo}: any) => {
           borderRadius: "8px",
         }}
       >
-        <h2>Llene sus datos:</h2>
+        <h2>{t("Order_details")}</h2>
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Order ID</label>
+            <label>{t("Order_id")}</label>
             <input
               type="text"
               name="orderId"
@@ -51,7 +53,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>Gift Card ID (opcional)</label>
+            <label>{t("Order_gift")}</label>
             <input
               type="text"
               name="giftCardId"
@@ -60,7 +62,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>Country</label>
+            <label>{t("Cart_Country")}</label>
             <input
               type="text"
               name="country"
@@ -70,7 +72,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>Frecuencia (opcional)</label>
+            <label>{t("Order_frequency")}</label>
             <input
               type="text"
               name="frecuency"
@@ -79,7 +81,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>Phone</label>
+            <label>{t("Cart_phone")}</label>
             <input
               type="text"
               name="phone"
@@ -89,7 +91,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>Street</label>
+            <label>{t("Cart_street")}</label>
             <input
               type="text"
               name="street"
@@ -99,7 +101,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>Number</label>
+            <label>{t("Cart_number")}</label>
             <input
               type="text"
               name="number"
@@ -109,7 +111,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>City</label>
+            <label>{t("Cart_city")}</label>
             <input
               type="text"
               name="city"
@@ -119,7 +121,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>State</label>
+            <label>{t("Cart_state")}</label>
             <input
               type="text"
               name="state"
@@ -129,7 +131,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>Postal Code</label>
+            <label>{t("Cart_code")}</label>
             <input
               type="text"
               name="postalCode"
@@ -139,7 +141,7 @@ const OrderInfo = ({userInfo}: any) => {
             />
           </div>
           <div>
-            <label>Shipment Country</label>
+            <label>{t("Order_shipment")}</label>
             <input
               type="text"
               name="shipmentCountry"
@@ -148,7 +150,7 @@ const OrderInfo = ({userInfo}: any) => {
               required
             />
           </div>
-          <button type="submit">Enviar</button>
+          <button type="submit">{t("Send")}</button>
         </form>
       </div>
     </>

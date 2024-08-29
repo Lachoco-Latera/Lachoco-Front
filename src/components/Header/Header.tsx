@@ -4,6 +4,7 @@ import useFromStore from "../../hooks/useFromStore";
 import SearchExampleStandard from "../Searchbar/Searchbar";
 import logo from "../../assets/images/logo.png";
 import tinyLogo from "../../assets/images/tinyLogo.png";
+import { useTranslation } from "react-i18next";
 
 import { Product } from "@/types.d";
 import {
@@ -38,8 +39,10 @@ async function hashPassword(password: string): Promise<string> {
 
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
+  const giftCard = useFromStore(useCartStore, (state) => state.giftCards)
   const { isSignedIn, user, isLoaded } = useUser();
   const [userCountry, setUserCountry] = useState<string>("");
+  const {t} = useTranslation()
 
   const navigate = useNavigate();
   const promise = () =>
@@ -252,9 +255,9 @@ export default function Header({ onCartIconClick }: Props) {
           <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-4">
-          {isSignedIn == true &&
+          {(isSignedIn == true &&
           user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
-          isLoaded ? (
+          isLoaded) || isSignedIn === false ? (
             <button
               type="button"
               title="Suscribete"
@@ -264,15 +267,15 @@ export default function Header({ onCartIconClick }: Props) {
               hover:scale-110 transition-all ease shadow hidden md:block"
               onClick={() =>
                 toast.promise(promise, {
-                  loading: `Serás redireccionado para suscribirte...`,
+                  loading: t("Toast_suscribe"),
                   success: () => {
-                    return `Muchas gracias de antemano! ❤`;
+                    return t("Toast_thanks");
                   },
                   error: "Error",
                 })
               }
             >
-              ¡Suscribete!
+              {t("Subscribe")}
             </button>
           ) : null}
           <div className="relative  hidden md:block"></div>
@@ -312,7 +315,7 @@ export default function Header({ onCartIconClick }: Props) {
               >
                 <FiShoppingCart size={24} />
                 <div className="text-white rounded-full bg-gray-700 w-5 h-5 text-sm -ml-[0.7em] -mt-5">
-                  {cart?.length}
+                  {(cart?.length || 0) + (giftCard?.length || 0)}
                 </div>
               </button>
             </div>

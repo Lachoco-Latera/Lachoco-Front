@@ -6,10 +6,12 @@ import Drawer from "../Drawer";
 import Cart from "../minicart/Cart";
 import { MdFavoriteBorder } from "react-icons/md";
 import { VITE_BASE_URL } from "@/config/envs";
+import { useTranslation } from "react-i18next";
 
 const Favorites = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [info, setInfo] = useState<any>(null);
+  const {t} = useTranslation()
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -50,10 +52,10 @@ const Favorites = () => {
         {info ? (
           <p className="flex flex-row gap-2 justify-center items-center">
             <MdFavoriteBorder size={28} />
-            Lista de favoritos!
+            {t("Fav_list")}
           </p>
         ) : (
-          <div>Loading...</div>
+          <div>{t("Loading")}</div>
         )}
       </div>
     </>

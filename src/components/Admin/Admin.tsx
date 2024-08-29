@@ -14,11 +14,14 @@ import {
 } from "react-icons/ai"; // Importa los íconos
 import { IoMenu } from "react-icons/io5";
 
+import { Footer } from "../Footer/Footer";
 import Header from "../Header/Header";
 import { products } from "../../mocks/data";
 import AdminBottomBar from "../AdminBottomBar/AdminBottomBar";
+import { useTranslation } from "react-i18next";
 
 export const Admin = () => {
+  const {t} = useTranslation()
   const [state, setState] = useState<string>();
   const [selectedOption] = useState<string>("");
   const [showExtraButtons, setShowExtraButtons] = useState<boolean>(false);
@@ -28,7 +31,7 @@ export const Admin = () => {
   const [deleteItem, setDeleteItem] = useState(false);
   const buttonConfig = [
     {
-      label: "Gestión Sabores",
+      label:t("Admin_Flavor"),
       state: "gestionSaboresDisponibles",
       component: (
         <GestionSaboresDisponibles
@@ -39,7 +42,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Gestión Productos",
+      label:t("Admin_Product"),
       state: "gestionImgProductos",
       component: (
         <GestionProductos
@@ -49,7 +52,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Gestión de Órdenes",
+      label:t("Admin_order"),
       state: "gestionOrdenCompra",
       component: (
         <GestionOrdenCompra
@@ -59,7 +62,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Gestión Favoritos",
+      label:t("Admin_favorites"),
       state: "gestionFavoritos",
       component: (
         <GestionFavoritos
@@ -69,7 +72,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Cupones y Descuentos",
+      label:t("Admin_coupons"),
       state: "gestionCuponesDesc",
       component: (
         <GestionCuponesDesc
@@ -79,7 +82,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Reviews y Calificaciones",
+      label:t("Admin_reviews"),
       state: "gestionReviwsCalif",
       component: (
         <GestionReviwsCalif
@@ -89,7 +92,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Redes Sociales",
+      label:t("Admin_social"),
       state: "gestionRedesSociales",
       component: (
         <GestionRedesSociales
@@ -99,7 +102,7 @@ export const Admin = () => {
       ),
     },
     {
-      label: "Info de empresa",
+      label:t("Admin_info"),
       state: "gestionPPyDatosEmpresa",
       component: (
         <GestionPPyDatosEmpresa
@@ -228,6 +231,7 @@ export const Admin = () => {
       <div className="block md:hidden">
         <AdminBottomBar onCartIconClick={handleCartIconClick}></AdminBottomBar>
       </div>
+      <Footer/>
     </>
   );
 };

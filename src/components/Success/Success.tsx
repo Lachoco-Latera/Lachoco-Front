@@ -3,6 +3,7 @@ import tinyLogo from "../../assets/images/tinyLogo.png";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../../stores/useCartStore"; // Asegúrate de ajustar la ruta de importación
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const Success = () => {
   const location = useLocation();
@@ -15,6 +16,7 @@ const Success = () => {
   const merchantOrderId = queryParams.get("merchant_order_id");
   const preferenceId = queryParams.get("preference_id");
   const { clearCart } = useCartStore();
+  const {t} = useTranslation()
 
   // Limpia el carrito cuando el componente se monta
   useEffect(() => {
@@ -31,41 +33,41 @@ const Success = () => {
           onClick={() => navigate("/inventory")}
         />
         <h1 className="text-3xl font-bold text-rose-600 mb-4">
-          ¡Gracias por tu compra!
+          {t("Success_thanks")}
+          {t("")}
         </h1>
         <p className="text-lg text-gray-700 mb-2">
-          Tu compra ha sido aprobada con éxito.
+        {t("Success_approved")}
         </p>
-        <p className="text-md text-gray-600">Detalles de la transacción:</p>
+        <p className="text-md text-gray-600">{t("Success_transaction")}</p>
         <ul className="list-disc list-inside text-gray-600">
           <li>
-            <strong>ID de Pago:</strong> {paymentId}
+            <strong>{t("Success_id")}</strong> {paymentId}
           </li>
           <li>
-            <strong>ID de Colección:</strong> {collectionId}
+            <strong>{t("Success_id2")}</strong> {collectionId}
           </li>
           <li>
-            <strong>ID de Orden de Comerciante:</strong> {merchantOrderId}
+            <strong>{t("Success_id3")}</strong> {merchantOrderId}
           </li>
           <li>
-            <strong>ID de Preferencia:</strong> {preferenceId}
+            <strong>{t("Success_id4")}</strong> {preferenceId}
           </li>
           <li>
-            <strong>Estado del pago:</strong> {paymentStatus}
+            <strong>{t("Success_payment")}</strong> {paymentStatus}
           </li>
           <li>
-            <strong>Tipo de Pago:</strong> {paymentType}
+            <strong>{t("Success_payment2")}</strong> {paymentType}
           </li>
         </ul>
         <p className="text-md text-gray-600 mt-4">
-          Nos alegra que hayas elegido comprar con nosotros. ¡Esperamos verte de
-          nuevo pronto!
+        {t("Success_msj")}
         </p>
         <small
           className="hover:cursor-pointer hover:scale-105 hover:font-bold transition-all ease py-6"
           onClick={() => navigate("/inventory")}
         >
-          Haz click aquí o al Logo para ir a tu inventario, o cierra está página
+         {t("Success_click")}
         </small>
       </div>
     </div>

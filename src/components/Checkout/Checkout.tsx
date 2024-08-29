@@ -1,5 +1,6 @@
 // import { toast } from "sonner";
 import { useCartStore } from "../../stores/useCartStore";
+import { useTranslation } from "react-i18next";
 
 const Checkout = ({
   id,
@@ -14,9 +15,12 @@ const Checkout = ({
   openCartModal,
 }: any) => {
   const { cart } = useCartStore();
+  
   const addToCart = useCartStore((state) => state.addToCart);
   console.log(productName);
+
   const isCartItem = cart.some((item) => item.id === id);
+
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (!isCartItem) {
@@ -24,6 +28,8 @@ const Checkout = ({
     }
     openModal();
   };
+
+  const {t} =useTranslation()
 
   return (
     <div
@@ -37,7 +43,7 @@ const Checkout = ({
       "
       onClick={() => openModal()}
     >
-      <h2 className="text-xl font-bold">Precio Individual</h2>
+      <h2 className="text-xl font-bold">{t("Individual_Price")}</h2>
       <div>
         $ {price} {currency}
       </div>
@@ -54,7 +60,7 @@ const Checkout = ({
               hover:scale-105 hover:font-bold text-xl
               cursor-pointer transition-all ease"
           >
-            Seleccionar sabores
+            {t("Select_flavors")}
           </button>
         ) : (
           <>
@@ -69,7 +75,7 @@ const Checkout = ({
                   cursor-pointer transition-all ease"
                 onClick={openCartModal}
               >
-                Ordernar ahora
+                {t("Order_now")}
               </button>
             ) : (
               <button
@@ -81,7 +87,7 @@ const Checkout = ({
                   cursor-pointer transition-all ease"
                 onClick={(e) => handleAddToCart(e)}
               >
-                Agregar
+                {t("Add")}
               </button>
             )}
           </>

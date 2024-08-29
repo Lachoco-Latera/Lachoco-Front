@@ -13,6 +13,7 @@ import "./index.css"; // Añade esta línea para los estilos CSS del loading
 import { useUser } from "@clerk/clerk-react";
 import logo from "./assets/images/logo.png";
 import { VITE_BASE_URL } from "./config/envs";
+import { useTranslation } from "react-i18next";
 
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -21,6 +22,7 @@ function App() {
   const [loading, setLoading] = useState(true); // Estado de carga
   const { isLoaded, user } = useUser();
   const [isFooterVisible, setIsFooterVisible] = useState(false); // Estado para la visibilidad del Footer
+  const {t} = useTranslation()
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   const { fetchData } = useProductsStore();
@@ -131,10 +133,10 @@ function App() {
                 const loadingText = document.getElementById("loading-text");
                 if (loadingText) {
                   loadingText.innerText =
-                    "Esto está tardando más de lo esperado, Hacer click al logo para reintentar";
+                    t("App_retry");
                 }
               }, 7000);
-              return <span id="loading-text">Buscando productos...</span>;
+              return <span id="loading-text">{t("searchProducts")}</span>;
             })()}
           </div>
         </div>
@@ -154,7 +156,7 @@ function App() {
           />
           <div
             id="footer"
-            className={`md:fixed w-full md:bottom-0 transition-opacity -z-[1] ${
+            className={`md:fixed w-full md:bottom-0 transition-opacity ${
               isFooterVisible ? "opacity-100" : "opacity-0"
             }`}
           >

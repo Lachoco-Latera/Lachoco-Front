@@ -1,14 +1,16 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
 
 export const DatosEmpresa: React.FC = () => {
+    const {t} = useTranslation()
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center">
-        <h1>Información de la empresa:</h1>
-        <h2>Tiempo de Chocolatear</h2>
-        <h2>Contacto: ventas@lachoco-latera.com</h2>
+        <h1>{t("Company_info")}</h1>
+        <h2>{t("Company_time")}</h2>
+        <h2>{t("contact")}ventas@lachoco-latera.com</h2>
         
         <div>
-            <h2>Tiendas Físicas</h2>
+            <h2>{t("Company_store")}</h2>
             <p>Lachoco Latera | Segovia</p>
             <p>Segovia, España</p>
             <p>+34 634089473 (text link a whatsapp)</p>
@@ -25,14 +27,14 @@ export const DatosEmpresa: React.FC = () => {
         </div>
         
         <div>
-            <h2>Horarios:</h2>
-            <p>Lunes a Jueves 01:30 PM - 08:00 PM</p>
-            <p>Viernes y Sábado 01:30 PM - 09:00 PM</p>
-            <p>Domingos y Festivos 01:30 PM - 07:30 PM</p>
+            <h2>{t("Company_hours")}</h2>
+            <p>{t("Company_days")} 01:30 PM - 08:00 PM</p>
+            <p>{t("Company_days")} 01:30 PM - 09:00 PM</p>
+            <p>{t("Company_days3")} 01:30 PM - 07:30 PM</p>
         </div>
         
         <div>
-            <h2>Notas de Prensa:</h2>
+            <h2>{t("Company_press")}</h2>
             <ul>
                 <li><a href="https://www.elespectador.com/entretenimiento/gente/con-sabor-a-chocolate-238588/">Con sabor a chocolate.</a></li>
                 <li><a href="https://thecitypaperbogota.com/dining/bakeries-cafes/for-love-of-chocolate/">For love of chocolate</a></li>

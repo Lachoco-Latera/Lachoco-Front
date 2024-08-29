@@ -4,6 +4,7 @@ import { GridColumn, Search, Grid, SearchProps } from "semantic-ui-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { VITE_BASE_URL } from "@/config/envs";
+import { useTranslation } from "react-i18next";
 
 const initialState = {
   loading: false,
@@ -30,6 +31,7 @@ function SearchExampleStandard() {
   const [state, dispatch] = React.useReducer(exampleReducer, initialState);
   const { loading, results, value } = state;
   const [products, setProducts] = useState([]);
+  const { t } = useTranslation()
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const navigate = useNavigate();
 
@@ -112,7 +114,7 @@ function SearchExampleStandard() {
           fluid
           category
           loading={loading}
-          placeholder="¿Qué quieres probar?"
+          placeholder={t("Search")}
           onResultSelect={(e, data) => {
             dispatch({
               type: "UPDATE_SELECTION",

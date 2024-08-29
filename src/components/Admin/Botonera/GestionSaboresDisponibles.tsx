@@ -3,6 +3,7 @@ import axios from "axios";
 import { IFlavor } from "../../../helpers/type";
 import { toast } from "sonner";
 import { VITE_BASE_URL } from "@/config/envs";
+import { useTranslation } from "react-i18next";
 
 export const GestionSaboresDisponibles = ({
   signal,
@@ -20,6 +21,7 @@ export const GestionSaboresDisponibles = ({
     stock: 0,
   });
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const {t} = useTranslation()
 
   useEffect(() => {
     if (signal) {
@@ -180,7 +182,7 @@ export const GestionSaboresDisponibles = ({
                 onSubmit={handleSubmitEdit}
                 className="w-[500px] h-[300px] flex flex-col justify-evenly items-center"
               >
-                <h2 className="font-bold text-xl">Editar sabor seleccionado</h2>
+                <h2 className="font-bold text-xl">{t("Management_select")}</h2>
                 <input
                   type="text"
                   placeholder="Nombre del sabor"
@@ -205,7 +207,7 @@ export const GestionSaboresDisponibles = ({
                 duration-400 bg-green-500 hover:bg-green-900
                  hover:text-green-500 m-3 capitalize hover:scale-105 transition-all ease"
                 >
-                  Guardar Cambios
+                  {t("Management_save")}
                 </button>
               </form>
             ) : (
@@ -213,7 +215,7 @@ export const GestionSaboresDisponibles = ({
                 onSubmit={handleOnSubmit}
                 className="w-[500px] h-[300px] flex flex-col justify-evenly items-center"
               >
-                <h2 className="font-bold text-xl">Agregar nuevo sabor</h2>
+                <h2 className="font-bold text-xl">{t("Management_new")}</h2>
                 <input
                   type="text"
                   placeholder="Nombre del sabor"
@@ -232,7 +234,7 @@ export const GestionSaboresDisponibles = ({
                   className="p-2 border rounded-md"
                 />
                 <button className="w-2/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-green-500 hover:bg-green-900 hover:text-green-500 m-3 capitalize hover:scale-105 transition-all ease">
-                  Agregar
+                  {t("Add")}
                 </button>
               </form>
             )}
@@ -247,20 +249,20 @@ export const GestionSaboresDisponibles = ({
               key={flavor.id}
               className="w-[300px] min-h-[350px] flex flex-col justify-evenly px-4 rounded-xl bg-white shadow-xl hover:shadow-xl transition-all ease hover:scale-105"
             >
-              <h2 className="font-bold">Sabor: {flavor.name}</h2>
+              <h2 className="font-bold">{t("flavor")} {flavor.name}</h2>
               <p className="font-bold">Stock: {flavor.stock}</p>
               <div className="w-full flex justify-center items-center">
                 <button
                   className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-red-500 hover:bg-red-900 hover:text-red-500 m-3 capitalize hover:scale-105 transition-all ease"
                   onClick={() => handleButtonDelete(flavor.id || undefined)}
                 >
-                  Eliminar
+                  {t("Management_delet")}
                 </button>
                 <button
                   className="w-1/3 h-[40px] xl:text-xl text-white p-1 block rounded-2xl font-semibold duration-400 bg-blue-500 hover:bg-blue-900 hover:text-blue-500 m-3 capitalize hover:scale-105 transition-all ease"
                   onClick={() => handleButtonEdit(flavor)}
                 >
-                  Editar
+                  {t("Management_edit")}
                 </button>
               </div>
             </div>

@@ -183,6 +183,11 @@
     "Toast_savedFlavor":"Flavor selection saved for",
     "Toast_check":"Please check remaining flavors, OR select as many flavors as you can before saving.",
     "Toast_removed":"Flavors removed for",
+    "processing_order": "Processing order...",
+    "order_processed_successfully": "Order processed successfully",
+    "error_creating_order": "Error creating payment order",
+    "order_id_is_invalid": "The order ID is invalid",
+    "please_access_to_payment": "Please access to the payment page",
 
     "what_do_you_want_to_try": "What do you want to try?",
 

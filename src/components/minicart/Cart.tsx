@@ -26,8 +26,31 @@ function Cart({ similar }: any) {
   const [actualLink, setActualLink] = useState("");
   const [infoModal, setInfoModal] = useState(false);
   const [useCustomMap, setUseCustomMap] = useState(false);
+  const [defineShipping, setDefineShipping] = useState(false);
+  const [shippingInfo, setShippingInfo] = useState({
+    carrier: "",
+    deliveryEstimate: "",
+    totalPrice: 0,  // Precio total del envío
+    service: "",  // Servicio de envío
+  });
   const {t} = useTranslation()
+  const [formData, setFormData] = useState({
+    orderId: orderCreatedId || "",
+    giftCardId: "",
+    country: "",
+    frecuency: "",
+    phone: "",
+    street: "",
+    number: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    shipmentCountry: "COL",
+  });
+
   const userEmail = user?.primaryEmailAddress?.emailAddress;
+  const userFullname = user?.fullName;
+
   similar;
   // const navigate = useNavigate();
   useEffect(() => {
@@ -196,6 +219,7 @@ function Cart({ similar }: any) {
     });
 
     const requestPayment = async (paymentData: Record<string, any>) => {
+      console.log("paymentData", paymentData);
       return axios.post(`${VITE_BASE_URL}/pagos/create-checkout-session`, paymentData)
       .then((paymentResponse) => {
         console.log(
@@ -264,6 +288,8 @@ function Cart({ similar }: any) {
       }
 
       if (globalOrderId !== "" && globalOrderId.length !== 0) {
+
+        console.log("userFullname", globalOrderId);
         toast.promise(
           requestPayment(paymentData), 
         {
@@ -277,14 +303,15 @@ function Cart({ similar }: any) {
     }
   }
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async() => {
+    console.log("formData", formData);
     const {orderId, shipmentCountry, giftCardId, frecuency,...rest} = formData;
-    const paymentData: any = {
+    let paymentData: any = {
       orderId: orderCreatedId,
       country: "COL",
     };
     if(Object.values(rest).every(value => value !== "")) {
-      paymentData.order = {
+      paymentData = {...paymentData,
         phone: rest.phone,
         number: rest.number,
         street: rest.street,
@@ -293,6 +320,8 @@ function Cart({ similar }: any) {
         postalCode: rest.postalCode,
         shipmentCountry: shipmentCountry || "COL",
       }
+
+      console.log("paymentData", paymentData.order);
     }
     if (giftCardId) {
       paymentData.order.giftCardId = giftCardId;
@@ -331,19 +360,7 @@ function Cart({ similar }: any) {
       }
   };
 
-  const [formData, setFormData] = useState({
-    orderId: orderCreatedId || "",
-    giftCardId: "",
-    country: "",
-    frecuency: "",
-    phone: "",
-    street: "",
-    number: "",
-    city: "",
-    state: "",
-    postalCode: "",
-    shipmentCountry: "COL",
-  });
+
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -471,6 +488,14 @@ const handleClickPlaceOrder = () => {
           </span>
         )}
       </div>
+      {defineShipping?(
+        <div className="flex rounded-xl p-2 mt-2 justify-center text-black-300  hover:text-red-500 hover:scale-105 transition-all ease">
+          <span>{`Transportadora: ${shippingInfo.carrier}`}</span>
+          <span>{`Tiempo estimado: ${shippingInfo.deliveryEstimate}`}</span>
+          <span>{`Valor: ${shippingInfo.totalPrice}`}</span>
+          <span>{`Servicio: ${shippingInfo.service}`}</span>
+        </div>
+      ):null}
       <div
         className="flex justify-between items-center mt-4 "
         onMouseEnter={() => setShowTooltip(true)}
@@ -485,6 +510,7 @@ const handleClickPlaceOrder = () => {
           ${total.toFixed(2)}
         </span>
       </div>
+
       {!handleUpdateFlavors() ? (
         <div className="flex rounded-xl p-2 mt-2 shadow justify-center text-red-300  hover:text-red-500 hover:scale-105 transition-all ease">
           <button
@@ -538,6 +564,7 @@ const handleClickPlaceOrder = () => {
           </>
         </>
       )}
+
       {infoModal ? (
         <>
           <div className="bg-white p-5 mt-5 z-50 shadow-md rounded-xl">

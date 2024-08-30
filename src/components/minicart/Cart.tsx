@@ -298,6 +298,28 @@ function Cart({ similar }: any) {
       paymentData.order.giftCardId = giftCardId;
     }
     if (orderCreatedId !== "" && orderCreatedId.length !== 0) {
+      console.log("userFullname", userFullname);
+      let shippingData={
+        user: {
+          name: userFullname,
+          company:"",
+          email: userEmail,
+          phone: paymentData.phone,
+          street: paymentData.street,
+          number: paymentData.number,
+          city: "Medellin",
+          state: "Antioquia",
+          country: "Colombia",
+          postalCode: paymentData.postalCode,
+        },
+        country: "CO",
+        carrier: "tcc"
+      }
+
+      const response = await axios.post(`${VITE_BASE_URL}/shipments/rate`, shippingData)
+      console.log("responseShipping", response);
+      setShippingInfo(response.data.data[0]);
+      setDefineShipping(true);
       toast.promise(requestPayment(paymentData),
       {
         loading: t("processing_order"),

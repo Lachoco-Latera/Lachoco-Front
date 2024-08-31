@@ -27,12 +27,11 @@ function Cart({ similar }: any) {
   const [infoModal, setInfoModal] = useState(false);
   const [useCustomMap, setUseCustomMap] = useState(false);
   const [defineShipping, setDefineShipping] = useState(false);
-  const [shippingInfo, setShippingInfo] = useState({
-    carrier: "",
-    deliveryEstimate: "",
-    totalPrice: 0,  // Precio total del envío
-    service: "",  // Servicio de envío
-  });
+  const [shippingInfo, setShippingInfo] = useState<any[]>([]);
+
+  const shippingLocal= JSON.parse(localStorage.getItem("shippingInfo") || "[]");
+  const shippingInfo2: any[] = [];
+  let shippingFlat: any[] = [];
   const {t} = useTranslation()
   const [formData, setFormData] = useState({
     orderId: orderCreatedId || "",
@@ -328,7 +327,10 @@ function Cart({ similar }: any) {
     }
     if (orderCreatedId !== "" && orderCreatedId.length !== 0) {
       console.log("userFullname", userFullname);
-      let shippingData={
+      const carriers = ["coordinadora", "interRapidisimo", "servientrega"];
+
+      for (let i = 0; i < carriers.length; i++) {
+      const shippingData={
         user: {
           name: userFullname,
           company:"",
@@ -342,13 +344,21 @@ function Cart({ similar }: any) {
           postalCode: paymentData.postalCode,
         },
         country: "CO",
-        carrier: "tcc"
+        carrier: carriers[i],
       }
 
       const response = await axios.post(`${VITE_BASE_URL}/shipments/rate`, shippingData)
-      console.log("responseShipping", response);
-      setShippingInfo(response.data.data[0]);
-      setDefineShipping(true);
+      console.log("responseShipping", response.data);
+      // setShippingInfo([...shippingInfo,response.data]);
+      shippingInfo2.push(response.data);
+      console.log("shippingInfo2", shippingInfo2);
+    }
+    shippingFlat=shippingInfo2.flat();
+    console.log("shippingFlat", shippingFlat);
+    window.localStorage.setItem("shippingInfo", JSON.stringify(shippingFlat));
+    setShippingInfo(shippingFlat);
+    console.log("shippingInfo", shippingInfo);
+    setDefineShipping(true);
       toast.promise(requestPayment(paymentData),
       {
         loading: t("processing_order"),
@@ -489,13 +499,26 @@ const handleClickPlaceOrder = () => {
         )}
       </div>
       {defineShipping?(
-        <div className="flex rounded-xl p-2 mt-2 justify-center text-black-300  hover:text-red-500 hover:scale-105 transition-all ease">
-          <span>{`Transportadora: ${shippingInfo.carrier}`}</span>
-          <span>{`Tiempo estimado: ${shippingInfo.deliveryEstimate}`}</span>
-          <span>{`Valor: ${shippingInfo.totalPrice}`}</span>
-          <span>{`Servicio: ${shippingInfo.service}`}</span>
+
+        <div className="flex-column justify-between items-center gap-4 mb-2 shadow-md p-4" >
+                <div className="flex items-center gap-8 md:flex-row flex-col md:text-start text-center hover:cursor-pointer">
+                  <h3 className=" font-semibold text-base w-full">Transportadora</h3>
+                  <h3 className=" font-semibold text-base w-3/4">Tiempo estimado</h3>
+                  <h3 className=" font-semibold text-base w-2/3">Valor</h3>
+                  <h3 className=" font-semibold text-base w-3/4">Servicio</h3>
+                </div>
+          {shippingLocal.map((item,index) => 
+              <div key={index} className="flex items-center gap-8 m-4 p-2 md:flex-row flex-col md:text-start text-center hover:cursor-pointer border border-black border-solid border-1 rounded">
+                  <h3 className=" text-base w-full">{item.carrier}</h3>
+                  <h3 className=" text-base w-3/4">{item.deliveryEstimate}</h3>
+                  <h3 className=" text-base w-2/3">{item.totalPrice}</h3>
+                  <h3 className=" text-base w-3/4">{item.service}</h3>
+              </div>
+          )}
+
         </div>
-      ):null}
+      ):null
+      }
       <div
         className="flex justify-between items-center mt-4 "
         onMouseEnter={() => setShowTooltip(true)}

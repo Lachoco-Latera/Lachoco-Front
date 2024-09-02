@@ -225,10 +225,10 @@ function Cart({ similar }: any) {
       }, 1100);
     });
 
-  const requestPayment = async (paymentData: Record<string, any>) => {
+  const requestPayment = async (paymentData: Record<string, any>, shippingPrice: Record<string, any>) => {
     console.log("paymentData", paymentData);
     return axios
-      .post(`${VITE_BASE_URL}/pagos/create-checkout-session`, paymentData)
+      .post(`${VITE_BASE_URL}/pagos/create-checkout-session`, {...paymentData, shippingPrice})
       .then((paymentResponse) => {
         console.log(
           "Respuesta de pago:",
@@ -378,7 +378,7 @@ function Cart({ similar }: any) {
       setDefineShipping(true);
       const shippingPrice = shippingLocal.totalPrice;
 
-      toast.promise(requestPayment({...paymentData, shippingPrice}), {
+      toast.promise(requestPayment(paymentData, shippingPrice), {
         loading: t("processing_order"),
         success: t("order_processed_successfully"),
         error: t("error_creating_order"),

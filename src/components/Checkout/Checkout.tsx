@@ -23,9 +23,9 @@ const Checkout = ({
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    if (!isCartItem) {
-      addToCart(product);
-    }
+   // if (!isCartItem) {
+   //   addToCart(product);
+    //}
     openModal();
   };
 

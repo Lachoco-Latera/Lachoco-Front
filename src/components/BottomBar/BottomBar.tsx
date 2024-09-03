@@ -22,7 +22,6 @@ interface Props {
 export default function BottomBar({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
   const { isSignedIn, user, isLoaded } = useUser();
-  console.log(user)
   const navigate = useNavigate();
   const promise = () =>
     new Promise((resolve) =>

@@ -296,7 +296,7 @@ export default function Header({ onCartIconClick }: Props) {
               <div className="relative  hidden md:block">
                 <button
                   type="button"
-                  title="Favoritos"
+                  title="Lista de Ordenes"
                   className="text-gray-800 text-xl flex items-center hover:scale-110 transition-all ease"
                   onClick={() => navigate("/inventory")}
                 >

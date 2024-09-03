@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom";
 import idioma from "../../assets/images/idioma.svg";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../hooks/LanguageContext";
+import { DatosEmpresa } from "./DatosEmpresa";
 
 export const Footer = () => {
   const [monedaState, setMonedaState] = useState(false);
@@ -34,7 +35,7 @@ export const Footer = () => {
 
               <li>
                 <a
-                  href="#"
+                  href="/company-info"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
                   {t("company_info")}
@@ -42,7 +43,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="privacy-policy"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
                   {t("privacy_policy")}
@@ -64,17 +65,17 @@ export const Footer = () => {
             </ul>
             <ul className="flex justify-center items-center md:py-0 py-4">
               <li>
-                <a href="#" className="hover:underline">
+                <a href="https://www.facebook.com/LachocoLateraChocolateria/" className="hover:underline">
                   <img src={logo1} alt="" className="me-4 w-8" />
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <a href="https://api.whatsapp.com/send?phone=573012985389" className="hover:underline">
                   <img src={logo2} alt="" className="me-4 w-8" />
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <a href="https://www.instagram.com/lachoco_latera/" className="hover:underline">
                   <img src={logo3} alt="" className="me-4 w-8" />
                 </a>
               </li>

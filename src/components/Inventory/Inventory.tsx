@@ -14,6 +14,7 @@ import { SlHeart } from "react-icons/sl";
 import { FaStar } from "react-icons/fa";
 import { VITE_BASE_URL } from "@/config/envs";
 import { useTranslation } from "react-i18next";
+import ItemGiftCard from "./ItemGiftCard";
 // import { useCartStore } from "../../stores/useCartStore";
 // import { MdAddShoppingCart } from "react-icons/md";
 
@@ -22,6 +23,7 @@ const Inventory = ({ onCartIconClick }: any) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [info, setInfo] = useState<any>(null);
   const [products, setProducts] = useState<any>([]);
+  const [giftCards, setGiftCards] = useState<any>([]);
   const [modalProduct, setModalProduct] = useState<any | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [hoveredOrderId, setHoveredOrderId] = useState<string | null>(null);
@@ -35,7 +37,7 @@ const Inventory = ({ onCartIconClick }: any) => {
   const { t } = useTranslation();
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
-
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -60,16 +62,29 @@ const Inventory = ({ onCartIconClick }: any) => {
         setInfo(filteredOrders);
 
         // Extract products from the filtered orders
-        const allProducts = filteredOrders.flatMap((order: any) =>
-          order.orderDetail.orderDetailProducts.map((product: any) => ({
+        const allProducts = filteredOrders.flatMap((order: any) => {
+          const rest = order.orderDetail.orderDetailProducts.map((product: any) => ({
             ...product.product,
             quantity: product.cantidad,
             pickedFlavors: product.pickedFlavors,
             orderId: order.id,
           }))
-        );
-
+          
+          return rest
+        }
+      );
+      const allGiftsCards = filteredOrders.flatMap((order: any) => {
+        return order.orderDetail.orderDetailGiftCards.map((gift:any) => ({
+          ...gift.giftCard,
+          quantity: 1,
+          orderId: order.id,
+          img: [gift.giftCard.img],
+        }
+        ))
+      })
+      
         setProducts(allProducts);
+        setGiftCards(allGiftsCards);
       } catch (err) {
         console.error(err);
       }
@@ -124,7 +139,6 @@ const Inventory = ({ onCartIconClick }: any) => {
       {t("Loading")}
     </div>
   );
-  console.log(info);
   return (
     <>
       <Header onCartIconClick={handleCartIconClick} products={info} />
@@ -300,6 +314,15 @@ const Inventory = ({ onCartIconClick }: any) => {
                 </div>
               </div>
             ))}
+            <ItemGiftCard 
+              info={info}
+              products={giftCards}
+              handleMouseEnter={handleMouseEnter}
+              handleMouseLeave={handleMouseLeave}
+              handleImageClick={handleImageClick}
+              hoveredOrderId={hoveredOrderId}
+              handleCopyOrderId={handleCopyOrderId}
+            />
           </div>
 
           {showModal && (

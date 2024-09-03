@@ -1,10 +1,72 @@
-import React from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
+import Header from "../Header/Header";
+import { Footer } from "./Footer";
+import Drawer from "../Drawer";
+import Cart from "../minicart/Cart";
+import { Product } from "@/types";
 
 export const DatosEmpresa: React.FC = () => {
+
+    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+
+    const handleCartIconClick = () => {
+        setIsDrawerOpen(!isDrawerOpen);
+      };
+
     const {t} = useTranslation()
+
+    const products: Product[] = [ 
+        {
+          id: "1",
+          name: "Product 1",
+          presentacion: 0,
+          description: "Descripción del producto 1",
+          quantity: 1,
+          category: {
+            id: "1",
+            name: "Category 1",
+            icon: 1,
+          },
+          price: "100",
+          currency: "USD",
+          label: "Nuevo",
+          isActive: true,
+          flavors: [
+            {
+              id: "1",
+              name: "Flavor 1",
+              stock: 1,
+            },
+            {
+              id: "2",
+              name: "Flavor 2",
+              stock: 1,
+            },
+          ],
+          images: [
+            {
+              id: "1",
+              img: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+              https: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+            },
+            {
+              id: "2",
+              img: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+              https: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+            },
+          ],
+        }
+      ]
+
   return (
+    <>
+    <Header onCartIconClick={handleCartIconClick}  products={products}/>
+    <Drawer isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}>
+          <Cart similar={'1234'} />
+        </Drawer>
     <div className="w-full min-h-screen flex flex-col items-center justify-center">
+
         <h1>{t("Company_info")}</h1>
         <h2>{t("Company_time")}</h2>
         <h2>{t("contact")}ventas@lachoco-latera.com</h2>
@@ -44,13 +106,8 @@ export const DatosEmpresa: React.FC = () => {
                 <li><a href="https://www.eltiempo.com/archivo/documento/MAM-4779851">Los chocolates de Marcela</a></li>
             </ul>
         </div>
-        
-        
-
-
-        
-
-
-    </div>
+   </div>
+        <Footer/> 
+   </>
   )
 }

@@ -26,7 +26,7 @@ export const Admin = () => {
   const [selectedOption] = useState<string>("");
   const [showExtraButtons, setShowExtraButtons] = useState<boolean>(false);
   const [, setRefreshFlavors] = useState(false);
-  const [signal, setSignal] = useState(false);
+  const [signal, setSignal] = useState(true);
   const [loading, setLoading] = useState(false);
   const [deleteItem, setDeleteItem] = useState(false);
   const buttonConfig = [

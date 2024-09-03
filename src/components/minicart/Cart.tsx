@@ -10,6 +10,7 @@ import { useUser } from "@clerk/clerk-react";
 import { VITE_BASE_URL, VITE_FRONTEND_URL } from "@/config/envs";
 import CartItemGiftCard from "../GiftCards/CartItemGiftCard";
 import { useTranslation } from "react-i18next";
+import ShippingProvider from "../ShippingProvider/ShippingProvider";
 
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors, giftCards } = useCartStore();
@@ -26,16 +27,43 @@ function Cart({ similar }: any) {
   const [actualLink, setActualLink] = useState("");
   const [infoModal, setInfoModal] = useState(false);
   const [useCustomMap, setUseCustomMap] = useState(false);
-  const {t} = useTranslation()
+  const [defineShipping, setDefineShipping] = useState(false);
+  const [shippingInfo, setShippingInfo] = useState<any[]>([]);
+
+  const shippingLocal = JSON.parse(
+    localStorage.getItem("shippingInfo") || "[]"
+  );
+
+  const shippingPrice = JSON.parse(
+    localStorage.getItem("shippingPrice") || "0"
+  );
+
+  const shippingInfo2: any[] = [];
+  let shippingFlat: any[] = [];
+  const { t } = useTranslation();
+  const [formData, setFormData] = useState({
+    orderId: orderCreatedId || "",
+    giftCardId: "",
+    country: "",
+    frecuency: "",
+    phone: "",
+    street: "",
+    number: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    shipmentCountry: "COL",
+  });
+
   const userEmail = user?.primaryEmailAddress?.emailAddress;
+  const userFullname = user?.fullName;
+
   similar;
   // const navigate = useNavigate();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(
-          `${VITE_BASE_URL}/users`
-        );
+        const response = await axios.get(`${VITE_BASE_URL}/users`);
         const userWithEmail = response.data.find(
           (user: any) => user.email === userEmail
         );
@@ -68,14 +96,17 @@ function Cart({ similar }: any) {
   let total = 0;
   let totalGiftCards = 0;
   if (cart) {
-    if(giftCards){
-      totalGiftCards = giftCards.reduce((acc, giftCards: any) => acc + Number(giftCards.amountCard), 0);
+    if (giftCards) {
+      totalGiftCards = giftCards.reduce(
+        (acc, giftCards: any) => acc + Number(giftCards.amountCard),
+        0
+      );
     }
     total = cart.reduce((acc, product: any) => {
       const quantity = Math.max(product.quantity as number, 0);
       return acc + product.price * quantity;
     }, 0);
-    total = total + totalGiftCards;
+    total = total + totalGiftCards+shippingPrice;
   }
 
   const bombonesProducts = cart.filter(
@@ -134,8 +165,7 @@ function Cart({ similar }: any) {
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
           )
           .then((response) => {
-            const countryCode =
-              response.data.address.country_code.toUpperCase();
+            const countryCode = response.data.address.country_code.toUpperCase();
             console.log(
               countryCode,
               `www.google.com/maps/@${latitude},${longitude}`
@@ -195,35 +225,43 @@ function Cart({ similar }: any) {
       }, 1100);
     });
 
-    const requestPayment = async (paymentData: Record<string, any>) => {
-      return axios.post(`${VITE_BASE_URL}/pagos/create-checkout-session`, paymentData)
+  const requestPayment = async (paymentData: Record<string, any>) => {
+    const shippingPrice = JSON.parse(
+      localStorage.getItem("shippingPrice") || "0"
+    );
+    console.log("paymentData", paymentData, shippingPrice);
+    const bodyCheckout = {...paymentData, shippingPrice}
+    return axios
+      .post(`${VITE_BASE_URL}/pagos/create-checkout-session`,bodyCheckout )
       .then((paymentResponse) => {
         console.log(
           "Respuesta de pago:",
           paymentResponse.data,
           paymentResponse
-          );
-          setInfoModal(false);
-          toast(t("please_access_to_payment"), {
-            duration: 10000,
-            action: {
-              label: "Click to continue",
-              onClick: () => (window.location.href = paymentResponse.data),
-            },
-          });
-          setToPayment(true);
-          setActualLink(paymentResponse.data)
-      }).catch((error) => {
-          setToPayment(false);
-          console.error("Error en el envío de paymentData:", error);
-          toast.warning(
-            t("Toast_createOrder") + t("Toast_form")
-          );
+        );
+        setInfoModal(false);
+        toast(t("please_access_to_payment"), {
+          duration: 10000,
+          action: {
+            label: "Click to continue",
+            onClick: () => (window.location.href = paymentResponse.data),
+          },
+        });
+        setToPayment(true);
+        setActualLink(paymentResponse.data);
       })
-    }
+      .catch((error) => {
+        setToPayment(false);
+        console.error("Error en el envío de paymentData:", error);
+        toast.warning(t("Toast_createOrder") + t("Toast_form"));
+      });
+  };
 
   const handlePlaceOrder2 = async () => {
-    if ((cart.length > 0 && giftCards.length === 0) || (cart.length > 0 && giftCards.length > 0)){
+    if (
+      (cart.length > 0 && giftCards.length === 0) ||
+      (cart.length > 0 && giftCards.length > 0)
+    ) {
       setInfoModal(true);
     }
 
@@ -253,38 +291,45 @@ function Cart({ similar }: any) {
           ? `www.google.com/maps/@${latitude},${longitude},20.01z?entry=ttu`
           : "No se pudo proporcionar ubicación de usuario",
     };
-    const response = await axios.post(`${VITE_BASE_URL}/orders`, order)
+    const response = await axios.post(`${VITE_BASE_URL}/orders`, order);
     globalOrderId = response.data[0].id;
     setOrderCreatedId(response.data[0].id);
 
-    if (cart.length === 0 && giftCards.length > 0){
+    if (cart.length === 0 && giftCards.length > 0) {
       const paymentData = {
         orderId: globalOrderId,
         country: "COL",
-      }
+      };
 
       if (globalOrderId !== "" && globalOrderId.length !== 0) {
-        toast.promise(
-          requestPayment(paymentData), 
-        {
+        console.log("userFullname", globalOrderId);
+        toast.promise(requestPayment(paymentData), {
           loading: t("processing_order"),
           success: t("order_processed_successfully"),
           error: t("error_creating_order"),
-        })
+        });
       } else {
-          throw new Error(t("order_id_is_invalid"));
-        }
+        throw new Error(t("order_id_is_invalid"));
+      }
     }
-  }
+  };
 
-  const handlePlaceOrder = () => {
-    const {orderId, shipmentCountry, giftCardId, frecuency,...rest} = formData;
-    const paymentData: any = {
+  const handlePlaceOrder = async () => {
+    console.log("formData", formData);
+    const {
+      orderId,
+      shipmentCountry,
+      giftCardId,
+      frecuency,
+      ...rest
+    } = formData;
+    let paymentData: any = {
       orderId: orderCreatedId,
       country: "COL",
     };
-    if(Object.values(rest).every(value => value !== "")) {
-      paymentData.order = {
+    if (Object.values(rest).every((value) => value !== "")) {
+      paymentData = {
+        ...paymentData,
         phone: rest.phone,
         number: rest.number,
         street: rest.street,
@@ -292,36 +337,60 @@ function Cart({ similar }: any) {
         state: rest.state,
         postalCode: rest.postalCode,
         shipmentCountry: shipmentCountry || "COL",
-      }
+        shippingPrice: shippingPrice,
+      };
+
+      console.log("paymentData", paymentData.order);
     }
     if (giftCardId) {
       paymentData.order.giftCardId = giftCardId;
     }
     if (orderCreatedId !== "" && orderCreatedId.length !== 0) {
-      toast.promise(requestPayment(paymentData),
-      {
+      console.log("userFullname", userFullname);
+      const carriers = ["coordinadora", "interRapidisimo", "servientrega"];
+
+      for (let i = 0; i < carriers.length; i++) {
+        const shippingData = {
+          user: {
+            name: userFullname,
+            company: "",
+            email: userEmail,
+            phone: paymentData.phone,
+            street: paymentData.street,
+            number: paymentData.number,
+            city: paymentData.city,
+            state: paymentData.state,
+            country: paymentData.shipmentCountry,
+            postalCode: paymentData.postalCode,
+          },
+          country: "CO",
+          carrier: carriers[i],
+        };
+
+        const response = await axios.post(
+          `${VITE_BASE_URL}/shipments/rate`,
+          shippingData
+        );
+        console.log("responseShipping", response.data);
+        shippingInfo2.push(response.data);
+        console.log("shippingInfo2", shippingInfo2);
+      }
+      shippingFlat = shippingInfo2.flat();
+      console.log("shippingFlat", shippingFlat);
+      window.localStorage.setItem("shippingInfo", JSON.stringify(shippingFlat));
+      console.log("shippingInfo", shippingInfo);
+      setDefineShipping(true);
+      const shippingPrice = shippingLocal.totalPrice;
+
+      toast.promise(requestPayment(paymentData, shippingPrice), {
         loading: t("processing_order"),
         success: t("order_processed_successfully"),
         error: t("error_creating_order"),
-      })
+      });
     } else {
-        throw new Error(t("order_id_is_invalid"));
-      }
+      throw new Error(t("order_id_is_invalid"));
+    }
   };
-
-  const [formData, setFormData] = useState({
-    orderId: orderCreatedId || "",
-    giftCardId: "",
-    country: "",
-    frecuency: "",
-    phone: "",
-    street: "",
-    number: "",
-    city: "",
-    state: "",
-    postalCode: "",
-    shipmentCountry: "COL",
-  });
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -352,87 +421,84 @@ function Cart({ similar }: any) {
           : "No se pudo proporcionar ubicación de usuario",
     };
 
-    axios
-      .post(`${VITE_BASE_URL}/orders`, order)
-      .then((response) => {
-        globalOrderId = response.data[0].id;
-        setOrderCreatedId(response.data[0].id);
-        const paymentData: any = {
-          orderId: globalOrderId,
-          country: "COL",
-          phone: formData.phone,
-          street: formData.street,
-          number: formData.number,
-          city: formData.city,
-          state: formData.state,
-          postalCode: formData.postalCode,
-          shipmentCountry: formData.shipmentCountry || "COL",
-        };
-        // Agregar giftCardId solo si no es vacío
-        if (formData.giftCardId) {
-          paymentData.giftCardId = formData.giftCardId;
-        }
+    axios.post(`${VITE_BASE_URL}/orders`, order).then((response) => {
+      globalOrderId = response.data[0].id;
+      setOrderCreatedId(response.data[0].id);
+      const paymentData: any = {
+        orderId: globalOrderId,
+        country: "COL",
+        phone: formData.phone,
+        street: formData.street,
+        number: formData.number,
+        city: formData.city,
+        state: formData.state,
+        postalCode: formData.postalCode,
+        shipmentCountry: formData.shipmentCountry || "COL",
+      };
+      // Agregar giftCardId solo si no es vacío
+      if (formData.giftCardId) {
+        paymentData.giftCardId = formData.giftCardId;
+      }
 
-        if (globalOrderId !== "" && globalOrderId.length !== 0) {
-          axios
-            .post(
-              `${VITE_BASE_URL}/pagos/create-checkout-session`,
-              paymentData
-            )
-            .then((paymentResponse) => {
-              console.log(
-                "Respuesta de pago:",
-                paymentResponse.data,
-                paymentResponse
-              );
-              setInfoModal(false);
-              toast("Por favor, acceder al pago", {
-                duration: 10000,
-                action: {
-                  label: "Click to continue",
-                  onClick: () => (window.location.href = paymentResponse.data),
-                },
-              });
-
-              setToPayment(true);
-              setActualLink(paymentResponse.data);
-            })
-            .catch((error) => {
-              console.error("Error en el envío de paymentData:", error);
-              toast.error("Error al crear la orden de pago: " + error.message);
-              setToPayment(false);
+      if (globalOrderId !== "" && globalOrderId.length !== 0) {
+        axios
+          .post(`${VITE_BASE_URL}/pagos/create-checkout-session`, {...paymentData, shippingPrice})
+          .then((paymentResponse) => {
+            console.log(
+              "Respuesta de pago:",
+              paymentResponse.data,
+              paymentResponse
+            );
+            setInfoModal(false);
+            toast("Por favor, acceder al pago", {
+              duration: 10000,
+              action: {
+                label: "Click to continue",
+                onClick: () => (window.location.href = paymentResponse.data),
+              },
             });
-        }
-      });
+
+            setToPayment(true);
+            setActualLink(paymentResponse.data);
+          })
+          .catch((error) => {
+            console.error("Error en el envío de paymentData:", error);
+            toast.error("Error al crear la orden de pago: " + error.message);
+            setToPayment(false);
+          });
+      }
+    });
   };
 
-  const isDisabled = orderCreatedId === "" ? false : !toPayment && orderCreatedId !== "" ? false : true;
-  const buttonClass = orderCreatedId === ""
-  ? "hover:bg-black text-black hover:text-white hover:scale-105"
-  : !toPayment && orderCreatedId
-  ? "hover:bg-black text-black hover:text-white hover:scale-105"
-  : "text-slate-500";
+  const isDisabled =
+    orderCreatedId === ""
+      ? false
+      : !toPayment && orderCreatedId !== ""
+      ? false
+      : true;
+  const buttonClass =
+    orderCreatedId === ""
+      ? "hover:bg-black text-black hover:text-white hover:scale-105"
+      : !toPayment && orderCreatedId
+      ? "hover:bg-black text-black hover:text-white hover:scale-105"
+      : "text-slate-500";
 
-const handleClickPlaceOrder = () => {
-  if (orderCreatedId === "") {
-    handlePlaceOrder2();
-  } else if (!toPayment && orderCreatedId !== "") {
-    handlePlaceOrder();
-  } else {
-    toast.info(t("Toast_order"));
-  }
-};
-
+  const handleClickPlaceOrder = () => {
+    if (orderCreatedId === "") {
+      handlePlaceOrder2();
+    } else if (!toPayment && orderCreatedId !== "") {
+      handlePlaceOrder();
+    } else {
+      toast.info(t("Toast_order"));
+    }
+  };
 
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">{t("Cart_your")}</h3>
       <ul>
         {giftCards?.map((giftCard, index) => (
-          <CartItemGiftCard
-            key={index}
-            giftCard={giftCard}
-          />
+          <CartItemGiftCard key={index} giftCard={giftCard} />
         ))}
         {cart?.map((product) => (
           <CartItem
@@ -449,6 +515,19 @@ const handleClickPlaceOrder = () => {
           </span>
         )}
       </div>
+      {defineShipping ? (
+        <div className="flex-column justify-between items-center gap-4 mb-2 shadow-md p-4">
+          <div className="flex items-center gap-8 md:flex-row flex-col md:text-start text-center hover:cursor-pointer">
+            <h3 className=" font-semibold text-base w-full">Transportadora</h3>
+            <h3 className=" font-semibold text-base w-3/4">Tiempo estimado</h3>
+            <h3 className=" font-semibold text-base w-2/3">Valor</h3>
+            <h3 className=" font-semibold text-base w-3/4">Servicio</h3>
+          </div>
+          {shippingLocal.map((carrier, index) => (
+            <ShippingProvider key={index} carrier={carrier} />
+          ))}
+        </div>
+      ) : null}
       <div
         className="flex justify-between items-center mt-4 "
         onMouseEnter={() => setShowTooltip(true)}
@@ -463,6 +542,7 @@ const handleClickPlaceOrder = () => {
           ${total.toFixed(2)}
         </span>
       </div>
+
       {!handleUpdateFlavors() ? (
         <div className="flex rounded-xl p-2 mt-2 shadow justify-center text-red-300  hover:text-red-500 hover:scale-105 transition-all ease">
           <button
@@ -516,6 +596,7 @@ const handleClickPlaceOrder = () => {
           </>
         </>
       )}
+
       {infoModal ? (
         <>
           <div className="bg-white p-5 mt-5 z-50 shadow-md rounded-xl">
@@ -546,9 +627,7 @@ const handleClickPlaceOrder = () => {
                 />
               </div>
               <div>
-                <label className="block mb-1">
-                  {t("Cart_state")}
-                </label>
+                <label className="block mb-1">{t("Cart_state")}</label>
                 <input
                   type="text"
                   name="state"
@@ -603,9 +682,7 @@ const handleClickPlaceOrder = () => {
                 />
               </div>
               <div>
-                <label className="block mb-1">
-                  {t("Cart_geolocation")}
-                </label>
+                <label className="block mb-1">{t("Cart_geolocation")}</label>
                 <input
                   type="text"
                   name="shipmentCountry"
@@ -627,9 +704,7 @@ const handleClickPlaceOrder = () => {
               </div>
 
               <div>
-                <label className="block mb-1">
-                  {t("Cart_coupon")}
-                </label>
+                <label className="block mb-1">{t("Cart_coupon")}</label>
                 <input
                   type="text"
                   name="giftCardId"

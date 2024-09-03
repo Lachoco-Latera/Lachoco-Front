@@ -225,10 +225,14 @@ function Cart({ similar }: any) {
       }, 1100);
     });
 
-  const requestPayment = async (paymentData: Record<string, any>, shippingPrice: Record<string, any>) => {
-    console.log("paymentData", paymentData);
+  const requestPayment = async (paymentData: Record<string, any>) => {
+    const shippingPrice = JSON.parse(
+      localStorage.getItem("shippingPrice") || "0"
+    );
+    console.log("paymentData", paymentData, shippingPrice);
+    const bodyCheckout = {...paymentData, shippingPrice}
     return axios
-      .post(`${VITE_BASE_URL}/pagos/create-checkout-session`, {...paymentData, shippingPrice})
+      .post(`${VITE_BASE_URL}/pagos/create-checkout-session`,bodyCheckout )
       .then((paymentResponse) => {
         console.log(
           "Respuesta de pago:",

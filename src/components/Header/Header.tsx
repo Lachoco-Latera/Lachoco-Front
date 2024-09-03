@@ -21,7 +21,7 @@ import { GrUserAdmin } from "react-icons/gr";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiTask } from "react-icons/bi";
-import { VITE_BASE_URL } from "@/config/envs";
+import { VITE_ADMIN_ID, VITE_BASE_URL } from "@/config/envs";
 
 interface Props {
   onCartIconClick: () => void;
@@ -255,9 +255,6 @@ export default function Header({ onCartIconClick }: Props) {
           <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-4">
-          {(isSignedIn == true &&
-          user.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
-          isLoaded) || isSignedIn === false ? (
             <button
               type="button"
               title="Suscribete"
@@ -277,7 +274,6 @@ export default function Header({ onCartIconClick }: Props) {
             >
               {t("Subscribe")}
             </button>
-          ) : null}
           <div className="relative  hidden md:block"></div>
           {isSignedIn == true && isLoaded ? (
             <div className="relative  hidden md:block">
@@ -320,9 +316,8 @@ export default function Header({ onCartIconClick }: Props) {
               </button>
             </div>
           ) : null}
-          {isSignedIn == true &&
-          user.id === "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
-          isLoaded ? (
+          {isSignedIn &&
+          user.id === VITE_ADMIN_ID ? (
             <div className="relative  hidden md:block">
               <button
                 type="button"

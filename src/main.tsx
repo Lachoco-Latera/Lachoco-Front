@@ -18,11 +18,13 @@ import { GiftCards } from "./components/GiftCards/GiftCards.tsx";
 import "./locales/i18n.ts"
 import { DatosEmpresa } from "./components/Footer/DatosEmpresa.tsx";
 import { PoliticaPrivacidad } from "./components/Footer/PoliticaPrivacidad.tsx";
+import AuthGuard from "./guards/authGuard.tsx";
 // Import your publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
 }
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -40,7 +42,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Admin />,
+    element:( 
+      <AuthGuard>
+        <Admin />
+      </AuthGuard>
+  ),
   },
   {
     path: "/success",

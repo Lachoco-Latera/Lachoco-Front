@@ -6,7 +6,7 @@
     "gift_cards": "Tarjetas de regalo",
     "help_center": "Centro de ayuda",
 
-    "Subscribe": "!Susbribite!",
+    "Subscribe": "!Suscribete!",
     "Search":"¿Qué quieres probar?",
 
     "App_retry":"Esto está tardando más de lo esperado, Hacer click al logo para reintentar",
@@ -77,9 +77,6 @@
     "Management_online":"Solo Online",
     "Management_isActive":"Esta activo",
     "Management_create":"Crear Producto",
-    "Select_category": "Selecciona una Categoria",
-    "Image_product": "Imagen del producto",
-    "Create_product":"Crear Producto",
 
     "Cart_your":"Tu carrito",
     "Cart_load":"Aún te faltan cargar sabores",

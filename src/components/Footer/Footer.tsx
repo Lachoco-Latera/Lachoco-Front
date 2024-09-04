@@ -47,17 +47,17 @@ export const Footer = () => {
             </ul>
             <ul className="flex justify-center items-center md:py-0 py-4">
               <li>
-                <a href="#" className="hover:underline">
+                <a href="https://www.facebook.com/LachocoLateraChocolateria/?locale=es_ES" target="_blank" className="hover:underline">
                   <img src={logo1} alt="" className="me-4 w-8" />
                 </a>
               </li>
               <li>
-                <a href="https://wa.me/+543825417601" className="hover:underline">
+                <a href="https://wa.me/+573012985389" target="_blank" className="hover:underline">
                   <img src={logo2} alt="" className="me-4 w-8" />
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <a href="https://www.instagram.com/lachoco_latera/?hl=es" target="_blank" className="hover:underline">
                   <img src={logo3} alt="" className="me-4 w-8" />
                 </a>
               </li>

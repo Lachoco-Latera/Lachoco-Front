@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import { Product } from "../types";
+import { VITE_BASE_URL } from "@/config/envs";
 
 interface State {
   products: Product[];
@@ -25,7 +26,7 @@ export const useProductsStore = create<State & Actions>((set) => ({
   fetchData: async () => {
     try {
       set({ isLoading: true, error: null });
-      const response = await fetch("https://lachoco.onrender.com/products");
+      const response = await fetch(`${VITE_BASE_URL}/products`);
       const data = await response.json();
       set({ products: data.products, isLoading: false });
     } catch (error) {

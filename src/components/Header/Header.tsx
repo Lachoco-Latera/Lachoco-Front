@@ -4,6 +4,7 @@ import useFromStore from "../../hooks/useFromStore";
 import SearchExampleStandard from "../Searchbar/Searchbar";
 import logo from "../../assets/images/logo.png";
 import tinyLogo from "../../assets/images/tinyLogo.png";
+import { useTranslation } from "react-i18next";
 
 import { Product } from "@/types.d";
 import {
@@ -21,7 +22,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiTask } from "react-icons/bi";
 import { VITE_BASE_URL } from "@/config/envs";
-import { useTranslation } from "react-i18next";
 
 interface Props {
   onCartIconClick: () => void;
@@ -39,6 +39,7 @@ async function hashPassword(password: string): Promise<string> {
 
 export default function Header({ onCartIconClick }: Props) {
   const cart = useFromStore(useCartStore, (state) => state.cart);
+  const giftCard = useFromStore(useCartStore, (state) => state.giftCards)
   const { isSignedIn, user, isLoaded } = useUser();
   const [userCountry, setUserCountry] = useState<string>("");
   const {t} = useTranslation()
@@ -314,7 +315,7 @@ export default function Header({ onCartIconClick }: Props) {
               >
                 <FiShoppingCart size={24} />
                 <div className="text-white rounded-full bg-gray-700 w-5 h-5 text-sm -ml-[0.7em] -mt-5">
-                  {cart?.length}
+                  {(cart?.length || 0) + (giftCard?.length || 0)}
                 </div>
               </button>
             </div>

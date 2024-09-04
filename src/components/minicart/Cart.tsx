@@ -4,14 +4,15 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MapSelector from "../MapSelector"; // Asegúrate de importar el MapSelector
-import { useTranslation } from "react-i18next";
 
 // import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
-import { VITE_BASE_URL } from "@/config/envs";
+import { VITE_BASE_URL, VITE_FRONTEND_URL } from "@/config/envs";
+import CartItemGiftCard from "../GiftCards/CartItemGiftCard";
+import { useTranslation } from "react-i18next";
+
 function Cart({ similar }: any) {
-  const {t} = useTranslation()
-  const { cart, confirmedFlavors } = useCartStore();
+  const { cart, confirmedFlavors, giftCards } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const [completed, setCompleted] = useState<boolean>(true);
@@ -25,6 +26,7 @@ function Cart({ similar }: any) {
   const [actualLink, setActualLink] = useState("");
   const [infoModal, setInfoModal] = useState(false);
   const [useCustomMap, setUseCustomMap] = useState(false);
+  const {t} = useTranslation()
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   similar;
   // const navigate = useNavigate();
@@ -64,11 +66,16 @@ function Cart({ similar }: any) {
   }, [confirmedFlavors]);
 
   let total = 0;
+  let totalGiftCards = 0;
   if (cart) {
+    if(giftCards){
+      totalGiftCards = giftCards.reduce((acc, giftCards: any) => acc + Number(giftCards.amountCard), 0);
+    }
     total = cart.reduce((acc, product: any) => {
       const quantity = Math.max(product.quantity as number, 0);
       return acc + product.price * quantity;
     }, 0);
+    total = total + totalGiftCards;
   }
 
   const bombonesProducts = cart.filter(
@@ -181,17 +188,43 @@ function Cart({ similar }: any) {
         );
 
         if (hasBombones) {
-          reject("Debes seleccionar sabores para los bombones.");
+          reject(t("Toast_flavors"));
         } else {
           // resolve(navigate("/ship"));
         }
       }, 1100);
     });
 
-  const handlePlaceOrder = () => {
-    if (!infoModal) {
+    const requestPayment = async (paymentData: Record<string, any>) => {
+      return axios.post(`${VITE_BASE_URL}/pagos/create-checkout-session`, paymentData)
+      .then((paymentResponse) => {
+        console.log(
+          "Respuesta de pago:",
+          paymentResponse.data,
+          paymentResponse
+          );
+          setInfoModal(false);
+          toast(t("please_access_to_payment"), {
+            duration: 10000,
+            action: {
+              label: "Click to continue",
+              onClick: () => (window.location.href = paymentResponse.data),
+            },
+          });
+          setToPayment(true);
+          setActualLink(paymentResponse.data)
+      }).catch((error) => {
+          setToPayment(false);
+          console.error("Error en el envío de paymentData:", error);
+          toast.warning(
+            t("Toast_createOrder") + t("Toast_form")
+          );
+      })
+    }
+
+  const handlePlaceOrder2 = async () => {
+    if ((cart.length > 0 && giftCards.length === 0) || (cart.length > 0 && giftCards.length > 0)){
       setInfoModal(true);
-      return;
     }
 
     const order = {
@@ -209,73 +242,71 @@ function Cart({ similar }: any) {
             ? confirmedFlavors[product.id] || []
             : product.flavors.map((flavor) => flavor.id),
       })),
+      giftCards: giftCards.map((giftCard) => ({
+        giftCardId: giftCard.id,
+        nameRecipient: giftCard.nameRecipient,
+        emailRecipient: giftCard.emailRecipient,
+        message: giftCard.message,
+      })),
       additionalInfo:
         latitude && longitude
           ? `www.google.com/maps/@${latitude},${longitude},20.01z?entry=ttu`
           : "No se pudo proporcionar ubicación de usuario",
     };
+    const response = await axios.post(`${VITE_BASE_URL}/orders`, order)
+    globalOrderId = response.data[0].id;
+    setOrderCreatedId(response.data[0].id);
 
-    toast.promise(
-      axios
-        .post(`${VITE_BASE_URL}/orders`, order)
-        .then((response) => {
-          globalOrderId = response.data[0].id;
-          setOrderCreatedId(response.data[0].id);
-          const paymentData: any = {
-            orderId: globalOrderId,
-            country: "COL",
-            phone: formData.phone,
-            number: formData.number,
-            street: formData.street,
-            city: formData.city,
-            state: formData.state,
-            postalCode: formData.postalCode,
-            shipmentCountry: formData.shipmentCountry || "COL",
-          };
-          // Agregar giftCardId solo si no es vacío
-          if (formData.giftCardId) {
-            paymentData.giftCardId = formData.giftCardId;
-          }
-
-          if (globalOrderId !== "" && globalOrderId.length !== 0) {
-            return axios.post(
-              `${VITE_BASE_URL}/pagos/create-checkout-session`,
-              paymentData
-            );
-          } else {
-            throw new Error("Order ID is invalid");
-          }
-        })
-        .then((paymentResponse) => {
-          console.log(
-            "Respuesta de pago:",
-            paymentResponse.data,
-            paymentResponse
-          );
-          setInfoModal(false);
-          toast("Por favor, acceder al pago", {
-            duration: 10000,
-            action: {
-              label: "Click to continue",
-              onClick: () => (window.location.href = paymentResponse.data),
-            },
-          });
-          setToPayment(true);
-          setActualLink(paymentResponse.data);
-        })
-        .catch((error) => {
-          setToPayment(false);
-          console.error("Error en el envío de paymentData:", error);
-          toast.warning(
-            t("Toast_createOrder") + t("Toast_form")
-          );
-        }),
-      {
-        loading: "Procesando orden...",
-        success: "Orden procesada con éxito",
-        error: "Error al crear la orden de pago",
+    if (cart.length === 0 && giftCards.length > 0){
+      const paymentData = {
+        orderId: globalOrderId,
+        country: "COL",
       }
-    );
+
+      if (globalOrderId !== "" && globalOrderId.length !== 0) {
+        toast.promise(
+          requestPayment(paymentData), 
+        {
+          loading: t("processing_order"),
+          success: t("order_processed_successfully"),
+          error: t("error_creating_order"),
+        })
+      } else {
+          throw new Error(t("order_id_is_invalid"));
+        }
+    }
+  }
+
+  const handlePlaceOrder = () => {
+    const {orderId, shipmentCountry, giftCardId, frecuency,...rest} = formData;
+    const paymentData: any = {
+      orderId: orderCreatedId,
+      country: "COL",
+    };
+    if(Object.values(rest).every(value => value !== "")) {
+      paymentData.order = {
+        phone: rest.phone,
+        number: rest.number,
+        street: rest.street,
+        city: rest.city,
+        state: rest.state,
+        postalCode: rest.postalCode,
+        shipmentCountry: shipmentCountry || "COL",
+      }
+    }
+    if (giftCardId) {
+      paymentData.order.giftCardId = giftCardId;
+    }
+    if (orderCreatedId !== "" && orderCreatedId.length !== 0) {
+      toast.promise(requestPayment(paymentData),
+      {
+        loading: t("processing_order"),
+        success: t("order_processed_successfully"),
+        error: t("error_creating_order"),
+      })
+    } else {
+        throw new Error(t("order_id_is_invalid"));
+      }
   };
 
   const [formData, setFormData] = useState({
@@ -375,10 +406,34 @@ function Cart({ similar }: any) {
       });
   };
 
+  const isDisabled = orderCreatedId === "" ? false : !toPayment && orderCreatedId !== "" ? false : true;
+  const buttonClass = orderCreatedId === ""
+  ? "hover:bg-black text-black hover:text-white hover:scale-105"
+  : !toPayment && orderCreatedId
+  ? "hover:bg-black text-black hover:text-white hover:scale-105"
+  : "text-slate-500";
+
+const handleClickPlaceOrder = () => {
+  if (orderCreatedId === "") {
+    handlePlaceOrder2();
+  } else if (!toPayment && orderCreatedId !== "") {
+    handlePlaceOrder();
+  } else {
+    toast.info(t("Toast_order"));
+  }
+};
+
+
   return (
     <section>
       <h3 className="text-2xl font-bold mb-4">{t("Cart_your")}</h3>
       <ul>
+        {giftCards?.map((giftCard, index) => (
+          <CartItemGiftCard
+            key={index}
+            giftCard={giftCard}
+          />
+        ))}
         {cart?.map((product) => (
           <CartItem
             key={product.id}
@@ -428,21 +483,12 @@ function Cart({ similar }: any) {
         <>
           <div
             className={`flex rounded-xl p-2 mt-2 shadow 
-        justify-center   ${
-          orderCreatedId === ""
-            ? "hover:bg-black text-black hover:text-white hover:scale-105 "
-            : "text-slate-500"
-        }  transition-all ease`}
+              justify-center ${buttonClass} transition-all ease`}
           >
             <button
-              onClick={() =>
-                orderCreatedId === ""
-                  ? handlePlaceOrder()
-                  : !toPayment && orderCreatedId !== ""
-                  ? handlePlaceOrder()
-                  : toast.info(t("Toast_order"))
-              }
+              onClick={() => handleClickPlaceOrder()}
               className="text-xl font-bold"
+              disabled={isDisabled}
             >
               {t("Cart_order")}
             </button>
@@ -451,13 +497,13 @@ function Cart({ similar }: any) {
             {toPayment ? (
               <div
                 className="flex rounded-xl p-2 mt-2 shadow 
-        justify-center hover:bg-green-500 text-green-500
-         hover:text-white hover:scale-105 transition-all ease"
+                justify-center hover:bg-green-500 text-green-500
+                  hover:text-white hover:scale-105 transition-all ease"
               >
                 <button
                   onClick={() =>
                     (window.location.href =
-                      actualLink || "https://lachoco-front.vercel.app")
+                      actualLink || `${VITE_FRONTEND_URL}`)
                   }
                   className="text-xl font-bold"
                 >
@@ -474,7 +520,7 @@ function Cart({ similar }: any) {
         <>
           <div className="bg-white p-5 mt-5 z-50 shadow-md rounded-xl">
             <h2 className="mb-4 font-bold">
-            {t("Cart_shipping")} <br /> {t("Cart_shipping2")}
+              {t("Cart_shipping")} <br /> {t("Cart_shipping2")}:
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -501,7 +547,7 @@ function Cart({ similar }: any) {
               </div>
               <div>
                 <label className="block mb-1">
-                {t("Cart_state")}
+                  {t("Cart_state")}
                 </label>
                 <input
                   type="text"

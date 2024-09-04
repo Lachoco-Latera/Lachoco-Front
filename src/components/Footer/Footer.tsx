@@ -4,6 +4,7 @@ import { CambioMoneda } from "../CambioMoneda/CambioMoneda";
 import logo1 from "../../assets/images/facebook.png";
 import logo2 from "../../assets/images/whatsapp.png";
 import logo3 from "../../assets/images/instagram.png";
+import { NavLink } from "react-router-dom";
 import idioma from "../../assets/images/idioma.svg";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../hooks/LanguageContext";
@@ -37,7 +38,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/gift-cards"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
                   {t("gift_cards")}

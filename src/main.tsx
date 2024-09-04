@@ -14,6 +14,7 @@ import Ship from "./components/Ship/Ship.tsx";
 import { Admin } from "./components/Admin/Admin.tsx";
 import Success from "./components/Success/Success.tsx";
 import Failure from "./components/Failure/Failure.tsx";
+import { GiftCards } from "./components/GiftCards/GiftCards.tsx";
 import "./locales/i18n.ts"
 // Import your publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
     path: "/failure",
     element: <Failure />,
   },
+  {
+    path: "/gift-cards",
+    element: <GiftCards />,
+  }
 ]);
 
 const isSmallScreen = window.innerWidth < 768;

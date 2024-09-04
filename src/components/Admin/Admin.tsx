@@ -178,10 +178,11 @@ export const Admin = () => {
           {buttonConfig?.map((button) => (
             <button
               key={button.state}
-              className="text-slate-600 font-bold text-center 
+              className={`text-slate-600 font-bold text-center 
               xl:text-lg m-2 hover:bg-rose-400 
               hover:text-white transition-all ease duration-400
-              p-2 rounded-xl hover:shadow-xl hover:scale-105"
+              p-2 rounded-xl hover:shadow-xl hover:scale-105 
+              ${state === button.state ? "bg-rose-400 text-white" : ""}`}
               onClick={() => handleButton(button.state)}
             >
               {button.label}

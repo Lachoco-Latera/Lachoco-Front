@@ -251,7 +251,7 @@ export default function Header({ onCartIconClick }: Props) {
             onClick={() => (window.location.href = "/")}
           />
         </span>
-        <div className="hover:drop-shadow transition-all ease md:op">
+        <div className="hover:drop-shadow transition-all ease ">
           <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-4">

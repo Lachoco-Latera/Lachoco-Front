@@ -29,7 +29,7 @@ export default function AuthGuard({ children }: Props) {
   useEffect(() => {
     const emailUser = user?.primaryEmailAddress?.emailAddress
     if (emailUser) check(emailUser)
-  }, [])
+  }, [user])
 
   if (!checked) {
     return null

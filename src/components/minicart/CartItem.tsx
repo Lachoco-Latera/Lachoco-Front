@@ -23,6 +23,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const navigate = useNavigate();
   const {t} =useTranslation()
+  
   const handleNavigate = (productId: any) => {
     navigate(`/products/${productId}`);
   };

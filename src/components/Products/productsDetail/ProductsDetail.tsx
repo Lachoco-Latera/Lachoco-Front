@@ -134,7 +134,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
           </div>
         ))}
       </Carousel>
-      <div className="flex md:flex-row flex-col items-center md:items-start justify-between">
+      <div className="flex md:flex-row flex-col-reverse items-center md:items-start justify-between">
         <div className="flex flex-col md:pr-10">
           <ul className="flex gap-2 ">
             {altLabel.map((label: any, index: number) => (

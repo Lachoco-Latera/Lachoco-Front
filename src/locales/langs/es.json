@@ -77,6 +77,9 @@
     "Management_online":"Solo Online",
     "Management_isActive":"Esta activo",
     "Management_create":"Crear Producto",
+    "Select_category": "Selecciona una Categoria",
+    "Image_product": "Imagen del producto",
+    "Create_product":"Crear Producto",
 
     "Cart_your":"Tu carrito",
     "Cart_load":"Aún te faltan cargar sabores",

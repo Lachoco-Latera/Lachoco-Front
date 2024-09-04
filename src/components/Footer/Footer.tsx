@@ -22,18 +22,6 @@ export const Footer = () => {
           <div className="md:flex flex-col ">
             <ul className="flex flex-wrap justify-center items-center mt-3 text-sm font-medium text-gray-600 sm:mt-0 py-4">
               <li>
-                <button className="hover:underline me-4 md:me-6 hover:text-sky-700">
-                  {t("currency_change")}
-                </button>
-              </li>
-
-              {monedaState ? (
-                <div className="w-[100px] h-[100px] absolute mb-[150px] right-96 bg-gray-600 z-10 flex flex-col justify-evenly">
-                  <CambioMoneda />
-                </div>
-              ) : null}
-
-              <li>
                 <a
                   href="/company-info"
                   className="hover:underline me-4 md:me-6 text-gray-600"
@@ -57,25 +45,20 @@ export const Footer = () => {
                   {t("gift_cards")}
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:underline text-gray-600 me-4">
-                {t("help_center")}
-                </a>
-              </li>
             </ul>
             <ul className="flex justify-center items-center md:py-0 py-4">
               <li>
-                <a href="https://www.facebook.com/LachocoLateraChocolateria/" className="hover:underline">
+                <a href="https://www.facebook.com/LachocoLateraChocolateria/?locale=es_ES" target="_blank" className="hover:underline">
                   <img src={logo1} alt="" className="me-4 w-8" />
                 </a>
               </li>
               <li>
-                <a href="https://api.whatsapp.com/send?phone=573012985389" className="hover:underline">
+                <a href="https://wa.me/+573012985389" target="_blank" className="hover:underline">
                   <img src={logo2} alt="" className="me-4 w-8" />
                 </a>
               </li>
               <li>
-                <a href="https://www.instagram.com/lachoco_latera/" className="hover:underline">
+                <a href="https://www.instagram.com/lachoco_latera/?hl=es" target="_blank" className="hover:underline">
                   <img src={logo3} alt="" className="me-4 w-8" />
                 </a>
               </li>

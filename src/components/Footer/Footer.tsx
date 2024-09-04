@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom";
 import idioma from "../../assets/images/idioma.svg";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../hooks/LanguageContext";
+import { DatosEmpresa } from "./DatosEmpresa";
 
 export const Footer = () => {
   const [monedaState, setMonedaState] = useState(false);
@@ -22,7 +23,7 @@ export const Footer = () => {
             <ul className="flex flex-wrap justify-center items-center mt-3 text-sm font-medium text-gray-600 sm:mt-0 py-4">
               <li>
                 <a
-                  href="#"
+                  href="/company-info"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
                   {t("company_info")}
@@ -30,7 +31,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="privacy-policy"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
                   {t("privacy_policy")}

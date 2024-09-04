@@ -79,6 +79,9 @@
     "Management_online":"Online Only",
     "Management_isActive":"isActive",
     "Management_create":"Create Product",
+    "Select_category": "Select a Category",
+    "Image_product":"Image of the product",
+    "Create_product":"Create Product",
 
 
     "Cart_your":"Your cart",

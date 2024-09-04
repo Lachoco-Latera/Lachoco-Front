@@ -22,7 +22,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     presentacion: 0,
     description: "",
     price: 0,
-    currency: "USD",
+    currency: "COP",
     label: "nuevo",
     isActive: false,
     flavors: [],
@@ -122,18 +122,25 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
       flavors: selectedFlavors,
       price: Number(prevState.price),
     }));
+
+    const productData = {
+      ...formEditState,
+      flavors: selectedFlavors,
+      price: Number(formEditState.price),
+    }
     toast("Esperando al servidor...", { id: "loading-submit" });
     try {
       let response;
       if (formEditState.id) {
         response = await axios.put(
-          `${VITE_BASE_URL}/products/${formEditState.id}`,
+          `${VITE_BASE_URL}/products/${productData.id}`,
           formEditState
         );
       } else {
+        const { id , ...restProductData } = productData;
         response = await axios.post(
           `${VITE_BASE_URL}/products`,
-          formEditState
+          restProductData
         );
       }
 
@@ -150,7 +157,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
           presentacion: 0,
           description: "",
           price: 0,
-          currency: "USD",
+          currency: "COP",
           label: "nuevo",
           flavors: [],
           images: [],
@@ -196,8 +203,8 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
   };
 
   const handleOnUpload = (error: any, result: any, widget: any) => {
-    if (error) {
-      updateError(error);
+    if (error && error.statusText) {
+      updateError(error.statusText);
       widget.close({ quiet: true });
       return;
     }
@@ -210,15 +217,15 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     }));
     toast.dismiss("loading-upload");
   };
+
   return (
     <div className="overflow-y-scroll">
       {modalOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center px-12 bg-black bg-opacity-50 z-50"
-          onClick={closeModal}
         >
           <div
-            className="bg-white p-4 md:p-6 md:max-w-3xl w-full rounded-lg overflow-y-auto max-h-[80vh] md:mb-0 mb-16 md:max-h-[90vh]"
+            className="bg-white p-4 md:p-6 md:max-w-3xl w-full rounded-lg overflow-y-auto max-h-[80vh] md:mb-0 mb-16 md:max-h-[90vh] md:px-16"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-row justify-end pb-2">
@@ -232,22 +239,34 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
               className=" flex flex-col justify-evenly items-center "
               onSubmit={handleSubmit}
             >
-              <div className="flex flex-col gap-2">
+              <h2 className="block text-3xl text-gray-900 self-center  font-semibold drop-shadow">
+                  {t("Create_product")}
+              </h2>
+              <div className="flex flex-col gap-2 relative mt-10">
+
+                  <label htmlFor="product-name" className="block text-base text-gray-900 self-start font-semibold drop-shadow">
+                  {t("Management_name")}
+                </label>
                 <input
                   type="text"
                   name="name"
-                  placeholder={t("Management_name")}
-                  className="p-2 border rounded-md"
+                  placeholder={'Ejemplo: Chocolate'}
+                  className="rounded-md block rounded-t-lg px-2.5 py-2.5 mb-3 w-full text-lg text-gray-900 bg-gray-100 border-0 border-b-2 border-rose-300 appearance-none focus:outline-none focus:ring-0 focus:border-rose-400 focus:border-2 peer"
                   value={formEditState.name}
                   onChange={handleInputChange}
+                  id="product-name"
                 />
+
+                <label htmlFor="categories" className="block text-base text-gray-900 self-start font-semibold drop-shadow">
+                  {t("Select_category")}</label>
                 <select
                   name="categoryId"
-                  className="p-2 border rounded-md"
+                  className="rounded-md rounded-t-lg px-2.5 py-3 mb-3 text-lg text-gray-900 bg-gray-100 focus:ring-blue-500 block w-full p-2.5 border-0 border-b-2 border-rose-300  focus:outline-none focus:ring-0 focus:border-rose-400 peer cursor-pointer"
                   value={formEditState.categoryId}
                   onChange={handleInputChange}
+                  id="categories"
                 >
-                  <option value="" disabled>
+                  <option selected>
                     {t("Management_category")}
                   </option>
                   {categories.map((category) => (
@@ -257,25 +276,36 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   ))}
                 </select>
 
-                <p className="self-start font-semibold drop-shadow">
+                <label htmlFor="presentation" className="block text-base text-gray-900 self-start font-semibold drop-shadow">
                   {t("Management_quantity")}
-                </p>
-                <input
-                  type="number"
-                  name="presentacion"
-                  placeholder={t("Management_presentation")}
-                  className="p-2 border rounded-md"
-                  value={formEditState.presentacion}
-                  onChange={handleInputChange}
-                />
-                <textarea
-                  name="description"
-                  placeholder={t("Management_description")}
-                  className="p-2 border rounded-md"
-                  value={formEditState.description}
-                  onChange={handleInputChange}
-                />
+                </label>
+
+                  <input
+                    type="number"
+                    name="presentacion"
+                    placeholder={"Ejemplo: 10"}
+                    className="rounded-md block rounded-t-lg px-2.5 py-2.5 mb-3 w-full text-lg text-gray-900 bg-gray-100 border-0 border-b-2 border-rose-300 appearance-none focus:outline-none focus:ring-0 focus:border-rose-400 focus:border-2 peer"
+                    value={formEditState.presentacion}
+                    onChange={handleInputChange}
+                    id="presentation"
+                  />
+
+                  <label htmlFor="description" className="block text-base text-gray-900 self-start font-semibold drop-shadow">
+                  {t("Management_description")}
+                </label>
+                  <textarea
+                  id="description"
+                    name="description"
+                    placeholder={t("Management_description")}
+                    className="rounded-md block rounded-t-lg px-2.5 py-2.5 mb-3 w-full text-lg text-gray-900 bg-gray-100 border-0 border-b-2 border-rose-300 appearance-none focus:outline-none focus:ring-0 focus:border-rose-400 focus:border-2 peer"
+                    value={formEditState.description}
+                    onChange={handleInputChange}
+                  />
+
                 <div className="flex flex-col items-center">
+                  <label className="block text-base text-gray-900 self-start font-semibold drop-shadow">
+                  {t("Image_product")}
+                </label>
                   <UploadWidget onUpload={handleOnUpload}>
                     {({ open }: any) => {
                       function handleOnClick(e: any) {
@@ -296,13 +326,13 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   <div className="flex flex-row flex-wrap justify-center items-center">
                     {formEditState.images.length > 0 ? (
                       formEditState.images.map(
-                        (image: { img: string }, index: number) => (
+                        (image: string, index: number) => (
                           <div
                             key={index}
                             className="relative p-2 max-w-40 break-words"
                           >
                             <img
-                              src={image.img} // Accede a image.img
+                              src={image}
                               alt={`Uploaded resource ${index}`}
                               className="w-20 h-20 object-cover"
                             />
@@ -329,7 +359,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 mb-5">
                   <p className="self-start font-semibold drop-shadow">
                     {t("Price")} {"(Euros)"}
                   </p>
@@ -337,13 +367,16 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                     type="number"
                     name="price"
                     placeholder={t("Price")}
-                    className="p-2 border rounded-md"
+                    className="rounded-md block rounded-t-lg px-2.5 py-2.5 mb-3 w-full text-lg text-gray-900 bg-gray-100 border-0 border-b-2 border-rose-300 appearance-none focus:outline-none focus:ring-0 focus:border-rose-400 focus:border-2 peer"
                     value={formEditState.price}
                     onChange={handleInputChange}
                   />
+                  <label htmlFor="presentation" className="block text-base text-gray-900 self-start font-semibold drop-shadow">
+                  {t("Management_label")}
+                </label>
                   <select
                     name="label"
-                    className="p-2 border rounded-md"
+                    className="rounded-md rounded-t-lg px-2.5 py-3 mb-3 text-lg text-gray-900 bg-gray-100 focus:ring-blue-500 block w-full p-2.5 border-0 border-b-2 border-rose-300  focus:outline-none focus:ring-0 focus:border-rose-400 peer cursor-pointer"
                     value={formEditState.label}
                     onChange={handleInputChange}
                   >
@@ -370,11 +403,11 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                     />
                   </div>
 
-                  <div className="flex flex-wrap justify-center">
+                  <div className="flex flex-wrap justify-center mb-4">
                     {flavors.map((flavor) => (
                       <div
                         key={flavor.id}
-                        className="m-2 p-4 border border-gray-300 rounded-lg shadow-sm bg-white flex items-center"
+                        className={`m-2 p-4 border border-rose-200 rounded-lg shadow-sm bg-white flex items-center`}
                       >
                         <input
                           type="checkbox"

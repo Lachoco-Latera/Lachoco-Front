@@ -28,8 +28,19 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const [lastPickedFlavor, setLastPickedFlavor] = useState<string>(""); //guarda el ultimo sabor seleccionado ej "fresa-id"
   const [flavorCounts, setFlavorCounts] = useState<{ [key: string]: number }>({}); //guarda un objeto donde cada clave es un id de sabor ej si se selecciona una vez chocolate y dos veces fresa {"chocolate-id": 2,"fresa-id": 1}
   const [moreOptions, setMoreOptions] = useState(false);
+  const [isDecrementDisabled, setIsDecrementDisabled] = useState(false); // Nuevo estado para controlar los botones
   const { t } = useTranslation();
 
+
+  useEffect(() => {
+    const cartItem = cart.find(item => item.id === product.id);
+
+    if (cartItem && cartItem.quantity > 1) {
+      setIsDecrementDisabled(false);
+    } else {
+      setIsDecrementDisabled(Boolean(confirmedFlavors[product.id]?.length));
+    }
+  }, [cart, product.id, confirmedFlavors]);
   
   let total = 0;
   if (cart) {
@@ -131,7 +142,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     }
   };
   
-  const isDecrementDisabled = Boolean(confirmedFlavors[product.id]?.length);
+
   useEffect(() => {
     console.log("Último producto seleccionado:", lastSelectedProductId);
   }, [lastSelectedProductId]);
@@ -274,9 +285,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                       <button
                         className="bg-green-500 hover:bg-green-600 text-white font-bold py-0 px-[6px] rounded-full"
                         onClick={() => handleIncreaseFlavor(flavor.id)}
-                        disabled={
-                          selectedFlavors.length >= product.presentacion || isDecrementDisabled
-                        } // Deshabilita si se alcanzó el máximo
+                        disabled={selectedFlavors.length >= product.presentacion || isDecrementDisabled}
                       >
                         +
                       </button>

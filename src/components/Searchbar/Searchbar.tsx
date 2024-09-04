@@ -109,8 +109,9 @@ function SearchExampleStandard() {
 
   return (
     <Grid>
-      <GridColumn width={16}>
+      <GridColumn width={16}  mobile={16}>
         <Search
+          className="md:"
           fluid
           category
           loading={loading}

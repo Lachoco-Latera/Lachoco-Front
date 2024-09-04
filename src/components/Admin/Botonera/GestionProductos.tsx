@@ -467,7 +467,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                 <img src={logo} alt="" className="w-36" />
               </div>
             )}
-            <p className="text-sm text-gray-600 text-center">
+            <p className="text-sm text-gray-600 text-center my-4">
               {order.description}
             </p>
             <p className="text-lg font-bold text-green-700 text-center">

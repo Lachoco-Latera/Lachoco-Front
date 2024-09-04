@@ -29,6 +29,7 @@ function Cart({ similar }: any) {
   const [useCustomMap, setUseCustomMap] = useState(false);
   const [defineShipping, setDefineShipping] = useState(false);
   const [shippingInfo, setShippingInfo] = useState<any[]>([]);
+  const [isLoadingShipment, setIsLoadingShipment] = useState(false);
 
   const shippingLocal = JSON.parse(
     localStorage.getItem("shippingInfo") || "[]"
@@ -106,7 +107,7 @@ function Cart({ similar }: any) {
       const quantity = Math.max(product.quantity as number, 0);
       return acc + product.price * quantity;
     }, 0);
-    total = total + totalGiftCards+shippingPrice;
+    total = total + totalGiftCards + shippingPrice;
   }
 
   const bombonesProducts = cart.filter(
@@ -226,13 +227,8 @@ function Cart({ similar }: any) {
     });
 
   const requestPayment = async (paymentData: Record<string, any>) => {
-    const shippingPrice = JSON.parse(
-      localStorage.getItem("shippingPrice") || "0"
-    );
-    console.log("paymentData", paymentData, shippingPrice);
-    const bodyCheckout = {...paymentData, shippingPrice}
     return axios
-      .post(`${VITE_BASE_URL}/pagos/create-checkout-session`,bodyCheckout )
+      .post(`${VITE_BASE_URL}/pagos/create-checkout-session`, paymentData)
       .then((paymentResponse) => {
         console.log(
           "Respuesta de pago:",
@@ -328,7 +324,7 @@ function Cart({ similar }: any) {
       country: "COL",
     };
     if (Object.values(rest).every((value) => value !== "")) {
-      paymentData = {
+      paymentData.order = {
         ...paymentData,
         phone: rest.phone,
         number: rest.number,
@@ -349,44 +345,54 @@ function Cart({ similar }: any) {
       console.log("userFullname", userFullname);
       const carriers = ["coordinadora", "interRapidisimo", "servientrega"];
 
-      for (let i = 0; i < carriers.length; i++) {
-        const shippingData = {
-          user: {
-            name: userFullname,
-            company: "",
-            email: userEmail,
-            phone: paymentData.phone,
-            street: paymentData.street,
-            number: paymentData.number,
-            city: paymentData.city,
-            state: paymentData.state,
-            country: paymentData.shipmentCountry,
-            postalCode: paymentData.postalCode,
-          },
-          country: "CO",
-          carrier: carriers[i],
-        };
+      try {
+        setIsLoadingShipment(true);
+        for (let i = 0; i < carriers.length; i++) {
+          const shippingData = {
+            user: {
+              name: userFullname,
+              company: "",
+              email: userEmail,
+              phone: paymentData.order.phone,
+              street: paymentData.order.street,
+              number: paymentData.order.number,
+              city: paymentData.order.city,
+              state: paymentData.order.state,
+              country: paymentData.order.shipmentCountry,
+              postalCode: paymentData.order.postalCode,
+            },
+            country: "CO",
+            carrier: carriers[i],
+          };
 
-        const response = await axios.post(
-          `${VITE_BASE_URL}/shipments/rate`,
-          shippingData
+          const response = await axios.post(
+            `${VITE_BASE_URL}/shipments/rate`,
+            shippingData
+          );
+          console.log("responseShipping", response.data);
+          shippingInfo2.push(response.data);
+          console.log("shippingInfo2", shippingInfo2);
+        }
+
+        shippingFlat = shippingInfo2.flat();
+        console.log("shippingFlat", shippingFlat);
+        window.localStorage.setItem(
+          "shippingInfo",
+          JSON.stringify(shippingFlat)
         );
-        console.log("responseShipping", response.data);
-        shippingInfo2.push(response.data);
-        console.log("shippingInfo2", shippingInfo2);
-      }
-      shippingFlat = shippingInfo2.flat();
-      console.log("shippingFlat", shippingFlat);
-      window.localStorage.setItem("shippingInfo", JSON.stringify(shippingFlat));
-      console.log("shippingInfo", shippingInfo);
-      setDefineShipping(true);
-      const shippingPrice = shippingLocal.totalPrice;
+        console.log("shippingInfo", shippingInfo);
+        setDefineShipping(true);
 
-      toast.promise(requestPayment(paymentData, shippingPrice), {
-        loading: t("processing_order"),
-        success: t("order_processed_successfully"),
-        error: t("error_creating_order"),
-      });
+        toast.promise(requestPayment(paymentData), {
+          loading: t("processing_order"),
+          success: t("order_processed_successfully"),
+          error: t("error_creating_order"),
+        });
+      } catch (error) {
+        console.log("Error al calcular el costo de envío:", error);
+      } finally {
+        setIsLoadingShipment(false);
+      }
     } else {
       throw new Error(t("order_id_is_invalid"));
     }
@@ -442,7 +448,10 @@ function Cart({ similar }: any) {
 
       if (globalOrderId !== "" && globalOrderId.length !== 0) {
         axios
-          .post(`${VITE_BASE_URL}/pagos/create-checkout-session`, {...paymentData, shippingPrice})
+          .post(`${VITE_BASE_URL}/pagos/create-checkout-session`, {
+            ...paymentData,
+            shippingPrice,
+          })
           .then((paymentResponse) => {
             console.log(
               "Respuesta de pago:",
@@ -555,9 +564,7 @@ function Cart({ similar }: any) {
             }
             className="text-xl font-bold"
             disabled
-          >
-            {t("Cart_pending")}
-          </button>
+          ></button>
         </div>
       ) : (
         <>
@@ -570,7 +577,27 @@ function Cart({ similar }: any) {
               className="text-xl font-bold"
               disabled={isDisabled}
             >
-              {t("Cart_order")}
+              {isLoadingShipment ? (
+                <svg
+                  aria-hidden="true"
+                  role="status"
+                  className="inline w-4 h-4 me-3 text-black animate-spin"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="#E5E7EB"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              ) : (
+                t("Cart_order")
+              )}
             </button>
           </div>
           <>

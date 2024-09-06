@@ -13,31 +13,28 @@ import { useTranslation } from "react-i18next";
 import ShippingProvider from "../ShippingProvider/ShippingProvider";
 
 function Cart({ similar }: any) {
-  const { cart, confirmedFlavors, giftCards } = useCartStore();
+  const { cart, confirmedFlavors, giftCards, totalShipping, shippingCarrier, shippingService } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const [completed, setCompleted] = useState<boolean>(true);
   const [userId, setUserId] = useState(null);
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
   const [toPayment, setToPayment] = useState(false);
   const [orderCreatedId, setOrderCreatedId] = useState("");
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [, setCountry] = useState<string>("");
-  const [actualLink, setActualLink] = useState("");
   const [infoModal, setInfoModal] = useState(false);
   const [useCustomMap, setUseCustomMap] = useState(false);
   const [defineShipping, setDefineShipping] = useState(false);
-  const [shippingInfo, setShippingInfo] = useState<any[]>([]);
+  const [shippingInfo, setShippingInfo] = useState<Record<string, string>[]>([]);
   const [isLoadingShipment, setIsLoadingShipment] = useState(false);
+  const [requestPaymentData, setRequestPaymentData] = useState<Record<string, any>>({});
+  const [selectedCarrier, setSelectedCarrier] = useState<string>('');
 
-  const shippingLocal = JSON.parse(
-    localStorage.getItem("shippingInfo") || "[]"
-  );
-
-  const shippingPrice = JSON.parse(
-    localStorage.getItem("shippingPrice") || "0"
-  );
+  const addShippingPrice = useCartStore((state) => state.addShippingPrice);
+  const addShippingCarrier = useCartStore((state) => state.addShippingCarrier);
+  const addShippingService = useCartStore((state) => state.addShippingService);
 
   const shippingInfo2: any[] = [];
   let shippingFlat: any[] = [];
@@ -61,6 +58,13 @@ function Cart({ similar }: any) {
 
   similar;
   // const navigate = useNavigate();
+
+  useEffect(() => {
+    addShippingPrice(0);
+    addShippingCarrier("");
+    addShippingService("");
+  }, [])
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -76,10 +80,10 @@ function Cart({ similar }: any) {
       }
     };
 
-    if (isLoaded && userEmail) {
+    if (userEmail) {
       fetchUserData();
     }
-  }, [isLoaded, userEmail]);
+  }, [userEmail]);
   useEffect(() => {
     const countFlavorsAndSum = () => {
       let totalFlavors = 0;
@@ -107,7 +111,7 @@ function Cart({ similar }: any) {
       const quantity = Math.max(product.quantity as number, 0);
       return acc + product.price * quantity;
     }, 0);
-    total = total + totalGiftCards + shippingPrice;
+    total = total + totalGiftCards + totalShipping;
   }
 
   const bombonesProducts = cart.filter(
@@ -235,7 +239,6 @@ function Cart({ similar }: any) {
           paymentResponse.data,
           paymentResponse
         );
-        setInfoModal(false);
         toast(t("please_access_to_payment"), {
           duration: 10000,
           action: {
@@ -244,7 +247,7 @@ function Cart({ similar }: any) {
           },
         });
         setToPayment(true);
-        setActualLink(paymentResponse.data);
+        window.location.href = paymentResponse.data || `${VITE_FRONTEND_URL}`
       })
       .catch((error) => {
         setToPayment(false);
@@ -298,7 +301,6 @@ function Cart({ similar }: any) {
       };
 
       if (globalOrderId !== "" && globalOrderId.length !== 0) {
-        console.log("userFullname", globalOrderId);
         toast.promise(requestPayment(paymentData), {
           loading: t("processing_order"),
           success: t("order_processed_successfully"),
@@ -311,15 +313,15 @@ function Cart({ similar }: any) {
   };
 
   const handlePlaceOrder = async () => {
-    console.log("formData", formData);
     const {
       orderId,
       shipmentCountry,
       giftCardId,
       frecuency,
+      country,
       ...rest
     } = formData;
-    let paymentData: any = {
+    const paymentData: Record<string, any> = {
       orderId: orderCreatedId,
       country: "COL",
     };
@@ -333,16 +335,12 @@ function Cart({ similar }: any) {
         state: rest.state,
         postalCode: rest.postalCode,
         shipmentCountry: shipmentCountry || "COL",
-        shippingPrice: shippingPrice,
       };
-
-      console.log("paymentData", paymentData.order);
     }
     if (giftCardId) {
       paymentData.order.giftCardId = giftCardId;
     }
     if (orderCreatedId !== "" && orderCreatedId.length !== 0) {
-      console.log("userFullname", userFullname);
       const carriers = ["coordinadora", "interRapidisimo", "servientrega"];
 
       try {
@@ -358,7 +356,7 @@ function Cart({ similar }: any) {
               number: paymentData.order.number,
               city: paymentData.order.city,
               state: paymentData.order.state,
-              country: paymentData.order.shipmentCountry,
+              country: country,
               postalCode: paymentData.order.postalCode,
             },
             country: "CO",
@@ -369,25 +367,16 @@ function Cart({ similar }: any) {
             `${VITE_BASE_URL}/shipments/rate`,
             shippingData
           );
-          console.log("responseShipping", response.data);
           shippingInfo2.push(response.data);
-          console.log("shippingInfo2", shippingInfo2);
         }
 
         shippingFlat = shippingInfo2.flat();
-        console.log("shippingFlat", shippingFlat);
-        window.localStorage.setItem(
-          "shippingInfo",
-          JSON.stringify(shippingFlat)
-        );
-        console.log("shippingInfo", shippingInfo);
-        setDefineShipping(true);
+        setShippingInfo(shippingFlat);
 
-        toast.promise(requestPayment(paymentData), {
-          loading: t("processing_order"),
-          success: t("order_processed_successfully"),
-          error: t("error_creating_order"),
-        });
+        setDefineShipping(true);
+        setRequestPaymentData(paymentData);
+        setInfoModal(false);
+
       } catch (error) {
         console.log("Error al calcular el costo de envío:", error);
       } finally {
@@ -397,6 +386,21 @@ function Cart({ similar }: any) {
       throw new Error(t("order_id_is_invalid"));
     }
   };
+
+  const handleClickPayment = (paymentData: Record<string, any>) => {
+
+    paymentData.order.shippingPrice = totalShipping;
+    paymentData.order.shippingCarrier = shippingCarrier;
+    paymentData.order.shippingService = shippingService;
+
+    toast.promise(requestPayment(paymentData), {
+      loading: t("processing_order"),
+      success: t("order_processed_successfully"),
+      error: t("error_creating_order"),
+    });
+
+    // window.location.href = actualLink || `${VITE_FRONTEND_URL}`
+  }
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -468,7 +472,6 @@ function Cart({ similar }: any) {
             });
 
             setToPayment(true);
-            setActualLink(paymentResponse.data);
           })
           .catch((error) => {
             console.error("Error en el envío de paymentData:", error);
@@ -482,7 +485,7 @@ function Cart({ similar }: any) {
   const isDisabled =
     orderCreatedId === ""
       ? false
-      : !toPayment && orderCreatedId !== ""
+      : orderCreatedId !== "" && !isLoadingShipment
       ? false
       : true;
   const buttonClass =
@@ -503,7 +506,7 @@ function Cart({ similar }: any) {
   };
 
   return (
-    <section>
+    <section className="mb-16">
       <h3 className="text-2xl font-bold mb-4">{t("Cart_your")}</h3>
       <ul>
         {giftCards?.map((giftCard, index) => (
@@ -525,15 +528,15 @@ function Cart({ similar }: any) {
         )}
       </div>
       {defineShipping ? (
-        <div className="flex-column justify-between items-center gap-4 mb-2 shadow-md p-4">
+        <div className="flex-column justify-between items-center gap-4 mb-10 shadow-md p-4">
           <div className="flex items-center gap-8 md:flex-row flex-col md:text-start text-center hover:cursor-pointer">
             <h3 className=" font-semibold text-base w-full">Transportadora</h3>
             <h3 className=" font-semibold text-base w-3/4">Tiempo estimado</h3>
             <h3 className=" font-semibold text-base w-2/3">Valor</h3>
             <h3 className=" font-semibold text-base w-3/4">Servicio</h3>
           </div>
-          {shippingLocal.map((carrier, index) => (
-            <ShippingProvider key={index} carrier={carrier} />
+          {shippingInfo?.map((carrier, index) => (
+            <ShippingProvider key={index} carrier={carrier} selectedCarrier={selectedCarrier} setSelectedCarrier={setSelectedCarrier}/>
           ))}
         </div>
       ) : null}
@@ -568,50 +571,51 @@ function Cart({ similar }: any) {
         </div>
       ) : (
         <>
-          <div
-            className={`flex rounded-xl p-2 mt-2 shadow 
-              justify-center ${buttonClass} transition-all ease`}
-          >
-            <button
-              onClick={() => handleClickPlaceOrder()}
-              className="text-xl font-bold"
-              disabled={isDisabled}
-            >
-              {isLoadingShipment ? (
-                <svg
-                  aria-hidden="true"
-                  role="status"
-                  className="inline w-4 h-4 me-3 text-black animate-spin"
-                  viewBox="0 0 100 101"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="#E5E7EB"
-                  />
-                  <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              ) : (
-                t("Cart_order")
-              )}
-            </button>
-          </div>
+            {!defineShipping ? (
+              <div
+                className={`flex rounded-xl p-2 mt-2 shadow 
+                  justify-center ${buttonClass} transition-all ease`}
+              >
+              <button
+                onClick={() => handleClickPlaceOrder()}
+                className="text-xl font-bold"
+                disabled={isDisabled}
+              >
+                {isLoadingShipment ? (
+                  <svg
+                    aria-hidden="true"
+                    role="status"
+                    className="inline w-4 h-4 me-3 text-black animate-spin"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="#E5E7EB"
+                    />
+                    <path
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                ) : (
+                  t("Cart_order")
+                )}
+
+              </button>
+            </div>
+            ) : null
+            }
           <>
-            {toPayment ? (
+            {defineShipping ? (
               <div
                 className="flex rounded-xl p-2 mt-2 shadow 
                 justify-center hover:bg-green-500 text-green-500
                   hover:text-white hover:scale-105 transition-all ease"
               >
                 <button
-                  onClick={() =>
-                    (window.location.href =
-                      actualLink || `${VITE_FRONTEND_URL}`)
-                  }
+                  onClick={() => handleClickPayment(requestPaymentData)}
                   className="text-xl font-bold"
                 >
                   {t("Cart_pay")}

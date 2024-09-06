@@ -7,12 +7,18 @@ interface State {
   giftCards: GiftCard[];
   totalItems: number;
   totalPrice: number;
+  totalShipping: number;
+  shippingCarrier: string;
+  shippingService: string;
   confirmedFlavors: { [productId: string]: string[] };
 }
 
 interface Actions {
   addToCart: (product: Product) => void;
   addGiftCard: (giftCard: GiftCard) => void;
+  addShippingPrice: (price: number) => void;
+  addShippingCarrier: (carrier: string) => void;
+  addShippingService: (service: string) => void
   removeFromGiftCard: (giftCard: GiftCard) => void;
   removeFromCart: (product: Product) => void;
   subtractFromCart: (product: Product) => void;
@@ -27,7 +33,10 @@ const INITIAL_STATE: State = {
   giftCards: [],
   totalItems: 0,
   totalPrice: 0,
+  totalShipping: 0,
   confirmedFlavors: {},
+  shippingCarrier: '',
+  shippingService: '',
 };
 
 export const useCartStore = create(
@@ -38,6 +47,9 @@ export const useCartStore = create(
       totalItems: INITIAL_STATE.totalItems,
       totalPrice: INITIAL_STATE.totalPrice,
       confirmedFlavors: INITIAL_STATE.confirmedFlavors,
+      totalShipping: INITIAL_STATE.totalShipping,
+      shippingCarrier: INITIAL_STATE.shippingCarrier,
+      shippingService: INITIAL_STATE.shippingService,
       addToCart: (product: Product) => {
         const cart = get().cart;
         const cartItem = cart.find((item) => item.id === product.id);
@@ -73,6 +85,24 @@ export const useCartStore = create(
         }))
         
 
+      },
+      addShippingPrice: (price: number) => {
+        set((state) => ({
+          ...state,
+          totalShipping: price,
+        }))
+      },
+      addShippingCarrier: (carrier: string) => {
+        set((state) => ({
+          ...state,
+          shippingCarrier: carrier,
+        }))
+      },
+      addShippingService: (service: string) => {
+        set((state) => ({
+          ...state,
+          shippingService: service,
+        }))
       },
       removeFromGiftCard: (giftCard: GiftCard) => {
         const giftCards = get().giftCards;
@@ -177,7 +207,10 @@ export const useCartStore = create(
           giftCards: [],
           totalItems: 0,
           totalPrice: 0,
+          totalShipping: 0,
           confirmedFlavors: {},
+          shippingCarrier: "",
+          shippingService: "",
         });
       },
     }),

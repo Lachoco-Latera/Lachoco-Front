@@ -15,6 +15,7 @@
     "@headlessui/react": "^2.0.4",
     "@hookform/resolvers": "^3.9.0",
     "axios": "^1.7.2",
+    "cloudinary": "^2.4.0",
     "i18next": "^23.13.0",
     "i18next-browser-languagedetector": "^8.0.0",
     "leaflet": "^1.9.4",

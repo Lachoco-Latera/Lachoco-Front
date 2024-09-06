@@ -3,10 +3,14 @@ import { useCartStore } from "@/stores/useCartStore";
 const ShippingProvider = ({carrier, selectedCarrier, setSelectedCarrier}: Record<string, any>) => {
 
   const addShippingToCart = useCartStore((state) => state.addShippingPrice);
+  const addShippingCarrier = useCartStore((state) => state.addShippingCarrier);
+  const addShippingService = useCartStore((state) => state.addShippingService);
 
   const handle = () => {
     setSelectedCarrier(carrier.service);
-    addShippingToCart(carrier.totalPrice)
+    addShippingToCart(carrier.totalPrice);
+    addShippingCarrier(carrier.carrier);
+    addShippingService(carrier.carrier);
   }
 
   return (

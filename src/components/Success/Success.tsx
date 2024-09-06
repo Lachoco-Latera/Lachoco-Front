@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 const Success = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+  console.log("Query params", queryParams);
   const navigate = useNavigate();
   const collectionId = queryParams.get("collection_id");
   const paymentStatus = queryParams.get("collection_status");

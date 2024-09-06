@@ -62,7 +62,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
         onClick={() => handleNavigate(product.id)}
       >
         <img
-          src={product.images[1]?.img}
+          src={product.images[1]}
           alt={product.name}
           width={100}
           height={100}

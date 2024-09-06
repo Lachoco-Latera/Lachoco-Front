@@ -35,7 +35,6 @@ const Inventory = ({ onCartIconClick }: any) => {
   userId;
   const navigate = useNavigate();
   const { t } = useTranslation();
-  console.log(products)
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   

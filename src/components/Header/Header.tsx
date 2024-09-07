@@ -222,10 +222,12 @@ export default function Header({ onCartIconClick }: Props) {
     }
   };
 
+  useEffect(() => {
   // Call the registerUser function when needed
   if (isSignedIn && isLoaded) {
     registerUser();
-  }
+  }}), [isSignedIn, isLoaded];
+  
   return (
     <header
       className=" 

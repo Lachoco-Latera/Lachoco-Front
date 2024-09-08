@@ -31,7 +31,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="privacy-policy"
+                  href="/privacy-policy"
                   className="hover:underline me-4 md:me-6 text-gray-600"
                 >
                   {t("privacy_policy")}

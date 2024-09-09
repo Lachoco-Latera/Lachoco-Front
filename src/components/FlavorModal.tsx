@@ -253,7 +253,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 >
                   <div className="flex flex-col justify-center items-center gap-2">
                     <img
-                      src={product.images[0]?.img}
+                      src={product.images[0]}
                       alt={flavor.name}
                       className="w-16 h-16 rounded"
                     />

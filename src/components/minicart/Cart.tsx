@@ -50,7 +50,7 @@ function Cart({ similar }: any) {
     city: "",
     state: "",
     postalCode: "",
-    shipmentCountry: "COL",
+    shipmentCountry: "Colombia",
   });
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
@@ -297,7 +297,7 @@ function Cart({ similar }: any) {
     if (cart.length === 0 && giftCards.length > 0) {
       const paymentData = {
         orderId: globalOrderId,
-        country: "COL",
+        country: "Colombia",
       };
 
       if (globalOrderId !== "" && globalOrderId.length !== 0) {
@@ -323,7 +323,7 @@ function Cart({ similar }: any) {
     } = formData;
     const paymentData: Record<string, any> = {
       orderId: orderCreatedId,
-      country: "COL",
+      country: "Colombia",
     };
     if (Object.values(rest).every((value) => value !== "")) {
       paymentData.order = {
@@ -334,7 +334,7 @@ function Cart({ similar }: any) {
         city: rest.city,
         state: rest.state,
         postalCode: rest.postalCode,
-        shipmentCountry: shipmentCountry || "COL",
+        shipmentCountry: shipmentCountry || "Colombia",
       };
     }
     if (giftCardId) {
@@ -436,14 +436,14 @@ function Cart({ similar }: any) {
       setOrderCreatedId(response.data[0].id);
       const paymentData: any = {
         orderId: globalOrderId,
-        country: "COL",
+        country: "Colombia",
         phone: formData.phone,
         street: formData.street,
         number: formData.number,
         city: formData.city,
         state: formData.state,
         postalCode: formData.postalCode,
-        shipmentCountry: formData.shipmentCountry || "COL",
+        shipmentCountry: formData.shipmentCountry || "Colombia",
       };
       // Agregar giftCardId solo si no es vacío
       if (formData.giftCardId) {

@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import ShippingProvider from "../ShippingProvider/ShippingProvider";
 
 function Cart({ similar }: any) {
-  const { cart, confirmedFlavors, giftCards, totalShipping } = useCartStore();
+  const { cart, confirmedFlavors, giftCards, totalShipping, shippingCarrier, shippingService } = useCartStore();
   const [, setActualConfirmedFlavorsTotal] = useState<number>(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const [completed, setCompleted] = useState<boolean>(true);
@@ -31,13 +31,10 @@ function Cart({ similar }: any) {
   const [isLoadingShipment, setIsLoadingShipment] = useState(false);
   const [requestPaymentData, setRequestPaymentData] = useState<Record<string, any>>({});
   const [selectedCarrier, setSelectedCarrier] = useState<string>('');
+
   const addShippingPrice = useCartStore((state) => state.addShippingPrice);
-
-
-
-  const shippingPrice = JSON.parse(
-    localStorage.getItem("shippingPrice") || "0"
-  );
+  const addShippingCarrier = useCartStore((state) => state.addShippingCarrier);
+  const addShippingService = useCartStore((state) => state.addShippingService);
 
   const shippingInfo2: any[] = [];
   let shippingFlat: any[] = [];
@@ -64,6 +61,8 @@ function Cart({ similar }: any) {
 
   useEffect(() => {
     addShippingPrice(0);
+    addShippingCarrier("");
+    addShippingService("");
   }, [])
 
   useEffect(() => {
@@ -322,7 +321,7 @@ function Cart({ similar }: any) {
       country,
       ...rest
     } = formData;
-    let paymentData: any = {
+    const paymentData: Record<string, any> = {
       orderId: orderCreatedId,
       country: "COL",
     };
@@ -391,6 +390,9 @@ function Cart({ similar }: any) {
   const handleClickPayment = (paymentData: Record<string, any>) => {
 
     paymentData.order.shippingPrice = totalShipping;
+    paymentData.order.shippingCarrier = shippingCarrier;
+    paymentData.order.shippingService = shippingService;
+
     toast.promise(requestPayment(paymentData), {
       loading: t("processing_order"),
       success: t("order_processed_successfully"),

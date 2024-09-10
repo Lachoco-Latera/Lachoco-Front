@@ -8,13 +8,17 @@ interface State {
   totalItems: number;
   totalPrice: number;
   totalShipping: number;
+  shippingCarrier: string;
+  shippingService: string;
   confirmedFlavors: { [productId: string]: string[] };
 }
 
 interface Actions {
   addToCart: (product: Product) => void;
   addGiftCard: (giftCard: GiftCard) => void;
-  addShippingPrice: (price: number) => void
+  addShippingPrice: (price: number) => void;
+  addShippingCarrier: (carrier: string) => void;
+  addShippingService: (service: string) => void
   removeFromGiftCard: (giftCard: GiftCard) => void;
   removeFromCart: (product: Product) => void;
   subtractFromCart: (product: Product) => void;
@@ -31,6 +35,8 @@ const INITIAL_STATE: State = {
   totalPrice: 0,
   totalShipping: 0,
   confirmedFlavors: {},
+  shippingCarrier: '',
+  shippingService: '',
 };
 
 export const useCartStore = create(
@@ -42,6 +48,8 @@ export const useCartStore = create(
       totalPrice: INITIAL_STATE.totalPrice,
       confirmedFlavors: INITIAL_STATE.confirmedFlavors,
       totalShipping: INITIAL_STATE.totalShipping,
+      shippingCarrier: INITIAL_STATE.shippingCarrier,
+      shippingService: INITIAL_STATE.shippingService,
       addToCart: (product: Product) => {
         const cart = get().cart;
         const cartItem = cart.find((item) => item.id === product.id);
@@ -82,6 +90,18 @@ export const useCartStore = create(
         set((state) => ({
           ...state,
           totalShipping: price,
+        }))
+      },
+      addShippingCarrier: (carrier: string) => {
+        set((state) => ({
+          ...state,
+          shippingCarrier: carrier,
+        }))
+      },
+      addShippingService: (service: string) => {
+        set((state) => ({
+          ...state,
+          shippingService: service,
         }))
       },
       removeFromGiftCard: (giftCard: GiftCard) => {
@@ -189,6 +209,8 @@ export const useCartStore = create(
           totalPrice: 0,
           totalShipping: 0,
           confirmedFlavors: {},
+          shippingCarrier: "",
+          shippingService: "",
         });
       },
     }),

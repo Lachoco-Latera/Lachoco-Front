@@ -18,11 +18,7 @@ export interface Product {
     name: string;
     stock: number;
   }[];
-  images: {
-    id: string;
-    img?: string;
-    https?: string;
-  }[];
+  images: string[];
 }
 
 export interface GiftCard {

@@ -75,7 +75,7 @@ function SearchExampleStandard() {
               .slice(0, 8)
               .join(" ")
               .concat(result.description.split(" ").length > 8 ? "..." : ""),
-            image: result.images.length > 0 ? result.images[0].img : undefined,
+            image: result.images.length > 0 ? result.images[0] : undefined,
             price: result.price,
             id: result.id,
           })),

@@ -142,16 +142,28 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
           `${VITE_BASE_URL}/products`,
           restProductData
         );
+        
       }
-
+      
       closeModal();
-
-      if (response) {
+      
+      if (response && response.status >= 200) {
         toast.success(
           formEditState.id
-            ? "Producto actualizado con éxito!"
-            : "Producto creado con éxito!"
+          ? "Producto actualizado con éxito!"
+          : "Producto creado con éxito!"
         );
+        console.log(formEditState.id)
+        if(formEditState.id) {
+          setOrderState((prevState) => prevState.map((order) => {
+            if(order.id === formEditState.id){
+              return {...order, ...response.data}
+            }
+            return order
+            }))
+        } else{
+          setOrderState((prevState) => [...prevState, response.data])
+        }
         setFormEditState({
           name: "",
           presentacion: 0,
@@ -186,6 +198,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
     };
     getOrders();
   }, []);
+
   const handleButtonDelete = async (id: string) => {
     toast("Esperando al servidor...", { id: "loading-delete" });
     try {
@@ -436,7 +449,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
                           hover:scale-105 transition all ease  hover:bg-rose-400 
                           text:bg-blue-400 hover:text-white font-bold hover:cursor-pointer"
                   >
-                    {t("Management_create")}
+                    {formEditState.id ? t("Edit_product") : t("Management_create")}
                   </button>
                 </div>
               </div>
@@ -457,7 +470,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
             {order.images.length > 0 ? (
               <div className="self-center">
                 <img
-                  src={order.images ? order.images[0]?.img : ""}
+                  src={order.images ? order.images[0] : ""}
                   alt=""
                   className="w-36"
                 />

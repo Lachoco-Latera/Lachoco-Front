@@ -31,7 +31,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const [moreOptions, setMoreOptions] = useState(false);
 
   const { t } = useTranslation();
-
+ console.log('sabores',flavorCounts)
   let total = 0;
   if (cart) {
     //calcula el precio total de los productos del carrito
@@ -115,10 +115,10 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     if (selectedFlavors.length < product.presentacion) {
       const randomFlavor =
         product.flavors[Math.floor(Math.random() * product.flavors.length)];
-      setSelectedFlavors([...selectedFlavors, randomFlavor.id]);
+      setSelectedFlavors([...selectedFlavors, randomFlavor.name]);
       setFlavorCounts((prevCounts) => ({
         ...prevCounts,
-        [randomFlavor.id]: (prevCounts[randomFlavor.id] || 0) + 1,
+        [randomFlavor.name]: (prevCounts[randomFlavor.name] || 0) + 1,
       }));
       toast(`${t("flavor")} ${randomFlavor.name} ${t("Toast_added")}`, {
         action: {
@@ -267,7 +267,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                             ? "bg-gray-800 opacity-50 hover:bg-gray-950"
                             : "bg-red-500 hover:bg-red-600"
                         } text-white font-bold py-0 px-[7px] rounded-full`}
-                        onClick={() => handleDecreaseFlavor(flavor.id)}
+                        onClick={() => handleDecreaseFlavor(flavor.name)}
                         disabled={!flavorCounts[flavor.id]}
                       >
                         -
@@ -276,7 +276,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                       {/* Muestra la cantidad seleccionada */}
                       <button
                         className="bg-green-500 hover:bg-green-600 text-white font-bold py-0 px-[6px] rounded-full"
-                        onClick={() => handleIncreaseFlavor(flavor.id)}
+                        onClick={() => handleIncreaseFlavor(flavor.name)}
                         disabled={
                           selectedFlavors.length >= product.presentacion
                         } // Deshabilita si se alcanzó el máximo

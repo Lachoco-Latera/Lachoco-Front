@@ -277,7 +277,7 @@ function Cart({ similar }: any) {
         pickedFlavors:
           product.category.name === "bombones"
             ? confirmedFlavors[product.id] || []
-            : product.flavors.map((flavor) => flavor.id),
+            : product.flavors.map((flavor) => flavor.name),
       })),
       giftCards: giftCards.map((giftCard) => ({
         giftCardId: giftCard.id,
@@ -341,7 +341,7 @@ function Cart({ similar }: any) {
       paymentData.order.giftCardId = giftCardId;
     }
     if (orderCreatedId !== "" && orderCreatedId.length !== 0) {
-      const carriers = ["coordinadora", "interRapidisimo", "servientrega"];
+      const carriers = ["tcc","coordinadora", "interRapidisimo", "servientrega"];
 
       try {
         setIsLoadingShipment(true);
@@ -372,6 +372,7 @@ function Cart({ similar }: any) {
 
         shippingFlat = shippingInfo2.flat();
         setShippingInfo(shippingFlat);
+        const maxShippingPrice = Math.max(...shippingFlat.map(carrier => carrier.totalPrice));
 
         setDefineShipping(true);
         setRequestPaymentData(paymentData);

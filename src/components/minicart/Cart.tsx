@@ -31,7 +31,8 @@ function Cart({ similar }: any) {
   const [isLoadingShipment, setIsLoadingShipment] = useState(false);
   const [requestPaymentData, setRequestPaymentData] = useState<Record<string, any>>({});
   const [selectedCarrier, setSelectedCarrier] = useState<string>('');
-
+  
+  const [maxShippingPrice, setMaxShippingPrice] = useState<number | null>(null);
   const addShippingPrice = useCartStore((state) => state.addShippingPrice);
   const addShippingCarrier = useCartStore((state) => state.addShippingCarrier);
   const addShippingService = useCartStore((state) => state.addShippingService);
@@ -372,8 +373,8 @@ function Cart({ similar }: any) {
 
         shippingFlat = shippingInfo2.flat();
         setShippingInfo(shippingFlat);
-        const maxShippingPrice = Math.max(...shippingFlat.map(carrier => carrier.totalPrice));
-
+        const maximumShippingPrice = Math.max(...shippingFlat.map(carrier => carrier.totalPrice));
+        setMaxShippingPrice(maximumShippingPrice);
         setDefineShipping(true);
         setRequestPaymentData(paymentData);
         setInfoModal(false);
@@ -531,14 +532,14 @@ function Cart({ similar }: any) {
       {defineShipping ? (
         <div className="flex-column justify-between items-center gap-4 mb-10 shadow-md p-4">
           <div className="flex items-center gap-8 md:flex-row flex-col md:text-start text-center hover:cursor-pointer">
-            <h3 className=" font-semibold text-base w-full">Transportadora</h3>
-            <h3 className=" font-semibold text-base w-3/4">Tiempo estimado</h3>
+            <h3 className=" font-semibold text-base w-full">Costo del envío: {maxShippingPrice}</h3>
+            {/* <h3 className=" font-semibold text-base w-3/4">Tiempo estimado</h3>
             <h3 className=" font-semibold text-base w-2/3">Valor</h3>
-            <h3 className=" font-semibold text-base w-3/4">Servicio</h3>
+            <h3 className=" font-semibold text-base w-3/4">Servicio</h3> */}
           </div>
-          {shippingInfo?.map((carrier, index) => (
+          {/* {shippingInfo?.map((carrier, index) => (
             <ShippingProvider key={index} carrier={carrier} selectedCarrier={selectedCarrier} setSelectedCarrier={setSelectedCarrier}/>
-          ))}
+          ))} */}
         </div>
       ) : null}
       <div

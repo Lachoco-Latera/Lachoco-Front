@@ -33,10 +33,10 @@ export const DatosEmpresa: React.FC = () => {
                 <h3 className="text-lg">Lachoco Latera | La Macarena</h3>
                 <p className="text-lg">Bogotá, Colombia</p>
                 <p className="text-lg">Cra. 4a # 26B-12</p>
-                <p className="text-lg"> +57 3012985389</p>
+                <p className="text-lg"> +57 3202506687</p>
                 <p className="text-lg">
-                  <a href="https://wa.me/+573012985389" />
-                  +57 3012985389
+                  <a href="https://wa.me/+573202506687" />
+                  +57 3202506687
                 </p>
               </div>
               <div className="flex flex-col ml-6 mr-6">

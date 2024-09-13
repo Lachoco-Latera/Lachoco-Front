@@ -297,7 +297,7 @@ function Cart({ similar }: any) {
     if (cart.length === 0 && giftCards.length > 0) {
       const paymentData = {
         orderId: globalOrderId,
-        country: "Colombi",
+        country: "Colombia",
       };
 
       if (globalOrderId !== "" && globalOrderId.length !== 0) {

@@ -375,6 +375,7 @@ function Cart({ similar }: any) {
         setShippingInfo(shippingFlat);
         const maximumShippingPrice = Math.max(...shippingFlat.map(carrier => carrier.totalPrice));
         setMaxShippingPrice(maximumShippingPrice);
+        addShippingPrice(maximumShippingPrice);
         setDefineShipping(true);
         setRequestPaymentData(paymentData);
         setInfoModal(false);

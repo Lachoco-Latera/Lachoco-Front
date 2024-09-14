@@ -61,7 +61,7 @@ export const DatosEmpresa: React.FC = () => {
           </div>
 
           <div className="w-full flex flex-row flex-wrap justify-center ml-2 mt-6">
-          <div className="flex flex-col">
+          <div className="flex flex-col mb-2">
               <h2 className="m-6 text-xl  font-bold">{t("Company_hours")}</h2>
               <p className="ml-6 text-lg">
                 <strong>{t("Company_days")}</strong> 01:30 PM - 08:00 PM
@@ -76,32 +76,32 @@ export const DatosEmpresa: React.FC = () => {
             <div className="flex flex-col">
               <h2 className="m-6 text-xl  font-bold">{t("Company_press")}</h2>
               <ul>
-                <li className="ml-6 text-lg">
+                <li className="ml-12 text-lg">
                   <a href="https://www.elespectador.com/entretenimiento/gente/con-sabor-a-chocolate-238588/">
                     Con sabor a chocolate.
                   </a>
                 </li>
-                <li className="ml-6 text-lg">
+                <li className="ml-12 text-lg">
                   <a href="https://thecitypaperbogota.com/dining/bakeries-cafes/for-love-of-chocolate/">
                     For love of chocolate
                   </a>
                 </li>
-                <li className="ml-6 text-lg">
+                <li className="ml-12 text-lg">
                   <a href="https://www.semana.com/especiales/festival-de-librerias-arcadia/articulo/la-choco-latera/29906/">
                     La Choco Latera
                   </a>
                 </li>
-                <li className="ml-6 text-lg">
+                <li className="ml-12 text-lg">
                   <a href="https://www.eltiempo.com/archivo/documento/CMS-16362576">
                     Bebidas con chocolate: Otra forma de celebrar
                   </a>
                 </li>
-                <li className="ml-6 text-lg">
+                <li className="ml-12 text-lg">
                   <a href="https://www.youtube.com/watch?v=BIOwq8iTKjk">
                     Mesa para Trece | Capítulo 7: SUMA IUIAI (Putumayo)
                   </a>
                 </li>
-                <li className="ml-6 text-lg">
+                <li className="ml-12 text-lg">
                   <a href="https://www.eltiempo.com/archivo/documento/MAM-4779851">
                     Los chocolates de Marcela
                   </a>

@@ -50,7 +50,7 @@ export const DatosEmpresa: React.FC = () => {
                 </p>
               </div> */}
             </div>
-            <div className="w-2/5 h-72 flex flex-col justify-center items-center border-2 border-solid rounded-lg border-black">
+            <div className="w-1/2 h-72 flex flex-col justify-center items-center border-2 border-solid rounded-lg border-black">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248.55621444117156!2d-74.06672248029659!3d4.6120171521723705!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f999a2277daab%3A0x843450f0e335a8eb!2sLachoco%20Latera%20Chocolater%C3%ADa!5e0!3m2!1ses-419!2sar!4v1719507808939!5m2!1ses-419!2sar"
                 allowFullScreen

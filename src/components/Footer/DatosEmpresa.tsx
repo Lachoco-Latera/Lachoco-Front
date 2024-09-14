@@ -33,7 +33,6 @@ export const DatosEmpresa: React.FC = () => {
                 <h3 className="text-lg">Lachoco Latera | La Macarena</h3>
                 <p className="text-lg">Bogotá, Colombia</p>
                 <p className="text-lg">Cra. 4a # 26B-12</p>
-                <p className="text-lg"> +57 3202506687</p>
                 <p className="text-lg">
                   <a href="https://wa.me/+573202506687">
                   +57 3202506687
@@ -62,6 +61,18 @@ export const DatosEmpresa: React.FC = () => {
           </div>
 
           <div className="w-full flex flex-row flex-wrap justify-center ml-2 mt-6">
+          <div className="flex flex-col">
+              <h2 className="m-6 text-xl  font-bold">{t("Company_hours")}</h2>
+              <p className="ml-6 text-lg">
+                <strong>{t("Company_days")}</strong> 01:30 PM - 08:00 PM
+              </p>
+              <p className="ml-6 text-lg">
+                <strong>{t("Company_days")}</strong> 01:30 PM - 09:00 PM
+              </p>
+              <p className="ml-6 text-lg">
+                <strong>{t("Company_days3")}</strong> 01:30 PM - 07:30 PM
+              </p>
+            </div>
             <div className="flex flex-col">
               <h2 className="m-6 text-xl  font-bold">{t("Company_press")}</h2>
               <ul>
@@ -97,18 +108,7 @@ export const DatosEmpresa: React.FC = () => {
                 </li>
               </ul>
             </div>
-            <div className="flex flex-col">
-              <h2 className="m-6 text-xl  font-bold">{t("Company_hours")}</h2>
-              <p className="ml-6 text-lg">
-                <strong>{t("Company_days")}</strong> 01:30 PM - 08:00 PM
-              </p>
-              <p className="ml-6 text-lg">
-                <strong>{t("Company_days")}</strong> 01:30 PM - 09:00 PM
-              </p>
-              <p className="ml-6 text-lg">
-                <strong>{t("Company_days3")}</strong> 01:30 PM - 07:30 PM
-              </p>
-            </div>
+            
           </div>
         </div>
       </div>

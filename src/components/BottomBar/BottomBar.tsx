@@ -29,7 +29,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
         () =>
           resolve(
             (window.location.href =
-              "https://lachoco-front.vercel.app/?category=cafes")
+              "https://lachoco-latera.com/?category=cafes")
           ),
         1100
       )

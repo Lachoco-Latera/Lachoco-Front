@@ -263,16 +263,16 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                     <div className="flex justify-center items-center gap-2 mt-2">
                       <button
                         className={`${
-                          !flavorCounts[flavor.id]
+                          !flavorCounts[flavor.name]
                             ? "bg-gray-800 opacity-50 hover:bg-gray-950"
                             : "bg-red-500 hover:bg-red-600"
                         } text-white font-bold py-0 px-[7px] rounded-full`}
                         onClick={() => handleDecreaseFlavor(flavor.name)}
-                        disabled={!flavorCounts[flavor.id]}
+                        disabled={!flavorCounts[flavor.name]}
                       >
                         -
                       </button>
-                      <span>{flavorCounts[flavor.id] || 0}</span>{" "}
+                      <span>{flavorCounts[flavor.name] || 0}</span>{" "}
                       {/* Muestra la cantidad seleccionada */}
                       <button
                         className="bg-green-500 hover:bg-green-600 text-white font-bold py-0 px-[6px] rounded-full"

@@ -35,18 +35,20 @@ export const DatosEmpresa: React.FC = () => {
                 <p className="text-lg">Cra. 4a # 26B-12</p>
                 <p className="text-lg"> +57 3202506687</p>
                 <p className="text-lg">
-                  <a href="https://wa.me/+573202506687" />
+                  <a href="https://wa.me/+573202506687">
                   +57 3202506687
+                  </a>
                 </p>
+                
               </div>
-              <div className="flex flex-col ml-6 mr-6">
+              {/* <div className="flex flex-col ml-6 mr-6">
                 <p className="text-lg">Lachoco Latera | Segovia</p>
                 <p className="text-lg">Segovia, España</p>
                 <p className="text-lg">
                   <a href="https://wa.me/+34634089473" />
                   +34 634089473
                 </p>
-              </div>
+              </div> */}
             </div>
             <div className="w-2/5 h-72 flex flex-col justify-center items-center border-2 border-solid rounded-lg border-black">
               <iframe

@@ -229,6 +229,8 @@ export default function Header({ onCartIconClick }: Props) {
     registerUser();
   }}), [isSignedIn];
   
+  console.log('user id:', user?.id)
+  console.log('env id:', VITE_ADMIN_ID)
   return (
     <header
       className=" 
@@ -304,7 +306,7 @@ export default function Header({ onCartIconClick }: Props) {
               </div>
             </>
           ) : null}
-          {user?.id !== "user_2ilWGvh9587cCuvrttNuLQrY0jD" ? (
+          {user?.id !== "user_2m6qxvEGjIZL9A7qdibGOs6NyAN" ? (
             <div className="relative  hidden md:block">
               <button
                 type="button"

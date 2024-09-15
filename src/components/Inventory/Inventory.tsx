@@ -167,7 +167,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                         ? "Solo Online"
                         : product.label}
                     </p>
-                    <i
+                    {/* <i
                       className="absolute ml-24 drop-shadow z-[2]"
                       onClick={(e) => handleFavoriteClick(e, product)}
                     >
@@ -189,7 +189,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                           />
                         </div>
                       </IconContext.Provider>
-                    </i>
+                    </i> */}
                   </div>
                 ) : null}
                 <div className="product-card-main flex flex-col">
@@ -246,7 +246,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                               handleCopyOrderId(hoveredOrderId || "")
                             }
                           >
-                            <span className="flex transition-all ease">
+                            {/* <span className="flex transition-all ease">
                               #
                               {products
                                 .filter(
@@ -254,7 +254,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                                 )
                                 .indexOf(product) + 1}
                             </span>
-                            <span className="flex">Id: {hoveredOrderId}</span>
+                            <span className="flex">Id: {hoveredOrderId}</span> */}
                             {info && hoveredOrderId && (
                               <>
                                 {info

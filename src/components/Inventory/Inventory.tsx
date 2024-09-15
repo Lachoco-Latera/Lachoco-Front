@@ -263,9 +263,9 @@ const Inventory = ({ onCartIconClick }: any) => {
                                   )
                                   .map((order: any) => (
                                     <div key={order.id}>
-                                      <span className="flex">
+                                      {/* <span className="flex">
                                         {t("status")}: {order.status}
-                                      </span>
+                                      </span> */}
                                       <span className="flex">
                                         {t("purchased")}: {order.date}
                                       </span>
@@ -276,7 +276,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                                             .length
                                         }
                                       </span>
-                                      <span className="flex flex-col items-start max-w-48">
+                                      {/* <span className="flex flex-col items-start max-w-48">
                                         {t("location")}:
                                         <span
                                           className="flex break-all"
@@ -298,7 +298,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                                             ? order.additionalInfo
                                             : "Aún sin localización"}
                                         </span>
-                                      </span>
+                                      </span> */}
                                       <span className="flex">
                                         Total: {order.orderDetail.price}
                                       </span>

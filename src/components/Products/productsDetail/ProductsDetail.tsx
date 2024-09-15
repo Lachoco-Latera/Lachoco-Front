@@ -151,7 +151,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
               <LuPackageOpen />
               {t("Products_presentation")}
             </p>
-            <p className=""> {productInfo?.description}</p>
+            <p className=""> {productInfo?.name}</p>
           </h2>
           <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
             <p className="flex gap-2 text-3xl">
@@ -165,7 +165,8 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
               <GrDeliver />
               {t("Products_shipping")}
             </p>
-            <p className=""> {productInfo?.description}</p>
+            {/* <p className=""> {productInfo?.description}</p> */}
+            <p className=""> Lo enviamos a tu dirección usando mensajería Premium</p>
           </h2>
           <div className="z-0">
             <MapComponent />

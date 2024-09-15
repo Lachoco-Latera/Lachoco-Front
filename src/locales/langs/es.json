@@ -93,7 +93,7 @@
     "Cart_Country":"Pais",
     "Cart_state":"Estado/Provincia/Departamento",
     "Cart_city":"Ciudad",
-    "Cart_street":"Calle/Barrio",
+    "Cart_street":"Dirección",
     "Cart_number":"Numero",
     "Cart_code":"Codigo postal",
     "Cart_geolocation":"Geolocalización (Para mejorar la precisión del envio)",

@@ -104,7 +104,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                   <div key={i} className="relative rounded-xl">
                     <img
                       alt={`Product image ${i + 1}`}
-                      src={image || ""}
+                      src={image?.img || ""}
                       className=" min-w-48 min-h-48 object-cover rounded-xl outline-none"
                     />
                   </div>
@@ -184,7 +184,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                   <div key={i}>
                     <img
                       alt={`Modal product image ${i + 1}`}
-                      src={image || ""}
+                      src={image?.img || ""}
                       className="object-cover rounded-lg"
                     />
                   </div>

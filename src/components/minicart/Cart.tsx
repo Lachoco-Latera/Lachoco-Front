@@ -10,7 +10,7 @@ import { useUser } from "@clerk/clerk-react";
 import { VITE_BASE_URL, VITE_FRONTEND_URL } from "@/config/envs";
 import CartItemGiftCard from "../GiftCards/CartItemGiftCard";
 import { useTranslation } from "react-i18next";
-import ShippingProvider from "../ShippingProvider/ShippingProvider";
+// import ShippingProvider from "../ShippingProvider/ShippingProvider";
 
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors, giftCards, totalShipping, shippingCarrier, shippingService } = useCartStore();
@@ -30,7 +30,7 @@ function Cart({ similar }: any) {
   const [shippingInfo, setShippingInfo] = useState<Record<string, string>[]>([]);
   const [isLoadingShipment, setIsLoadingShipment] = useState(false);
   const [requestPaymentData, setRequestPaymentData] = useState<Record<string, any>>({});
-  const [selectedCarrier, setSelectedCarrier] = useState<string>('');
+  // const [selectedCarrier, setSelectedCarrier] = useState<string>('');
   
   const [maxShippingPrice, setMaxShippingPrice] = useState<number | null>(null);
   const addShippingPrice = useCartStore((state) => state.addShippingPrice);
@@ -47,7 +47,7 @@ function Cart({ similar }: any) {
     frecuency: "",
     phone: "",
     street: "",
-    number: "",
+    number: ".",
     city: "",
     state: "",
     postalCode: "",
@@ -693,7 +693,7 @@ function Cart({ similar }: any) {
                   className="w-full border p-2 rounded"
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="block mb-1">{t("Cart_number")}</label>
                 <input
                   type="text"
@@ -703,7 +703,7 @@ function Cart({ similar }: any) {
                   required
                   className="w-full border p-2 rounded"
                 />
-              </div>
+              </div> */}
               <div>
                 <label className="block mb-1">{t("Cart_code")}</label>
                 <input

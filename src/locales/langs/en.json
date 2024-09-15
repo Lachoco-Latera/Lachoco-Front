@@ -96,7 +96,7 @@
     "Cart_Country":"Country",
     "Cart_state":"State/Province/Department",
     "Cart_city":"City",
-    "Cart_street":"Street/Neighborhood",
+    "Cart_street":"Address",
     "Cart_number":"Number",
     "Cart_code":"Zip code",
     "Cart_geolocation":"Geolocation (To improve shipping accuracy)",

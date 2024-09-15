@@ -170,6 +170,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       );
       setMoreOptions(true);
     }
+    closeModal();
   };
 
   const handleResetFlavors = () => {
@@ -253,7 +254,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 >
                   <div className="flex flex-col justify-center items-center gap-2">
                     <img
-                      src={product.images[0]}
+                      src={product.images[0]?.img}
                       alt={flavor.name}
                       className="w-16 h-16 rounded"
                     />

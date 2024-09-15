@@ -67,7 +67,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                   onClick={(e) => handleFavoriteClick(e, product)}
                 >
                   <IconContext.Provider value={{}}>
-                    <div
+                    {/* <div
                       className="relative group"
                       onClick={() => toast.success("Añadido a favoritos ")}
                     >
@@ -82,7 +82,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                         color="white"
                         className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow z-30"
                       />
-                    </div>
+                    </div> */}
                   </IconContext.Provider>
                 </i>
               </div>

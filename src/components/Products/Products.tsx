@@ -44,7 +44,7 @@ const Products = () => {
   return (
     <>
       {" "}
-      <div className="hidden md:block">
+      <div>
         <Header onCartIconClick={handleCartIconClick} products={info} />{" "}
       </div>
       <div className="block md:hidden">

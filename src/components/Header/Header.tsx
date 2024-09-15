@@ -224,9 +224,10 @@ export default function Header({ onCartIconClick }: Props) {
 
   useEffect(() => {
   // Call the registerUser function when needed
-  if (isSignedIn && isLoaded) {
+  // if (isSignedIn && isLoaded) {
+  if (isSignedIn) {
     registerUser();
-  }}), [isSignedIn, isLoaded];
+  }}), [isSignedIn];
   
   return (
     <header
@@ -257,7 +258,7 @@ export default function Header({ onCartIconClick }: Props) {
           <SearchExampleStandard />
         </div>
         <div className="flex flex-row items-center gap-4">
-            <button
+            {/* <button
               type="button"
               title="Suscribete"
               className="
@@ -275,9 +276,9 @@ export default function Header({ onCartIconClick }: Props) {
               }
             >
               {t("Subscribe")}
-            </button>
+            </button> */}
           <div className="relative  hidden md:block"></div>
-          {isSignedIn == true && isLoaded ? (
+          {/* {isSignedIn == true && isLoaded ? (
             <div className="relative  hidden md:block">
               <button
                 type="button"
@@ -288,7 +289,7 @@ export default function Header({ onCartIconClick }: Props) {
                 <MdFavoriteBorder size={28} />
               </button>
             </div>
-          ) : null}
+          ) : null} */}
           {isSignedIn ? (
             <>
               <div className="relative  hidden md:block">

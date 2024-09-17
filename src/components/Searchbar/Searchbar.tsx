@@ -54,7 +54,7 @@ function SearchExampleStandard() {
 
         let filteredResults = _.filter(products, (result: any) => {
           if (isNumber) {
-            return re.test(result.price.toString());
+            return re.test(result.price);
           } else {
             return re.test(result.name) || re.test(result.description);
           }

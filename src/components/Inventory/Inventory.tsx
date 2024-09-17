@@ -233,7 +233,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                     <div>
                       <div className="product-price text-black-800 font-regular relative transition-all ease">
                         <span className="duration-0 flex flex-row justify-between items-center py-2 ">
-                          $ {product.price}
+                          $ {Number(product.price).toLocaleString()}
                         </span>
                         {product.orderId === hoveredOrderId && (
                           <div
@@ -300,7 +300,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                                         </span>
                                       </span> */}
                                       <span className="flex">
-                                        Total: {order.orderDetail.price}
+                                        Total: {Number(order.orderDetail.price).toLocaleString()}
                                       </span>
                                     </div>
                                   ))}

@@ -110,7 +110,7 @@ export default function ItemGiftCard({
                                         }
                                       </span>
                                       <span className="flex">
-                                        Total: {order.orderDetail.price}
+                                        Total: {Number(order.orderDetail.price).toLocaleString()}
                                       </span>
                                     </div>
                                   ))}

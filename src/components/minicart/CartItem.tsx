@@ -73,7 +73,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
             {product.name}
             <span className="font-light"> x {product.presentacion}</span>
           </span>
-          <span className="text-gray-600 font-bold">${product.price}</span>
+          <span className="text-gray-600 font-bold">${Number(product.price).toLocaleString()}</span>
           <span className="flex flex-row gap-2 items-center relative">
             Cajas: {product.quantity}
             {confirmedFlavorsCount !== productMaxFlavor &&

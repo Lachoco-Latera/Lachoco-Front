@@ -95,7 +95,7 @@ export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
               {t("Management_description")}: {product.description}
             </p>
             <p className="font-bold    text-center">
-            {t("Price")}: {product.price} {product.currency}
+            {t("Price")}: {Number(product.price).toLocaleString()} {product.currency}
             </p>
             <p className="font-bold    text-center">
               {t("category")}: {product.category.name}

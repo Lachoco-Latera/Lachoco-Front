@@ -533,7 +533,7 @@ function Cart({ similar }: any) {
       {defineShipping ? (
         <div className="flex-column justify-between items-center gap-4 mb-10 shadow-md p-4">
           <div className="flex items-center gap-8 md:flex-row flex-col md:text-start text-center hover:cursor-pointer">
-            <h3 className=" font-semibold text-base w-full">Costo del envío: {maxShippingPrice}</h3>
+            <h3 className=" font-semibold text-base w-full">Costo del envío: $ {maxShippingPrice.toLocaleString()}</h3>
             {/* <h3 className=" font-semibold text-base w-3/4">Tiempo estimado</h3>
             <h3 className=" font-semibold text-base w-2/3">Valor</h3>
             <h3 className=" font-semibold text-base w-3/4">Servicio</h3> */}
@@ -554,7 +554,7 @@ function Cart({ similar }: any) {
             !completed ? "text-red-500" : "text-slate-500"
           }`}
         >
-          ${total.toFixed(2)}
+          ${Number(total.toFixed(2)).toLocaleString()}
         </span>
       </div>
 

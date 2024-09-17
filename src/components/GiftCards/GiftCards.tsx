@@ -160,7 +160,7 @@ export const GiftCards = () => {
         className={`flex justify-center items-center h-28 w-full bg-white rounded-lg cursor-pointer 
         ${amountGiftCard === price ? 'outline outline-[#0071e3] outline-[2px]' : 'border-[#a8a8ad] border-[1px]'}`}
         onClick={()=> handleSelectPrice(price)}> 
-        <span className="font-semibold text-2xl">${price}</span>
+        <span className="font-semibold text-2xl">${Number(price).toLocaleString()}</span>
       </div>
     )
   }
@@ -233,26 +233,26 @@ export const GiftCards = () => {
                 <GridRow >
                   <GridColumn>
                     <div className="mb-6 mt-6">
-                    {priceCard('20000')}
+                    {priceCard('20.000')}
 
                     </div>
                   </GridColumn>
                   <GridColumn>
                     <div className="mb-6 mt-6">
 
-                    {priceCard('50000')}
+                    {priceCard('50.000')}
                     </div>
                   </GridColumn>
                   <GridColumn>
                     <div className="mb-6 mt-6">
 
-                    {priceCard('70000')}
+                    {priceCard('70.000')}
                     </div>
                   </GridColumn>
                   <GridColumn>
                     <div className="mb-6 mt-6">
 
-                    {priceCard('100000')}
+                    {priceCard('100.000')}
                     </div>
                   </GridColumn>
                 </GridRow>

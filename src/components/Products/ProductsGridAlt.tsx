@@ -140,7 +140,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                         })
                       )}
                     >
-                      $ {product.price}
+                      $ {Number(product.price).toLocaleString()}
                       <div
                         className="
                       rounded-2xl 

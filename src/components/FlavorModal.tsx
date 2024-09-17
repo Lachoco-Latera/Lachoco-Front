@@ -328,7 +328,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 </i>
               </p>
               <p className="text-lg">
-                {t("Flavor_priceT")} ${total}
+                {t("Flavor_priceT")} ${Number(total).toLocaleString()}
               </p>
             </div>
             <div className="pt-4">

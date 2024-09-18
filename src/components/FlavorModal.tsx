@@ -31,7 +31,9 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   const [moreOptions, setMoreOptions] = useState(false);
 
   const { t } = useTranslation();
-  console.log(flavorCounts);
+
+ console.log('sabores',flavorCounts)
+
   let total = 0;
   if (cart) {
     //calcula el precio total de los productos del carrito
@@ -115,10 +117,10 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     if (selectedFlavors.length < product.presentacion) {
       const randomFlavor =
         product.flavors[Math.floor(Math.random() * product.flavors.length)];
-      setSelectedFlavors([...selectedFlavors, randomFlavor.id]);
+      setSelectedFlavors([...selectedFlavors, randomFlavor.name]);
       setFlavorCounts((prevCounts) => ({
         ...prevCounts,
-        [randomFlavor.id]: (prevCounts[randomFlavor.id] || 0) + 1,
+        [randomFlavor.name]: (prevCounts[randomFlavor.name] || 0) + 1,
       }));
       toast(`${t("flavor")} ${randomFlavor.name} ${t("Toast_added")}`, {
         action: {
@@ -168,6 +170,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       toast.error(t("Toast_check"));
       setMoreOptions(true);
     }
+    closeModal();
   };
 
   const handleResetFlavors = () => {
@@ -250,27 +253,27 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                   }`}
                 >
                   <div className="flex flex-col justify-center items-center gap-2">
-                    <img
-                      src={product.images[0]}
+                    {/* <img
+                      src={product.images[0]?.img}
                       alt={flavor.name}
                       className="w-16 h-16 rounded"
-                    />
+                    /> */}
                     <div>
                       <p className="text-lg font-semibold">{flavor.name}</p>
                     </div>
                     <div className="flex justify-center items-center gap-2 mt-2">
                       <button
                         className={`${
-                          !flavorCounts[flavor.id]
+                          !flavorCounts[flavor.name]
                             ? "bg-gray-800 opacity-50 hover:bg-gray-950"
                             : "bg-red-500 hover:bg-red-600"
                         } text-white font-bold py-0 px-[7px] rounded-full`}
-                        onClick={() => handleDecreaseFlavor(flavor.id)}
-                        disabled={!flavorCounts[flavor.id]}
+                        onClick={() => handleDecreaseFlavor(flavor.name)}
+                        disabled={!flavorCounts[flavor.name]}
                       >
                         -
                       </button>
-                      <span>{flavorCounts[flavor.id] || 0}</span>{" "}
+                      <span>{flavorCounts[flavor.name] || 0}</span>{" "}
                       {/* Muestra la cantidad seleccionada */}
                       <button
                         className="bg-green-500 hover:bg-green-600 text-white font-bold py-0 px-[6px] rounded-full"
@@ -325,7 +328,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
                 </i>
               </p>
               <p className="text-lg">
-                {t("Flavor_priceT")} ${total}
+                {t("Flavor_priceT")} ${Number(total).toLocaleString()}
               </p>
             </div>
             <div className="pt-4">

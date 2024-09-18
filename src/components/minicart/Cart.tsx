@@ -10,7 +10,7 @@ import { useUser } from "@clerk/clerk-react";
 import { VITE_BASE_URL, VITE_FRONTEND_URL } from "@/config/envs";
 import CartItemGiftCard from "../GiftCards/CartItemGiftCard";
 import { useTranslation } from "react-i18next";
-import ShippingProvider from "../ShippingProvider/ShippingProvider";
+// import ShippingProvider from "../ShippingProvider/ShippingProvider";
 
 function Cart({ similar }: any) {
   const { cart, confirmedFlavors, giftCards, totalShipping, shippingCarrier, shippingService } = useCartStore();
@@ -30,8 +30,9 @@ function Cart({ similar }: any) {
   const [shippingInfo, setShippingInfo] = useState<Record<string, string>[]>([]);
   const [isLoadingShipment, setIsLoadingShipment] = useState(false);
   const [requestPaymentData, setRequestPaymentData] = useState<Record<string, any>>({});
-  const [selectedCarrier, setSelectedCarrier] = useState<string>('');
-
+  // const [selectedCarrier, setSelectedCarrier] = useState<string>('');
+  
+  const [maxShippingPrice, setMaxShippingPrice] = useState<number | null>(null);
   const addShippingPrice = useCartStore((state) => state.addShippingPrice);
   const addShippingCarrier = useCartStore((state) => state.addShippingCarrier);
   const addShippingService = useCartStore((state) => state.addShippingService);
@@ -46,11 +47,11 @@ function Cart({ similar }: any) {
     frecuency: "",
     phone: "",
     street: "",
-    number: "",
+    number: ".",
     city: "",
     state: "",
     postalCode: "",
-    shipmentCountry: "COL",
+    shipmentCountry: "Colombia",
   });
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
@@ -277,7 +278,7 @@ function Cart({ similar }: any) {
         pickedFlavors:
           product.category.name === "bombones"
             ? confirmedFlavors[product.id] || []
-            : product.flavors.map((flavor) => flavor.id),
+            : product.flavors.map((flavor) => flavor.name),
       })),
       giftCards: giftCards.map((giftCard) => ({
         giftCardId: giftCard.id,
@@ -297,7 +298,7 @@ function Cart({ similar }: any) {
     if (cart.length === 0 && giftCards.length > 0) {
       const paymentData = {
         orderId: globalOrderId,
-        country: "COL",
+        country: "Colombia",
       };
 
       if (globalOrderId !== "" && globalOrderId.length !== 0) {
@@ -323,7 +324,7 @@ function Cart({ similar }: any) {
     } = formData;
     const paymentData: Record<string, any> = {
       orderId: orderCreatedId,
-      country: "COL",
+      country: "Colombia",
     };
     if (Object.values(rest).every((value) => value !== "")) {
       paymentData.order = {
@@ -334,14 +335,14 @@ function Cart({ similar }: any) {
         city: rest.city,
         state: rest.state,
         postalCode: rest.postalCode,
-        shipmentCountry: shipmentCountry || "COL",
+        shipmentCountry: shipmentCountry || "Colombia",
       };
     }
     if (giftCardId) {
       paymentData.order.giftCardId = giftCardId;
     }
     if (orderCreatedId !== "" && orderCreatedId.length !== 0) {
-      const carriers = ["coordinadora", "interRapidisimo", "servientrega"];
+      const carriers = ["tcc","coordinadora", "interRapidisimo", "servientrega"];
 
       try {
         setIsLoadingShipment(true);
@@ -372,7 +373,9 @@ function Cart({ similar }: any) {
 
         shippingFlat = shippingInfo2.flat();
         setShippingInfo(shippingFlat);
-
+        const maximumShippingPrice = Math.min(...shippingFlat.map(carrier => carrier.totalPrice));
+        setMaxShippingPrice(maximumShippingPrice);
+        addShippingPrice(maximumShippingPrice);
         setDefineShipping(true);
         setRequestPaymentData(paymentData);
         setInfoModal(false);
@@ -436,14 +439,14 @@ function Cart({ similar }: any) {
       setOrderCreatedId(response.data[0].id);
       const paymentData: any = {
         orderId: globalOrderId,
-        country: "COL",
+        country: "Colombia",
         phone: formData.phone,
         street: formData.street,
         number: formData.number,
         city: formData.city,
         state: formData.state,
         postalCode: formData.postalCode,
-        shipmentCountry: formData.shipmentCountry || "COL",
+        shipmentCountry: formData.shipmentCountry || "Colombia",
       };
       // Agregar giftCardId solo si no es vacío
       if (formData.giftCardId) {
@@ -530,14 +533,14 @@ function Cart({ similar }: any) {
       {defineShipping ? (
         <div className="flex-column justify-between items-center gap-4 mb-10 shadow-md p-4">
           <div className="flex items-center gap-8 md:flex-row flex-col md:text-start text-center hover:cursor-pointer">
-            <h3 className=" font-semibold text-base w-full">Transportadora</h3>
-            <h3 className=" font-semibold text-base w-3/4">Tiempo estimado</h3>
+            <h3 className=" font-semibold text-base w-full">Costo del envío: $ {maxShippingPrice.toLocaleString()}</h3>
+            {/* <h3 className=" font-semibold text-base w-3/4">Tiempo estimado</h3>
             <h3 className=" font-semibold text-base w-2/3">Valor</h3>
-            <h3 className=" font-semibold text-base w-3/4">Servicio</h3>
+            <h3 className=" font-semibold text-base w-3/4">Servicio</h3> */}
           </div>
-          {shippingInfo?.map((carrier, index) => (
+          {/* {shippingInfo?.map((carrier, index) => (
             <ShippingProvider key={index} carrier={carrier} selectedCarrier={selectedCarrier} setSelectedCarrier={setSelectedCarrier}/>
-          ))}
+          ))} */}
         </div>
       ) : null}
       <div
@@ -551,7 +554,7 @@ function Cart({ similar }: any) {
             !completed ? "text-red-500" : "text-slate-500"
           }`}
         >
-          ${total.toFixed(2)}
+          ${Number(total.toFixed(2)).toLocaleString()}
         </span>
       </div>
 
@@ -690,7 +693,7 @@ function Cart({ similar }: any) {
                   className="w-full border p-2 rounded"
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="block mb-1">{t("Cart_number")}</label>
                 <input
                   type="text"
@@ -700,7 +703,7 @@ function Cart({ similar }: any) {
                   required
                   className="w-full border p-2 rounded"
                 />
-              </div>
+              </div> */}
               <div>
                 <label className="block mb-1">{t("Cart_code")}</label>
                 <input

@@ -484,7 +484,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
               {order.description}
             </p>
             <p className="text-lg font-bold text-green-700 text-center">
-              ${order.price} {order.currency}
+              ${Number(order.price).toLocaleString()} {order.currency}
             </p>
             <p className="text-md font-semibold text-gray-800 text-center">
               {order.category.name}

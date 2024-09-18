@@ -97,7 +97,7 @@ export const GestionPPyDatosEmpresa = ({ signal, onCloseModal }: any) => {
               Description: {product.description}
             </p>
             <p className="font-bold    text-center">
-              Price: {product.price} {product.currency}
+              Price: {Number(product.price).toLocaleString()} {product.currency}
             </p>
             <p className="font-bold    text-center">
               Category: {product.category.name}

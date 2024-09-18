@@ -53,7 +53,7 @@ export const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="https://wa.me/+573012985389" target="_blank" className="hover:underline">
+                <a href="https://wa.me/+573202506687" target="_blank" className="hover:underline">
                   <img src={logo2} alt="" className="me-4 w-8" />
                 </a>
               </li>

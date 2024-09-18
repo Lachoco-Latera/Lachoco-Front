@@ -67,7 +67,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                   onClick={(e) => handleFavoriteClick(e, product)}
                 >
                   <IconContext.Provider value={{}}>
-                    <div
+                    {/* <div
                       className="relative group"
                       onClick={() => toast.success("Añadido a favoritos ")}
                     >
@@ -82,7 +82,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                         color="white"
                         className="cursor-pointer group-hover:scale-[1.3] ease-in-out duration-300 drop-shadow z-30"
                       />
-                    </div>
+                    </div> */}
                   </IconContext.Provider>
                 </i>
               </div>
@@ -104,7 +104,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                   <div key={i} className="relative rounded-xl">
                     <img
                       alt={`Product image ${i + 1}`}
-                      src={image || ""}
+                      src={image?.img || ""}
                       className=" min-w-48 min-h-48 object-cover rounded-xl outline-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                         })
                       )}
                     >
-                      $ {product.price}
+                      $ {Number(product.price).toLocaleString()}
                       <div
                         className="
                       rounded-2xl 
@@ -184,7 +184,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
                   <div key={i}>
                     <img
                       alt={`Modal product image ${i + 1}`}
-                      src={image || ""}
+                      src={image?.img || ""}
                       className="object-cover rounded-lg"
                     />
                   </div>

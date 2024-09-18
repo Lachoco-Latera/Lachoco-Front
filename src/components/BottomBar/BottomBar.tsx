@@ -29,7 +29,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
         () =>
           resolve(
             (window.location.href =
-              "https://lachoco-front.vercel.app/?category=cafes")
+              "https://lachoco-latera.com/?category=cafes")
           ),
         1100
       )
@@ -88,7 +88,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
                   <LuPackageOpen size={28} />
                 </button>
               </div>
-              <div>
+              {/* <div>
                 <button
                   type="button"
                   title="Mini Cart"
@@ -108,14 +108,14 @@ export default function BottomBar({ onCartIconClick }: Props) {
                 >
                   <LiaCrownSolid size={34} />
                 </button>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <FaRegHeart
                   size={28}
                   className=" text-slate-800 hover:cursor-pointer"
                   onClick={() => navigate(`/favorites`)}
                 />
-              </div>
+              </div> */}
             </>
           ) : null}
 

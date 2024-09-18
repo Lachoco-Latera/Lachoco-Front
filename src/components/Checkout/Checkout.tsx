@@ -45,7 +45,7 @@ const Checkout = ({
     >
       <h2 className="text-xl font-bold">{t("Individual_Price")}</h2>
       <div>
-        $ {price} {currency}
+        $ {Number(price).toLocaleString()} {currency}
       </div>
       {/*Acá aclaración del llenado de la caja */}
       <div className="pt-4">

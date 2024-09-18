@@ -54,7 +54,7 @@ function SearchExampleStandard() {
 
         let filteredResults = _.filter(products, (result: any) => {
           if (isNumber) {
-            return re.test(result.price.toString());
+            return re.test(result.price);
           } else {
             return re.test(result.name) || re.test(result.description);
           }
@@ -75,7 +75,7 @@ function SearchExampleStandard() {
               .slice(0, 8)
               .join(" ")
               .concat(result.description.split(" ").length > 8 ? "..." : ""),
-            image: result.images.length > 0 ? result.images[0] : undefined,
+            image: result.images.length > 0 ? result.images[0].img : undefined,
             price: result.price,
             id: result.id,
           })),

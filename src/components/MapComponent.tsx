@@ -31,11 +31,11 @@ const MapComponent = () => {
           Lachoco-Latera <br /> Shipping Service.
         </Popup>
       </Marker>
-      <Marker position={[40.4168, -3.7038]}>
+      {/* <Marker position={[40.4168, -3.7038]}>
         <Popup>
           Madrid, España <br /> Shipping Hub.
         </Popup>
-      </Marker>
+      </Marker> */}
     </MapContainer>
   );
 };

@@ -26,12 +26,14 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
     useState<string>(""); //guarda el ultimo id del producto seleccionado ej ["vainilla-id"]
   const [lastPickedFlavor, setLastPickedFlavor] = useState<string>(""); //guarda el ultimo sabor seleccionado ej "fresa-id"
   const [flavorCounts, setFlavorCounts] = useState<{ [key: string]: number }>(
-    {}
+    {},
   ); //guarda un objeto donde cada clave es un id de sabor ej si se selecciona una vez chocolate y dos veces fresa {"chocolate-id": 2,"fresa-id": 1}
   const [moreOptions, setMoreOptions] = useState(false);
 
   const { t } = useTranslation();
+
  console.log('sabores',flavorCounts)
+
   let total = 0;
   if (cart) {
     //calcula el precio total de los productos del carrito
@@ -75,7 +77,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       toast.error(t("Toast_0"));
     }
   };
-  
+
   const handleFillWithLastFlavor = () => {
     if (selectedFlavors.length < product.presentacion) {
       let flavorToAdd = lastPickedFlavor;
@@ -165,9 +167,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
       addConfirmedFlavors(product.id, selectedFlavors);
       toast.success(`${t("Toast_savedFlavor")} ${product.name}`);
     } else {
-      toast.error(
-        t("Toast_check")
-      );
+      toast.error(t("Toast_check"));
       setMoreOptions(true);
     }
     closeModal();

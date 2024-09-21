@@ -190,7 +190,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
             confirmedFlavors={actualSelectionLength}
             product={info}
             openModal={
-              info?.category?.name === "bombones" ? openFlavorModal : null
+              productInfo?.flavors ? openFlavorModal : null
             }
             openCartModal={onCheckIconClick}
           />

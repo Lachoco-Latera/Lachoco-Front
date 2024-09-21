@@ -303,7 +303,7 @@ export default function Header({ onCartIconClick }: Props) {
                 <MdOutlineCardGiftcard size={24} />
               </button>
             </div>
-          {isSignedIn ? (
+          {/* {isSignedIn ? (
             <>
               <div className="relative  hidden md:block">
                 <button
@@ -316,7 +316,7 @@ export default function Header({ onCartIconClick }: Props) {
                 </button>
               </div>
             </>
-          ) : null}
+          ) : null} */}
           {user?.id !== "user_2m6qxvEGjIZL9A7qdibGOs6NyAN" ? (
             <div className="relative  hidden md:block">
               <button

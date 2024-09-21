@@ -277,7 +277,7 @@ function Cart({ similar }: any) {
         })),
         pickedFlavors:
           product.category.name === "bombones"
-            ? confirmedFlavors[product.id] || []
+            ? confirmedFlavors[product.id] || [' ']
             : product.flavors.map((flavor) => flavor.name),
       })),
       giftCards: giftCards.map((giftCard) => ({

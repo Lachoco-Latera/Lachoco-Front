@@ -80,7 +80,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
   const actualSelectionLength = confirmedFlavors[info.id]?.length || 0;
 
   return (
-    <div className="flex flex-col md:px-48 px-12 md:py-10 ">
+    <div className="flex flex-col md:px-48 px-12 md:py-10 relative ">
       <div className="flex flex-col md:flex-row items-center md:justify-between">
         <h2 className="font-semibold md:text-3xl ">{productInfo?.name}</h2>
         <div className="flex items-center gap-2 ease transition-all">

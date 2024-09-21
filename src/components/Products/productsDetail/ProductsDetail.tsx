@@ -174,8 +174,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
         </div>
         <div
           className={`flex mb-20 ${
-            productInfo?.category?.name === "bombones"
-              ? "hover:cursor-pointer"
+            productInfo?.flavors ? "hover:cursor-pointer"
               : ""
           }`}
         >

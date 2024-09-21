@@ -40,7 +40,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
   };
 
   const openFlavorModal = () => {
-    info?.category?.name === "bombones"
+    info?.category?.name === "bombones" || info?.category?.name === "chocolates de especialidad"
       ? setShowFlavorModal(true)
       : setShowFlavorModal(false);
   };

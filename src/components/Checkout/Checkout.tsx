@@ -49,7 +49,7 @@ const Checkout = ({
       </div>
       {/*Acá aclaración del llenado de la caja */}
       <div className="pt-4">
-        {productCategory === "bombones" &&
+        {productCategory === "bombones" || productCategory === "chocolates de especialidad" &&
         isCartItem &&
         confirmedFlavors !== flavorQuantity ? (
           <button
@@ -64,7 +64,7 @@ const Checkout = ({
           </button>
         ) : (
           <>
-            {(productCategory !== "bombones" && isCartItem) ||
+            {(productCategory !== "bombones" || productCategory !== "chocolates de especialidad" && isCartItem) ||
             (confirmedFlavors === flavorQuantity && confirmedFlavors != 0) ? (
               <button
                 className="

@@ -188,6 +188,7 @@
     "error_creating_order": "Error al crear la orden de pago",
     "order_id_is_invalid": "El ID del pedido no es válido",
     "please_access_to_payment": "Por favor acceda a la página de pago",
+    "please_sign_in": "Por favor registrese antes de realizar el pedido",
     
     "what_do_you_want_to_try": "¿Qué quieres probar?",
     

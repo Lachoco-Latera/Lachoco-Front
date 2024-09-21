@@ -1,4 +1,5 @@
 import { FiShoppingCart } from "react-icons/fi";
+import { MdOutlineCardGiftcard } from "react-icons/md";
 import { useCartStore } from "../../stores/useCartStore";
 import useFromStore from "../../hooks/useFromStore";
 import SearchExampleStandard from "../Searchbar/Searchbar";
@@ -292,6 +293,16 @@ export default function Header({ onCartIconClick }: Props) {
               </button>
             </div>
           ) : null} */}
+          <div className="relative  hidden md:block">
+              <button
+                type="button"
+                title="Gift Card"
+                className="text-gray-800 text-xl md:flex items-center hover:scale-110 transition-all ease"
+                onClick={() => navigate("/gift-cards")}
+              >
+                <MdOutlineCardGiftcard size={24} />
+              </button>
+            </div>
           {isSignedIn ? (
             <>
               <div className="relative  hidden md:block">

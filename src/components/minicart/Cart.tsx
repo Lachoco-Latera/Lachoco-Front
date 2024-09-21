@@ -6,7 +6,7 @@ import axios from "axios";
 import MapSelector from "../MapSelector"; // Asegúrate de importar el MapSelector
 
 // import { useNavigate } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
+import { SignInButton, useUser } from "@clerk/clerk-react";
 import { VITE_BASE_URL, VITE_FRONTEND_URL } from "@/config/envs";
 import CartItemGiftCard from "../GiftCards/CartItemGiftCard";
 import { useTranslation } from "react-i18next";
@@ -18,7 +18,7 @@ function Cart({ similar }: any) {
   const [showTooltip, setShowTooltip] = useState<boolean>(false); // Estado para controlar la visibilidad del tooltip
   const [completed, setCompleted] = useState<boolean>(true);
   const [userId, setUserId] = useState(null);
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
   const [toPayment, setToPayment] = useState(false);
   const [orderCreatedId, setOrderCreatedId] = useState("");
   const [latitude, setLatitude] = useState<number | null>(null);
@@ -314,6 +314,8 @@ function Cart({ similar }: any) {
   };
 
   const handlePlaceOrder = async () => {
+
+    if(user){
     const {
       orderId,
       shipmentCountry,
@@ -388,6 +390,9 @@ function Cart({ similar }: any) {
     } else {
       throw new Error(t("order_id_is_invalid"));
     }
+  } else{
+    
+  }
   };
 
   const handleClickPayment = (paymentData: Record<string, any>) => {
@@ -574,7 +579,7 @@ function Cart({ similar }: any) {
         </div>
       ) : (
         <>
-            {!defineShipping ? (
+            {!defineShipping ? ( isSignedIn ? (
               <div
                 className={`flex rounded-xl p-2 mt-2 shadow 
                   justify-center ${buttonClass} transition-all ease`}
@@ -607,7 +612,10 @@ function Cart({ similar }: any) {
                 )}
 
               </button>
-            </div>
+            </div>) : ( <div className="flex flex-col text-xl m-10 items-center">
+                      <span className="text-red-500 mb-4"> Por favor registrese antes de realizar el pedido</span>
+                      <SignInButton />
+                      </div>)
             ) : null
             }
           <>
@@ -631,12 +639,15 @@ function Cart({ similar }: any) {
         </>
       )}
 
-      {infoModal ? (
+      {infoModal && isSignedIn ? (
         <>
           <div className="bg-white p-5 mt-5 z-50 shadow-md rounded-xl">
             <h2 className="mb-4 font-bold">
               {t("Cart_shipping")} <br /> {t("Cart_shipping2")}:
             </h2>
+            {/* <h2 className="mb-4 font-bold text-red-500">
+              {t("Cart_pay")}
+            </h2> */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block mb-1">{t("Cart_phone")}</label>
@@ -750,7 +761,12 @@ function Cart({ similar }: any) {
             </form>
           </div>
         </>
-      ) : null}
+      ) : (null
+      // <div className="flex flex-col text-2xl m-10">
+      //   <span className="text-red-500 mb-4"> Por favor registrese antes de realizar el pedido</span>
+      //   <SignInButton />
+      //   </div>
+      )}
     </section>
   );
 }

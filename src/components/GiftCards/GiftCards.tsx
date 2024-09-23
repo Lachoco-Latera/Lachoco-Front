@@ -134,7 +134,7 @@ export const GiftCards = () => {
       message: data.message,
     }
     const response = await createGiftCard(order);
-    console.log(response.data)
+    //console.log(response.data)
     if(response.status === 201) {
       addGiftCard({...order, id: response.data.gift.id});
     }

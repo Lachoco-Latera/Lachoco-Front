@@ -117,7 +117,7 @@ const Inventory = ({ onCartIconClick }: any) => {
   const handleFavoriteClick = (event: React.MouseEvent, product: any) => {
     event.stopPropagation();
     // Lógica para manejar el favorito del producto
-    console.log(`Producto favorito: ${product.description}`);
+    //console.log(`Producto favorito: ${product.description}`);
   };
 
   const handleMouseEnter = (orderId: string) => {

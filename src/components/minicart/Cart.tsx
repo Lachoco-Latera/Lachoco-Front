@@ -116,7 +116,7 @@ function Cart({ similar }: any) {
   }
 
   const bombonesProducts = cart.filter(
-    (product) => product.category.name === "bombones"
+    (product) => product.category.name === "bombones" || product.category.name === "chocolates de especialidad"
   );
 
   const handleUpdateFlavors = () => {
@@ -204,14 +204,14 @@ function Cart({ similar }: any) {
             cantidad: product.quantity,
             category: product.category,
             flavors:
-              product.category.name === "bombones"
+              (product.category.name === "bombones" || product.category.name === "chocolates de especialidad")
                 ? product.flavors.map((flavor) => ({
                     flavorId: flavor.id,
                     cantidad: flavor.stock,
                   }))
                 : [],
             pickedFlavors:
-              product.category.name === "bombones"
+              (product.category.name === "bombones" || product.category.name === "chocolates de especialidad")
                 ? confirmedFlavors[product.id] || []
                 : product.flavors.map((flavor) => flavor.id),
           })),
@@ -219,7 +219,7 @@ function Cart({ similar }: any) {
 
         const hasBombones = order.products.some(
           (product: any) =>
-            product.category.name === "bombones" &&
+            (product.category.name === "bombones" || product.category.name === "chocolates de especialidad") &&
             product.pickedFlavors.length === 0
         );
 
@@ -276,7 +276,7 @@ function Cart({ similar }: any) {
           cantidad: 1,
         })),
         pickedFlavors:
-          product.category.name === "bombones"
+          (product.category.name === "bombones" || product.category.name === "chocolates de especialidad")
             ? confirmedFlavors[product.id] || [' ']
             : product.flavors.map((flavor) => flavor.name),
       })),
@@ -429,7 +429,7 @@ function Cart({ similar }: any) {
           cantidad: 1,
         })),
         pickedFlavors:
-          product.category.name === "bombones"
+          (product.category.name === "bombones" || product.category.name === "chocolates de especialidad")
             ? confirmedFlavors[product.id] || []
             : product.flavors.map((flavor) => flavor.id),
       })),

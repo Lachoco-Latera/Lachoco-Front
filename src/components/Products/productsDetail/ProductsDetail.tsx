@@ -40,7 +40,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
   };
 
   const openFlavorModal = () => {
-    info?.category?.name === "bombones"
+    (info?.category?.name === "bombones"  || info?.category?.name === "chocolates de especialidad")
       ? setShowFlavorModal(true)
       : setShowFlavorModal(false);
   };
@@ -189,7 +189,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
             confirmedFlavors={actualSelectionLength}
             product={info}
             openModal={
-              productInfo?.category.name==="bombones" ? openFlavorModal : null
+              (productInfo?.category.name==="bombones" || productInfo?.category.name==="chocolates de especialidad")? openFlavorModal : null
             }
             openCartModal={onCheckIconClick}
           />

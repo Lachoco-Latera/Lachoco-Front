@@ -230,8 +230,8 @@ export default function Header({ onCartIconClick }: Props) {
     registerUser();
   }}), [isSignedIn];
   
-  // console.log('user id:', user?.id)
-  // console.log('env id:', VITE_ADMIN_ID)
+  console.log('user id:', user?.id)
+  console.log('env id:', VITE_ADMIN_ID)
   return (
     <header
       className=" 

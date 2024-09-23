@@ -39,7 +39,7 @@ const ProductsGridAlt = ({ products, onCartIconClick }: Props) => {
 
   const handleFavoriteClick = (event: React.MouseEvent, product: Product) => {
     event.stopPropagation();
-    console.log(`Producto favorito: ${product.description}`);
+    //console.log(`Producto favorito: ${product.description}`);
   };
 
   const selectedCategory = searchParams.get("category");

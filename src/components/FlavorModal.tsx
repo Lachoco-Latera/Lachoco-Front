@@ -32,7 +32,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
 
   const { t } = useTranslation();
 
- console.log('sabores',flavorCounts)
+ //console.log('sabores',flavorCounts)
 
   let total = 0;
   if (cart) {
@@ -105,7 +105,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         action: {
           label: "Okay!",
           onClick: () => {
-            console.log(`Cerrar modal de ${flavorName}`);
+            //console.log(`Cerrar modal de ${flavorName}`);
             closeModal();
           },
         },
@@ -126,7 +126,7 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
         action: {
           label: "Okay!",
           onClick: () => {
-            console.log(`Cerrar modal de ${randomFlavor.name}`);
+            //console.log(`Cerrar modal de ${randomFlavor.name}`);
             closeModal();
           },
         },
@@ -135,11 +135,11 @@ const FlavorModal: React.FC<Props> = ({ product, closeModal }) => {
   };
 
   useEffect(() => {
-    console.log("Último producto seleccionado:", lastSelectedProductId);
+    //console.log("Último producto seleccionado:", lastSelectedProductId);
   }, [lastSelectedProductId]);
 
   useEffect(() => {
-    console.log("Sabores seleccionados:", selectedFlavors);
+    //console.log("Sabores seleccionados:", selectedFlavors);
   }, [selectedFlavors]);
 
   useEffect(() => {

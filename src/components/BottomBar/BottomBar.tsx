@@ -79,16 +79,6 @@ export default function BottomBar({ onCartIconClick }: Props) {
           </div>
           {isSignedIn ? (
             <>
-            <div className="relative  hidden md:block">
-              <button
-                type="button"
-                title="Gift Card"
-                className="text-gray-800 text-xl md:flex items-center hover:scale-110 transition-all ease"
-                onClick={() => navigate("/gift-cards")}
-              >
-                <MdOutlineCardGiftcard size={24} />
-              </button>
-            </div>
               {/* <div className="relative md:hidden">
                 <button
                   type="button"
@@ -129,7 +119,16 @@ export default function BottomBar({ onCartIconClick }: Props) {
               </div> */}
             </>
           ) : null}
-
+          <div className="relative  hidden md:block">
+            <button
+              type="button"
+              title="Gift Card"
+              className="text-gray-800 text-xl md:flex items-center hover:scale-110 transition-all ease"
+              onClick={() => navigate("/gift-cards")}
+            >
+              <MdOutlineCardGiftcard size={24} />
+            </button>
+          </div>
           <div>
             <button
               type="button"

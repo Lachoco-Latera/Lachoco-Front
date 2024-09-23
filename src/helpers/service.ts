@@ -57,7 +57,7 @@ export const postFlavors = async (data: IFlavor) => {
     // const res = await axios.post('', data)
     // console.log(res.data)
     // return res.data
-    console.log(data);
+    //console.log(data);
     return "Datos cargados exitosamente";
   } catch (error) {
     console.log(error);
@@ -69,7 +69,7 @@ export const deleteFlavor = async (id: string | undefined) => {
     // const res = await axios.delete(`${id}`)
     // console.log(res.data)
     // return res.data
-    console.log(id);
+    //console.log(id);
     return "Sabor eliminado correctamente";
   } catch (error) {
     console.log(error);

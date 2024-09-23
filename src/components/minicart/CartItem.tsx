@@ -77,7 +77,7 @@ export default function CartItem({ product, onUpdateFlavors }: Props) {
           <span className="flex flex-row gap-2 items-center relative">
             Cajas: {product.quantity}
             {confirmedFlavorsCount !== productMaxFlavor &&
-            product.category.name === "bombones"? (
+            (product.category.name === "bombones" || product.category.name === "chocolates de especialidad")? (
               <>
                 <FaExclamation
                   className="text-amber-500 cursor-pointer"

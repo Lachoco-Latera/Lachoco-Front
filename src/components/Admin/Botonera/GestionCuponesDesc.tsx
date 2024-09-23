@@ -39,7 +39,7 @@ export const GestionCuponesDesc = ({ signal, onCloseModal }: any) => {
         console.log(error);
       }
     };
-    console.log(giftcardsState);
+    //console.log(giftcardsState);
     const getUsers = async () => {
       try {
         const response = await axios.get(

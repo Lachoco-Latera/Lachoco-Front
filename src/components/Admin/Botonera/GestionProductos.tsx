@@ -153,7 +153,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
           ? "Producto actualizado con éxito!"
           : "Producto creado con éxito!"
         );
-        console.log(formEditState.id)
+        //console.log(formEditState.id)
         if(formEditState.id) {
           setOrderState((prevState) => prevState.map((order) => {
             if(order.id === formEditState.id){
@@ -207,7 +207,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
         prevState.filter((order) => order.id !== id)
       );
       toast.success("Producto eliminado");
-      console.log(`Producto con id: ${id} eliminado`);
+      //console.log(`Producto con id: ${id} eliminado`);
     } catch (error) {
       console.error(`Error al eliminar el producto con id: ${id}`, error);
     } finally {

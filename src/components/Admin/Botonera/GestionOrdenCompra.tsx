@@ -49,7 +49,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
     };
     getOrders();
   }, []);
-  console.log(ordersState);
+  //console.log(ordersState);
   const handleButtonDelete = async (id: string) => {
     const alertId = toast("¿Deseas eliminar la orden seleccionada?", {
       duration: 5000,
@@ -62,7 +62,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
               `${VITE_BASE_URL}/orders/${id}`
             );
             const deletedOrder = response.data;
-            console.log(`Orden eliminada correctamente: ${deletedOrder}`);
+            //console.log(`Orden eliminada correctamente: ${deletedOrder}`);
             setOrdersState(ordersState.filter((order) => order.id !== id));
             toast.success(
               `La orden se elimino correctamente: ${deletedOrder}`,
@@ -88,7 +88,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
 
   const handleOnSubmitEdit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(editFormState);
+    //console.log(editFormState);
     const alertId = toast("¿Deseas editar la orden seleccionada?", {
       duration: 5000,
       action: {
@@ -104,7 +104,7 @@ export const GestionOrdenCompra = ({ signal, onCloseModal }: any) => {
               }
             );
             const updatedOrder = response.data;
-            console.log(`Orden editada correctamente: ${updatedOrder}`);
+            //console.log(`Orden editada correctamente: ${updatedOrder}`);
             setOrdersState((prevOrders) =>
               prevOrders.map((order) =>
                 order.id === updatedOrder.id ? updatedOrder : order

@@ -45,7 +45,7 @@ export const GestionReviwsCalif = ({ signal, onCloseModal }: any) => {
       const response = await axios.delete(
         `${VITE_BASE_URL}/products/${productId}`
       );
-      console.log(response.data);
+      //console.log(response.data);
       // Actualizar el estado de los productos después de eliminar
       setProducts(products.filter((product) => product.id !== productId));
       alert("Producto eliminado correctamente");

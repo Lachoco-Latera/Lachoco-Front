@@ -16,6 +16,7 @@ import { GrUserAdmin } from "react-icons/gr";
 import { LuPackageOpen } from "react-icons/lu";
 import { LiaCrownSolid } from "react-icons/lia";
 import { MdOutlineCardGiftcard } from "react-icons/md";
+import { VITE_ADMIN_ID } from "@/config/envs";
 interface Props {
   onCartIconClick: () => void;
 }
@@ -48,7 +49,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
             </SignedIn>
           </div>
           {isSignedIn == true &&
-          user.id === "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
+          user.id === VITE_ADMIN_ID &&
           isLoaded ? (
             <div>
               <button
@@ -119,7 +120,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
               </div> */}
             </>
           ) : null}
-          <div className="relative  hidden md:block">
+          <div>
             <button
               type="button"
               title="Gift Card"

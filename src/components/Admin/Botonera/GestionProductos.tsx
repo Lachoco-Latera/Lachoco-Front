@@ -153,7 +153,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
           ? "Producto actualizado con éxito!"
           : "Producto creado con éxito!"
         );
-        console.log(formEditState.id)
+        //console.log(formEditState.id)
         if(formEditState.id) {
           setOrderState((prevState) => prevState.map((order) => {
             if(order.id === formEditState.id){
@@ -207,7 +207,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
         prevState.filter((order) => order.id !== id)
       );
       toast.success("Producto eliminado");
-      console.log(`Producto con id: ${id} eliminado`);
+      //console.log(`Producto con id: ${id} eliminado`);
     } catch (error) {
       console.error(`Error al eliminar el producto con id: ${id}`, error);
     } finally {
@@ -484,7 +484,7 @@ export const GestionProductos = ({ signal, onCloseModal }: any) => {
               {order.description}
             </p>
             <p className="text-lg font-bold text-green-700 text-center">
-              ${order.price} {order.currency}
+              ${Number(order.price).toLocaleString()} {order.currency}
             </p>
             <p className="text-md font-semibold text-gray-800 text-center">
               {order.category.name}

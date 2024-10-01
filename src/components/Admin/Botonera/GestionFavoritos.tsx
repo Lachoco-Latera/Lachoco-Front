@@ -64,7 +64,7 @@ export const GestionFavoritos = ({ signal, onCloseModal }: any) => {
           try {
             // ACA VA LA LOGICA PARA HACER LA SOLICITUD AL BACK
             setModalOpen(false); // cerrar el modal al hacer clic en editar
-            console.log('DATOS EDITADOS CON EXITOOOO WEY')
+            //console.log('DATOS EDITADOS CON EXITOOOO WEY')
             toast.success ('Datos editados correctamente',{
               duration: 5000,
             } )
@@ -85,7 +85,7 @@ export const GestionFavoritos = ({ signal, onCloseModal }: any) => {
           toast.dismiss(alertId);
           try {
             // Aquí se debería agregar la lógica para eliminar el usuario usando su ID
-            console.log(`Eliminar usuario con id: ${id}`);
+            //console.log(`Eliminar usuario con id: ${id}`);
             // Simulando eliminación
             setUserState(userState.filter((user) => user.id !== id));
             toast.success ('La eliminacion se realizo con éxito',{

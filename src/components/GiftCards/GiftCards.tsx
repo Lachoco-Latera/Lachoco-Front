@@ -134,7 +134,7 @@ export const GiftCards = () => {
       message: data.message,
     }
     const response = await createGiftCard(order);
-    console.log(response.data)
+    //console.log(response.data)
     if(response.status === 201) {
       addGiftCard({...order, id: response.data.gift.id});
     }
@@ -160,7 +160,7 @@ export const GiftCards = () => {
         className={`flex justify-center items-center h-28 w-full bg-white rounded-lg cursor-pointer 
         ${amountGiftCard === price ? 'outline outline-[#0071e3] outline-[2px]' : 'border-[#a8a8ad] border-[1px]'}`}
         onClick={()=> handleSelectPrice(price)}> 
-        <span className="font-semibold text-2xl">${price}</span>
+        <span className="font-semibold text-2xl">${Number(price).toLocaleString()}</span>
       </div>
     )
   }
@@ -188,13 +188,13 @@ export const GiftCards = () => {
           <Cart similar={'1234'} />
         </Drawer>
         
-        <div className="max-w-[80%] mx-auto mt-16 pb-40 rounded-lg">
-          <div className="flex justify-between w-full">
+        <div className="max-w-[80%] md:w-full mx-auto mt-16 pb-40 rounded-lg">
+          <div className="flex justify-between content-center w-full flex-col mx-auto md:flex-row">
             
-            <div className="w-[50%]">
+            <div className="w-[80%] md:w-full mx-auto">
               <img src={designGiftCard || defaultDesignGiftCard} alt="gift-card" className="w-full h-[500px] object-contain sticky top-36" />
             </div>
-            <Form className="w-[40%]" onSubmit={handleSubmit(onSubmit)} >
+            <Form className="w-[80%] md:w-full mx-auto" onSubmit={handleSubmit(onSubmit)} >
             <div className="w-full pl-6">
               <h2 className="text-5xl font-bold mb-2">{t("buy_gift_card")}</h2>
               <p className="text-gray-600 mb-4 text-[18px]">
@@ -233,26 +233,26 @@ export const GiftCards = () => {
                 <GridRow >
                   <GridColumn>
                     <div className="mb-6 mt-6">
-                    {priceCard('20000')}
+                    {priceCard('20.000')}
 
                     </div>
                   </GridColumn>
                   <GridColumn>
                     <div className="mb-6 mt-6">
 
-                    {priceCard('50000')}
+                    {priceCard('50.000')}
                     </div>
                   </GridColumn>
                   <GridColumn>
                     <div className="mb-6 mt-6">
 
-                    {priceCard('70000')}
+                    {priceCard('70.000')}
                     </div>
                   </GridColumn>
                   <GridColumn>
                     <div className="mb-6 mt-6">
 
-                    {priceCard('100000')}
+                    {priceCard('100.000')}
                     </div>
                   </GridColumn>
                 </GridRow>

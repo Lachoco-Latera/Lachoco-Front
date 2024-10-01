@@ -12,6 +12,7 @@ import {
 } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { GrUserAdmin } from "react-icons/gr";
+import { VITE_ADMIN_ID } from "@/config/envs";
 // import { toast } from "sonner";
 interface Props {
   onCartIconClick: () => void;
@@ -43,7 +44,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
             </SignedIn>
           </div>
           {isSignedIn == true &&
-          user.id === "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
+          user.id === VITE_ADMIN_ID &&
           isLoaded ? (
             <div>
               <button

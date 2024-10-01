@@ -15,6 +15,8 @@ import { FaRegHeart } from "react-icons/fa";
 import { GrUserAdmin } from "react-icons/gr";
 import { LuPackageOpen } from "react-icons/lu";
 import { LiaCrownSolid } from "react-icons/lia";
+import { MdOutlineCardGiftcard } from "react-icons/md";
+import { VITE_ADMIN_ID } from "@/config/envs";
 interface Props {
   onCartIconClick: () => void;
 }
@@ -29,7 +31,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
         () =>
           resolve(
             (window.location.href =
-              "https://lachoco-front.vercel.app/?category=cafes")
+              "https://lachoco-latera.com/?category=cafes")
           ),
         1100
       )
@@ -47,7 +49,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
             </SignedIn>
           </div>
           {isSignedIn == true &&
-          user.id === "user_2ilWGvh9587cCuvrttNuLQrY0jD" &&
+          user.id === VITE_ADMIN_ID &&
           isLoaded ? (
             <div>
               <button
@@ -78,7 +80,7 @@ export default function BottomBar({ onCartIconClick }: Props) {
           </div>
           {isSignedIn ? (
             <>
-              <div className="relative md:hidden">
+              {/* <div className="relative md:hidden">
                 <button
                   type="button"
                   title="Favoritos"
@@ -87,8 +89,8 @@ export default function BottomBar({ onCartIconClick }: Props) {
                 >
                   <LuPackageOpen size={28} />
                 </button>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <button
                   type="button"
                   title="Mini Cart"
@@ -108,17 +110,26 @@ export default function BottomBar({ onCartIconClick }: Props) {
                 >
                   <LiaCrownSolid size={34} />
                 </button>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <FaRegHeart
                   size={28}
                   className=" text-slate-800 hover:cursor-pointer"
                   onClick={() => navigate(`/favorites`)}
                 />
-              </div>
+              </div> */}
             </>
           ) : null}
-
+          <div>
+            <button
+              type="button"
+              title="Gift Card"
+              className="text-gray-800 text-xl md:flex items-center hover:scale-110 transition-all ease"
+              onClick={() => navigate("/gift-cards")}
+            >
+              <MdOutlineCardGiftcard size={24} />
+            </button>
+          </div>
           <div>
             <button
               type="button"

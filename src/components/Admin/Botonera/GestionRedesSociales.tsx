@@ -128,7 +128,7 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
           onClick: async () => {
             toast.dismiss(alertId);
             try {
-              console.log(formState);
+              //console.log(formState);
 
               // Asegúrate de pasar el id correcto aquí
               await putRedes(selectedRed.id, formState);
@@ -149,7 +149,7 @@ export const GestionRedesSociales = ({ signal, onCloseModal }: any) => {
     }
   };
   const handleOnUpload = (result: any) => {
-    console.log(result); // Para verificar el objeto result
+    //console.log(result); // Para verificar el objeto result
     if (result && result.event === "success") {
       const uploadedImageUrl = result.info.secure_url;
       setFormState((prev) => ({

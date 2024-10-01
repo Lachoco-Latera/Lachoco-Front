@@ -13,7 +13,7 @@ export const products: Product[] = [
     },
     description:
       "Chocolate oscuro premium con 70% de cacao, elaborado con ingredientes de alta calidad y un toque de vainilla.",
-    price: "15000.00",
+    price: "15.000.00",
     currency: "COP",
     label: "SoloOnline",
     isActive: true,

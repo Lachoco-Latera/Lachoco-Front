@@ -17,7 +17,7 @@ const Checkout = ({
   const { cart } = useCartStore();
   
   const addToCart = useCartStore((state) => state.addToCart);
-  console.log(productName);
+  //console.log(productName);
 
   const isCartItem = cart.some((item) => item.id === id);
 
@@ -30,7 +30,7 @@ const Checkout = ({
   };
 
   const {t} =useTranslation()
-
+ //console.log("Product category:",productCategory)
   return (
     <div
       className="
@@ -45,11 +45,11 @@ const Checkout = ({
     >
       <h2 className="text-xl font-bold">{t("Individual_Price")}</h2>
       <div>
-        $ {price} {currency}
+        $ {Number(price).toLocaleString()} {currency}
       </div>
       {/*Acá aclaración del llenado de la caja */}
       <div className="pt-4">
-        {productCategory === "bombones" &&
+        {(productCategory === "bombones" || productCategory === "chocolates de especialidad") &&
         isCartItem &&
         confirmedFlavors !== flavorQuantity ? (
           <button
@@ -64,7 +64,7 @@ const Checkout = ({
           </button>
         ) : (
           <>
-            {(productCategory !== "bombones" && isCartItem) ||
+            {((productCategory !== "bombones" ||productCategory !== "chocolates de especialidad" )&& isCartItem) ||
             (confirmedFlavors === flavorQuantity && confirmedFlavors != 0) ? (
               <button
                 className="

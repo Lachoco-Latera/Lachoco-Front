@@ -19,7 +19,7 @@ const MapSelector = ({ setLatitude, setLongitude }: any) => {
 
   return (
     <MapContainer
-      center={[-34.598153, -58.4411486]} // Posición inicial
+      center={[4.65, -74.06]} // Posición inicial
       zoom={13}
       style={{ height: "300px", width: "100%" }}
     >

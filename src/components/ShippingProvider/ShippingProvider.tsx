@@ -10,7 +10,7 @@ const ShippingProvider = ({carrier, selectedCarrier, setSelectedCarrier}: Record
     setSelectedCarrier(carrier.service);
     addShippingToCart(carrier.totalPrice);
     addShippingCarrier(carrier.carrier);
-    addShippingService(carrier.carrier);
+    addShippingService(carrier.service);
   }
 
   return (

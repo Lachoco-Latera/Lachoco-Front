@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 const OrderInfo = ({userInfo}: any) => {
   const {t} = useTranslation()
-  console.log(userInfo);
+  //console.log(userInfo);
   const [formData, setFormData] = useState({
     orderId: "",
     giftCardId: "",
@@ -25,7 +25,7 @@ const OrderInfo = ({userInfo}: any) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(formData);
+    //console.log(formData);
   };
 
   return (

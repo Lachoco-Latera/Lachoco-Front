@@ -117,7 +117,7 @@ const Inventory = ({ onCartIconClick }: any) => {
   const handleFavoriteClick = (event: React.MouseEvent, product: any) => {
     event.stopPropagation();
     // Lógica para manejar el favorito del producto
-    console.log(`Producto favorito: ${product.description}`);
+    //console.log(`Producto favorito: ${product.description}`);
   };
 
   const handleMouseEnter = (orderId: string) => {
@@ -167,7 +167,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                         ? "Solo Online"
                         : product.label}
                     </p>
-                    <i
+                    {/* <i
                       className="absolute ml-24 drop-shadow z-[2]"
                       onClick={(e) => handleFavoriteClick(e, product)}
                     >
@@ -189,7 +189,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                           />
                         </div>
                       </IconContext.Provider>
-                    </i>
+                    </i> */}
                   </div>
                 ) : null}
                 <div className="product-card-main flex flex-col">
@@ -233,7 +233,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                     <div>
                       <div className="product-price text-black-800 font-regular relative transition-all ease">
                         <span className="duration-0 flex flex-row justify-between items-center py-2 ">
-                          $ {product.price}
+                          $ {Number(product.price).toLocaleString()}
                         </span>
                         {product.orderId === hoveredOrderId && (
                           <div
@@ -246,7 +246,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                               handleCopyOrderId(hoveredOrderId || "")
                             }
                           >
-                            <span className="flex transition-all ease">
+                            {/* <span className="flex transition-all ease">
                               #
                               {products
                                 .filter(
@@ -254,7 +254,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                                 )
                                 .indexOf(product) + 1}
                             </span>
-                            <span className="flex">Id: {hoveredOrderId}</span>
+                            <span className="flex">Id: {hoveredOrderId}</span> */}
                             {info && hoveredOrderId && (
                               <>
                                 {info
@@ -263,9 +263,9 @@ const Inventory = ({ onCartIconClick }: any) => {
                                   )
                                   .map((order: any) => (
                                     <div key={order.id}>
-                                      <span className="flex">
+                                      {/* <span className="flex">
                                         {t("status")}: {order.status}
-                                      </span>
+                                      </span> */}
                                       <span className="flex">
                                         {t("purchased")}: {order.date}
                                       </span>
@@ -276,7 +276,7 @@ const Inventory = ({ onCartIconClick }: any) => {
                                             .length
                                         }
                                       </span>
-                                      <span className="flex flex-col items-start max-w-48">
+                                      {/* <span className="flex flex-col items-start max-w-48">
                                         {t("location")}:
                                         <span
                                           className="flex break-all"
@@ -298,9 +298,9 @@ const Inventory = ({ onCartIconClick }: any) => {
                                             ? order.additionalInfo
                                             : "Aún sin localización"}
                                         </span>
-                                      </span>
+                                      </span> */}
                                       <span className="flex">
-                                        Total: {order.orderDetail.price}
+                                        Total: {Number(order.orderDetail.price).toLocaleString()}
                                       </span>
                                     </div>
                                   ))}

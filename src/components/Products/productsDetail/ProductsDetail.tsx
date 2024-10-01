@@ -40,7 +40,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
   };
 
   const openFlavorModal = () => {
-    info?.category?.name === "bombones"
+    (info?.category?.name === "bombones"  || info?.category?.name === "chocolates de especialidad")
       ? setShowFlavorModal(true)
       : setShowFlavorModal(false);
   };
@@ -80,19 +80,19 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
   const actualSelectionLength = confirmedFlavors[info.id]?.length || 0;
 
   return (
-    <div className="flex flex-col md:px-48 px-12 md:py-10 ">
+    <div className="flex flex-col md:px-48 px-12 md:py-10 relative ">
       <div className="flex flex-col md:flex-row items-center md:justify-between">
         <h2 className="font-semibold md:text-3xl ">{productInfo?.name}</h2>
         <div className="flex items-center gap-2 ease transition-all">
           <a
             className="flex flex-row cursor-pointer items-center hover:scale-110 hover:px-2 gap-2 transition-all ease"
-            href="whatsapp://send?text=Mirá la nueva página de lachoco-latera: https://lachoco-latera.com"
+            href="whatsapp://send?text=Conoce la nueva página de lachoco-latera: https://lachoco-latera.com"
             data-action="share/whatsapp/share"
           >
             <FaShareSquare size={16} />
             {t("share")}{" "}
           </a>
-          <div
+          {/* <div
             className="relative group flex cursor-pointer items-center gap-2 hover:scale-110 hover:px-2 transition-all ease"
             onClick={handleHeartClick}
           >
@@ -110,7 +110,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
               className="cursor-pointer group-hover:scale-[1.1] ease-in-out duration-300 drop-shadow z-[8]"
             />
             {t("Fav_add")}
-          </div>
+          </div> */}
         </div>
       </div>
       <Carousel
@@ -136,7 +136,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
       </Carousel>
       <div className="flex md:flex-row flex-col-reverse items-center md:items-start justify-between">
         <div className="flex flex-col md:pr-10">
-          <ul className="flex gap-2 ">
+          {/* <ul className="flex gap-2 ">
             {altLabel.map((label: any, index: number) => (
               <li
                 key={index}
@@ -145,13 +145,13 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
                 {label}
               </li>
             ))}
-          </ul>
+          </ul> */}
           <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
             <p className="flex gap-2 text-3xl">
               <LuPackageOpen />
               {t("Products_presentation")}
             </p>
-            <p className=""> {productInfo?.description}</p>
+            <p className=""> {productInfo?.name}</p>
           </h2>
           <h2 className="self-start max-w-2xl pt-12 md:font-semibold">
             <p className="flex gap-2 text-3xl">
@@ -165,7 +165,8 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
               <GrDeliver />
               {t("Products_shipping")}
             </p>
-            <p className=""> {productInfo?.description}</p>
+            {/* <p className=""> {productInfo?.description}</p> */}
+            <p className=""> Lo enviamos a tu dirección usando mensajería premium</p>
           </h2>
           <div className="z-0">
             <MapComponent />
@@ -173,8 +174,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
         </div>
         <div
           className={`flex mb-20 ${
-            productInfo?.category?.name === "bombones"
-              ? "hover:cursor-pointer"
+            productInfo?.flavors ? "hover:cursor-pointer"
               : ""
           }`}
         >
@@ -189,7 +189,7 @@ const ProductsDetail: React.FC<ProductsDetailProps> = ({
             confirmedFlavors={actualSelectionLength}
             product={info}
             openModal={
-              info?.category?.name === "bombones" ? openFlavorModal : null
+              (productInfo?.category.name==="bombones" || productInfo?.category.name==="chocolates de especialidad")? openFlavorModal : null
             }
             openCartModal={onCheckIconClick}
           />
